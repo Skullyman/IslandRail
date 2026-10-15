@@ -390,7 +390,7 @@ body.maxmap-on{overflow:hidden}
 
 <div class="app">
   <header class="top">
-    <div class="brand"><h1>Island Rail <b>Planner</b></h1><span>E&amp;N corridor · <span id="subtitle">ICF business case service · West Shore every 12 minutes · Victoria–Courtenay, Nanaimo and Duncan regional trains</span></span></div>
+    <div class="brand"><h1>Island Rail <b>Planner</b></h1><span>E&amp;N corridor · <span id="subtitle">Data-driven service on 8 trainsets · West Shore every 10–20 min · Nanaimo–Victoria commuter · Courtenay intercity</span></span></div>
     <div class="clock" id="clock" aria-live="off">Mon 06:50</div>
     <div class="ctrls">
       <div class="seg" role="group" aria-label="Simulation speed" id="speeds">
@@ -468,7 +468,7 @@ body.maxmap-on{overflow:hidden}
         <div><b id="job-cov">0</b> of <b id="job-tot">0</b> jobs (<b id="job-pct">0%</b>) are within 800 m of one of the <b id="job-n">0</b> stations served.</div>
         <div class="m">Circles sit at the centre of each area's employment land. 2021 counts were taken during the pandemic; the 2026 Census place-of-work data is due in 2027.</div></div>
       <div class="poplegend buslegend" id="buslegend" hidden><h4>BC Transit buses</h4><div class="m">Weekday schedule (Wednesday 21 October 2026) for the nine Island transit systems, from BC Transit's GTFS feed. Buses run on the map clock.</div>
-        <div class="fopts"><label><input type="checkbox" id="bo-lines" checked> Route lines</label><label><input type="checkbox" id="bo-num"> Show route number</label></div>
+        <div class="fopts"><label><input type="checkbox" id="bo-lines" checked> Route lines</label><label><input type="checkbox" id="bo-num" checked> Show route number</label></div>
         <div id="bstats"></div><div id="bconn"></div>
         <div class="m">Each bus moves at an even pace from its first to its last stop. BC Transit's live vehicle positions can't be read from this page, so these are timetable positions, not live ones. Hover a bus for its trip times, a route line for its trips, or a station for the routes nearby.</div></div></div>
       
@@ -511,7 +511,7 @@ body.maxmap-on{overflow:hidden}
       </div>
       <div class="pane" id="pane-plan" hidden>
         <h3 class="sec">Starting timetable</h3>
-        <div class="pbtns"><select id="tt-preset" aria-label="Starting timetable"><option value="icf">ICF business case, West Shore every 12 min</option><option value="data8">Data-driven, 8 trainsets</option><option value="data">Data-driven, unconstrained fleet</option></select><button class="btn" id="btn-preset" type="button">Load this timetable</button></div>
+        <div class="pbtns"><select id="tt-preset" aria-label="Starting timetable"><option value="data8">Data-driven, 8 trainsets</option><option value="icf">ICF business case, West Shore every 12 min</option><option value="data">Data-driven, unconstrained fleet</option></select><button class="btn" id="btn-preset" type="button">Load this timetable</button></div>
         <div class="ttcmp" id="tt-compare"></div>
         <h3 class="sec">Service plan summary</h3>
         <div class="kpis" id="plan-sum"></div>
@@ -521,7 +521,7 @@ body.maxmap-on{overflow:hidden}
           <div class="pbtns"><button class="btn" id="btn-export" type="button">Copy plan</button><button class="btn" id="btn-import" type="button">Load plan</button></div></div>
         <h3 class="sec">Assumptions</h3>
         <ul class="notes">
-          <li>Data-driven timetable on 8 trainsets: the Courtenay intercity (the ICF 05:54 and 16:51 trains) and two Nanaimo–Duncan–Victoria commuter trains (Nanaimo 05:30 and 06:05, back from Victoria 16:10 and 17:05) are placed first. West Shore trains then run both ways every 30 minutes from 05:30, every 15 minutes 06:30–09:00, every 20 minutes 09:00–14:00, every 10 minutes 14:00–16:00 (the afternoon peak starts early, with school trips), every 15 minutes 16:00–18:30 and every 30 minutes to 22:00, using the West Shore sets plus the regional sets while they wait in Victoria between peaks. Victoria departures are offset so layovers balance at both ends.</li>
+          <li>Starting timetable (default): data-driven on 8 trainsets.  the Courtenay intercity (the ICF 05:54 and 16:51 trains) and two Nanaimo–Duncan–Victoria commuter trains (Nanaimo 05:30 and 06:05, back from Victoria 16:10 and 17:05) are placed first. West Shore trains then run both ways every 30 minutes from 05:30, every 15 minutes 06:30–09:00, every 20 minutes 09:00–14:00, every 10 minutes 14:00–16:00 (the afternoon peak starts early, with school trips), every 15 minutes 16:00–18:30 and every 30 minutes to 22:00, using the West Shore sets plus the regional sets while they wait in Victoria between peaks. Victoria departures are offset so layovers balance at both ends.</li>
           <li>Data-driven timetable, unconstrained fleet: West Shore trains both ways every 30 minutes from 05:30, every 10 minutes 06:30–09:00 and 14:30–18:30 (sets that work the peaks run as two coupled units), every 15 minutes midday and every 30 minutes to 22:00. These are shaped by the CRD 2022 survey: West Shore ↔ core trips run both ways all day (about 46,000 a day each way, 36% counter-peak in the morning and 56% in the afternoon), the morning peak is sharp at 8 am and the afternoon peak runs 2–6 pm. Cowichan gets 4 commuter trains into Victoria arriving 06:45–08:30 and 4 back 15:30–17:45, plus a counter-peak run each way (3,095 Census commuters a day from the Cowichan Valley to Greater Victoria). A Duncan–Nanaimo shuttle runs 5 times each way (2,115 + 1,490 commuters a day between them), meeting Victoria trains at Duncan. Courtenay trains offer a morning arrival in Victoria, an evening return and day trips to Nanaimo.</li>
           <li>ICF timetable: the service pattern from the Island Corridor Foundation business case (Tables 17 and 18), using its stop times. The West Shore line is tightened to a train every 12 minutes: Westhills → Victoria 06:00–15:00 and Victoria → Westhills 09:15–17:30. Trainsets out of position run back empty. Victoria ↔ Courtenay and Victoria ↔ Nanaimo have 3 trains a day each way; Duncan has 2 morning trains to Victoria and 2 afternoon trains back. Use the Timetable and Fleet tabs to change it.</li>
           <li>Single track: a 12-minute service in both directions needs trains to pass every few minutes. That would require double track or several long passing loops between Victoria and Westhills, which this simulation does not model.</li>
@@ -703,7 +703,7 @@ function icfLeg(pat,from,to,dep){const a=pat.findIndex(x=>x[0]===from),b=pat.fin
 const PRESETS={icf:{name:'ICF business case, West Shore every 12 min',sub:'ICF business case service · West Shore every 12 minutes · Victoria–Courtenay, Nanaimo and Duncan regional trains'},
   data:{name:'Data-driven (CRD survey and Census)',sub:'Data-driven service · West Shore every 10 min peaks, 15 midday · Cowichan commuter · Duncan–Nanaimo shuttle'}};
 PRESETS.data8={name:'Data-driven, 8 trainsets',sub:'Data-driven service on 8 trainsets · West Shore every 10–20 min · Nanaimo–Victoria commuter · Courtenay intercity'};
-function defaultPlan(preset){return preset==='data'?dataPlan():preset==='data8'?data8Plan():icfPlan();}
+function defaultPlan(preset='data8'){return preset==='data'?dataPlan():preset==='icf'?icfPlan():data8Plan();}
 function icfPlan(){
   const fleet=[],trips=[];if(!STATIONS.VIC||!STATIONS.WHL)return{v:3,preset:'icf',fleet,trips,stations:{...STNSPEC},track:TRACKSPEC};
   const trip=(no,cls,tag,set,stops)=>trips.push({id:nid('t'),no:String(no),cls,tag,set,fixed:true,stops});
@@ -811,13 +811,13 @@ function dataPlan(){
   fleet.push({id:'P1',name:'Spare set',type:'dmu',home:'WHL'});
   return{v:3,preset:'data',fleet,trips,stations:{...STNSPEC},track:TRACKSPEC};
 }
-const LS='island-rail-plan-v3';// v3: ICF business case timetable
+const LS='island-rail-plan-v4';// v4: data-driven 8-trainset timetable is the default// v3: ICF business case timetable
 function validPlan(p){return p&&Array.isArray(p.fleet)&&Array.isArray(p.trips)&&p.fleet.every(f=>f&&f.id&&TYPES[f.type])&&
   p.trips.every(t=>t&&t.id&&Array.isArray(t.stops)&&t.stops.length>=2&&t.stops.every(x=>STATIONS[x.c]&&isFinite(x.t)));}
 function loadPlan(){try{const s=localStorage.getItem(LS);if(s){const p=JSON.parse(s);TRACKSPEC=normTrack(p&&p.track);applyStations(p&&p.stations);if(validPlan(p))return p;}}catch(_){}
   TRACKSPEC=normTrack(null);
   // keep station and track edits from the previous timetable version; the timetable itself starts fresh
-  let old=null;try{old=JSON.parse(localStorage.getItem('island-rail-plan-v2')||localStorage.getItem('island-rail-plan-v1')||'null');}catch(_){}
+  let old=null;try{old=JSON.parse(localStorage.getItem('island-rail-plan-v3')||localStorage.getItem('island-rail-plan-v2')||localStorage.getItem('island-rail-plan-v1')||'null');}catch(_){}
   if(old&&old.track)TRACKSPEC=normTrack(old.track);applyStations(old&&old.stations);return defaultPlan();}
 function savePlan(){PLAN.stations=STNSPEC;PLAN.track=TRACKSPEC;try{localStorage.setItem(LS,JSON.stringify(PLAN));}catch(_){}}
 let PLAN=loadPlan();
@@ -1568,6 +1568,8 @@ wrap.addEventListener('pointermove',e=>{if(!busHoverOn||busG.style.display==='no
   tip.innerHTML=`<h4><span class="busno" style="background:${R.col}">${esc(R.sh)}</span> ${esc(S.n)}</h4><div class="m">This trip ${hhmm(t.s%1440)}–${hhmm(t.e%1440)} · about ${left} min to its last stop</div>`;
   tip.hidden=false;let x=e.clientX-r.left+14,y=e.clientY-r.top+14;if(x>r.width-240)x-=260;if(y>r.height-90)y-=100;tip.style.left=x+'px';tip.style.top=y+'px';});
 window.__busReady=1;
+// defaults: buses on with route numbers; trails and bike lanes off
+$('trailbtn').click();$('bo-num').checked=true;busNums=true;$('busbtn').click();
 /* ---------- source and destination heatmap: commuter homes spread over residential land, workplaces over Census job locations ---------- */
 let FHEAT='off';
 const heatImg=el('image',{class:'fheat',preserveAspectRatio:'none'},flowG);flowG.insertBefore(heatImg,flowG.firstChild);
@@ -1995,7 +1997,7 @@ $('btn-auto2').onclick=()=>$('btn-auto').click();
 $('btn-reset').onclick=e=>{const b=e.currentTarget;if(b.dataset.armed){TRACKSPEC=normTrack(null);applyStations({});PLAN=defaultPlan($('tt-preset').value);DONE.clear();KNOWN.clear();for(const t of [...trains]){removeTrainGfx(t);}trains.length=0;FORM=null;
     syncRuntime();bootPositions();applyPlan('Restored the starting timetable, the original stations and the original track');b.textContent='Reset to starting timetable';delete b.dataset.armed;}
   else{b.dataset.armed='1';b.textContent='Confirm reset (discards your edits)';setTimeout(()=>{if(b.isConnected&&b.dataset.armed){delete b.dataset.armed;b.textContent='Reset to starting timetable';}},4000);}};
-function setSubtitle(){$('subtitle').textContent=(PRESETS[PLAN.preset]||PRESETS.icf).sub;$('tt-preset').value=PRESETS[PLAN.preset]?PLAN.preset:'icf';}
+function setSubtitle(){$('subtitle').textContent=(PRESETS[PLAN.preset]||PRESETS.data8).sub;$('tt-preset').value=PRESETS[PLAN.preset]?PLAN.preset:'data8';}
 setSubtitle();
 $('btn-preset').onclick=()=>{const k=$('tt-preset').value;PLAN=defaultPlan(k);DONE.clear();KNOWN.clear();for(const t of [...trains])removeTrainGfx(t);trains.length=0;FORM=null;
   syncRuntime();bootPositions();setSubtitle();applyPlan(`Loaded the ${PRESETS[k].name} timetable. Stations and track are unchanged.`);};
