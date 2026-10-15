@@ -511,7 +511,7 @@ body.maxmap-on{overflow:hidden}
       </div>
       <div class="pane" id="pane-plan" hidden>
         <h3 class="sec">Starting timetable</h3>
-        <div class="pbtns"><select id="tt-preset" aria-label="Starting timetable"><option value="icf">ICF business case, West Shore every 12 min</option><option value="data">Data-driven (CRD survey and Census)</option></select><button class="btn" id="btn-preset" type="button">Load this timetable</button></div>
+        <div class="pbtns"><select id="tt-preset" aria-label="Starting timetable"><option value="icf">ICF business case, West Shore every 12 min</option><option value="data8">Data-driven, 8 trainsets</option><option value="data">Data-driven, unconstrained fleet</option></select><button class="btn" id="btn-preset" type="button">Load this timetable</button></div>
         <div class="ttcmp" id="tt-compare"></div>
         <h3 class="sec">Service plan summary</h3>
         <div class="kpis" id="plan-sum"></div>
@@ -521,7 +521,8 @@ body.maxmap-on{overflow:hidden}
           <div class="pbtns"><button class="btn" id="btn-export" type="button">Copy plan</button><button class="btn" id="btn-import" type="button">Load plan</button></div></div>
         <h3 class="sec">Assumptions</h3>
         <ul class="notes">
-          <li>Data-driven timetable: West Shore trains both ways every 30 minutes from 05:30, every 10 minutes 06:30–09:00 and 14:30–18:30 (sets that work the peaks run as two coupled units), every 15 minutes midday and every 30 minutes to 22:00. These are shaped by the CRD 2022 survey: West Shore ↔ core trips run both ways all day (about 46,000 a day each way, 36% counter-peak in the morning and 56% in the afternoon), the morning peak is sharp at 8 am and the afternoon peak runs 2–6 pm. Cowichan gets 4 commuter trains into Victoria arriving 06:45–08:30 and 4 back 15:30–17:45, plus a counter-peak run each way (3,095 Census commuters a day from the Cowichan Valley to Greater Victoria). A Duncan–Nanaimo shuttle runs 5 times each way (2,115 + 1,490 commuters a day between them), meeting Victoria trains at Duncan. Courtenay trains offer a morning arrival in Victoria, an evening return and day trips to Nanaimo.</li>
+          <li>Data-driven timetable on 8 trainsets: the Courtenay intercity (the ICF 05:54 and 16:51 trains) and two Nanaimo–Duncan–Victoria commuter trains (Nanaimo 05:30 and 06:05, back from Victoria 16:10 and 17:05) are placed first. West Shore trains then run both ways every 30 minutes from 05:30, every 15 minutes 06:30–09:00, every 20 minutes 09:00–14:00, every 10 minutes 14:00–16:00 (the afternoon peak starts early, with school trips), every 15 minutes 16:00–18:30 and every 30 minutes to 22:00, using the West Shore sets plus the regional sets while they wait in Victoria between peaks. Victoria departures are offset so layovers balance at both ends.</li>
+          <li>Data-driven timetable, unconstrained fleet: West Shore trains both ways every 30 minutes from 05:30, every 10 minutes 06:30–09:00 and 14:30–18:30 (sets that work the peaks run as two coupled units), every 15 minutes midday and every 30 minutes to 22:00. These are shaped by the CRD 2022 survey: West Shore ↔ core trips run both ways all day (about 46,000 a day each way, 36% counter-peak in the morning and 56% in the afternoon), the morning peak is sharp at 8 am and the afternoon peak runs 2–6 pm. Cowichan gets 4 commuter trains into Victoria arriving 06:45–08:30 and 4 back 15:30–17:45, plus a counter-peak run each way (3,095 Census commuters a day from the Cowichan Valley to Greater Victoria). A Duncan–Nanaimo shuttle runs 5 times each way (2,115 + 1,490 commuters a day between them), meeting Victoria trains at Duncan. Courtenay trains offer a morning arrival in Victoria, an evening return and day trips to Nanaimo.</li>
           <li>ICF timetable: the service pattern from the Island Corridor Foundation business case (Tables 17 and 18), using its stop times. The West Shore line is tightened to a train every 12 minutes: Westhills → Victoria 06:00–15:00 and Victoria → Westhills 09:15–17:30. Trainsets out of position run back empty. Victoria ↔ Courtenay and Victoria ↔ Nanaimo have 3 trains a day each way; Duncan has 2 morning trains to Victoria and 2 afternoon trains back. Use the Timetable and Fleet tabs to change it.</li>
           <li>Single track: a 12-minute service in both directions needs trains to pass every few minutes. That would require double track or several long passing loops between Victoria and Westhills, which this simulation does not model.</li>
           <li>Run times for new or changed trips use track speeds of 90 km/h open line, 55 km/h on the Malahat, 45–60 km/h in Victoria and Nanaimo, and 40 km/h on the Port Alberni line, capped by each train type's top speed.</li>
@@ -701,7 +702,8 @@ function icfLeg(pat,from,to,dep){const a=pat.findIndex(x=>x[0]===from),b=pat.fin
   return pat.slice(a,b+1).filter(x=>STATIONS[x[0]]).map(([c,t])=>({c,t:dep+t-t0}));}
 const PRESETS={icf:{name:'ICF business case, West Shore every 12 min',sub:'ICF business case service · West Shore every 12 minutes · Victoria–Courtenay, Nanaimo and Duncan regional trains'},
   data:{name:'Data-driven (CRD survey and Census)',sub:'Data-driven service · West Shore every 10 min peaks, 15 midday · Cowichan commuter · Duncan–Nanaimo shuttle'}};
-function defaultPlan(preset){return preset==='data'?dataPlan():icfPlan();}
+PRESETS.data8={name:'Data-driven, 8 trainsets',sub:'Data-driven service on 8 trainsets · West Shore every 10–20 min · Nanaimo–Victoria commuter · Courtenay intercity'};
+function defaultPlan(preset){return preset==='data'?dataPlan():preset==='data8'?data8Plan():icfPlan();}
 function icfPlan(){
   const fleet=[],trips=[];if(!STATIONS.VIC||!STATIONS.WHL)return{v:3,preset:'icf',fleet,trips,stations:{...STNSPEC},track:TRACKSPEC};
   const trip=(no,cls,tag,set,stops)=>trips.push({id:nid('t'),no:String(no),cls,tag,set,fixed:true,stops});
@@ -745,6 +747,37 @@ function chainSets(list,type,prefix,label,fleet,lay=5){const erc={},er=(a,b)=>a=
     const s=ok?ok.s:(sets.push({id:prefix+(sets.length+1),at:null,ready:-1}),sets[sets.length-1]);
     t.set=s.id;s.at=t.stops[t.stops.length-1].c;s.ready=t.stops[t.stops.length-1].t;}
   sets.forEach((s,i)=>fleet.push({id:s.id,name:label+' '+(i+1),type}));}
+/* Data-driven timetable on a fixed fleet of 8 trainsets: regional trains are placed first, then West Shore trips are given to any set
+   that is free between its own commitments (including regional sets waiting in Victoria between peaks). */
+const D8_WS=[[hm(5,30),hm(6,30),30],[hm(6,30),hm(9,0),15],[hm(9,0),hm(14,0),20],[hm(14,0),hm(16,0),10],[hm(16,0),hm(18,30),15],[hm(18,30),hm(22,1),30]];
+function data8Plan(MAX=8,WIN=D8_WS){
+  const fleet=[],trips=[],dropped=[];if(!STATIONS.VIC||!STATIONS.WHL)return{v:3,preset:'data8',fleet,trips,stations:{...STNSPEC},track:TRACKSPEC};
+  const type='dmu',lay=5,erc={},er=(a,b)=>a===b?0:(erc[a+b]??=computeTimes([a,b],0,type,'Empty').pop().t+lay);
+  const mk=(no,cls,tag,stops)=>({id:nid('t'),no:String(no),cls,tag,set:null,fixed:true,stops});
+  const dep=t=>t.stops[0].t,arr=t=>t.stops[t.stops.length-1].t,from=t=>t.stops[0].c,to=t=>t.stops[t.stops.length-1].c;
+  const sets=[];const newSet=(id,name)=>{const s={id,name,list:[]};sets.push(s);return s;};
+  const put=(s,t)=>{t.set=s.id;s.list.push(t);s.list.sort((a,b)=>dep(a)-dep(b));trips.push(t);};
+  // regional trains (fixed): Courtenay intercity, and two Nanaimo–Duncan–Victoria commuter trains
+  if(STATIONS.CTN){const r=newSet('R1','Island Regional');put(r,mk(2,'Intercity','Courtenay–Victoria',icfLeg(ICF_SB,'CTN','VIC',hm(5,54))));put(r,mk(1,'Intercity','Victoria–Courtenay',icfLeg(ICF_NB,'VIC','CTN',hm(16,51))));}
+  if(STATIONS.NAN&&STATIONS.DUN){[[hm(5,30),hm(16,10)],[hm(6,5),hm(17,5)]].forEach(([a,b],k)=>{const s=newSet('N'+(k+1),'Mid-Island commuter '+(k+1));
+    put(s,mk(11+k*2,'Regional','Nanaimo–Duncan–Victoria commuter',icfLeg(ICF_SB,'NAN','VIC',a)));put(s,mk(12+k*2,'Regional','Victoria–Duncan–Nanaimo commuter',icfLeg(ICF_NB,'VIC','NAN',b)));});}
+  // West Shore trips, both directions, headways shaped by the CRD survey's hourly trips
+  const ws=[];let e=100,o=101;
+  const runIn=31,runOut=30;// ICF Westhills–Victoria running times
+  for(const [a,b,h] of WIN){const N=Math.ceil((runIn+runOut+2*lay)/h),slack=N*h-runIn-runOut-2*lay,off=(runIn+lay+Math.floor(slack/2))%h;// balance layovers at both ends
+    for(let d=a;d<b;d+=h){const tag=`West Shore · every ${h} min`;
+      ws.push(mk((e+=2)-2,'CRD Commute',tag,icfLeg(ICF_SB,'WHL','VIC',d)),mk((o+=2)-2,'CRD Commute',tag,icfLeg(ICF_NB,'VIC','WHL',d+off)));}}
+  ws.sort((a,b)=>dep(a)-dep(b));
+  const fits=(s,t)=>{const L=s.list;let prev=null,next=null;for(const x of L){if(arr(x)<=dep(t)+.01){prev=x;}else if(dep(x)>=arr(t)-.01){if(!next)next=x;}else return null;}
+    if(prev&&arr(prev)+lay+er(to(prev),from(t))>dep(t)+.01)return null;
+    if(next&&arr(t)+lay+er(to(t),from(next))>dep(next)+.01)return null;
+    return{at:prev?to(prev)===from(t):false,slack:prev?dep(t)-arr(prev):1e4};};
+  for(const t of ws){let best=null;for(const s of sets){const f=fits(s,t);if(f&&(!best||(f.at&&!best.f.at)||(f.at===best.f.at&&f.slack<best.f.slack)))best={s,f};}
+    if(!best&&sets.length<MAX)best={s:newSet('W'+(sets.length+1),'West Shore')};
+    if(best)put(best.s,t);else dropped.push(t);}
+  let w=0;sets.forEach(s=>fleet.push({id:s.id,name:s.name==='West Shore'?'West Shore '+(++w):s.name,type}));
+  return{v:3,preset:'data8',fleet,trips,dropped:dropped.map(t=>from(t)+' '+hhmm(dep(t))),stations:{...STNSPEC},track:TRACKSPEC};
+}
 /* Data-driven timetable: shaped by the CRD 2022 travel survey (hourly trips, West Shore <-> core both ways) and Census 2021 commuting */
 const DD_WS=[[hm(5,30),hm(6,30),30],[hm(6,30),hm(9,0),10],[hm(9,0),hm(14,30),15],[hm(14,30),hm(18,30),10],[hm(18,30),hm(22,1),30]];
 const ddPeak=d=>(d>=hm(6,30)&&d<hm(9,0))||(d>=hm(14,30)&&d<hm(18,30));
@@ -1975,9 +2008,9 @@ function presetStats(P){let km=0,seats=0,wsDay=0,peakIn=0;const sets=new Set();
   if(window.__flowReady){PLAN=P;FSVC='plan';FSRC='census';try{const R=flowModel();div=Math.round(R.div*2);mal=Math.round(R.mal[1]*2);}catch(_){}PLAN=keep.P;FSVC=keep.svc;FSRC=keep.src;}
   let units=0;for(const id of sets)units+=P.fleet.find(x=>x.id===id).type==='dmu2'?2:1;
   return{trips:P.trips.length,sets:sets.size,units,km:Math.round(km),wsDay,peakIn,div,mal};}
-function renderCompare(){const a=presetStats(defaultPlan('icf')),b=presetStats(defaultPlan('data'));
-  const row=(l,k,f=fmt)=>`<tr><th>${l}</th><td>${a[k]==null?'—':f(a[k])}</td><td>${b[k]==null?'—':f(b[k])}</td></tr>`;
-  $('tt-compare').innerHTML=`<table><thead><tr><th></th><th>ICF</th><th>Data-driven</th></tr></thead><tbody>${row('Trips per weekday','trips')}${row('Trainsets used','sets')}${row('2-car units needed','units')}${row('Train-km per day','km')}
+function renderCompare(){const a=presetStats(defaultPlan('icf')),c=presetStats(defaultPlan('data8')),b=presetStats(defaultPlan('data'));
+  const cell=(x,k,f)=>`<td>${x[k]==null?'—':f(x[k])}</td>`,row=(l,k,f=fmt)=>`<tr><th>${l}</th>${cell(a,k,f)}${cell(c,k,f)}${cell(b,k,f)}</tr>`;
+  $('tt-compare').innerHTML=`<table><thead><tr><th></th><th>ICF</th><th>Data, 8 sets</th><th>Data, no limit</th></tr></thead><tbody>${row('Trips per weekday','trips')}${row('Trainsets used','sets')}${row('2-car units needed','units')}${row('Train-km per day','km')}
     ${row('Trains Langford → Victoria per day','wsDay')}${row('Seats arriving Victoria from Langford, 7–9 am','peakIn')}${row(`Fewer car commute trips a day (${FPCT}% of drivers switch)`,'div')}${row('… of which across the Malahat','mal')}</tbody></table>
     <div class="m">Car trips use the Travel flows commuting model (2021 Census) with only the stations and trains in each timetable. Riders carried come from running the day in the simulation.</div>`;}
 $('btn-export').onclick=()=>{const ta=$('io');ta.value=JSON.stringify(PLAN,null,1);ta.select();navigator.clipboard?.writeText(ta.value).then(()=>toast('Copied','Plan JSON is on your clipboard')).catch(()=>toast('Ready to copy','Select the text and copy it'));};
