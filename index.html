@@ -388,7 +388,7 @@ body.maxmap-on{overflow:hidden}
 
 <div class="app">
   <header class="top">
-    <div class="brand"><h1>Island Rail <b>Planner</b></h1><span>E&amp;N corridor · West Shore line: Westhills–Victoria every 12 minutes · Victoria–Courtenay · Parksville–Port Alberni</span></div>
+    <div class="brand"><h1>Island Rail <b>Planner</b></h1><span>E&amp;N corridor · ICF business case service · West Shore every 12 minutes · Victoria–Courtenay, Nanaimo and Duncan regional trains</span></div>
     <div class="clock" id="clock" aria-live="off">Mon 06:50</div>
     <div class="ctrls">
       <div class="seg" role="group" aria-label="Simulation speed" id="speeds">
@@ -516,7 +516,7 @@ body.maxmap-on{overflow:hidden}
           <div class="pbtns"><button class="btn" id="btn-export" type="button">Copy plan</button><button class="btn" id="btn-import" type="button">Load plan</button></div></div>
         <h3 class="sec">Assumptions</h3>
         <ul class="notes">
-          <li>Starting timetable: West Shore line, Westhills ↔ Victoria, all stops, a train every 12 minutes in each direction from 05:30 to about 23:00. Trainsets lay over at least 5 minutes at each end, and the number of sets is the fewest that can hold that headway. Use the Timetable and Fleet tabs to add Cowichan, Nanaimo, Port Alberni or freight services.</li>
+          <li>Starting timetable: the service pattern from the Island Corridor Foundation business case (Tables 17 and 18), using its stop times. The West Shore line is tightened to a train every 12 minutes: Westhills → Victoria 06:00–15:00 and Victoria → Westhills 09:15–17:30. Trainsets out of position run back empty. Victoria ↔ Courtenay and Victoria ↔ Nanaimo have 3 trains a day each way; Duncan has 2 morning trains to Victoria and 2 afternoon trains back. Use the Timetable and Fleet tabs to change it.</li>
           <li>Single track: a 12-minute service in both directions needs trains to pass every few minutes. That would require double track or several long passing loops between Victoria and Westhills, which this simulation does not model.</li>
           <li>Run times for new or changed trips use track speeds of 90 km/h open line, 55 km/h on the Malahat, 45–60 km/h in Victoria and Nanaimo, and 40 km/h on the Port Alberni line, capped by each train type's top speed.</li>
           <li>Trainsets turn around in 3 minutes and run empty to reposition when needed. Trains running in the same direction stay at least one signal block (1 km) apart and never overtake: a train that catches up waits at a signal and picks up the delay. Trains meeting head-on on single track are not modelled.</li>
@@ -684,34 +684,57 @@ function prep(tr){const o={...tr,stops:tr.stops.map(x=>({...x}))};o.freight=tr.c
   o.stops.forEach((x,i)=>{x.s=o.route.stops.find(r=>r.c===x.c).s;x.dep=x.t;x.arr=i===0||i===n-1?x.t:x.t-dwellFor(tr.cls);});
   o.dep=tripDep(tr);o.arr=tripArr(tr);o.from=o.stops[0].c;o.to=o.stops[n-1].c;return o;}
 
-/* ---------- the plan (fleet + timetable): West Shore line, Westhills ↔ Victoria every 12 minutes ---------- */
-const WS={from:'WHL',to:'VIC',hw:12,first:5*60+30,last:23*60,lay:5,type:'dmu'};
+/* ---------- the plan (fleet + timetable): ICF business case service pattern (Tables 17 and 18), with the West Shore line every 12 minutes ---------- */
+// stop times in minutes from the first departure, from ICF Table 17 (Courtenay 05:54 to Victoria 09:44 southbound; Victoria 16:51 to Courtenay 20:41 northbound)
+const ICF_SB=[['CTN',0],['QUB',51],['PKS',61],['NAN',92],['LDY',112],['DUN',138],['SHL',163],['WHL',199],['LAN',204],['ATK',208],['SMI',211],['ESQ',218],['VIC',230]];
+const ICF_NB=[['VIC',0],['ESQ',11],['SMI',18],['ATK',21],['LAN',25],['WHL',30],['SHL',66],['DUN',91],['LDY',117],['NAN',137],['PKS',168],['QUB',178],['CTN',230]];
+const WS={hw:12,lay:5,type:'dmu',inb:[6*60,15*60],outb:[9*60+15,17*60+30]};// ICF Table 18 operating windows; headway tightened to 12 minutes
+const hm=(h,m)=>h*60+m;
+function icfLeg(pat,from,to,dep){const a=pat.findIndex(x=>x[0]===from),b=pat.findIndex(x=>x[0]===to);const t0=pat[a][1];
+  return pat.slice(a,b+1).filter(x=>STATIONS[x[0]]).map(([c,t])=>({c,t:dep+t-t0}));}
 function defaultPlan(){
-  const fleet=[],trips=[];const st=STATIONS;
-  if(st[WS.from]&&st[WS.to]){
-    const r=routeFor([WS.from,WS.to]);const inb=r.stops.filter(x=>st[x.c].type==='pax').map(x=>x.c);const outb=[...inb].reverse();
-    const R=Math.ceil(computeTimes(inb,0,WS.type,'CRD Commute').pop().t);// run time, minutes
-    const N=Math.ceil((2*R+2*WS.lay)/WS.hw),slack=N*WS.hw-2*R,layTo=Math.floor(slack/2);
-    const offOut=(R+layTo)%WS.hw;// Victoria departures sit on this offset so layovers at each end are balanced
-    let n=100;const mk=(codes,d)=>({id:nid('t'),no:String(n++),cls:'CRD Commute',tag:'Every 12 min',set:null,fixed:true,stops:computeTimes(codes,d,WS.type,'CRD Commute')});
-    const list=[];for(let d=WS.first;d<=WS.last;d+=WS.hw)list.push(mk(inb,d));
-    n=101;const ib=list.length;for(let d=WS.first+offOut;d<=WS.last+offOut;d+=WS.hw)list.push(mk(outb,d));
-    // number inbound (to Victoria) even, outbound odd, in departure order
-    let e=100,o=101;list.sort((a,b)=>tripDep(a)-tripDep(b)).forEach(t=>{t.no=String(t.stops[0].c===WS.from?(e+=2)-2:(o+=2)-2);});
-    // chain into trainsets: reuse the set that has been waiting longest at that end
-    const sets=[];for(const t of list){const from=t.stops[0].c,dep=tripDep(t);
-      const c=sets.filter(s=>s.at===from&&s.ready+WS.lay<=dep+.01).sort((a,b)=>a.ready-b.ready)[0];
-      const s=c||(sets.push({id:'S'+(sets.length+1),at:null,ready:-1}),sets[sets.length-1]);t.set=s.id;s.at=t.stops[t.stops.length-1].c;s.ready=tripArr(t);trips.push(t);}
-    sets.forEach((s,i)=>fleet.push({id:s.id,name:'Set '+(i+1),type:WS.type}));}
-  fleet.push({id:'P1',name:'Spare set',type:WS.type,home:WS.from});
-  return{v:2,fleet,trips,stations:{...STNSPEC},track:TRACKSPEC};
+  const fleet=[],trips=[];if(!STATIONS.VIC||!STATIONS.WHL)return{v:3,fleet,trips,stations:{...STNSPEC},track:TRACKSPEC};
+  const trip=(no,cls,tag,set,stops)=>trips.push({id:nid('t'),no:String(no),cls,tag,set,fixed:true,stops});
+  // West Shore: Westhills -> Victoria every 12 minutes 06:00-15:00, Victoria -> Westhills every 12 minutes 09:15-17:30
+  const ws=[];let e=100,o=101;
+  for(let d=WS.inb[0];d<WS.inb[1];d+=WS.hw)ws.push({no:(e+=2)-2,stops:icfLeg(ICF_SB,'WHL','VIC',d)});
+  for(let d=WS.outb[0];d<=WS.outb[1];d+=WS.hw)ws.push({no:(o+=2)-2,stops:icfLeg(ICF_NB,'VIC','WHL',d)});
+  ws.sort((a,b)=>a.stops[0].t-b.stops[0].t);
+  // chain into trainsets: a set at the right end first, otherwise one at the other end that has time to run back empty
+  const erc={},er=(a,b)=>a===b?0:(erc[a+b]??=computeTimes([a,b],0,WS.type,'Empty').pop().t);
+  const sets=[];for(const t of ws){const from=t.stops[0].c,dep=t.stops[0].t;
+    const ok=sets.map(s=>({s,r:s.at===from?s.ready+WS.lay:s.ready+WS.lay+er(s.at,from)+WS.lay})).filter(x=>x.r<=dep+.01)
+      .sort((a,b)=>(a.s.at===from?0:1)-(b.s.at===from?0:1)||a.s.ready-b.s.ready)[0];
+    const s=ok?ok.s:(sets.push({id:'S'+(sets.length+1),at:null,ready:-1}),sets[sets.length-1]);
+    trip(t.no,'CRD Commute','West Shore · every 12 min',s.id,t.stops);s.at=t.stops[t.stops.length-1].c;s.ready=t.stops[t.stops.length-1].t;}
+  sets.forEach((s,i)=>fleet.push({id:s.id,name:'West Shore '+(i+1),type:WS.type}));
+  // Courtenay <-> Victoria, 3 a day each way (ICF Table 18); the 05:54 and 16:51 runs are the ICF Table 17 trains
+  if(STATIONS.CTN){fleet.push({id:'R1',name:'Island Regional 1',type:'dmu'},{id:'R2',name:'Island Regional 2',type:'dmu'});
+    trip(2,'Intercity','Courtenay–Victoria','R1',icfLeg(ICF_SB,'CTN','VIC',hm(5,54)));
+    trip(3,'Intercity','Victoria–Courtenay','R1',icfLeg(ICF_NB,'VIC','CTN',hm(10,21)));
+    trip(6,'Intercity','Courtenay–Victoria','R1',icfLeg(ICF_SB,'CTN','VIC',hm(15,0)));
+    trip(1,'Intercity','Victoria–Courtenay','R2',icfLeg(ICF_NB,'VIC','CTN',hm(6,51)));
+    trip(4,'Intercity','Courtenay–Victoria','R2',icfLeg(ICF_SB,'CTN','VIC',hm(11,24)));
+    trip(5,'Intercity','Victoria–Courtenay','R2',icfLeg(ICF_NB,'VIC','CTN',hm(16,51)));}
+  // Nanaimo <-> Victoria, 3 a day each way, one set based in Nanaimo
+  if(STATIONS.NAN){fleet.push({id:'N1',name:'Nanaimo 1',type:'dmu'});
+    [[hm(6,30),hm(9,30)],[hm(12,30),hm(15,30)],[hm(18,30),hm(21,0)]].forEach(([sb,nb],i)=>{
+      trip(12+i*2,'Regional','Nanaimo–Victoria','N1',icfLeg(ICF_SB,'NAN','VIC',sb));trip(13+i*2,'Regional','Victoria–Nanaimo','N1',icfLeg(ICF_NB,'VIC','NAN',nb));});}
+  // Duncan <-> Victoria: 2 morning trains in (arrive by 08:30) and 2 afternoon trains out (15:00-17:00)
+  if(STATIONS.DUN){fleet.push({id:'D1',name:'Cowichan 1',type:'dmu'},{id:'D2',name:'Cowichan 2',type:'dmu'});
+    trip(22,'Regional','Duncan–Victoria','D1',icfLeg(ICF_SB,'DUN','VIC',hm(5,58)));trip(23,'Regional','Victoria–Duncan','D1',icfLeg(ICF_NB,'VIC','DUN',hm(15,0)));
+    trip(24,'Regional','Duncan–Victoria','D2',icfLeg(ICF_SB,'DUN','VIC',hm(6,58)));trip(25,'Regional','Victoria–Duncan','D2',icfLeg(ICF_NB,'VIC','DUN',hm(16,0)));}
+  fleet.push({id:'P1',name:'Spare set',type:'dmu',home:'WHL'});
+  return{v:3,fleet,trips,stations:{...STNSPEC},track:TRACKSPEC};
 }
-const LS='island-rail-plan-v2';
+const LS='island-rail-plan-v3';// v3: ICF business case timetable
 function validPlan(p){return p&&Array.isArray(p.fleet)&&Array.isArray(p.trips)&&p.fleet.every(f=>f&&f.id&&TYPES[f.type])&&
   p.trips.every(t=>t&&t.id&&Array.isArray(t.stops)&&t.stops.length>=2&&t.stops.every(x=>STATIONS[x.c]&&isFinite(x.t)));}
 function loadPlan(){try{const s=localStorage.getItem(LS);if(s){const p=JSON.parse(s);TRACKSPEC=normTrack(p&&p.track);applyStations(p&&p.stations);if(validPlan(p))return p;}}catch(_){}
   TRACKSPEC=normTrack(null);
-  let old=null;try{old=JSON.parse(localStorage.getItem('island-rail-plan-v1')||'null');}catch(_){}applyStations(old&&old.stations);return defaultPlan();}
+  // keep station and track edits from the previous timetable version; the timetable itself starts fresh
+  let old=null;try{old=JSON.parse(localStorage.getItem('island-rail-plan-v2')||localStorage.getItem('island-rail-plan-v1')||'null');}catch(_){}
+  if(old&&old.track)TRACKSPEC=normTrack(old.track);applyStations(old&&old.stations);return defaultPlan();}
 function savePlan(){PLAN.stations=STNSPEC;PLAN.track=TRACKSPEC;try{localStorage.setItem(LS,JSON.stringify(PLAN));}catch(_){}}
 let PLAN=loadPlan();
 const DONE=new Set();       // trip ids completed (or cancelled) today
