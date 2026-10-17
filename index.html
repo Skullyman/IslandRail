@@ -10,7 +10,7 @@
 <style>
 /* Layout: dispatcher's console — live corridor map fills the left, train status board docked right; stacks on phones. */
 :root{
-  --bg:#e8ebe4; --panel:#f7f7f2; --panel-2:#eef0ea; --ink:#1b2421; --muted:#5a6863; --line:#cfd5cd;
+  --bg:#e8ebe4; --panel:#f7f7f2; --panel-2:#eef0ea; --ink:#1b2421; --muted:#5a6863; --line:#cfd5cd; --ctl-line:#7b8882; --ctl-bg:#ffffff; --ctl-hov:#e9eee9;
   --sea:#b4ced2; --sea-ink:#46717a; --land:#ece6d3; --land-edge:#a99f83; --lake:#c3d9dc; --grid:rgba(40,70,80,.13);
   --rail:#8c1d2c; --rail-tie:#f6efe4; --sleeper:#6b5a45; --rail-off:#8f8f8a; --sleeper-off:#b7b2a6; --bike-p:#1f8a3b; --bike-l:#3fae5a; --hwy:#d38a22; --hwy-case:#fff8ea; --hwy-flow:#fffdf5; --car:#6d4a10;
   --accent:#8c1d2c; --ok:#2c7a4b; --info:#2f5f9e; --warn:#a86a10; --bad:#b42318;
@@ -20,13 +20,13 @@
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0d1517; --panel:#131e21; --panel-2:#18262a; --ink:#e6ece8; --muted:#94a6a0; --line:#25363a;
+  --bg:#0d1517; --panel:#131e21; --panel-2:#18262a; --ink:#e6ece8; --muted:#94a6a0; --line:#25363a; --ctl-line:#6b8a90; --ctl-bg:#203338; --ctl-hov:#2b454c;
   --sea:#0d2930; --sea-ink:#6fa3ad; --land:#1c2a25; --land-edge:#3d5148; --lake:#12333b; --grid:rgba(160,200,210,.09);
   --rail:#e2566b; --rail-tie:#1c2a25; --sleeper:#a08a6a; --rail-off:#a3aba6; --sleeper-off:#6c7570; --bike-p:#4fd27a; --bike-l:#2f9e55; --hwy:#e2a03e; --hwy-case:#2b2a20; --hwy-flow:#3a3420; --car:#ffd58a;
   --accent:#ee7586; --ok:#4cc27c; --info:#6c9ee6; --warn:#e5a53b; --bad:#ff6b5e;
   --halo:#1c2a25; --chip:#1b2a2e; --contour:rgba(214,196,150,.18); --contour-idx:rgba(224,206,160,.36); --elev:#e8dcc0; --hill-op:.6; --pop:#7fb0ff; --lu-res:#ffb956; --lu-op:.17; --lu-com:#2fd1b6; --lu-ins:#5fb6f2; --lu-ind:#9db6c2; --job:#3fe0c5; --t0:#6fc27e; --t1:#cbd95a; --t2:#f2c14a; --t3:#f08a45; --t4:#ff5a4f; --road:#030504; --road-case:#7d9088; --cg0:#52e882; --cg1:#ffd426; --cg2:#ff4636; --trail:#b39bff; --tct:#d2c4ff; --flow:#bccbe8; --bus:#4fd1a1; --d-air:#5b86e8; --d-ferry:#2bb3a3; --d-edu:#9d77e0; --d-hosp:#e2566b; --d-def:#8a99a3; --d-gov:#d4893f; --d-shop:#e05aae; --sp0:#ff4d6a;--sp1:#ff7a6b;--sp2:#f06cc0;--sp3:#a98bff;--sp4:#5aa9ff;--sp5:#2fd1bd; --crk0:#f6cf86;--crk1:#f59a4a;--crk2:#ff6a45;--crk3:#ff3b4a; --heat-src:#ff8a3d; --heat-dst:#4aa8ff; --street:#4b5a55; --street-edge:#18221f; --hwy-edge:#2a1f0c; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0d1517; --panel:#131e21; --panel-2:#18262a; --ink:#e6ece8; --muted:#94a6a0; --line:#25363a;
+  --bg:#0d1517; --panel:#131e21; --panel-2:#18262a; --ink:#e6ece8; --muted:#94a6a0; --line:#25363a; --ctl-line:#6b8a90; --ctl-bg:#203338; --ctl-hov:#2b454c;
   --sea:#0d2930; --sea-ink:#6fa3ad; --land:#1c2a25; --land-edge:#3d5148; --lake:#12333b; --grid:rgba(160,200,210,.09);
   --rail:#e2566b; --rail-tie:#1c2a25; --sleeper:#a08a6a; --rail-off:#a3aba6; --sleeper-off:#6c7570; --bike-p:#4fd27a; --bike-l:#2f9e55; --hwy:#e2a03e; --hwy-case:#2b2a20; --hwy-flow:#3a3420; --car:#ffd58a;
   --accent:#ee7586; --ok:#4cc27c; --info:#6c9ee6; --warn:#e5a53b; --bad:#ff6b5e;
@@ -425,6 +425,67 @@ svg.picking{cursor:crosshair}
 .tspark .sp-now{stroke:var(--muted);stroke-dasharray:2 2}
 .tspark text{font-family:var(--mono);font-size:9px;fill:var(--muted)}
 @media (max-width:980px){.panel .pane{max-height:75vh}}
+.work.off .workband{stroke-opacity:.16;stroke-dasharray:2 7;stroke-width:12}.work.off .workdot{fill-opacity:.45}.work.off .worklbl{opacity:.7}
+.tip.act{pointer-events:auto}.tipchk{display:flex;gap:6px;align-items:center;margin-top:6px;font-weight:600;cursor:pointer}.tip .pbtns{display:flex;gap:6px;margin-top:6px}
+.wkon{display:flex;gap:4px;align-items:center;font-size:11px;cursor:pointer}.wkrow.off b{opacity:.7}.wkrow.off .wkico{opacity:.5}
+.wkwarn{border:1px solid var(--accent);border-radius:8px;padding:6px 8px;margin:6px 0;font-size:12px;display:grid;gap:6px}
+.wksum{font-size:12px;display:grid;gap:3px;margin:6px 0}
+/* V42: stronger controls in the panels */
+.btn,.lsw,.mapctl button,.seg,.tabs{border-color:var(--ctl-line)}
+.btn,.lsw,.mapctl button{background:var(--ctl-bg);color:var(--ink)}
+.btn{font-weight:600}
+.btn:hover,.lsw:hover,.mapctl button:hover{background:var(--ctl-hov);border-color:var(--ink)}
+.btn.primary,.lsw[aria-pressed="true"],.mapctl button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.primary:hover{background:color-mix(in srgb,var(--ink) 82%,var(--bg))}
+.btn.danger{border-color:var(--bad);color:var(--bad);background:var(--ctl-bg)}.btn.danger:hover{background:var(--bad);color:#fff}
+.seg{background:var(--ctl-bg)}.seg button{color:var(--ink)}.seg button+button{border-left:1px solid var(--ctl-line)}
+.panel select,.panel input:not([type=checkbox]):not([type=radio]):not([type=range]),.panel textarea,.layerpanel select,.legend select,.tip select{background:var(--ctl-bg);border:1px solid var(--ctl-line);color:var(--ink);border-radius:5px}
+.panel select:focus,.panel input:focus,.panel textarea:focus,.legend select:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
+.panel input:disabled{opacity:.6}
+input[type=checkbox],input[type=radio]{accent-color:var(--accent);width:15px;height:15px;cursor:pointer}
+.tabs{background:var(--panel-2)}.tabs button{color:var(--ink);opacity:.75;font-size:12px;letter-spacing:.01em;padding:5px 2px}.tabs{gap:2px}.tabs button:hover{opacity:1;background:var(--ctl-hov)}
+.tabs button[aria-selected="true"]{opacity:1;background:var(--ink);color:var(--bg)}
+.form{border-left:3px solid var(--accent)}
+.linkbtn{all:unset;color:var(--accent);font-weight:700;cursor:pointer;text-decoration:underline}.trknote{padding:4px 12px 8px}
+/* works panel */
+.worksbox{display:grid;gap:8px;padding:8px 12px 14px}
+.wkcard{border:1px solid var(--ctl-line);border-radius:8px;padding:8px 10px;display:grid;gap:6px;background:var(--panel-2)}
+.wkstat{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:6px}.wkstat div{display:grid}.wkstat b{font-size:14px}.wkstat .m{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em}
+.wkwarn{display:flex;gap:8px;align-items:center;justify-content:space-between;border:1px solid var(--accent);border-radius:6px;padding:6px 8px;font-size:12px;background:color-mix(in srgb,var(--accent) 7%,var(--ctl-bg))}
+.wkbar{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}.wkbar .seg button{font-family:var(--body);font-size:12px;padding:5px 9px}
+.wksort{display:flex;gap:5px;align-items:center;font-size:12px}.wksort select{font-size:12px;padding:3px 5px}
+.wklist{display:grid;border:1px solid var(--ctl-line);border-radius:8px;overflow:hidden}
+.wkitem+.wkitem{border-top:1px solid var(--line)}
+.wkitem .wkrow{display:grid;grid-template-columns:auto 22px minmax(0,1fr) auto;gap:8px;align-items:center;padding:7px 8px;border:0;cursor:pointer;font-size:12px}
+.wkitem .wkrow:hover{background:var(--ctl-hov)}.wkitem .wkrow:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.wkitem.open{background:color-mix(in srgb,var(--accent) 6%,var(--panel))}.wkitem.open .wkrow{background:color-mix(in srgb,var(--accent) 12%,var(--panel))}
+.wkmain{min-width:0}.wkmain b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wkr{display:grid;justify-items:end;gap:1px;font-size:11.5px;white-space:nowrap}.wksave{color:var(--ok);font-weight:700}
+.wkrow.off .wkmain b{opacity:.75}.wkrow.off .wkico{opacity:.55}
+.wkst{font-size:10.5px;padding:0 6px;border-radius:9px;border:1px solid var(--ctl-line);display:inline-block;margin-top:2px}
+.wksw{position:relative;display:inline-block;width:30px;height:17px;flex:none;cursor:pointer}.wksw input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.wksw span{position:absolute;inset:0;border-radius:9px;background:var(--ctl-bg);border:1.5px solid var(--ctl-line);transition:background .15s}
+.wksw span::after{content:"";position:absolute;top:1.5px;left:1.5px;width:11px;height:11px;border-radius:50%;background:var(--ctl-line);transition:transform .15s}
+.wksw input:checked+span{background:var(--ok);border-color:var(--ok)}.wksw input:checked+span::after{transform:translateX(13px);background:#fff}
+.wksw input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+.wked{display:grid;gap:7px;padding:4px 10px 10px 10px;font-size:12px}
+.wef{display:grid;gap:6px}.wef.g2{grid-template-columns:1fr 1fr}.wef.g3{grid-template-columns:1.2fr 1fr 1fr}
+.wef label{display:grid;gap:2px;font-size:11.5px;font-weight:600;min-width:0}.wef input,.wef select,.wef textarea{font:inherit;font-size:12.5px;font-weight:400;min-width:0;width:100%;padding:5px 7px}
+.wef textarea{resize:vertical}.wehint{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.weeff{border-left:3px solid var(--ok);padding:3px 8px;background:var(--panel-2);border-radius:0 5px 5px 0}
+.weacts{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.weacts .grow{flex:1}
+.wknew{border:1.5px solid var(--accent);border-radius:8px;padding:8px 10px;display:grid;gap:8px;background:var(--ctl-bg)}
+.wkhead{display:flex;justify-content:space-between;align-items:center}
+.wktypes{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.wktype{display:grid;grid-template-columns:22px 1fr;gap:7px;align-items:center;text-align:left;border:1px solid var(--ctl-line);border-radius:6px;background:var(--panel);color:var(--ink);padding:5px 7px;cursor:pointer;font:inherit;font-size:12px}
+.wktype:hover{border-color:var(--ink);background:var(--ctl-hov)}.wktype .m{display:block;font-size:10.5px;line-height:1.25}
+.wkstep{font-size:12.5px}.wkstep>b:first-child{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;margin-right:4px}
+.wkempty{padding:10px}
+.worksbox .infrasum{border:1px solid var(--ctl-line);border-radius:8px;padding:8px 10px}
+.work.hl .workband{stroke-opacity:.7;stroke-width:22}
+.wkh{cursor:ew-resize}.wkhit{fill:transparent}.wkhdot{fill:var(--panel);stroke-width:3}.wkh:hover .wkhdot{fill:var(--ink)}
+.wkhlbl{font-family:var(--body);font-size:10.5px;font-weight:700;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px;pointer-events:none}
+@media (max-width:600px){.wktypes{grid-template-columns:1fr}.wef.g3{grid-template-columns:1fr 1fr}.wef.g3 label:first-child{grid-column:1/-1}}
 </style></head>
 <body>
 <noscript><p style="padding:2em;font-family:sans-serif">Island Rail Planner needs JavaScript enabled.</p></noscript>
@@ -502,7 +563,7 @@ svg.picking{cursor:crosshair}
         <div class="popkey jobkey"><span><i style="width:11px;height:11px"></i>1k jobs</span><span><i style="width:24px;height:24px"></i>5k</span><span><i style="width:34px;height:34px"></i>10k</span></div>
         <div><b id="job-cov">0</b> of <b id="job-tot">0</b> jobs (<b id="job-pct">0%</b>) are within 800 m of one of the <b id="job-n">0</b> stations served.</div>
         <div class="m">Circles sit at the centre of each area's employment land. 2021 counts were taken during the pandemic; the 2026 Census place-of-work data is due in 2027.</div></div>
-      <div class="poplegend speedlegend" id="speedlegend" hidden><h4>Track speed</h4><div class="m">Passenger speed limit along the line, from the 2003 E&amp;N track charts, the speed setting in the Track tab and any track works (outlined bands). Bridges, tunnels and road crossings appear as you zoom in; red marks are out of service today.</div><div id="spdstats"></div></div>
+      <div class="poplegend speedlegend" id="speedlegend" hidden><h4>Track speed</h4><div class="m">Passenger speed limit along the line, from the 2003 E&amp;N track charts, the speed setting in the Track tab and any track works (outlined bands; dashed if not applied, click one to apply it or not). Bridges, tunnels and road crossings appear as you zoom in; red marks are out of service today.</div><div id="spdstats"></div></div>
       <div class="poplegend crashlegend" id="crashlegend" hidden><h4>Reported crashes</h4><div class="m">ICBC reported crashes, 2021–2025 (data as of 31 March 2026). Excludes parking lots and parked vehicles; mid-block crashes are placed between the nearest intersections.</div><div class="crkey"><span><i class="k0"></i>1–4</span><span><i class="k1"></i>5–19</span><span><i class="k2"></i>20–49</span><span><i class="k3"></i>50+</span></div><div class="m">Crashes per location over five years. Zoomed out, locations are grouped into 2 km squares.</div><div id="crstats"></div></div>
       <div class="poplegend buslegend" id="destlegend" hidden><h4>Key destinations</h4><div class="m">Airports, ferry terminals, universities and colleges, hospitals, defence bases, government and major shopping centres: places many people must reach. Turn names on or off in the Layers panel. Locations from OpenStreetMap.</div>
         <div class="destkey"><span><i style="background:var(--d-air)"></i>Air</span><span><i style="background:var(--d-ferry)"></i>Ferry</span><span><i style="background:var(--d-edu)"></i>Campus</span><span><i style="background:var(--d-hosp)"></i>Hospital</span><span><i style="background:var(--d-def)"></i>Defence</span><span><i style="background:var(--d-gov)"></i>Government</span><span><i style="background:var(--d-shop)"></i>Shopping</span></div>
@@ -526,7 +587,7 @@ svg.picking{cursor:crosshair}
       <div class="placebar" id="placebar" hidden><span>Click the rail line where the new station should go</span><button class="btn sm" id="placecancel" type="button">Cancel</button></div>
     </div>
     <aside class="panel" aria-label="Service planner">
-      <div class="phead"><div class="tabs" role="tablist"><button type="button" role="tab" data-tab="tt" aria-selected="true">Timetable</button><button type="button" role="tab" data-tab="fleet" aria-selected="false">Fleet</button><button type="button" role="tab" data-tab="stn" aria-selected="false">Stations</button><button type="button" role="tab" data-tab="trk" aria-selected="false">Track</button><button type="button" role="tab" data-tab="plan" aria-selected="false">Plan</button></div><span id="p-sum"></span></div>
+      <div class="phead"><div class="tabs" role="tablist"><button type="button" role="tab" data-tab="tt" aria-selected="true">Timetable</button><button type="button" role="tab" data-tab="fleet" aria-selected="false">Fleet</button><button type="button" role="tab" data-tab="stn" aria-selected="false">Stations</button><button type="button" role="tab" data-tab="trk" aria-selected="false">Track</button><button type="button" role="tab" data-tab="works" aria-selected="false">Works</button><button type="button" role="tab" data-tab="plan" aria-selected="false">Plan</button></div><span id="p-sum"></span></div>
       <div class="pane" id="pane-tt">
         <div class="toolbar"><button class="btn primary" id="btn-new" type="button">+ New trip</button><select id="f-filter" aria-label="Filter trips"></select><span class="grow"></span><button class="btn" id="btn-auto" type="button" title="Assign trainsets to trips automatically">Auto-assign</button></div>
         <div class="form" id="tripform" hidden></div>
@@ -547,9 +608,13 @@ svg.picking{cursor:crosshair}
         <div class="toolbar"><button class="btn primary" id="btn-drawtrk" type="button">+ Draw new track</button><button class="btn" id="btn-edittrk" type="button" aria-pressed="false">Move track</button><span class="grow"></span><span class="m" id="trk-count"></span></div>
         <div class="form" id="trkhelp" hidden></div>
         <div class="spdbox" id="spdbox"></div>
-        <div class="spdbox" id="worksbox"></div>
+        <p class="m trknote">Track works and speed projects are in the <button class="linkbtn" type="button" id="go-works">Works</button> tab.</p>
         <div id="trklist"></div>
         <div class="pbtns" id="trkresetbox" hidden><button class="btn danger" id="btn-trkreset" type="button">Undo all track changes</button></div>
+      </div>
+      <div class="pane" id="pane-works" hidden>
+        <div class="toolbar"><button class="btn primary" id="wk-new" type="button">+ New work</button><span class="grow"></span><span class="m" id="wk-count"></span></div>
+        <div id="worksbox" class="worksbox"></div>
       </div>
       <div class="pane" id="pane-plan" hidden>
         <h3 class="sec">Starting timetable</h3>
@@ -617,11 +682,12 @@ const BASE_LINES={MAIN:GEO.MAIN,ALB:GEO.ALB};
 /* ---------- track edits: moved alignments (geom) and added tracks (lines) ---------- */
 var TRACKSPEC={geom:{},lines:[]}, TRK={};// TRK: line id -> {id,name,parent,jk,v,user}
 const BASE_BUILT={MAIN:buildLine(GEO.MAIN),ALB:buildLine(GEO.ALB)};
-function normTrack(sp){const o={geom:{},lines:[],works:[]};if(!sp||typeof sp!=='object')return o;
-  if(Array.isArray(sp.works))for(const w of sp.works)if(w&&WORK_TYPES[w.type]&&(w.line==='MAIN'||w.line==='ALB')&&isFinite(+w.a)&&isFinite(+w.b)&&+w.b>+w.a)o.works.push({id:String(w.id||'w'+Math.random().toString(36).slice(2,8)),type:w.type,line:w.line,a:+w.a,b:+w.b,name:String(w.name||'').slice(0,80),deg:w.deg!=null?+w.deg:undefined,status:['idea','proposed','planned','funded','built'].includes(w.status)?w.status:'idea',cost:w.cost!=null&&w.cost!==''&&isFinite(+w.cost)?+w.cost:null,notes:String(w.notes||'').slice(0,1000),project:w.project||null});
+function normTrack(sp){const o={geom:{},lines:[],works:[],seed:41};if(!sp||typeof sp!=='object'){o.works=DEFAULT_WORKS.map(w=>({...w}));return o;}
+  if(Array.isArray(sp.works))for(const w of sp.works)if(w&&WORK_TYPES[w.type]&&(w.line==='MAIN'||w.line==='ALB')&&isFinite(+w.a)&&isFinite(+w.b)&&+w.b>+w.a)o.works.push({id:String(w.id||'w'+Math.random().toString(36).slice(2,8)),type:w.type,line:w.line,a:+w.a,b:+w.b,name:String(w.name||'').slice(0,80),deg:w.deg!=null?+w.deg:undefined,status:['idea','proposed','planned','funded','built'].includes(w.status)?w.status:'idea',cost:w.cost!=null&&w.cost!==''&&isFinite(+w.cost)?+w.cost:null,notes:String(w.notes||'').slice(0,1500),project:w.project||null,on:w.on!==false});
   if(sp.geom&&typeof sp.geom==='object')for(const l of ['MAIN','ALB'])if(Array.isArray(sp.geom[l])&&sp.geom[l].length>=2&&sp.geom[l].every(e=>Array.isArray(e)||(e&&Number.isInteger(e.a)&&Array.isArray(e.ll))))o.geom[l]=sp.geom[l];
   if(Array.isArray(sp.lines))for(const t of sp.lines)if(t&&typeof t.id==='string'&&Array.isArray(t.ll)&&t.ll.length>=2&&(t.parent==='MAIN'||t.parent==='ALB'||o.lines.some(x=>x.id===t.parent)))
     o.lines.push({id:t.id,name:String(t.name||'New track').slice(0,40),v:Math.max(20,Math.min(160,+t.v||80)),parent:t.parent,ll:t.ll.map(p=>[+p[0],+p[1]])});
+  if(!sp.seed)for(const w of DEFAULT_WORKS)if(!o.works.some(x=>x.id===w.id))o.works.push({...w});
   return o;}
 const lineName=l=>TRK[l]?TRK[l].name:l==='ALB'?'Port Alberni line':l==='MAIN'?'Main line':'Removed track';
 // the editable vertex list of a line: [lon,lat] bends, {a:baseIndex,ll} for fixed points (stations, ends)
@@ -733,11 +799,41 @@ const WORK_TYPES={
  drain:{n:'Drainage, ballast and surfacing',s:'Drainage',i:'≈',c:'#7a6a3a',d:'Ditching, culverts, new ballast and tamping. Lifts soft-track slow orders in the range.'},
  rebuild:{n:'Rebuild a missing bridge or track',s:'Rebuild',i:'↺',c:'#a23b2a',d:'Rebuilds a bridge that is out or track that has been removed, reopening the line. The Restored setting already assumes the line is continuous.'},
  veg:{n:'Vegetation clearing and sight lines',s:'Clearing',i:'♣',c:'#4f8a3c',d:'Brushes the right of way and crossing sight triangles. Lifts sight-line slow orders in the range.'}};
+
+/* ---------- corridor speed projects (V41): the cheap ones are applied by default. Costs are 2026 CAD order-of-magnitude estimates.
+   Unit costs: 2020 Island Rail Corridor Condition Assessment, Appendix G (WSP for BC MoTI), escalated ×1.3 to 2026;
+   crossing gates: CN Otway Rd, Prince George (2021, $472–529k for gates, bells, lights and constant warning time), escalated ×1.15;
+   crossing counts and protection: Transport Canada Grade Crossings Inventory (2023 update). ---------- */
+const SE_NOTE=mi=>`Cost basis: re-surfacing curves with up to 6 in. of superelevation (6 in. lift $7/track ft and ballast at $50/cu yd in the 2020 Island Rail Corridor Condition Assessment) ≈ $59k per mile in 2020, about $77k per mile in 2026, charged on all ${mi} miles of the range. Roughly half that if done in the restoration's own surfacing pass. Same speed gain as approving the trains for 5 in. of cant deficiency instead of 3 in.`;
+const XG=575,XP=725,XC=100;// $k: add gates and constant warning time to lights/bells; full gates at a passive crossing; close a crossing
+const DEFAULT_WORKS=[
+ {id:'p41-se1',type:'superel',line:'MAIN',a:2.89,b:10,name:'Superelevation: Esquimalt–Langford–Goldstream',status:'proposed',cost:0.5,on:true,notes:SE_NOTE(7.1)},
+ {id:'p41-se2',type:'superel',line:'MAIN',a:10,b:28,name:'Superelevation: Malahat',status:'proposed',cost:1.4,on:true,notes:SE_NOTE(18)+' Small gain here: the 11° curves stay near 30 mph until they are eased.'},
+ {id:'p41-se3',type:'superel',line:'MAIN',a:28,b:71.52,name:'Superelevation: Shawnigan–Duncan–Ladysmith–Nanaimo',status:'proposed',cost:3.4,on:true,notes:SE_NOTE(43.5)},
+ {id:'p41-se4',type:'superel',line:'MAIN',a:73.93,b:137.9,name:'Superelevation: Wellington–Parksville–Courtenay',status:'proposed',cost:4.9,on:true,notes:SE_NOTE(64)},
+ {id:'p41-se5',type:'superel',line:'ALB',a:10,b:36.95,name:'Superelevation: Arrowsmith grade (Port Alberni Sub)',status:'proposed',cost:2.1,on:true,notes:SE_NOTE(27)},
+ {id:'p41-x1',type:'xing',line:'MAIN',a:0,b:2.89,name:'Crossings: Vic West and Esquimalt',status:'proposed',cost:5.4,on:true,
+  notes:`11 crossings in the Transport Canada inventory, MP 0.4–2.5. Add gates and constant warning time at Tyee, Esquimalt Rd, Wilson, Lampson and Admirals (5 × $${XG}k); constant warning time at Catherine (already gated, $150k); full gates at the passive Russell, Devonshire and Hutchinson crossings (3 × $${XP}k); close Mary St and Intervale Ave (500 vehicles a day each, 2 × $${XC}k).`},
+ {id:'p41-x2',type:'xing',line:'MAIN',a:71.52,b:73.93,name:'Crossings: Nanaimo townsite',status:'proposed',cost:6.7,on:true,
+  notes:`14 crossings, MP 71.8–73.9, all with lights and bells. Add gates and constant warning time at 11 (Fifth, Kennedy, Milton, Albert, Prideaux, Franklyn, Fitzwilliam, Wentworth, Comox, Rosehill, Townsite: 11 × $${XG}k); constant warning time at St George (already gated, $150k); close Campbell St and the second Prideaux St crossing (2 × $${XC}k).`},
+ {id:'p41-x3',type:'xing',line:'MAIN',a:137.9,b:139.9,name:'Crossings: Courtenay approach',status:'proposed',cost:2.0,on:true,
+  notes:`4 crossings, MP 138.3–139.7. Gates at 26th St and 17th Ave (2 × $${XG}k); full gates at the passive Cumberland Rd crossing (7,000 vehicles a day, $${XP}k); close 29th St (50 vehicles a day, $${XC}k).`},
+ {id:'p41-x4',type:'xing',line:'ALB',a:36.95,b:38,name:'Crossings: Port Alberni',status:'proposed',cost:1.7,on:true,
+  notes:`Johnston Rd, Roger St and Stamp Ave (11,000–18,000 vehicles a day, lights and bells today): add gates and constant warning time (3 × $${XG}k).`},
+ {id:'p41-c4a',type:'renew',line:'MAIN',a:73.93,b:80,name:'Class 4 track: Nanaimo–Wellington',status:'idea',cost:35,on:false,
+  notes:'Saves under a minute. Cost basis: 115 lb welded rail, ties, plates and surfacing at the 2020 assessment intermediate-phase rates (≈$0.75M per mile in 2026), plus signalling for running above 60 mph at the assessment’s commuter signalling rate (≈$4.3M per mile), plus gates at 8 crossings. Poor value at today’s alignment.'},
+ {id:'p41-c4b',type:'renew',line:'ALB',a:0,b:10,name:'Class 4 track: Parksville–Coombs',status:'idea',cost:53,on:false,
+  notes:'Saves about 2 minutes. Same cost basis as the Nanaimo–Wellington Class 4 project, over 10 miles, plus gates at 6 crossings.'},
+ {id:'p41-cv1',type:'curve',line:'MAIN',a:10.7,b:27.9,deg:4,name:'Curve easing: Malahat (rock cuts)',status:'idea',cost:140,on:false,
+  notes:'Largest single gain, about 13 minutes. Cost basis: about $8M per mile for rock cuts and side-hill realignment, from the 2017 Malahat Village highway project ($34M for 5 km of widening with blasting, about $15M per mile in 2026) scaled down for a single-track corridor. Range $90–240M. Needs a geotechnical study before it can be costed properly.'},
+ {id:'p41-cv2',type:'curve',line:'ALB',a:10,b:36.95,deg:6,name:'Curve easing: Arrowsmith grade',status:'idea',cost:215,on:false,
+  notes:'About 19 minutes on the Port Alberni Sub. Same $8M per mile basis as the Malahat curve easing, over 27 miles of mountain grade.'}];
+const worksSig=()=>SPEED_PROF+'|'+(TRACKSPEC.works||[]).filter(w=>w.on!==false).map(w=>[w.type,w.line,w.a,w.b,w.deg??''].join(':')).sort().join(',');
 // effective speed (mph) at a milepost: 2003 posted, curve limit, track class, town limits and any track works
 function effMph(line,mp,fr,works){const T=TRKSPD[line];const look=L=>{for(const x of L)if(mp<x[1])return x;return L[L.length-1];};
   const p=look(T.posted),D=look(T.curve)[2];const town=(URBAN[line]||[]).some(([a,b])=>mp>=a&&mp<b);
   let cap=60,Ea=4,deg=D,tcap=0,hit=false;
-  for(const w of (works||TRACKSPEC.works||[])){if(w.line!==line||mp<w.a||mp>=w.b)continue;const t=WORK_TYPES[w.type];if(!t)continue;hit=true;
+  for(const w of (works||TRACKSPEC.works||[])){if(w.line!==line||mp<w.a||mp>=w.b||w.on===false)continue;const t=WORK_TYPES[w.type];if(!t)continue;hit=true;
     if(t.cap)cap=Math.max(cap,t.cap);if(t.Ea)Ea=Math.max(Ea,t.Ea);if(t.deg!==undefined)deg=Math.min(deg,w.deg??t.deg);if(t.town)tcap=Math.max(tcap,t.town);}
   const cv=deg>0?5*Math.floor(Math.sqrt((Ea+3)/(0.0007*deg))/5):999,model=Math.min(cap,cv);
   if(SPEED_PROF==='posted'&&!hit)return fr?p[3]:p[2];
@@ -772,12 +868,15 @@ const ICF_SB=[['CTN',0],['QUB',51],['PKS',61],['NAN',92],['LDY',112],['DUN',138]
 const ICF_NB=[['VIC',0],['ESQ',11],['SMI',18],['ATK',21],['LAN',25],['WHL',30],['SHL',66],['DUN',91],['LDY',117],['NAN',137],['PKS',168],['QUB',178],['CTN',230]];
 const WS={hw:12,lay:5,type:'dmu',inb:[6*60,15*60],outb:[9*60+15,17*60+30]};// ICF Table 18 operating windows; headway tightened to 12 minutes
 const hm=(h,m)=>h*60+m;
+// a leg of an ICF stopping pattern, timed by the planner's speed model (current speed setting and applied track works)
+function mdlLeg(pat,from,to,dep){const a=pat.findIndex(x=>x[0]===from),b=pat.findIndex(x=>x[0]===to);const codes=pat.slice(a,b+1).map(x=>x[0]).filter(c=>STATIONS[c]);
+  return computeTimes(codes,dep,'dmu','Regional').map(o=>({c:o.c,t:Math.round(o.t*2)/2}));}
 function icfLeg(pat,from,to,dep){const a=pat.findIndex(x=>x[0]===from),b=pat.findIndex(x=>x[0]===to);const t0=pat[a][1];
   return pat.slice(a,b+1).filter(x=>STATIONS[x[0]]).map(([c,t])=>({c,t:dep+t-t0}));}
 const PRESETS={icf:{name:'ICF business case, West Shore every 12 min',sub:'ICF business case service · West Shore every 12 minutes · Victoria–Courtenay, Nanaimo and Duncan regional trains'},
   data:{name:'Data-driven (CRD survey and Census)',sub:'Data-driven service · West Shore every 10 min peaks, 15 midday · Cowichan commuter · Duncan–Nanaimo shuttle'}};
-PRESETS.data8={name:'Data-driven, 8 trainsets',sub:'Data-driven service on 8 trainsets · West Shore every 10–20 min · Nanaimo–Victoria commuter · Courtenay intercity'};
-function defaultPlan(preset='data8'){return preset==='data'?dataPlan():preset==='icf'?icfPlan():data8Plan();}
+PRESETS.data8={name:'Data-driven, 8 trainsets',sub:'Data-driven service on 8 trainsets · West Shore every 10–20 min · Nanaimo–Victoria commuter · Courtenay intercity · timed with the applied speed projects'};
+function defaultPlan(preset='data8'){const p=preset==='data'?dataPlan():preset==='icf'?icfPlan():data8Best();if(p.preset!=='icf')p.timedSig=worksSig();return p;}
 function icfPlan(){
   const fleet=[],trips=[];if(!STATIONS.VIC||!STATIONS.WHL)return{v:3,preset:'icf',fleet,trips,stations:{...STNSPEC},track:TRACKSPEC};
   const trip=(no,cls,tag,set,stops)=>trips.push({id:nid('t'),no:String(no),cls,tag,set,fixed:true,stops});
@@ -824,6 +923,10 @@ function chainSets(list,type,prefix,label,fleet,lay=5){const erc={},er=(a,b)=>a=
 /* Data-driven timetable on a fixed fleet of 8 trainsets: regional trains are placed first, then West Shore trips are given to any set
    that is free between its own commitments (including regional sets waiting in Victoria between peaks). */
 const D8_WS=[[hm(5,30),hm(6,30),30],[hm(6,30),hm(9,0),15],[hm(9,0),hm(14,0),20],[hm(14,0),hm(16,0),10],[hm(16,0),hm(18,30),15],[hm(18,30),hm(22,1),30]];
+// West Shore headways to try, richest first: faster running (from the applied speed projects) lets the same 8 sets run more often
+const D8_RICH=[[hm(5,30),hm(6,30),20],[hm(6,30),hm(9,0),12],[hm(9,0),hm(14,0),15],[hm(14,0),hm(16,0),10],[hm(16,0),hm(18,30),15],[hm(18,30),hm(22,1),20]];
+const D8_MID=[[hm(5,30),hm(6,30),30],[hm(6,30),hm(9,0),15],[hm(9,0),hm(14,0),15],[hm(14,0),hm(16,0),10],[hm(16,0),hm(18,30),15],[hm(18,30),hm(22,1),20]];
+function data8Best(){let last=null;for(const w of [D8_RICH,D8_MID,D8_WS]){const p=data8Plan(8,w);if(!p.dropped||!p.dropped.length)return p;last=last||p;}return data8Plan(8,D8_WS);}
 function data8Plan(MAX=8,WIN=D8_WS){
   const fleet=[],trips=[],dropped=[];if(!STATIONS.VIC||!STATIONS.WHL)return{v:3,preset:'data8',fleet,trips,stations:{...STNSPEC},track:TRACKSPEC};
   const type='dmu',lay=5,erc={},er=(a,b)=>a===b?0:(erc[a+b]??=computeTimes([a,b],0,type,'Empty').pop().t+lay);
@@ -832,15 +935,15 @@ function data8Plan(MAX=8,WIN=D8_WS){
   const sets=[];const newSet=(id,name)=>{const s={id,name,list:[]};sets.push(s);return s;};
   const put=(s,t)=>{t.set=s.id;s.list.push(t);s.list.sort((a,b)=>dep(a)-dep(b));trips.push(t);};
   // regional trains (fixed): Courtenay intercity, and two Nanaimo–Duncan–Victoria commuter trains
-  if(STATIONS.CTN){const r=newSet('R1','Island Regional');put(r,mk(2,'Intercity','Courtenay–Victoria',icfLeg(ICF_SB,'CTN','VIC',hm(5,54))));put(r,mk(1,'Intercity','Victoria–Courtenay',icfLeg(ICF_NB,'VIC','CTN',hm(16,51))));}
+  if(STATIONS.CTN){const r=newSet('R1','Island Regional');put(r,mk(2,'Intercity','Courtenay–Victoria',mdlLeg(ICF_SB,'CTN','VIC',hm(5,54))));put(r,mk(1,'Intercity','Victoria–Courtenay',mdlLeg(ICF_NB,'VIC','CTN',hm(16,51))));}
   if(STATIONS.NAN&&STATIONS.DUN){[[hm(5,30),hm(16,10)],[hm(6,5),hm(17,5)]].forEach(([a,b],k)=>{const s=newSet('N'+(k+1),'Mid-Island commuter '+(k+1));
-    put(s,mk(11+k*2,'Regional','Nanaimo–Duncan–Victoria commuter',icfLeg(ICF_SB,'NAN','VIC',a)));put(s,mk(12+k*2,'Regional','Victoria–Duncan–Nanaimo commuter',icfLeg(ICF_NB,'VIC','NAN',b)));});}
+    put(s,mk(11+k*2,'Regional','Nanaimo–Duncan–Victoria commuter',mdlLeg(ICF_SB,'NAN','VIC',a)));put(s,mk(12+k*2,'Regional','Victoria–Duncan–Nanaimo commuter',mdlLeg(ICF_NB,'VIC','NAN',b)));});}
   // West Shore trips, both directions, headways shaped by the CRD survey's hourly trips
   const ws=[];let e=100,o=101;
-  const runIn=31,runOut=30;// ICF Westhills–Victoria running times
+  const runIn=Math.ceil(mdlLeg(ICF_SB,'WHL','VIC',0).pop().t),runOut=Math.ceil(mdlLeg(ICF_NB,'VIC','WHL',0).pop().t);// model running times with the applied works
   for(const [a,b,h] of WIN){const N=Math.ceil((runIn+runOut+2*lay)/h),slack=N*h-runIn-runOut-2*lay,off=(runIn+lay+Math.floor(slack/2))%h;// balance layovers at both ends
     for(let d=a;d<b;d+=h){const tag=`West Shore · every ${h} min`;
-      ws.push(mk((e+=2)-2,'CRD Commute',tag,icfLeg(ICF_SB,'WHL','VIC',d)),mk((o+=2)-2,'CRD Commute',tag,icfLeg(ICF_NB,'VIC','WHL',d+off)));}}
+      ws.push(mk((e+=2)-2,'CRD Commute',tag,mdlLeg(ICF_SB,'WHL','VIC',d)),mk((o+=2)-2,'CRD Commute',tag,mdlLeg(ICF_NB,'VIC','WHL',d+off)));}}
   ws.sort((a,b)=>dep(a)-dep(b));
   const fits=(s,t)=>{const L=s.list;let prev=null,next=null;for(const x of L){if(arr(x)<=dep(t)+.01){prev=x;}else if(dep(x)>=arr(t)-.01){if(!next)next=x;}else return null;}
     if(prev&&arr(prev)+lay+er(to(prev),from(t))>dep(t)+.01)return null;
@@ -862,36 +965,37 @@ function dataPlan(){
   const peak=[],off=[];let e=100,o=101;
   for(const [a,b,h] of DD_WS)for(let d=a;d<b;d+=h){
     const p=ddPeak(d),tag=p?'West Shore peak · every 10 min · 2 units':`West Shore · every ${h} min`;
-    (p?peak:off).push(mk((e+=2)-2,'CRD Commute',tag,null,icfLeg(ICF_SB,'WHL','VIC',d)));
-    (p?peak:off).push(mk((o+=2)-2,'CRD Commute',tag,null,icfLeg(ICF_NB,'VIC','WHL',d+5)));}
+    (p?peak:off).push(mk((e+=2)-2,'CRD Commute',tag,null,mdlLeg(ICF_SB,'WHL','VIC',d)));
+    (p?peak:off).push(mk((o+=2)-2,'CRD Commute',tag,null,mdlLeg(ICF_NB,'VIC','WHL',d+5)));}
   // one pool of sets; a set that works any peak trip runs as two coupled units
   const all=[...peak,...off],f0=fleet.length;chainSets(all,'dmu','W','West Shore',fleet);trips.push(...all);
   for(const f of fleet.slice(f0))if(peak.some(t=>t.set===f.id)){f.type='dmu2';f.name+=' (2 units)';}
   // Cowichan commuter: 4 trains into Victoria arriving 06:45-08:30, 4 back 15:30-17:45, plus a counter-peak run each way
   if(STATIONS.DUN){[[hm(5,13),hm(15,30)],[hm(5,43),hm(16,15)],[hm(6,13),hm(17,0)],[hm(6,48),hm(17,45)]].forEach(([i,b],k)=>{const id='D'+(k+1);fleet.push({id,name:'Cowichan '+(k+1),type:'dmu'});
-      trips.push(mk(21+k*2,'Regional','Duncan–Victoria commuter',id,icfLeg(ICF_SB,'DUN','VIC',i)),mk(22+k*2,'Regional','Victoria–Duncan commuter',id,icfLeg(ICF_NB,'VIC','DUN',b)));});
+      trips.push(mk(21+k*2,'Regional','Duncan–Victoria commuter',id,mdlLeg(ICF_SB,'DUN','VIC',i)),mk(22+k*2,'Regional','Victoria–Duncan commuter',id,mdlLeg(ICF_NB,'VIC','DUN',b)));});
     fleet.push({id:'D5',name:'Cowichan 5',type:'dmu'});
-    trips.push(mk(30,'Regional','Victoria–Duncan counter-peak','D5',icfLeg(ICF_NB,'VIC','DUN',hm(6,30))),mk(29,'Regional','Duncan–Victoria counter-peak','D5',icfLeg(ICF_SB,'DUN','VIC',hm(15,0))));}
+    trips.push(mk(30,'Regional','Victoria–Duncan counter-peak','D5',mdlLeg(ICF_NB,'VIC','DUN',hm(6,30))),mk(29,'Regional','Duncan–Victoria counter-peak','D5',mdlLeg(ICF_SB,'DUN','VIC',hm(15,0))));}
   // Duncan–Nanaimo shuttle, 5 a day each way, meeting the Victoria trains at Duncan
   if(STATIONS.DUN&&STATIONS.NAN){fleet.push({id:'M1',name:'Mid-Island 1',type:'dmu'},{id:'M2',name:'Mid-Island 2',type:'dmu'});let n=40;
     [['M1','SB',hm(5,25)],['M1','NB',hm(6,20)],['M1','SB',hm(7,30)],['M1','NB',hm(8,30)],['M1','SB',hm(11,0)],['M1','NB',hm(12,0)],
      ['M2','SB',hm(15,0)],['M2','NB',hm(17,10)],['M2','SB',hm(18,10)],['M2','NB',hm(19,20)]].forEach(([set,dir,d])=>
-      trips.push(mk(n++,'Regional',dir==='SB'?'Nanaimo–Duncan shuttle':'Duncan–Nanaimo shuttle',set,dir==='SB'?icfLeg(ICF_SB,'NAN','DUN',d):icfLeg(ICF_NB,'DUN','NAN',d))));}
+      trips.push(mk(n++,'Regional',dir==='SB'?'Nanaimo–Duncan shuttle':'Duncan–Nanaimo shuttle',set,dir==='SB'?mdlLeg(ICF_SB,'NAN','DUN',d):mdlLeg(ICF_NB,'DUN','NAN',d))));}
   // Courtenay intercity: a morning arrival in Victoria and evening return, plus day trips to Nanaimo timed around the Departure Bay ferries
   if(STATIONS.CTN){fleet.push({id:'R1',name:'Island Regional 1',type:'dmu'},{id:'R2',name:'Island Regional 2',type:'dmu'},{id:'R3',name:'Island Regional 3',type:'dmu'});
-    trips.push(mk(2,'Intercity','Courtenay–Victoria','R1',icfLeg(ICF_SB,'CTN','VIC',hm(5,54))),mk(5,'Intercity','Victoria–Courtenay','R1',icfLeg(ICF_NB,'VIC','CTN',hm(16,51))),
-      mk(4,'Intercity','Courtenay–Victoria','R2',icfLeg(ICF_SB,'CTN','VIC',hm(9,8))),mk(3,'Intercity','Victoria–Courtenay','R2',icfLeg(ICF_NB,'VIC','CTN',hm(13,15))),
-      mk(1,'Intercity','Victoria–Courtenay','R3',icfLeg(ICF_NB,'VIC','CTN',hm(7,0))),mk(6,'Intercity','Courtenay–Victoria','R3',icfLeg(ICF_SB,'CTN','VIC',hm(17,30))));}
+    trips.push(mk(2,'Intercity','Courtenay–Victoria','R1',mdlLeg(ICF_SB,'CTN','VIC',hm(5,54))),mk(5,'Intercity','Victoria–Courtenay','R1',mdlLeg(ICF_NB,'VIC','CTN',hm(16,51))),
+      mk(4,'Intercity','Courtenay–Victoria','R2',mdlLeg(ICF_SB,'CTN','VIC',hm(9,8))),mk(3,'Intercity','Victoria–Courtenay','R2',mdlLeg(ICF_NB,'VIC','CTN',hm(13,15))),
+      mk(1,'Intercity','Victoria–Courtenay','R3',mdlLeg(ICF_NB,'VIC','CTN',hm(7,0))),mk(6,'Intercity','Courtenay–Victoria','R3',mdlLeg(ICF_SB,'CTN','VIC',hm(17,30))));}
   fleet.push({id:'P1',name:'Spare set',type:'dmu',home:'WHL'});
   return{v:3,preset:'data',fleet,trips,stations:{...STNSPEC},track:TRACKSPEC};
 }
-const LS='island-rail-plan-v4';// v4: data-driven 8-trainset timetable is the default// v3: ICF business case timetable
+const LS='island-rail-plan-v5';// v5: timetable timed by the speed model with the corridor speed projects
+// v4: data-driven 8-trainset timetable is the default// v3: ICF business case timetable
 function validPlan(p){return p&&Array.isArray(p.fleet)&&Array.isArray(p.trips)&&p.fleet.every(f=>f&&f.id&&TYPES[f.type])&&
   p.trips.every(t=>t&&t.id&&Array.isArray(t.stops)&&t.stops.length>=2&&t.stops.every(x=>STATIONS[x.c]&&isFinite(x.t)));}
 function loadPlan(){try{const s=localStorage.getItem(LS);if(s){const p=JSON.parse(s);TRACKSPEC=normTrack(p&&p.track);applyStations(p&&p.stations);if(validPlan(p))return p;}}catch(_){}
   TRACKSPEC=normTrack(null);
   // keep station and track edits from the previous timetable version; the timetable itself starts fresh
-  let old=null;try{old=JSON.parse(localStorage.getItem('island-rail-plan-v3')||localStorage.getItem('island-rail-plan-v2')||localStorage.getItem('island-rail-plan-v1')||'null');}catch(_){}
+  let old=null;try{old=JSON.parse(localStorage.getItem('island-rail-plan-v4')||localStorage.getItem('island-rail-plan-v3')||localStorage.getItem('island-rail-plan-v2')||localStorage.getItem('island-rail-plan-v1')||'null');}catch(_){}
   if(old&&old.track)TRACKSPEC=normTrack(old.track);applyStations(old&&old.stations);return defaultPlan();}
 function savePlan(){PLAN.stations=STNSPEC;PLAN.track=TRACKSPEC;try{localStorage.setItem(LS,JSON.stringify(PLAN));}catch(_){}}
 let PLAN=loadPlan();if(SPEED_PROFS[PLAN.speedProf])SPEED_PROF=PLAN.speedProf;else PLAN.speedProf=SPEED_PROF;
@@ -1389,7 +1493,7 @@ function showTip(st,e,pin){if(tipPinned&&!pin)return;if(pin)tipPinned=st;const t
   body+=`<div class="deps">${deps.length?deps.map(d=>`<div><span>${hhmm(d.t)}</span><b>${d.tr.no}</b><span>${nm(d.tr.to)}</span>${d.d>1?`<em>+${Math.round(d.d)}′</em>`:''}</div>`).join(''):'<div class="m">No more departures today</div>'}</div>`;
   tip.innerHTML=`<h4>${st.n}</h4><div class="m">${kmTxt}</div>${body}`;
   tip.hidden=false;let x=e.clientX-r.left+14,y=e.clientY-r.top+14;if(x>r.width-210)x-=230;if(y>r.height-170)y-=180;tip.style.left=x+'px';tip.style.top=y+'px';}
-function hideTip(force){if(tipPinned&&force!==true)return;tipPinned=null;$('tip').hidden=true;}
+function hideTip(force){if(tipPinned&&force!==true)return;tipPinned=null;$('tip').hidden=true;$('tip').classList.remove('act');}
 
 /* ---------- editor ---------- */
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -1789,7 +1893,7 @@ function buildCrash(){if(crashBuilt)return;crashBuilt=true;
   crashG.addEventListener('pointerover',e=>{const t=e.target;if(tipPinned)return;if(t._cell)showCrashCellTip(t._cell,e);else if(t._i!==undefined)showCrashTip(CRASH[t._i],e);});
   crashG.addEventListener('pointerout',e=>{if(!tipPinned&&(e.target._cell||e.target._i!==undefined))$('tip').hidden=true;});
   crashG.addEventListener('click',e=>{const t=e.target;if(t._cell){e.stopPropagation();tipPinned={crash:1};showCrashCellTip(t._cell,e);}else if(t._i!==undefined){e.stopPropagation();tipPinned={crash:1};showCrashTip(CRASH[t._i],e);}});}
-function placeTip(e,h){const tip=$('tip'),w=wrap.getBoundingClientRect();if(e)tipXY=[e.clientX-w.left,e.clientY-w.top];tip.innerHTML=h;tip.hidden=false;
+function placeTip(e,h){const tip=$('tip'),w=wrap.getBoundingClientRect();if(e)tipXY=[e.clientX-w.left,e.clientY-w.top];tip.classList.remove('act');tip.innerHTML=h;tip.hidden=false;
   let x=tipXY[0]+14,y=tipXY[1]+14;if(x>w.width-280)x-=300;if(y>w.height-150)y-=160;tip.style.left=x+'px';tip.style.top=y+'px';}
 const crashLine=(t,c)=>`<div><b>${t.toLocaleString()}</b> reported crash${t===1?'':'es'}, 2021–2025: <b>${c.toLocaleString()}</b> injured or killed someone, ${(t-c).toLocaleString()} property damage only</div>`;
 function showCrashTip(o,e){const nm=crashName(o);
@@ -1881,8 +1985,9 @@ function drawHeatNow(){
 $('fheat').onchange=()=>{FHEAT=$('fheat').value;$('fheat-key').hidden=FHEAT==='off';drawHeat();};
 
 function switchTab(n){tab=n;document.querySelectorAll('[data-tab]').forEach(x=>x.setAttribute('aria-selected',String(x.dataset.tab===n)));
-  ['tt','fleet','stn','trk','plan'].forEach(p=>$('pane-'+p).hidden=p!==n);if(n!=='stn')cancelPlacing(true);if(n!=='trk'){cancelDrawing();setTrkEdit(false);}renderEditor();}
+  ['tt','fleet','stn','trk','works','plan'].forEach(p=>$('pane-'+p).hidden=p!==n);if(n!=='works'&&typeof WORK_PICK!=='undefined'&&WORK_PICK){WORK_PICK=null;WORK_NEW=false;svg.classList.remove('picking');}if(n==='works'){renderWorks();if(L.speed.style.display==='none')$('speedbtn').click();}if(n!=='stn')cancelPlacing(true);if(n!=='trk'){cancelDrawing();setTrkEdit(false);}renderEditor();}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+$('go-works').onclick=()=>switchTab('works');
 
 function tripStatus(tr){if(!tr.set||!setOf(tr.set))return['una','Unassigned'];const t=trains.find(x=>x.id===tr.set);
   if(t&&t.trip&&t.trip.id===tr.id)return t.blocked>.5?['bad','Held at signal']:['run',t.delay>5?`+${Math.round(t.delay)} min`:'Running'];
@@ -2224,7 +2329,7 @@ function renderTrack(){const lines=Object.keys(LINES);$('trk-count').textContent
     b.dataset.armed='1';b.textContent=n?`Remove with ${n} station${n>1?'s':''}?`:'Confirm';setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent='Remove';}},4000);});
   box.querySelectorAll('.trow2').forEach(r=>r.onclick=e=>{if(e.target.closest('input,select,button'))return;const v=LINES[r.dataset.l];const xs=v.map(o=>o.xy[0]),ys=v.map(o=>o.xy[1]);
     const w=Math.max(30,Math.max(...xs)-Math.min(...xs),(Math.max(...ys)-Math.min(...ys))*vb.w/vb.h)*1.25;vb.w=w;const rr=wrap.getBoundingClientRect();vb.h=w*rr.height/rr.width;vb.x=(Math.min(...xs)+Math.max(...xs))/2-w/2;vb.y=(Math.min(...ys)+Math.max(...ys))/2-vb.h/2;applyVB();});
-  renderTrkHelp();renderSpeeds();renderWorks();}
+  renderTrkHelp();renderSpeeds();}
 /* ---------- track speeds panel (Track tab) ---------- */
 let SPD_LINE='MAIN';
 const SPD_STNS={MAIN:[['Victoria',0],['Langford',7.9],['Shawnigan',27.8],['Duncan',39.7],['Ladysmith',58.4],['Nanaimo',72.5],['Parksville',95.2],['Qualicum',101.8],['Courtenay',139.7]],
@@ -2233,6 +2338,7 @@ function bandsMph(line,mp){const A=TRKSPD[line].anch;let k=mp*1.609;for(let i=1;
   if(line!=='MAIN')return 40/1.609;return (k<6?45:k>=13&&k<=45?55:k>110&&k<122?60:90)/1.609;}
 function spdRunTimes(){const keep=SPEED_PROF,out={};const vc=['CTN','QUB','PKS','NAN','LDY','DUN','SHL','WHL','LAN','ATK','SMI','ESQ','VIC'].filter(c=>STATIONS[c]);const lv=['LAN','ATK','SMI','ESQ','VIC'].filter(c=>STATIONS[c]);
   for(const p of Object.keys(SPEED_PROFS)){SPEED_PROF=p;try{const a=computeTimes(vc,0,'dmu','Regional'),b=computeTimes(lv,0,'dmu','Commuter');out[p]=[a[a.length-1].t,b[b.length-1].t];}catch(_){out[p]=[NaN,NaN];}}
+  SPEED_PROF='restored';const kw=TRACKSPEC.works;TRACKSPEC.works=[];try{const a=computeTimes(vc,0,'dmu','Regional'),b=computeTimes(lv,0,'dmu','Commuter');out.none=[a[a.length-1].t,b[b.length-1].t];}catch(_){out.none=[NaN,NaN];}TRACKSPEC.works=kw;
   SPEED_PROF=keep;return out;}
 function renderSpeeds(){const box=$('spdbox');if(!box)return;const T=TRKSPD[SPD_LINE],prof=SPEED_PROF,maxMP=SPD_LINE==='MAIN'?140:38;
   const W=330,H=160,ml=30,mr=14,mt=10,mb=40,x=mp=>ml+(W-ml-mr)*mp/maxMP,y=v=>mt+(H-mt-mb)*(1-v/60);
@@ -2255,14 +2361,14 @@ function renderSpeeds(){const box=$('spdbox');if(!box)return;const T=TRKSPD[SPD_
    <table class="spdtab"><thead><tr><th>Running time, 2-car DMU, all stops</th>${Object.keys(SPEED_PROFS).map(k=>`<th${k===prof?' class="on"':''}>${k==='restored'?'Restored':k==='posted'?'2003':'Bands'}</th>`).join('')}<th>ICF</th></tr></thead>
    <tbody><tr><td>Courtenay → Victoria</td>${Object.keys(SPEED_PROFS).map(k=>`<td${k===prof?' class="on"':''}>${hm(rt[k][0])}</td>`).join('')}<td>3:50</td></tr>
    <tr><td>Langford → Victoria</td>${Object.keys(SPEED_PROFS).map(k=>`<td${k===prof?' class="on"':''}>${Math.round(rt[k][1])} min</td>`).join('')}<td>26 min</td></tr></tbody></table>
+   <p class="m">${(TRACKSPEC.works||[]).some(w=>w.on!==false)?`Includes the applied track works (not the Bands column). Restored with no works: Courtenay → Victoria ${hm(rt.none[0])}, Langford → Victoria ${Math.round(rt.none[1])} min.`:'No track works are applied.'}</p>
    <p class="${fast?'spdwarn':'m'}">${fast?`<b>${fast}</b> of ${ntr} trips in this timetable are scheduled faster than these track speeds allow.`:`Every trip in this timetable can be run at these track speeds.`}</p>
    <div class="pbtns" style="padding:4px 0"><button class="btn sm" id="btn-retime" type="button">Retime all trips to these speeds</button></div>
    <p class="m">Source: E&amp;N Railway Co. track charts (Crouch Engineering, last revised 2003) and E&amp;N mileage lists. Speeds are posted passenger limits; freight trips use the freight limit.</p>`;
   $('spd-line').onchange=e=>{SPD_LINE=e.target.value;renderSpeeds();};
   $('spd-prof').onchange=e=>{SPEED_PROF=PLAN.speedProf=e.target.value;MINCACHE.clear();applyPlan(`Run times now use ${SPEED_PROFS[SPEED_PROF].n.toLowerCase()}`);renderSpeeds();renderWorks();};
   $('btn-retime').onclick=e=>{const b=e.currentTarget;if(!b.dataset.armed){b.dataset.armed='1';b.textContent='Confirm: recalculate every trip from its first departure';setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent='Retime all trips to these speeds';}},4000);return;}
-    let n=0;for(const tr of PLAN.trips){const f=PLAN.fleet.find(f=>f.id===tr.set);const ty=f?f.type:'dmu';const codes=codesOf(tr);try{const t=computeTimes(codes,tripDep(tr),ty,tr.cls);const old=tripArr(tr);tr.stops=t.map(o=>({c:o.c,t:Math.round(o.t*2)/2}));if(Math.abs(tripArr(tr)-old)>.4)n++;}catch(_){}}
-    MINCACHE.clear();applyPlan(`Retimed ${n} trips to ${SPEED_PROFS[SPEED_PROF].n.toLowerCase()}`);renderSpeeds();};
+    retimeAll();};
   const svgEl=box.querySelector('.spdchart'),cur=$('spd-cur');
   svgEl.onpointermove=e=>{const r=svgEl.getBoundingClientRect();const px=(e.clientX-r.left)*W/r.width;const mp=Math.max(0,Math.min(maxMP,(px-ml)/(W-ml-mr)*maxMP));
     cur.setAttribute('x1',x(mp));cur.setAttribute('x2',x(mp));cur.style.display='';
@@ -2278,6 +2384,8 @@ let spdLblG=el('g',{},L.speed);
 function mpToK(line,mp){const A=TRKSPD[line].anch;if(mp<=A[0][1])return A[0][0]+(mp-A[0][1])*1.609;for(let i=1;i<A.length;i++)if(mp<=A[i][1]){const a=A[i-1],b=A[i];return a[0]+(b[0]-a[0])*(mp-a[1])/(b[1]-a[1]);}const z=A[A.length-1];return z[0]+(mp-z[1])*1.609;}
 function lineMax(line){const v=LINES[line];return v[v.length-1].k;}
 // speed (mph) along a line at k, in the current setting
+function retimeAll(){let n=0;for(const tr of PLAN.trips){const f=PLAN.fleet.find(f=>f.id===tr.set);const ty=f?f.type:'dmu';const codes=codesOf(tr);try{const t=computeTimes(codes,tripDep(tr),ty,tr.cls);const old=tripArr(tr);tr.stops=t.map(o=>({c:o.c,t:Math.round(o.t*2)/2}));if(Math.abs(tripArr(tr)-old)>.4)n++;}catch(_){}}
+  PLAN.timedSig=worksSig();MINCACHE.clear();applyPlan(`Retimed ${n} trips to ${SPEED_PROFS[SPEED_PROF].n.toLowerCase()} and the applied track works`);if(typeof renderSpeeds==='function')renderSpeeds();renderWorks();return n;}
 function speedAtK(line,k){if(TRKSPD[line]&&SPEED_PROF!=='bands')return effMph(line,kToMP(line,k),false);return limit(line,k,false)/1.609;}
 const pruneSC=()=>{for(let i=SC.length;i--;)if(!SC[i].g.isConnected)SC.splice(i,1);};
 function drawSpeedLayer(){spdG.innerHTML='';spdLblG.innerHTML='';pruneSC();if(L.speed.style.display==='none')return;
@@ -2288,93 +2396,183 @@ function drawSpeedLayer(){spdG.innerHTML='';spdLblG.innerHTML='';pruneSC();if(L.
       if(v!==lastV||kk-lastK>8){lastK=kk;const g=scg(xy[0],xy[1],spdLblG,2.2);el('rect',{x:-11,y:-19,width:22,height:13,rx:3,class:'spdtag '+b[2]},g);el('text',{y:-9,'text-anchor':'middle',class:'spdtagt'},g).textContent=v;lastV=v;}}
     flush();}
   drawWorksOnMap();drawInfra();updateSC();}
-function drawWorksOnMap(){worksG.innerHTML='';pruneSC();for(const w of TRACKSPEC.works||[]){if(!LINES[w.line])continue;const t=WORK_TYPES[w.type];const k0=Math.max(LINES[w.line][0].k,mpToK(w.line,w.a)),k1=Math.min(lineMax(w.line),mpToK(w.line,w.b));if(k1<=k0)continue;
-  const pts=[];for(let k=k0;k<k1;k+=.1)pts.push(lineAt(w.line,k));pts.push(lineAt(w.line,k1));
-  const g=el('g',{class:'work'+(w.id===WORK_SEL?' sel':''),'data-w':w.id},worksG);
-  el('polyline',{points:pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '),class:'workband','vector-effect':'non-scaling-stroke',style:`stroke:${t.c}`},g);
-  const m=pts[Math.floor(pts.length/2)];const lg=scg(m[0],m[1],g,1.2);el('circle',{r:8,class:'workdot',style:`fill:${t.c}`},lg);el('text',{y:3.5,'text-anchor':'middle',class:'workico'},lg).textContent=t.i;
-  const lb=scg(m[0],m[1],g,2.6);el('text',{x:11,y:4,class:'worklbl'},lb).textContent=w.name||t.s;
-  g.addEventListener('click',e=>{e.stopPropagation();openWork(w.id);});
-  g.addEventListener('pointerenter',e=>{if(tipPinned)return;showWorkTip(w,e);});g.addEventListener('pointerleave',()=>{if(!tipPinned)$('tip').hidden=true;});}}
-function showWorkTip(w,e){const t=WORK_TYPES[w.type],ef=workEffect(w);
-  placeTip(e,`<h4>${esc(w.name||t.n)}</h4><div class="m">${esc(t.n)} · ${TRKSPD[w.line].sub} MP ${w.a.toFixed(1)}–${w.b.toFixed(1)} · ${WORK_STATUS[w.status]}</div><div>${ef.saved>.05?`Saves <b>${ef.saved.toFixed(1)} min</b> end to end on the subdivision`:'No running-time change in the current speed setting'}</div>${w.cost?`<div class="m">Estimated cost $${w.cost} M</div>`:''}<div class="m">Project: ${w.project?esc(w.project):'not linked yet'}</div>`);}
+function drawWorksOnMap(){worksG.innerHTML='';pruneSC();
+  for(const w of (TRACKSPEC.works||[]).slice().sort((x,y)=>(x.id===WORK_SEL)-(y.id===WORK_SEL))){if(!LINES[w.line])continue;const t=WORK_TYPES[w.type];const k0=Math.max(LINES[w.line][0].k,mpToK(w.line,w.a)),k1=Math.min(lineMax(w.line),mpToK(w.line,w.b));if(k1<=k0)continue;
+    const pts=[];for(let k=k0;k<k1;k+=.1)pts.push(lineAt(w.line,k));pts.push(lineAt(w.line,k1));
+    const g=el('g',{class:'work'+(w.id===WORK_SEL?' sel':'')+(w.id===WORK_HL?' hl':'')+(w.on===false?' off':''),'data-w':w.id},worksG);
+    el('polyline',{points:pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '),class:'workband','vector-effect':'non-scaling-stroke',style:`stroke:${t.c}`},g);
+    const m=pts[Math.floor(pts.length/2)];const lg=scg(m[0],m[1],g,1.2);el('circle',{r:8,class:'workdot',style:`fill:${t.c}`},lg);el('text',{y:3.5,'text-anchor':'middle',class:'workico'},lg).textContent=t.i;
+    const lb=scg(m[0],m[1],g,w.id===WORK_SEL?0:2.6);el('text',{x:11,y:4,class:'worklbl'},lb).textContent=w.name||t.s;
+    g.addEventListener('click',e=>{if(e.target.closest('.wkh'))return;e.stopPropagation();tipPinned={work:w.id};showWorkTip(w,e,true);});
+    g.addEventListener('pointerenter',e=>{if(tipPinned||WORK_DRAG||Date.now()-WORK_DRAGT<600)return;showWorkTip(w,e);});g.addEventListener('pointerleave',()=>{if(!tipPinned)$('tip').hidden=true;});
+    // drag handles on the selected work's two ends
+    if(w.id===WORK_SEL)[['a',pts[0]],['b',pts[pts.length-1]]].forEach(([end,p])=>{const h=scg(p[0],p[1],g,0);h.setAttribute('class','wkh');
+      el('circle',{r:9,class:'wkhit'},h);el('circle',{r:6,class:'wkhdot',style:`stroke:${t.c}`},h);el('text',{y:-12,'text-anchor':'middle',class:'wkhlbl'},h).textContent='MP '+w[end].toFixed(1);
+      h.addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefault();hideTip(true);WORK_DRAG={id:w.id,end};
+        const mv=ev=>{const [x,y]=toSvg(ev);const sn=snapToRail(x,y);if(!sn||sn.line!==w.line||!TRKSPD[sn.line])return;const mp=Math.max(0,Math.min(lineMaxMP(w.line),+kToMP(sn.line,sn.k).toFixed(2)));
+            if(end==='a')w.a=Math.min(mp,w.b-.05);else w.b=Math.max(mp,w.a+.05);drawWorksOnMap();syncEditorRange(w);};
+        const up=()=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);WORK_DRAG=null;WORK_DRAGT=Date.now();$('tip').hidden=true;
+          worksChanged(`Moved ${w.name} to MP ${w.a.toFixed(1)}–${w.b.toFixed(1)}`);};
+        window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);});});}
+  updateSC();}
+const lineMaxMP=l=>l==='MAIN'?139.87:38;
+function showWorkTip(w,e,pin){const t=WORK_TYPES[w.type],ef=workEffect(w),on=w.on!==false;
+  placeTip(e,`<h4>${esc(w.name||t.n)}</h4><div class="m">${esc(t.n)} · ${TRKSPD[w.line].sub} MP ${w.a.toFixed(1)}–${w.b.toFixed(1)} · ${WORK_STATUS[w.status]}</div>
+    <div>${ef.saved>.05?(on?`Saves <b>${ef.saved.toFixed(1)} min</b> end to end on the subdivision`:`Would save <b>${ef.saved.toFixed(1)} min</b> end to end if applied`):'No running-time change in the current speed setting'}</div>
+    ${w.cost!=null?`<div>Estimated cost <b>$${w.cost} M</b> (2026 CAD)</div>`:''}${pin&&w.notes?`<div class="m" style="max-width:300px;margin-top:4px">${esc(w.notes)}</div>`:''}
+    ${pin?`<label class="tipchk"><input type="checkbox" id="tip-apply"${on?' checked':''}> Applied to track speeds</label><div class="pbtns"><button class="btn sm primary" id="tip-edit" type="button">Edit</button><button class="btn sm" id="tip-close" type="button">Close</button></div>`:`<div class="m">${on?'Applied to track speeds':'Not applied to track speeds'} · click for options</div>`}`);
+  if(!pin)return;$('tip').classList.add('act');
+  $('tip-apply').onchange=ev=>{setWorkOn(w.id,ev.target.checked);const w2=(TRACKSPEC.works||[]).find(x=>x.id===w.id);if(w2){tipPinned={work:w.id};showWorkTip(w2,null,true);}};
+  $('tip-edit').onclick=()=>{hideTip(true);openWork(w.id);};$('tip-close').onclick=()=>hideTip(true);}
+function setWorkOn(id,on){const w=(TRACKSPEC.works||[]).find(x=>x.id===id);if(!w)return;w.on=on;const ef=workEffect(w);
+  worksChanged(`${on?'Applied':'Removed from track speeds'}: ${w.name}${ef.saved>.05?` (${on?'saves':'adds'} ${ef.saved.toFixed(1)} min)`:''}. Retime the timetable in the Works tab to use it.`,true);}
 // running time over a whole subdivision, no stops, minutes
 function subTime(line,works){const keep=TRACKSPEC.works;if(works)TRACKSPEC.works=works;let t=0;const k0=LINES[line][0].k,k1=lineMax(line),dk=.1;
   for(let k=k0;k<k1;k+=dk){const v=speedAtK(line,k+dk/2)*1.609;t+=Math.min(dk,k1-k)/Math.max(5,Math.min(v,120))*60;}TRACKSPEC.works=keep;return t;}
-function workEffect(w){const all=TRACKSPEC.works||[];const without=all.filter(x=>x!==w);return{saved:subTime(w.line,without)-subTime(w.line,all)};}
+function workEffect(w){const base=(TRACKSPEC.works||[]).filter(x=>x!==w&&x.id!==w.id&&x.on!==false);return{saved:subTime(w.line,base)-subTime(w.line,[...base,{...w,on:true}])};}
 const WORK_STATUS={idea:'Idea',proposed:'Proposed',planned:'Planned',funded:'Funded',built:'Built'};
-let WORK_SEL=null,WORK_FORM=null,WORK_PICK=null;
+let WORK_DRAGT=0,WORK_SEL=null,WORK_HL=null,WORK_PICK=null,WORK_NEW=false,WORK_DRAG=null,WORK_SNAP=null,WORK_FILTER='all',WORK_SORT='mp',WORK_FULL=null;
 function newWorkId(){return 'w'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
-function openWork(id){WORK_SEL=id;const w=(TRACKSPEC.works||[]).find(x=>x.id===id);if(!w)return;WORK_FORM={...w};if(tab!=='trk')switchTab('trk');renderWorks();drawWorksOnMap();
-  const el2=$('wkform');if(el2)el2.scrollIntoView({block:'nearest'});}
-function commitWorks(msg){MINCACHE.clear();savePlan();applyPlan(msg);drawSpeedLayer();renderWorks();if(!$('speedlegend').hidden)speedStats();}
+const snapWorks=()=>JSON.stringify(TRACKSPEC.works||[]);
+const findWork=id=>(TRACKSPEC.works||[]).find(x=>x.id===id);
+function openWork(id,noZoom){const w=findWork(id);if(!w)return;if(WORK_SEL!==id){WORK_SEL=id;WORK_SNAP={id,json:JSON.stringify(w)};}WORK_NEW=false;
+  if(tab!=='works')switchTab('works');else renderWorks();if(L.speed.style.display==='none')$('speedbtn').click();else drawWorksOnMap();if(!noZoom)zoomToWork(id);
+  const r=document.querySelector(`#worksbox .wkrow[data-w="${id}"]`);if(r)r.scrollIntoView({block:'nearest'});}
+function closeWork(){WORK_SEL=null;WORK_SNAP=null;WORK_PICK=null;svg.classList.remove('picking');renderWorks();drawWorksOnMap();}
+// every change: speeds, layer and panel update at once; the heavier timetable checks follow a moment later
+let worksT=null;
+function worksChanged(msg,loud){MINCACHE.clear();savePlan();if(L.speed.style.display!=='none'){drawSpeedLayer();speedStats();}else drawWorksOnMap();renderWorks();
+  clearTimeout(worksT);worksT=setTimeout(()=>applyPlan(loud?msg:''),loud?0:500);}
+const commitWorks=msg=>worksChanged(msg,true);
+function createWork(o){const t=WORK_TYPES[o.type];const w={id:newWorkId(),type:o.type,line:o.line,a:+o.a.toFixed(2),b:+o.b.toFixed(2),name:o.name||`${t.s}, MP ${o.a.toFixed(1)}–${o.b.toFixed(1)}`,
+    deg:t.deg!==undefined?(o.deg??t.deg):undefined,status:o.status||'idea',cost:o.cost??null,notes:o.notes||'',project:null,on:true,fresh:true};
+  (TRACKSPEC.works||(TRACKSPEC.works=[])).push(w);WORK_SEL=w.id;WORK_SNAP=null;WORK_NEW=false;WORK_PICK=null;svg.classList.remove('picking');
+  if(tab!=='works')switchTab('works');if(L.speed.style.display==='none')$('speedbtn').click();
+  const ef=workEffect(w);worksChanged(`Added ${w.name}${ef.saved>.05?`: saves ${ef.saved.toFixed(1)} min`:''}`,true);zoomToWork(w.id);
+  setTimeout(()=>{const n=$('we-name');if(n){n.focus();n.select();}},50);return w;}
+function mapCentreRange(){const cx=vb.x+vb.w/2,cy=vb.y+vb.h/2;const sn=snapToRail(cx,cy);if(!sn||!TRKSPD[sn.line])return{line:'MAIN',a:15,b:16};
+  const mp=kToMP(sn.line,sn.k),mx=lineMaxMP(sn.line);const a=Math.max(0,Math.min(mx-1,mp-.5));return{line:sn.line,a,b:Math.min(mx,a+1)};}
+function syncEditorRange(w){if(w.id!==WORK_SEL)return;const a=$('we-a'),b=$('we-b');if(a)a.value=w.a.toFixed(2);if(b)b.value=w.b.toFixed(2);}
+function workValue(w,ef){return w.cost>0&&ef.saved>.05?ef.saved/w.cost:null;}
 function renderWorks(){const box=$('worksbox');if(!box)return;const W=TRACKSPEC.works||[];
+  const act=document.activeElement,fid=act&&box.contains(act)?act.id:null,sel0=fid&&act.selectionStart!=null?[act.selectionStart,act.selectionEnd]:null;
   const tot={};for(const l of ['MAIN','ALB'])tot[l]=subTime(l,[])-subTime(l,W);
-  const row=w=>{const t=WORK_TYPES[w.type],ef=workEffect(w);return `<div class="wkrow${w.id===WORK_SEL?' sel':''}" data-w="${w.id}"><span class="wkico" style="background:${t.c}">${t.i}</span>
-    <div><b>${esc(w.name||t.n)}</b><div class="m">${esc(t.s)} · ${w.line==='MAIN'?'Victoria':'Port Alberni'} Sub MP ${w.a.toFixed(1)}–${w.b.toFixed(1)}${w.cost?` · $${w.cost} M`:''}</div></div>
-    <div class="wkr"><span class="wkst st-${w.status}">${WORK_STATUS[w.status]}</span><span class="m">${ef.saved>.05?`−${ef.saved.toFixed(1)} min`:'no change'}</span></div></div>`;};
-  box.innerHTML=`<div class="spdhead"><h4>Track works</h4><button class="btn sm primary" id="btn-addwork" type="button">+ Add work</button></div>
-    <p class="m">Fix slow sections: each work changes the speed limits in its milepost range, and run times follow. Works will be linkable to projects later.</p>
-    ${WORK_FORM?workForm():''}
-    ${W.length?W.slice().sort((a,b)=>a.line.localeCompare(b.line)||a.a-b.a).map(row).join(''):'<p class="m">No works yet. Turn on the Track speed layer to find the slow sections.</p>'}
-    ${W.length?`<p class="m">All works together save <b>${tot.MAIN.toFixed(1)} min</b> on the Victoria Sub${tot.ALB>.05?` and <b>${tot.ALB.toFixed(1)} min</b> on the Port Alberni Sub`:''} (running time end to end, no stops).</p>`:''}${infraSummary()}`;
+  const ON=W.filter(w=>w.on!==false),OFF=W.filter(w=>w.on===false),sum=a=>a.reduce((s,w)=>s+(+w.cost||0),0),money=v=>v>=10?Math.round(v):v.toFixed(1);
+  const EF=new Map(W.map(w=>[w.id,workEffect(w)]));
+  let list=W.filter(w=>WORK_FILTER==='all'||(WORK_FILTER==='on')===(w.on!==false));
+  const by={mp:(a,b)=>a.line.localeCompare(b.line)||a.a-b.a,saved:(a,b)=>EF.get(b.id).saved-EF.get(a.id).saved,cost:(a,b)=>(+a.cost||0)-(+b.cost||0),
+    value:(a,b)=>(workValue(b,EF.get(b.id))??-1)-(workValue(a,EF.get(a.id))??-1)};list=list.slice().sort(by[WORK_SORT]||by.mp);
+  const stale=PLAN.timedSig&&PLAN.timedSig!==worksSig();
+  const row=w=>{const t=WORK_TYPES[w.type],ef=EF.get(w.id),on=w.on!==false,v=workValue(w,ef),sel=w.id===WORK_SEL;
+    return `<div class="wkitem${sel?' open':''}"><div class="wkrow${sel?' sel':''}${on?'':' off'}" data-w="${w.id}" tabindex="0" role="button" aria-expanded="${sel}">
+      <label class="wksw" title="Apply to track speeds and run times"><input type="checkbox" data-on="${w.id}"${on?' checked':''} aria-label="Applied"><span></span></label>
+      <span class="wkico" style="background:${t.c}">${t.i}</span>
+      <div class="wkmain"><b class="wkname">${esc(w.name||t.n)}</b><div class="m">${w.line==='MAIN'?'Victoria':'Port Alberni'} Sub MP ${w.a.toFixed(1)}–${w.b.toFixed(1)}</div><span class="wkst st-${w.status}">${WORK_STATUS[w.status]}</span></div>
+      <div class="wkr"><b>${w.cost!=null?'$'+money(+w.cost)+'M':'—'}</b><span class="${ef.saved>.05?'wksave':'m'}">${ef.saved>.05?(on?`−${ef.saved.toFixed(1)} min`:`${ef.saved.toFixed(1)} min possible`):'no change'}</span>${v?`<span class="m">${v>=1?v.toFixed(1):v.toFixed(2)} min/$M</span>`:''}</div></div>
+      ${sel?editorHtml(w,ef):''}</div>`;};
+  box.innerHTML=`
+    ${WORK_NEW||WORK_PICK&&WORK_PICK.create?newWorkHtml():''}
+    <div class="wkcard">
+      <div class="wkstat"><div><span class="m">Applied</span><b>${ON.length} works · $${money(sum(ON))}M</b></div><div><span class="m">Victoria Sub</span><b>−${tot.MAIN.toFixed(1)} min</b></div><div><span class="m">Alberni Sub</span><b>−${tot.ALB.toFixed(1)} min</b></div></div>
+      <div class="m">${OFF.length?`${OFF.length} more not applied ($${money(sum(OFF))}M). `:''}Running time end to end, no stops. Costs are 2026 CAD order-of-magnitude estimates.</div>
+      ${stale?`<div class="wkwarn"><span>The timetable was timed with different track speeds.</span><button class="btn sm primary" id="btn-retime2" type="button">Retime all trips</button></div>`:''}
+    </div>
+    <div class="wkbar"><div class="seg" role="group" aria-label="Show">${[['all','All'],['on','Applied'],['off','Not applied']].map(([k,n])=>`<button type="button" data-f="${k}" aria-pressed="${WORK_FILTER===k}">${n}</button>`).join('')}</div>
+      <label class="wksort">Sort<select id="wk-sort">${[['mp','Milepost'],['value','Minutes per $M'],['saved','Minutes saved'],['cost','Cost']].map(([k,n])=>`<option value="${k}"${WORK_SORT===k?' selected':''}>${n}</option>`).join('')}</select></label></div>
+    <div class="wklist">${list.length?list.map(row).join(''):`<p class="m wkempty">${W.length?'No works in this view.':'No works yet. Click + New work, or click a slow section or a structure on the Track speed layer.'}</p>`}</div>
+    ${infraSummary()}`;
+  bindWorks(box);
+  if(fid){const f=$(fid);if(f){f.focus();if(sel0&&f.setSelectionRange)try{f.setSelectionRange(sel0[0],sel0[1]);}catch(_){}}}
+  const c=$('wk-count');if(c)c.textContent=`${W.length} works`;}
+function newWorkHtml(){const P=WORK_PICK&&WORK_PICK.create;
+  if(P)return `<div class="wknew"><b>New ${esc(WORK_TYPES[P].s.toLowerCase())} work</b>
+    <div class="wkstep">${WORK_PICK.stage?'<b>2</b> Now click the <b>end</b> of the range on the line.':'<b>1</b> Click the <b>start</b> of the range on the line (zoom in for accuracy).'}</div>
+    <div class="pbtns"><button class="btn sm" id="wn-centre" type="button">Use the map centre instead</button><button class="btn sm" id="wn-cancel" type="button">Cancel</button></div></div>`;
+  return `<div class="wknew"><div class="wkhead"><b>What kind of work?</b><button class="btn sm" id="wn-cancel" type="button">Cancel</button></div>
+    <div class="wktypes">${Object.entries(WORK_TYPES).map(([k,o])=>`<button type="button" class="wktype" data-type="${k}" title="${esc(o.d)}"><span class="wkico" style="background:${o.c}">${o.i}</span><span><b>${esc(o.s)}</b><span class="m">${esc(o.n)}</span></span></button>`).join('')}</div>
+    <div class="m">Then click the start and end of the range on the map.</div></div>`;}
+function editorHtml(w,ef){const t=WORK_TYPES[w.type],changed=WORK_SNAP&&WORK_SNAP.id===w.id&&WORK_SNAP.json!==JSON.stringify(w);
+  const lo=[],hi=[];const others=(TRACKSPEC.works||[]).filter(x=>x.id!==w.id&&x.on!==false);
+  const keep=TRACKSPEC.works;TRACKSPEC.works=others;for(let m=w.a;m<w.b;m+=.05)lo.push(speedAtK(w.line,mpToK(w.line,m)));TRACKSPEC.works=[...others,{...w,on:true}];for(let m=w.a;m<w.b;m+=.05)hi.push(speedAtK(w.line,mpToK(w.line,m)));TRACKSPEC.works=keep;
+  const r=v=>{const a=Math.round(Math.min(...v)),b=Math.round(Math.max(...v));return a===b?a:a+'–'+b;};
+  return `<div class="wked" id="wked">
+    <div class="wef"><label class="wide">Name<input id="we-name" maxlength="80" value="${esc(w.name)}"></label></div>
+    <div class="wef g2"><label>Type<select id="we-type">${Object.entries(WORK_TYPES).map(([k,o])=>`<option value="${k}"${k===w.type?' selected':''}>${esc(o.s)}</option>`).join('')}</select></label>
+      <label>Status<select id="we-status">${Object.entries(WORK_STATUS).map(([k,n])=>`<option value="${k}"${k===w.status?' selected':''}>${n}</option>`).join('')}</select></label></div>
+    <div class="m">${esc(t.d)}</div>
+    <div class="wef g3"><label>Subdivision<select id="we-line"><option value="MAIN"${w.line==='MAIN'?' selected':''}>Victoria</option><option value="ALB"${w.line==='ALB'?' selected':''}>Port Alberni</option></select></label>
+      <label>From MP<input id="we-a" type="number" step="0.1" min="0" value="${w.a.toFixed(2)}"></label><label>To MP<input id="we-b" type="number" step="0.1" min="0" value="${w.b.toFixed(2)}"></label></div>
+    <div class="wehint"><button class="btn sm" id="we-pick" type="button" aria-pressed="${!!(WORK_PICK&&WORK_PICK.id===w.id)}">${WORK_PICK&&WORK_PICK.id===w.id?(WORK_PICK.stage?'Click the end on the map…':'Click the start on the map…'):'Pick range on map'}</button><span class="m">or drag the end handles on the map</span></div>
+    <div class="wef g2"><label>Est. cost ($M, 2026)<input id="we-cost" type="number" step="0.1" min="0" value="${w.cost??''}" placeholder="unknown"></label>
+      ${t.deg!==undefined?`<label>Sharpest curve after<select id="we-deg">${[1,1.5,2,3,4,5,6,8].map(d=>`<option value="${d}"${(w.deg??t.deg)==d?' selected':''}>${d}° (≈${5*Math.floor(Math.sqrt(7/(0.0007*d))/5)} mph)</option>`).join('')}</select></label>`:'<span></span>'}</div>
+    <label class="tipchk"><input type="checkbox" id="we-on"${w.on!==false?' checked':''}> Applied to track speeds and run times</label>
+    <div class="weeff">Speeds in range: <b>${r(lo)} → ${r(hi)} mph</b>. ${ef.saved>.05?`${w.on!==false?'Saves':'Would save'} <b>${ef.saved.toFixed(1)} min</b> end to end.`:'No running-time change in the current speed setting.'}</div>
+    <div class="wef"><label class="wide">Notes and cost basis<textarea id="we-notes" rows="3" maxlength="1500">${esc(w.notes||'')}</textarea></label></div>
+    <div class="weacts"><button class="btn sm primary" id="we-done" type="button">Done</button><button class="btn sm" id="we-zoom" type="button">Zoom to</button><button class="btn sm" id="we-dup" type="button">Duplicate</button>${changed?'<button class="btn sm" id="we-revert" type="button">Undo changes</button>':''}<span class="grow"></span><button class="btn sm danger" id="we-del" type="button">Delete</button></div>
+    <div class="m">Changes apply as you make them.</div></div>`;}
+function bindWorks(box){
+  const r2=$('btn-retime2');if(r2)r2.onclick=e=>{const b=e.currentTarget;if(!b.dataset.armed){b.dataset.armed='1';b.textContent='Confirm: retime every trip';setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent='Retime all trips';}},4000);return;}retimeAll();};
+  box.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{WORK_FILTER=b.dataset.f;renderWorks();});
+  $('wk-sort').onchange=e=>{WORK_SORT=e.target.value;renderWorks();};
+  box.querySelectorAll('input[data-on]').forEach(c=>{c.onclick=e=>e.stopPropagation();c.onchange=()=>setWorkOn(c.dataset.on,c.checked);});
+  box.querySelectorAll('.wksw').forEach(l=>l.onclick=e=>e.stopPropagation());
   box.querySelectorAll('[data-plan]').forEach(b=>b.onclick=()=>planWorkAt(INFRA[+b.dataset.plan]));
-  $('btn-addwork').onclick=()=>{WORK_SEL=null;WORK_FORM={id:null,type:'curve',line:'MAIN',a:15,b:20,name:'',deg:4,status:'idea',cost:null,notes:'',project:null};renderWorks();};
-  box.querySelectorAll('.wkrow').forEach(r=>r.onclick=()=>{openWork(r.dataset.w);zoomToWork(r.dataset.w);});
-  if(WORK_FORM)bindWorkForm();}
-function zoomToWork(id){const w=(TRACKSPEC.works||[]).find(x=>x.id===id);if(!w||!LINES[w.line])return;const k0=mpToK(w.line,w.a),k1=mpToK(w.line,w.b);const xs=[],ys=[];
-  for(let k=k0;k<=k1;k+=.2){const p=lineAt(w.line,k);xs.push(p[0]);ys.push(p[1]);}
+  box.querySelectorAll('.wkrow').forEach(r=>{const go=()=>{if(WORK_SEL===r.dataset.w)closeWork();else openWork(r.dataset.w);};
+    r.onclick=go;r.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){if(e.target!==r)return;e.preventDefault();go();}};
+    r.onmouseenter=()=>{WORK_HL=r.dataset.w;const g=worksG.querySelector(`.work[data-w="${r.dataset.w}"]`);if(g)g.classList.add('hl');};
+    r.onmouseleave=()=>{WORK_HL=null;const g=worksG.querySelector(`.work[data-w="${r.dataset.w}"]`);if(g)g.classList.remove('hl');};});
+  // new work
+  box.querySelectorAll('.wktype').forEach(b=>b.onclick=()=>{WORK_NEW=false;WORK_PICK={stage:0,create:b.dataset.type};svg.classList.add('picking');if(L.speed.style.display==='none')$('speedbtn').click();renderWorks();});
+  const wc=$('wn-cancel');if(wc)wc.onclick=()=>{WORK_NEW=false;WORK_PICK=null;svg.classList.remove('picking');renderWorks();};
+  const wm=$('wn-centre');if(wm)wm.onclick=()=>{const type=WORK_PICK.create,r=WORK_PICK.stage?{line:WORK_PICK.line,a:WORK_PICK.a,b:Math.min(lineMaxMP(WORK_PICK.line),WORK_PICK.a+1)}:mapCentreRange();createWork({type,...r});};
+  // editor
+  const w=findWork(WORK_SEL);if(!w||!$('wked'))return;
+  const live=(id,fn)=>{const e=$(id);if(e)e.oninput=()=>{fn(e);};};
+  live('we-name',e=>{w.name=e.value.slice(0,80);const n=document.querySelector(`.wkrow[data-w="${w.id}"] .wkname`);if(n)n.textContent=w.name||WORK_TYPES[w.type].n;clearTimeout(worksT);worksT=setTimeout(()=>{savePlan();drawWorksOnMap();},400);});
+  live('we-notes',e=>{w.notes=e.value;clearTimeout(worksT);worksT=setTimeout(savePlan,400);});
+  const ch=(id,fn)=>{const e=$(id);if(e)e.onchange=()=>{fn(e);delete w.fresh;setTimeout(()=>worksChanged(''),0);};};
+  ch('we-type',e=>{const auto=!w.name||w.name.startsWith(WORK_TYPES[w.type].s);w.type=e.value;const t=WORK_TYPES[w.type];w.deg=t.deg;if(auto)w.name=`${t.s}, MP ${w.a.toFixed(1)}–${w.b.toFixed(1)}`;});
+  ch('we-status',e=>w.status=e.value);
+  ch('we-line',e=>{w.line=e.value;const mx=lineMaxMP(w.line);w.a=Math.min(w.a,mx-.1);w.b=Math.min(Math.max(w.b,w.a+.1),mx);});
+  const rng=()=>{let a=+$('we-a').value,b=+$('we-b').value;if(!isFinite(a)||!isFinite(b))return;if(b<a)[a,b]=[b,a];const mx=lineMaxMP(w.line);w.a=+Math.max(0,Math.min(mx-.05,a)).toFixed(2);w.b=+Math.max(w.a+.05,Math.min(mx,b)).toFixed(2);};
+  ch('we-a',rng);ch('we-b',rng);
+  ch('we-deg',e=>w.deg=+e.value);
+  ch('we-cost',e=>w.cost=e.value===''?null:Math.max(0,+e.value));
+  ch('we-on',e=>w.on=e.checked);
+  $('we-pick').onclick=()=>{WORK_PICK=WORK_PICK&&WORK_PICK.id===w.id?null:{stage:0,id:w.id};svg.classList.toggle('picking',!!WORK_PICK);renderWorks();};
+  $('we-done').onclick=closeWork;$('we-zoom').onclick=()=>zoomToWork(w.id);
+  $('we-dup').onclick=()=>{const c={...w,id:newWorkId(),name:(w.name||'')+' (copy)'};delete c.fresh;TRACKSPEC.works.push(c);WORK_SEL=c.id;WORK_SNAP={id:c.id,json:JSON.stringify(c)};worksChanged(`Duplicated ${w.name}`,true);};
+  const rv=$('we-revert');if(rv)rv.onclick=()=>{const o=JSON.parse(WORK_SNAP.json);Object.keys(w).forEach(k=>delete w[k]);Object.assign(w,o);worksChanged(`Undid the changes to ${w.name}`,true);};
+  $('we-del').onclick=e=>{const b=e.currentTarget;if(!w.fresh&&!b.dataset.armed){b.dataset.armed='1';b.textContent='Confirm delete';setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent='Delete';}},4000);return;}
+    TRACKSPEC.works=TRACKSPEC.works.filter(x=>x.id!==w.id);WORK_SEL=null;WORK_SNAP=null;worksChanged(`Deleted ${w.name}`,true);};}
+function zoomToWork(id){const w=findWork(id);if(!w||!LINES[w.line])return;const k0=mpToK(w.line,w.a),k1=mpToK(w.line,w.b);const xs=[],ys=[];
+  for(let k=k0;k<=k1;k+=.2){const p=lineAt(w.line,k);xs.push(p[0]);ys.push(p[1]);}const p1=lineAt(w.line,k1);xs.push(p1[0]);ys.push(p1[1]);
   const r=wrap.getBoundingClientRect();const wd=Math.max(12,(Math.max(...xs)-Math.min(...xs))*1.6,(Math.max(...ys)-Math.min(...ys))*1.6*r.width/r.height);
   vb.w=wd;vb.h=wd*r.height/r.width;vb.x=(Math.min(...xs)+Math.max(...xs))/2-wd/2;vb.y=(Math.min(...ys)+Math.max(...ys))/2-vb.h/2;applyVB();}
-function workForm(){const f=WORK_FORM,t=WORK_TYPES[f.type];
-  return `<div class="form wkform" id="wkform"><div class="frow"><label>Type<select id="wk-type">${Object.entries(WORK_TYPES).map(([k,o])=>`<option value="${k}"${k===f.type?' selected':''}>${esc(o.n)}</option>`).join('')}</select></label></div>
-    <p class="m">${esc(t.d)}</p>
-    <div class="frow"><label>Name<input id="wk-name" maxlength="80" value="${esc(f.name)}" placeholder="${esc(t.s)}, MP ${(+f.a).toFixed(1)}"></label></div>
-    <div class="frow g3"><label>Subdivision<select id="wk-line"><option value="MAIN"${f.line==='MAIN'?' selected':''}>Victoria</option><option value="ALB"${f.line==='ALB'?' selected':''}>Port Alberni</option></select></label>
-      <label>From MP<input id="wk-a" type="number" step="0.1" min="0" value="${(+f.a).toFixed(2)}"></label><label>To MP<input id="wk-b" type="number" step="0.1" min="0" value="${(+f.b).toFixed(2)}"></label></div>
-    <div class="frow"><button class="btn sm" id="wk-pick" type="button" aria-pressed="${!!WORK_PICK}">${WORK_PICK?(WORK_PICK.stage?'Now click the end on the map':'Click the start on the map'):'Pick the range on the map'}</button></div>
-    ${t.deg!==undefined?`<div class="frow"><label>Sharpest curve after the work<select id="wk-deg">${[1,1.5,2,3,4,5,6,8].map(d=>`<option value="${d}"${(f.deg??t.deg)==d?' selected':''}>${d}°  (about ${5*Math.floor(Math.sqrt(7/(0.0007*d))/5)} mph)</option>`).join('')}</select></label></div>`:''}
-    <div class="frow g3"><label>Status<select id="wk-status">${Object.entries(WORK_STATUS).map(([k,n])=>`<option value="${k}"${k===f.status?' selected':''}>${n}</option>`).join('')}</select></label>
-      <label>Est. cost ($M)<input id="wk-cost" type="number" step="0.1" min="0" value="${f.cost??''}"></label><label>Project<input value="Not linked yet" disabled></label></div>
-    <div class="frow"><label>Notes<textarea id="wk-notes" rows="2" maxlength="1000">${esc(f.notes||'')}</textarea></label></div>
-    <div class="m" id="wk-preview"></div>
-    <div class="pbtns" style="padding:4px 0"><button class="btn primary sm" id="wk-save" type="button">${f.id?'Save':'Add work'}</button><button class="btn sm" id="wk-cancel" type="button">Cancel</button>${f.id?'<span class="grow"></span><button class="btn sm danger" id="wk-del" type="button">Delete</button>':''}</div></div>`;}
-function readWorkForm(){const f=WORK_FORM;f.type=$('wk-type').value;f.name=$('wk-name').value.trim();f.line=$('wk-line').value;let a=+$('wk-a').value,b=+$('wk-b').value;if(b<a)[a,b]=[b,a];
-  const mx=f.line==='MAIN'?139.7:38;f.a=Math.max(0,Math.min(mx,a));f.b=Math.max(0,Math.min(mx,b));const d=$('wk-deg');f.deg=d?+d.value:undefined;f.status=$('wk-status').value;
-  const c=$('wk-cost').value;f.cost=c===''?null:Math.max(0,+c);f.notes=$('wk-notes').value;}
-function previewWork(){const f=WORK_FORM;if(!f||f.b-f.a<.01){$('wk-preview').textContent='Set a milepost range.';return;}
-  const others=(TRACKSPEC.works||[]).filter(x=>x.id!==f.id);const w={...f,id:'__p'};const s=subTime(f.line,others)-subTime(f.line,[...others,w]);
-  const fr=[];for(let m=f.a;m<f.b;m+=.05){const kk=mpToK(f.line,m);fr.push([speedAtK(f.line,kk)]);}
-  const keep=TRACKSPEC.works;TRACKSPEC.works=[...others,w];const after=[];for(let m=f.a;m<f.b;m+=.05)after.push(speedAtK(f.line,mpToK(f.line,m)));TRACKSPEC.works=keep;
-  const lo=Math.min(...fr.map(x=>x[0])),lo2=Math.min(...after),hi2=Math.max(...after);
-  $('wk-preview').innerHTML=`In this range: ${Math.round(lo)} mph at the slowest now → ${Math.round(lo2)===Math.round(hi2)?Math.round(lo2):Math.round(lo2)+'–'+Math.round(hi2)} mph after. ${s>.05?`Saves <b>${s.toFixed(1)} min</b> end to end.`:'No running-time change in the current speed setting'+(SPEED_PROF==='restored'&&WORK_TYPES[f.type].d.includes('Lifts')?' (the Restored setting already assumes this kind of repair).':'.')}`;}
-function bindWorkForm(){const ids=['wk-type','wk-name','wk-line','wk-a','wk-b','wk-deg','wk-status','wk-cost','wk-notes'];
-  for(const id of ids){const e=$(id);if(!e)continue;e.oninput=e.onchange=()=>{const ty=WORK_FORM.type;readWorkForm();if(id==='wk-type'&&ty!==WORK_FORM.type){WORK_FORM.deg=WORK_TYPES[WORK_FORM.type].deg;renderWorks();return;}previewWork();};}
-  previewWork();
-  $('wk-pick').onclick=()=>{readWorkForm();WORK_PICK=WORK_PICK?null:{stage:0};svg.classList.toggle('picking',!!WORK_PICK);renderWorks();};
-  $('wk-cancel').onclick=()=>{WORK_FORM=null;WORK_PICK=null;svg.classList.remove('picking');renderWorks();drawWorksOnMap();};
-  $('wk-save').onclick=()=>{readWorkForm();const f=WORK_FORM;if(f.b-f.a<.01){toast('Set a range','The work needs a start and end milepost');return;}
-    if(!TRACKSPEC.works)TRACKSPEC.works=[];const t=WORK_TYPES[f.type];const rec={id:f.id||newWorkId(),type:f.type,line:f.line,a:+f.a.toFixed(2),b:+f.b.toFixed(2),name:f.name||`${t.s}, MP ${f.a.toFixed(1)}–${f.b.toFixed(1)}`,deg:t.deg!==undefined?f.deg??t.deg:undefined,status:f.status,cost:f.cost,notes:f.notes,project:f.project||null};
-    const i=TRACKSPEC.works.findIndex(x=>x.id===rec.id);if(i>=0)TRACKSPEC.works[i]=rec;else TRACKSPEC.works.push(rec);WORK_SEL=rec.id;WORK_FORM=null;WORK_PICK=null;svg.classList.remove('picking');
-    const ef=workEffect(rec);commitWorks(`${i>=0?'Updated':'Added'} ${rec.name}${ef.saved>.05?`: saves ${ef.saved.toFixed(1)} min`:''}`);};
-  const d=$('wk-del');if(d)d.onclick=e=>{const b=e.currentTarget;if(!b.dataset.armed){b.dataset.armed='1';b.textContent='Confirm delete';setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent='Delete';}},4000);return;}
-    const id=WORK_FORM.id;TRACKSPEC.works=TRACKSPEC.works.filter(x=>x.id!==id);WORK_FORM=null;WORK_SEL=null;commitWorks('Deleted the track work');};}
-svg.addEventListener('click',e=>{if(!WORK_PICK||dragMoved>=5||!WORK_FORM)return;const [x,y]=toSvg(e);const sn=snapToRail(x,y);
-  if(!sn||!TRKSPD[sn.line]||sn.d*ppu>40){toast('Not on the line','Click on the Victoria or Port Alberni subdivision');return;}e.stopPropagation();
-  const mp=+kToMP(sn.line,sn.k).toFixed(2);if(WORK_PICK.stage===0){WORK_FORM.line=sn.line;WORK_FORM.a=mp;WORK_FORM.b=Math.max(mp+.1,WORK_FORM.b);WORK_PICK.stage=1;}
-  else{if(sn.line===WORK_FORM.line){WORK_FORM.b=mp;if(WORK_FORM.b<WORK_FORM.a)[WORK_FORM.a,WORK_FORM.b]=[WORK_FORM.b,WORK_FORM.a];}WORK_PICK=null;svg.classList.remove('picking');}
-  renderWorks();},true);
+$('wk-new').onclick=()=>{WORK_NEW=!WORK_NEW;WORK_PICK=null;svg.classList.remove('picking');if(WORK_NEW){WORK_SEL=null;WORK_SNAP=null;}renderWorks();drawWorksOnMap();$('worksbox').scrollTop=0;$('pane-works').scrollTop=0;};
+// map picking: a new work's range, or a new range for the open work
+svg.addEventListener('click',e=>{if(!WORK_PICK||dragMoved>=5)return;const [x,y]=toSvg(e);const sn=snapToRail(x,y);
+  if(!sn||!TRKSPD[sn.line]||sn.d*ppu>40){toast('Not on the line','Click on the Victoria or Port Alberni subdivision');e.stopPropagation();return;}e.stopPropagation();
+  const mp=+kToMP(sn.line,sn.k).toFixed(2);
+  if(WORK_PICK.create){if(!WORK_PICK.stage){Object.assign(WORK_PICK,{stage:1,line:sn.line,a:mp});renderWorks();return;}
+    if(sn.line!==WORK_PICK.line){toast('Same subdivision','Click the end on the same subdivision as the start');return;}
+    let a=WORK_PICK.a,b=mp;if(b<a)[a,b]=[b,a];if(b-a<.05)b=a+.1;createWork({type:WORK_PICK.create,line:sn.line,a,b});return;}
+  const w=findWork(WORK_PICK.id);if(!w){WORK_PICK=null;return;}
+  if(!WORK_PICK.stage){WORK_PICK.stage=1;WORK_PICK.a=mp;WORK_PICK.line=sn.line;renderWorks();return;}
+  if(sn.line!==WORK_PICK.line){toast('Same subdivision','Click the end on the same subdivision as the start');return;}
+  let a=WORK_PICK.a,b=mp;if(b<a)[a,b]=[b,a];if(b-a<.05)b=a+.1;w.line=sn.line;w.a=a;w.b=b;WORK_PICK=null;svg.classList.remove('picking');worksChanged(`Moved ${w.name} to MP ${a.toFixed(1)}–${b.toFixed(1)}`,true);},true);
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(WORK_PICK||WORK_NEW){WORK_PICK=null;WORK_NEW=false;svg.classList.remove('picking');renderWorks();}});
 function speedStats(){if($('speedlegend').hidden)return;const rows={};let tot=0;
   for(const line of ['MAIN','ALB']){if(!LINES[line])continue;const k0=LINES[line][0].k,k1=lineMax(line);for(let k=k0;k<k1;k+=.1){const b=spdBand(Math.round(speedAtK(line,k+.05)));rows[b[2]]=(rows[b[2]]||0)+.1/1.609;tot+=.1/1.609;}}
   const tm=subTime('MAIN'),ta=subTime('ALB'),hm=v=>`${Math.floor(v/60)}:${String(Math.round(v%60)).padStart(2,'0')}`;
   $('spdstats').innerHTML=`<div class="spdbars">${SPD_BANDS.map(b=>`<div><i class="${b[2]}"></i><span>${b[3]}</span><b>${Math.round(rows[b[2]]||0)} mi</b></div>`).join('')}</div>
     <div>Running time end to end, no stops: Victoria Sub <b>${hm(tm)}</b>, Port Alberni Sub <b>${hm(ta)}</b>.</div>
-    <div class="m">${SPEED_PROFS[SPEED_PROF].n}${(TRACKSPEC.works||[]).length?`, with ${TRACKSPEC.works.length} track work${TRACKSPEC.works.length>1?'s':''}`:''}. Change the setting or add works in the Track tab.</div>`;}
+    <div class="m">${SPEED_PROFS[SPEED_PROF].n}${(()=>{const n=(TRACKSPEC.works||[]).filter(w=>w.on!==false).length;return n?`, with ${n} applied track work${n>1?'s':''}`:'';})()}. Change the setting in the Track tab; add or edit works in the Works tab.</div>`;}
 $('speedbtn').onclick=()=>{const on=L.speed.style.display==='none';L.speed.style.display=on?'':'none';$('speedbtn').setAttribute('aria-pressed',String(on));$('speedlegend').hidden=!on;if(on){drawSpeedLayer();speedStats();}};
 
 /* ---------- structures: bridges, tunnels, road crossings and known gaps (E&N mileage lists, track charts, Wikipedia route map) ---------- */
 const INFRA_KIND={h:{n:'Major bridge',i:'Π',z:1.2,lz:3},b:{n:'Bridge or trestle',i:'π',z:2.2,lz:4.5},t:{n:'Tunnel',i:'∩',z:1.2,lz:3},r:{n:'Road crossing',i:'⊥',z:3,lz:6},g:{n:'Removed track',i:'✕',z:0,lz:2}};
-const infraFixedBy=x=>(TRACKSPEC.works||[]).find(w=>w.line===x.l&&w.a<=(x.m2||x.m)+.05&&w.b>=x.m-.05&&['bridge','rebuild','tunnel','raise'].includes(w.type));
+const infraFixedBy=x=>(TRACKSPEC.works||[]).find(w=>w.on!==false&&w.line===x.l&&w.a<=(x.m2||x.m)+.05&&w.b>=x.m-.05&&['bridge','rebuild','tunnel','raise'].includes(w.type));
 const infraGroup=el('g',{class:'infral'},L.speed);
 function drawInfra(){infraGroup.innerHTML='';if(L.speed.style.display==='none')return;
   for(const x of INFRA){if(!LINES[x.l])continue;const K=INFRA_KIND[x.k],bad=x.s!=='ok',fix=bad&&infraFixedBy(x);
@@ -2384,12 +2582,12 @@ function drawInfra(){infraGroup.innerHTML='';if(L.speed.style.display==='none')r
     el('circle',{r:x.k==='h'||bad?7.5:x.k==='b'?5.5:4.5,class:'infrabg'},g);el('text',{y:x.k==='r'?3.3:3.6,'text-anchor':'middle',class:'infraico'},g).textContent=bad?(fix?'✓':'!'):K.i;
     const lg=scg(xy[0],xy[1],infraGroup,bad?1.6:K.lz);el('text',{x:10,y:-6,class:'infralbl'+(bad?' bad':'')},lg).textContent=x.n+(bad&&!fix?(x.s==='removed'?' · removed':' · out'):'');
     g.addEventListener('pointerenter',e=>{if(!tipPinned)showInfraTip(x,e);});g.addEventListener('pointerleave',()=>{if(!tipPinned)$('tip').hidden=true;});
-    g.addEventListener('click',e=>{e.stopPropagation();planWorkAt(x);});}}
-function showInfraTip(x,e){const K=INFRA_KIND[x.k],fix=x.s!=='ok'&&infraFixedBy(x);
-  placeTip(e,`<h4>${esc(x.n)}</h4><div class="m">${K.n} · ${TRKSPD[x.l].sub} MP ${x.a?'≈':''}${x.m.toFixed(1)}${x.m2?`–${x.m2.toFixed(1)}`:''}</div><div>${esc(x.d)}</div>${x.s!=='ok'?`<div style="margin-top:4px"><b class="${fix?'okt':'badt'}">${fix?`Addressed by “${esc(fix.name)}”`:x.s==='removed'?'Track removed today':'Out of service today'}</b></div>`:''}<div class="m">Click to plan a track work here.</div>`);}
+    g.addEventListener('click',e=>{e.stopPropagation();tipPinned={infra:x};showInfraTip(x,e,true);});}}
+function showInfraTip(x,e,pin){const K=INFRA_KIND[x.k],fix=x.s!=='ok'&&infraFixedBy(x);
+  placeTip(e,`<h4>${esc(x.n)}</h4><div class="m">${K.n} · ${TRKSPD[x.l].sub} MP ${x.a?'≈':''}${x.m.toFixed(1)}${x.m2?`–${x.m2.toFixed(1)}`:''}</div><div>${esc(x.d)}</div>${x.s!=='ok'?`<div style="margin-top:4px"><b class="${fix?'okt':'badt'}">${fix?`Addressed by “${esc(fix.name)}”`:x.s==='removed'?'Track removed today':'Out of service today'}</b></div>`:''}${pin?`<div class="pbtns"><button class="btn sm primary" id="tip-plan" type="button">Plan a work here</button><button class="btn sm" id="tip-close" type="button">Close</button></div>`:'<div class="m">Click for options.</div>'}`);
+  if(!pin)return;$('tip').classList.add('act');$('tip-plan').onclick=()=>{hideTip(true);planWorkAt(x);};$('tip-close').onclick=()=>hideTip(true);}
 function planWorkAt(x){const ty=x.k==='g'?'rebuild':x.k==='t'?'tunnel':x.k==='r'?'xing':x.s!=='ok'?'rebuild':'bridge';const a=Math.max(0,x.m-.05),b=(x.m2||x.m)+.05;
-  WORK_SEL=null;WORK_FORM={id:null,type:ty,line:x.l,a:+a.toFixed(2),b:+b.toFixed(2),name:`${WORK_TYPES[ty].s}: ${x.n}`,deg:WORK_TYPES[ty].deg,status:'idea',cost:null,notes:x.d,project:null};
-  if(tab!=='trk')switchTab('trk');renderWorks();const f=$('wkform');if(f)f.scrollIntoView({block:'nearest'});}
+  createWork({type:ty,line:x.l,a,b,name:`${WORK_TYPES[ty].s}: ${x.n}`,notes:x.d});}
 function infraSummary(){const c={h:0,b:0,t:0,r:0};for(const x of INFRA)if(c[x.k]!==undefined)c[x.k]++;const probs=INFRA.filter(x=>x.s!=='ok');
   return `<div class="infrasum"><div class="m">${c.h+c.b} bridges and trestles (${c.h} major), ${c.t} tunnel${c.t>1?'s':''} and covered sections, ${c.r} road crossings, from the E&amp;N mileage lists, the 2003 track charts and the Wikipedia route map. Shown on the Track speed layer.</div>
     <div class="m"><b>Out of service today:</b></div>${probs.map(x=>{const fix=infraFixedBy(x);return `<div class="probrow"><span class="${fix?'okt':'badt'}">${fix?'✓':'!'}</span><span>${esc(x.n)} <span class="m">${x.l==='MAIN'?'Victoria':'Port Alberni'} Sub MP ${x.m.toFixed(1)}${x.m2?`–${x.m2.toFixed(1)}`:''}</span></span>${fix?'<span class="m">planned</span>':`<button class="btn sm" data-plan="${INFRA.indexOf(x)}">Plan work</button>`}</div>`;}).join('')}</div>`;}
