@@ -486,6 +486,27 @@ input[type=checkbox],input[type=radio]{accent-color:var(--accent);width:15px;hei
 .wkh{cursor:ew-resize}.wkhit{fill:transparent}.wkhdot{fill:var(--panel);stroke-width:3}.wkh:hover .wkhdot{fill:var(--ink)}
 .wkhlbl{font-family:var(--body);font-size:10.5px;font-weight:700;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px;pointer-events:none}
 @media (max-width:600px){.wktypes{grid-template-columns:1fr}.wef.g3{grid-template-columns:1fr 1fr}.wef.g3 label:first-child{grid-column:1/-1}}
+/* capital cost */
+.plancost{padding:0 12px 10px;display:grid;gap:8px;font-size:12px}
+.costtot{border:1px solid var(--ctl-line);border-radius:8px;padding:10px;display:grid;gap:8px;background:var(--panel-2)}
+.costtot>div:first-child{display:grid}.costtot>div:first-child>span:first-child{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.costtot b{font-family:var(--display);font-size:30px;line-height:1.05}
+.costbar{display:flex;height:12px;border-radius:6px;overflow:hidden;gap:1px;background:var(--line)}.costbar i{display:block;min-width:2px}
+.costkey{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;font-size:11px}.costkey span{display:flex;gap:5px;align-items:center}.costkey b{margin-left:auto;font-size:11px;font-family:inherit}
+.costkey i{width:10px;height:10px;border-radius:2px;flex:none}
+.cg0{background:#8c6d3f}.cg1{background:#5b6f8a}.cg2{background:#c0392b}.cg3{background:#7b52c7}.cg4{background:#0f8f7f}.cg5{background:#4f8a3c}.cg6{background:#2f5f9e}.cgw{background:#d9822b}.cgs{background:#8a8f8c}.cgc{background:repeating-linear-gradient(45deg,#8a8f8c 0 3px,#c9ccca 3px 6px)}
+.costopts{display:flex;flex-wrap:wrap;gap:4px 14px}.costopts label{display:flex;gap:5px;align-items:center;cursor:pointer}
+.costh{margin:6px 0 0;font-size:13px;display:flex;justify-content:space-between;gap:8px}.costh span{font-variant-numeric:tabular-nums}
+.coststeps{margin:0;padding-left:20px;display:grid;gap:4px}.coststeps li b{display:block}.coststeps .m{display:block;font-size:11.5px}
+.costg{border:1px solid var(--ctl-line);border-radius:8px;overflow:hidden}
+.costgh{display:flex;justify-content:space-between;padding:5px 8px;background:var(--panel-2);border-bottom:1px solid var(--line)}
+.costr summary{display:flex;justify-content:space-between;gap:10px;padding:5px 8px;cursor:pointer;list-style:none}.costr summary::-webkit-details-marker{display:none}
+.costr summary span::before{content:"▸ ";color:var(--muted)}.costr[open] summary span::before{content:"▾ "}.costr summary:hover{background:var(--ctl-hov)}
+.costr .m{padding:0 8px 6px 20px;font-size:11.5px}.costr+.costr{border-top:1px solid var(--line)}
+.costr b,.costw b,.costgh b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.costw{display:flex;justify-content:space-between;gap:10px;padding:5px 8px;align-items:baseline}.costw+.costw{border-top:1px solid var(--line)}.costw.tot{background:var(--panel-2);font-weight:700;font-size:13px}
+.costw .linkbtn{color:var(--ink);font-weight:600;text-decoration-color:var(--ctl-line)}
+.costw{align-items:center}.costw .grow{flex:1;min-width:0}.costw .wksw{flex:none}.costoff summary{cursor:pointer;padding:4px 0;font-weight:600}.costoff .costg{margin-top:4px}.costopts select{font-size:12px;padding:2px 4px}
 </style></head>
 <body>
 <noscript><p style="padding:2em;font-family:sans-serif">Island Rail Planner needs JavaScript enabled.</p></noscript>
@@ -623,6 +644,8 @@ input[type=checkbox],input[type=radio]{accent-color:var(--accent);width:15px;hei
         <h3 class="sec">Service plan summary</h3>
         <div class="kpis" id="plan-sum"></div>
         <div class="pbtns"><button class="btn" id="btn-auto2" type="button">Auto-assign trainsets</button><button class="btn danger" id="btn-reset" type="button">Reset to starting timetable</button></div>
+        <h3 class="sec">Capital cost</h3>
+        <div class="plancost" id="plan-cost"></div>
         <h3 class="sec">Share or back up this plan</h3>
         <div class="pio"><textarea id="io" spellcheck="false" placeholder="Click Copy plan to get the JSON, or paste a plan here and click Load plan."></textarea>
           <div class="pbtns"><button class="btn" id="btn-export" type="button">Copy plan</button><button class="btn" id="btn-import" type="button">Load plan</button></div></div>
@@ -2605,6 +2628,94 @@ function restartDay(){const deps=trains.flatMap(t=>t.block.map(b=>b.dep));const 
 $('btn-restart').onclick=restartDay;
 
 /* plan pane */
+/* ---------- capital cost: restoration steps for a basic rail-with-trail service, plus the track works that are applied ----------
+   Restoration figures: 2020 Island Rail Corridor Condition Assessment (IRCCA, WSP for BC MoTI), Appendix G cost estimate, by segment.
+   Overheads, escalation, rolling stock per car, trail per km and reserve-land alternatives: CVRD "Island Rail Corridor – Towards a Shared Vision",
+   Appendix H (Stantec/Modus, February 2025), which summarizes the IRCCA, the ICF 2022 business case and the FORT-VI 2023 trail study. */
+const ESC20=637/548*1.03**3;// 2020→2023 from the CVRD report (Table H-6), then 3% a year to 2026 ≈ ×1.27
+const ESC23=1.03**3;// 2023→2026
+const COST_BASE=[// [group, step, Victoria Sub $M (2020), Port Alberni Sub $M (2020), note]
+ ['Track','Restore track to Class 2: ties, relay rail, plates and anchors, surfacing, drainage, vegetation, fencing, yards',31.29,6.89,'IRCCA initial phase, less bridges, crossings and rockfall. 45% of ties (180,000) were found defective.'],
+ ['Track','Upgrade to Class 3 and 286,000 lb cars: 115 lb rail, double-shoulder plates, ties, turnouts',90.52,23.98,'IRCCA intermediate phase. Needed for the 60 mph passenger speeds the planner assumes and for more than 4 trains a day.'],
+ ['Track','Ballast program: undercutting, new ballast, 6 in. surfacing, geometry testing',48.48,13.16,'IRCCA ultimate phase, ballast items only. Ballast was rated poor from Langford to Nanaimo.'],
+ ['Structures','Bridge and trestle remediation',38.42,34.70,'IRCCA bridge remediation by segment (48 bridges on the Victoria Sub), including the Port Alberni Sub trestles that are out today.'],
+ ['Structures','Rockfall protection (Langford–Shawnigan, Port Alberni Sub)',1.40,0.25,'IRCCA rockfall remediation.'],
+ ['Crossings','Bring all road crossings to standard: surfaces, warning systems, sight lines',44.29,8.48,'IRCCA crossing upgrades: 203 crossings on the Victoria Sub, 33 on the Port Alberni Sub.']];
+const COST_ALLOW=[// 2026 $M allowances, construction
+ ['Structures','Rebuild track through the Snaw-Naw-As reserve, MP 82.8–83.7 (removed 2024), subject to agreement with the Nation',3,0,'Planner allowance: 0.9 mile of new track and crossings.'],
+ ['Structures','Shawnigan Lake Road bridge, MP 26.8 (out today)',3,0,'Planner allowance, if not covered by the IRCCA bridge budget. The CVRD report also plans to raise its clearance for the trail.']];
+const STN_MAJOR=new Set(['VIC','WHL','DUN','NAN','CTN','PAL']);
+const TRAIN_COST={dmu:2*6*ESC23,dmu2:4*6*ESC23,bemu:2*7.5*ESC23,h2:2*9*ESC23,pp:(18+4*5)*ESC23,rdc:6,steam:3,frt:0};// $M per trainset, 2026
+const TRAIL_KM={vic:209,alb:61};// corridor km without trail today: Victoria Sub north of Humpback Rd, and the Port Alberni Sub
+const TRAIL_RATE=595800/1e6*ESC23;// $M per km, FORT-VI corridor average incl. bridge decking, crossings, engineering and contingency (2023), escalated
+const OVH=[['Construction supervision',.10],['Engineering',.12],['Project management',.10],['First Nations consultation',.15]];// IRCCA percentages, CVRD Table H-6
+function costOpts(){const o=PLAN.costOpts||(PLAN.costOpts={});if(o.v!==44){o.v=44;o.alb=o.alb!==false;o.trailN=true;o.cont=50;}if(typeof o.cont!=='number')o.cont=o.cont?50:0;return o;}
+function costModel(){const o=costOpts(),albOn=o.alb,rows=[];const add=(g,n,v,note,src,kind='c')=>rows.push({g,n,v,note,src,kind});
+  for(const [g,n,v,a,note] of COST_BASE)add(g,n,(v+(albOn?a:0))*ESC20,note+(albOn?'':' Victoria Sub only.'),'IRCCA 2020, escalated');
+  for(const [g,n,v,a,note] of COST_ALLOW)add(g,n,v+(albOn?a:0),note,'Allowance');
+  add('Signals and sidings','Signals and train control, Victoria–Langford (frequent commuter service)',26*ESC20,'IRCCA signalling upgrades.','IRCCA 2020, escalated');
+  add('Signals and sidings','Dispatching and train control for the rest of the line',(130+(albOn?38:0))*0.4,'Planner allowance: about $0.4M per mile for a centralized dispatch and train control system.','Allowance');
+  add('Signals and sidings','Passing sidings for two-way service, and commuter storage sidings',6*4+1.64*ESC20,'Planner allowance: 6 passing sidings at $4M (the ICF business case allowed only $5M in total); storage sidings from the IRCCA.','Allowance');
+  const st=[...servedStops()].filter(c=>STATIONS[c]);const big=st.filter(c=>STN_MAJOR.has(c)),small=st.filter(c=>!STN_MAJOR.has(c));
+  add('Stations and facility',`Stations served by this timetable: ${big.length} main and ${small.length} local (platforms, shelters, access, parking)`,(big.length*6.85+small.length*3.43)*ESC20,`IRCCA station costs: $6.85M main, $3.43M local (2020). Served: ${st.map(nm).join(', ')}.`,'IRCCA 2020, escalated');
+  add('Stations and facility','Maintenance and storage facility',75.48*ESC20,'IRCCA maintenance facility.','IRCCA 2020, escalated');
+  // trail
+  add('Trail','Complete the CRD E&N Rail Trail: Jacklin Rd to Humpback Rd, 3.6 km',3.6*36/17.4*1.5,'CRD E&N Rail Trail: $36M for 17.4 km (2016), escalated. 13.8 km Victoria–Jacklin Rd is built.','Canadian example');
+  if(o.trailN){const km=TRAIL_KM.vic+(albOn?TRAIL_KM.alb:0);
+    add('Trail',`Rail-with-trail beside the line north of the CRD${albOn?' and on the Port Alberni Sub':''}, about ${km} km`,km*TRAIL_RATE,'FORT-VI trail feasibility study as costed in the CVRD report (Table H-7): $349,100 per km civil works, 25% asphalt and 75% gravel, bridge railing and decking, crossings and rock fall; $595,800 per km with engineering and contingency (2023), escalated. The CVRD section alone (72 km) is $55.2M.','CVRD report');}
+  // not subject to construction overheads
+  const fl={};for(const f of PLAN.fleet)fl[f.type]=(fl[f.type]||0)+1;
+  add('Trains and property',`Trains: ${Object.entries(fl).map(([k,n])=>`${n} × ${TYPES[k]?TYPES[k].short:k}`).join(', ')}`,Object.entries(fl).reduce((s,[k,n])=>s+n*(TRAIN_COST[k]??12),0),'CVRD report Table H-3: a DMU car costs $5–7M (2023), as on Ottawa’s Trillium Line (Stadler FLIRT); about $12.4M per 2-car unit in 2026.','CVRD report','x');
+  add('Trains and property','Property for stations, sidings and the facility',44.24*ESC20,'IRCCA property acquisition.','IRCCA 2020, escalated','x');
+  // works: every applied work that is not already built
+  const W=(TRACKSPEC.works||[]).filter(w=>albOn||w.line!=='ALB');
+  const wk=W.filter(w=>w.on!==false&&w.status!=='built'),off=W.filter(w=>w.on===false&&w.status!=='built'),built=W.filter(w=>w.status==='built');
+  const wsum=wk.reduce((s,w)=>s+(+w.cost||0),0),offsum=off.reduce((s,w)=>s+(+w.cost||0),0),nocost=wk.filter(w=>w.cost==null).length;
+  const constr=rows.filter(r=>r.kind==='c').reduce((s,r)=>s+r.v,0)+wsum,other=rows.filter(r=>r.kind==='x').reduce((s,r)=>s+r.v,0);
+  const ovh=OVH.map(([n,p])=>[n,p,constr*p]),cont=constr*o.cont/100;
+  const base=rows.reduce((s,r)=>s+r.v,0);
+  return{rows,base,constr,other,wk,off,built,wsum,offsum,nocost,ovh,cont,total:constr+other+ovh.reduce((s,x)=>s+x[2],0)+cont,st,o};}
+const COST_STEPS=[
+ ['Corridor and partners','Agreements with the Island Corridor Foundation, regional districts, the province and the First Nations whose reserves the corridor crosses. In the Cowichan Valley alone it bisects five reserve sections (Oyster Bay 12, Squaw-Hay-One 11, Halalt 2 and two in Cowichan 1); going around any one of them would mean a 1–3 km diversion or a $150–410M tunnel (CVRD report, Table H-2). Rebuilding through the Snaw-Naw-As reserve needs that Nation’s agreement.'],
+ ['Funding','Federal and provincial capital funding agreements; regional and municipal shares for stations and the trail.'],
+ ['Studies and design','Business case update, environmental review and contaminated-site investigation (Phase I and II ESA for creosote ties, fuel and yard sites), archaeology, climate and flood risk (Chemainus River, Shawnigan Lake and sea-level rise), geotechnical and bridge inspections, then detailed engineering.'],
+ ['Approvals','Approval of passenger operation by the rail safety regulator, crossing approvals with road authorities, environmental and other permits.'],
+ ['Track, structures and crossings','Rebuild the track to Class 3, remediate bridges and rockfall, bring crossings to standard and rebuild the missing pieces, working in stages from the CRD north.'],
+ ['Signals, stations, facility and trail','Train control and sidings, stations, the maintenance facility, and the trail beside the line, with fencing where the two run side by side.'],
+ ['Trains and operator','Buy diesel multiple units (the CVRD report’s recommended technology) and procure an operator; hire and train crews and maintainers.'],
+ ['Test and open','Testing and commissioning, safety certification and trial running, then open in stages: West Shore first, then Duncan, Nanaimo and Courtenay.']];
+function renderCost(){const box=$('plan-cost');if(!box)return;const m=costModel(),o=m.o,f=v=>v>=100?Math.round(v).toLocaleString():v>=10?v.toFixed(0):v.toFixed(1);
+  const groups={};for(const r of m.rows)(groups[r.g]||(groups[r.g]=[])).push(r);
+  const gsum=g=>groups[g].reduce((s,r)=>s+r.v,0),osum=m.ovh.reduce((s,x)=>s+x[2],0);
+  const bar=[...Object.keys(groups).map((g,i)=>[g,gsum(g),'cg'+i]),['Speed projects',m.wsum,'cgw'],['Overheads',osum,'cgs'],...(m.cont?[[`Contingency (${o.cont}%)`,m.cont,'cgc']]:[])];
+  box.innerHTML=`<div class="costtot"><div><span>Overall capital cost</span><b>$${(m.total/1000).toFixed(2)}B</b><span class="m">2026 CAD, order of magnitude · ${m.wk.length} applied work${m.wk.length===1?'':'s'} included</span></div>
+      <div class="costbar">${bar.map(([n,v,c])=>`<i class="${c}" style="flex:${Math.max(v,0.001)}" title="${esc(n)}: $${f(v)}M"></i>`).join('')}</div>
+      <div class="costkey">${bar.map(([n,v,c])=>`<span><i class="${c}"></i>${esc(n)} <b>$${f(v)}M</b></span>`).join('')}</div></div>
+    <div class="costopts"><label><input type="checkbox" id="co-alb"${o.alb?' checked':''}> Include the Port Alberni Sub</label><label><input type="checkbox" id="co-trail"${o.trailN?' checked':''}> Trail along the whole corridor</label>
+      <label>Contingency <select id="co-cont">${[[50,'50% (IRCCA)'],[30,'30%'],[0,'None']].map(([v,n])=>`<option value="${v}"${o.cont===v?' selected':''}>${n}</option>`).join('')}</select></label></div>
+    <h4 class="costh">Speed projects applied in the Works tab <span>$${f(m.wsum)}M</span></h4>
+    ${m.wk.length?`<div class="costg">${m.wk.slice().sort((a,b)=>a.line.localeCompare(b.line)||a.a-b.a).map(w=>`<div class="costw"><label class="wksw" title="Applied"><input type="checkbox" data-con="${w.id}" checked aria-label="Applied"><span></span></label><span class="grow"><button type="button" class="linkbtn" data-wopen="${w.id}">${esc(w.name)}</button><span class="m"> · ${WORK_STATUS[w.status]}${w.status==='idea'?' (not yet proposed)':''}</span></span><b>${w.cost!=null?'$'+f(+w.cost)+'M':'no cost yet'}</b></div>`).join('')}</div>`:'<p class="m">No works applied. Switch works on in the Works tab, or here below.</p>'}
+    ${m.nocost?`<p class="m">${m.nocost} applied work${m.nocost>1?'s have':' has'} no cost estimate yet.</p>`:''}
+    ${m.off.length?`<details class="costoff"><summary>Not applied: ${m.off.length} work${m.off.length>1?'s':''}, $${f(m.offsum)}M</summary><div class="costg">${m.off.map(w=>`<div class="costw"><label class="wksw" title="Applied"><input type="checkbox" data-con="${w.id}" aria-label="Applied"><span></span></label><span class="grow"><button type="button" class="linkbtn" data-wopen="${w.id}">${esc(w.name)}</button><span class="m"> · ${WORK_STATUS[w.status]}</span></span><b>${w.cost!=null?'$'+f(+w.cost)+'M':'—'}</b></div>`).join('')}</div></details>`:''}
+    <h4 class="costh">Basic rail with trail <span>$${f(m.base)}M</span></h4>
+    ${Object.keys(groups).map(g=>`<div class="costg"><div class="costgh"><b>${g}</b><b>$${f(gsum(g))}M</b></div>${groups[g].map(r=>`<details class="costr"><summary><span>${esc(r.n)}</span><b>$${f(r.v)}M</b></summary><div class="m">${esc(r.note)} <i>${r.src}.</i></div></details>`).join('')}</div>`).join('')}
+    <h4 class="costh">Overheads and contingency <span>$${f(osum+m.cont)}M</span></h4>
+    <div class="costg">${m.ovh.map(([n,p,v])=>`<div class="costw"><span>${n} (${Math.round(p*100)}%)</span><b>$${f(v)}M</b></div>`).join('')}${m.cont?`<div class="costw"><span>Contingency (${o.cont}%)</span><b>$${f(m.cont)}M</b></div>`:''}
+      <div class="costw tot"><span>Total</span><b>$${f(m.total)}M</b></div></div>
+    <p class="m">Overheads are charged on construction ($${f(m.constr)}M, including the applied works) at the IRCCA rates shown in the CVRD report; trains and property carry none.</p>
+    <h4 class="costh">Steps to bring the line back into service</h4>
+    <ol class="coststeps">${COST_STEPS.map(([n,d])=>`<li><b>${n}</b><span class="m">${d}</span></li>`).join('')}</ol>
+    <h4 class="costh">Other estimates, for comparison</h4>
+    <div class="costg"><div class="costw"><span>ICF initial business case, hybrid intermediate phase, incl. $50M of trains (2023 $)</span><b>$461M</b></div>
+      <div class="costw"><span>IRCCA ultimate phase, Victoria–Courtenay, with overheads (2023 $)</span><b>$637M</b></div>
+      <div class="costw"><span>Same, plus trains ($264M, rising to $432M)</span><b>$901M</b></div>
+      <div class="costw"><span>IRCCA Langford–Victoria commuter service (2020 $)</span><b>$547M</b></div></div>
+    <p class="m">The ICF case assumes most work is routine maintenance with little engineering, no First Nations consultation costs and little for commuter service; the IRCCA includes these (CVRD report, H.5).</p>
+    <p class="m">Sources: Island Rail Corridor Condition Assessment cost estimate (WSP for BC MoTI, 2020); CVRD “Island Rail Corridor – Towards a Shared Vision”, Appendix H (Stantec/Modus, 2025), including the ICF business case (2022) and the FORT-VI trail study (2023); CRD E&amp;N Rail Trail (2016). Escalated to 2026 using the CVRD report’s 2020–2023 factor and 3% a year after. Allowances are the planner’s assumptions. Stations and trains follow the current timetable and fleet. Excludes operating costs and financing.</p>`;
+  const sv=(id,k)=>$(id).onchange=e=>{costOpts()[k]=e.target.checked;savePlan();renderCost();};sv('co-alb','alb');sv('co-trail','trailN');
+  $('co-cont').onchange=e=>{costOpts().cont=+e.target.value;savePlan();renderCost();};
+  box.querySelectorAll('input[data-con]').forEach(c=>c.onchange=()=>{setWorkOn(c.dataset.con,c.checked);renderCost();});
+  box.querySelectorAll('[data-wopen]').forEach(b=>b.onclick=()=>openWork(b.dataset.wopen));}
 function renderPlanPane(){const ck=FPCT+'|'+JSON.stringify(STNSPEC).length+'|'+JSON.stringify(TRACKSPEC).length;if(renderPlanPane.ck!==ck){renderPlanPane.ck=ck;try{renderCompare();}catch(e){console.warn(e);}}
   let km=0,seatkm=0;const used=new Set();for(const tr of PLAN.trips){if(!tr.set||!setOf(tr.set))continue;used.add(tr.set);const l=routeFor(codesOf(tr)).len;km+=l;const f=setOf(tr.set);if(!TYPES[f.type].freight)seatkm+=l*TYPES[f.type].cap;}
   // peak trainsets in service
@@ -2612,6 +2723,7 @@ function renderPlanPane(){const ck=FPCT+'|'+JSON.stringify(STNSPEC).length+'|'+J
   const un=PLAN.trips.filter(t=>!t.set||!setOf(t.set)).length;const jc=jobsCoverage();
   $('plan-sum').innerHTML=[[PLAN.trips.length,'Trips per weekday'],[fmt(km),'Train-km per day'],[fmt(seatkm),'Seat-km per day'],[`${used.size} / ${PLAN.fleet.length}`,'Trainsets used'],[peak,'Peak trainsets running'],[un,'Unassigned trips'],[WARN.size,'Trips with warnings'],[servedStops().size,'Stations served'],[fmt(jobsRound(jc.cov)),'Jobs within 800 m of a served station'],[Math.round(jc.cov/jc.tot*100)+'%','Share of mapped jobs (2021)']]
     .map(([v,l])=>`<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join('');
+  renderCost();
 }
 $('btn-auto2').onclick=()=>$('btn-auto').click();
 $('btn-reset').onclick=e=>{const b=e.currentTarget;if(b.dataset.armed){TRACKSPEC=normTrack(null);applyStations({});PLAN=defaultPlan($('tt-preset').value);DONE.clear();KNOWN.clear();for(const t of [...trains]){removeTrainGfx(t);}trains.length=0;FORM=null;
@@ -2642,7 +2754,7 @@ $('btn-import').onclick=()=>{const keep=STNSPEC,keepT=TRACKSPEC;try{const p=JSON
 function renderEditor(){
   const a=PLAN.trips.filter(t=>t.set&&setOf(t.set)).length;
   $('p-sum').textContent=`${PLAN.trips.length} trips · ${PLAN.fleet.length} trainsets${WARN.size?` · ${WARN.size} ⚠`:''}`;
-  if(tab==='tt'){renderForm();renderTT();}else if(tab==='fleet')renderFleet();else if(tab==='stn')renderStations();else if(tab==='trk')renderTrack();else renderPlanPane();
+  if(tab==='tt'){renderForm();renderTT();}else if(tab==='fleet')renderFleet();else if(tab==='stn')renderStations();else if(tab==='trk')renderTrack();else if(tab==='plan')renderPlanPane();
 }
 function renderHeader(){
   $('clock').textContent=$('fsclock').textContent=`${DAYS[day%5]} ${hhmm(sim)}`;
