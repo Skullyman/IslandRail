@@ -507,6 +507,16 @@ input[type=checkbox],input[type=radio]{accent-color:var(--accent);width:15px;hei
 .costw{display:flex;justify-content:space-between;gap:10px;padding:5px 8px;align-items:baseline}.costw+.costw{border-top:1px solid var(--line)}.costw.tot{background:var(--panel-2);font-weight:700;font-size:13px}
 .costw .linkbtn{color:var(--ink);font-weight:600;text-decoration-color:var(--ctl-line)}
 .costw{align-items:center}.costw .grow{flex:1;min-width:0}.costw .wksw{flex:none}.costoff summary{cursor:pointer;padding:4px 0;font-weight:600}.costoff .costg{margin-top:4px}.costopts select{font-size:12px;padding:2px 4px}
+/* settings and experimental mode */
+.setwrap{position:relative}.setbtn{display:inline-flex;gap:5px;align-items:center;padding:7px 10px}
+.setmenu{position:absolute;right:0;top:calc(100% + 6px);z-index:30;width:300px;background:var(--panel);border:1px solid var(--ctl-line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:10px 12px;display:grid;gap:10px;font-size:12.5px}
+.setmenu h4{margin:0;font-family:var(--display);font-size:16px;text-transform:uppercase;letter-spacing:.03em}
+.setrow{display:flex;justify-content:space-between;align-items:center;gap:8px}.setrow .seg button{font-family:var(--body);font-size:12px;padding:5px 9px}
+.setexp{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:start;cursor:pointer;border:1px solid var(--ctl-line);border-radius:8px;padding:8px}.setexp .m{display:block;font-size:11.5px;margin-top:2px}.setexp input{margin-top:2px}
+.setmenu p{margin:0}
+.app.basic .panel{display:none!important}
+.app.basic .main{grid-template-columns:minmax(0,1fr)}.app.basic #tip-edit,.app.basic #tip-plan{display:none}
+@media (max-width:600px){.setbtn span{display:none}.setmenu{width:min(300px,calc(100vw - 32px))}}
 </style></head>
 <body>
 <noscript><p style="padding:2em;font-family:sans-serif">Island Rail Planner needs JavaScript enabled.</p></noscript>
@@ -525,6 +535,13 @@ input[type=checkbox],input[type=radio]{accent-color:var(--accent);width:15px;hei
         <button id="sp-12" data-s="12" aria-pressed="false">12×</button>
       </div>
       <button class="btn restart" id="btn-restart" type="button" title="Restart today's service from the first departure">↺ Restart day</button>
+      <div class="setwrap"><button class="btn setbtn" id="btn-settings" type="button" aria-haspopup="true" aria-expanded="false" title="Settings"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></button>
+        <div class="setmenu" id="setmenu" role="dialog" aria-label="Settings" hidden>
+          <h4>Settings</h4>
+          <div class="setrow"><span>Appearance</span><div class="seg" role="group" aria-label="Appearance" id="set-theme"><button type="button" data-th="system">System</button><button type="button" data-th="light">Light</button><button type="button" data-th="dark">Dark</button></div></div>
+          <label class="setexp"><input type="checkbox" id="set-exp"><span><b>Experimental mode</b><span class="m">Shows the planning tools: Timetable, Fleet, Stations, Track, Works and Plan panels. These are early and still changing.</span></span></label>
+          <p class="m">Settings are remembered in this browser.</p>
+        </div></div>
     </div>
     <div class="stats">
       <div class="stat"><b id="s-run">0</b><span>Trains running</span></div>
@@ -666,7 +683,7 @@ input[type=checkbox],input[type=radio]{accent-color:var(--accent);width:15px;hei
           <li>Edits are saved in this browser only. Use Copy plan to keep or share them.</li>
         </ul>
       </div>
-      <div class="log"><h3>Dispatch log</h3><ol id="log"></ol></div>
+            <div class="log"><h3>Dispatch log</h3><ol id="log"></ol></div>
     </aside>
   </main>
 </div>
@@ -2458,7 +2475,7 @@ let WORK_DRAGT=0,WORK_SEL=null,WORK_HL=null,WORK_PICK=null,WORK_NEW=false,WORK_D
 function newWorkId(){return 'w'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
 const snapWorks=()=>JSON.stringify(TRACKSPEC.works||[]);
 const findWork=id=>(TRACKSPEC.works||[]).find(x=>x.id===id);
-function openWork(id,noZoom){const w=findWork(id);if(!w)return;if(WORK_SEL!==id){WORK_SEL=id;WORK_SNAP={id,json:JSON.stringify(w)};}WORK_NEW=false;
+function openWork(id,noZoom){if(!needExp())return;const w=findWork(id);if(!w)return;if(WORK_SEL!==id){WORK_SEL=id;WORK_SNAP={id,json:JSON.stringify(w)};}WORK_NEW=false;
   if(tab!=='works')switchTab('works');else renderWorks();if(L.speed.style.display==='none')$('speedbtn').click();else drawWorksOnMap();if(!noZoom)zoomToWork(id);
   const r=document.querySelector(`#worksbox .wkrow[data-w="${id}"]`);if(r)r.scrollIntoView({block:'nearest'});}
 function closeWork(){WORK_SEL=null;WORK_SNAP=null;WORK_PICK=null;svg.classList.remove('picking');renderWorks();drawWorksOnMap();}
@@ -2467,7 +2484,7 @@ let worksT=null;
 function worksChanged(msg,loud){MINCACHE.clear();savePlan();if(L.speed.style.display!=='none'){drawSpeedLayer();speedStats();}else drawWorksOnMap();renderWorks();
   clearTimeout(worksT);worksT=setTimeout(()=>applyPlan(loud?msg:''),loud?0:500);}
 const commitWorks=msg=>worksChanged(msg,true);
-function createWork(o){const t=WORK_TYPES[o.type];const w={id:newWorkId(),type:o.type,line:o.line,a:+o.a.toFixed(2),b:+o.b.toFixed(2),name:o.name||`${t.s}, MP ${o.a.toFixed(1)}–${o.b.toFixed(1)}`,
+function createWork(o){if(!needExp())return null;const t=WORK_TYPES[o.type];const w={id:newWorkId(),type:o.type,line:o.line,a:+o.a.toFixed(2),b:+o.b.toFixed(2),name:o.name||`${t.s}, MP ${o.a.toFixed(1)}–${o.b.toFixed(1)}`,
     deg:t.deg!==undefined?(o.deg??t.deg):undefined,status:o.status||'idea',cost:o.cost??null,notes:o.notes||'',project:null,on:true,fresh:true};
   (TRACKSPEC.works||(TRACKSPEC.works=[])).push(w);WORK_SEL=w.id;WORK_SNAP=null;WORK_NEW=false;WORK_PICK=null;svg.classList.remove('picking');
   if(tab!=='works')switchTab('works');if(L.speed.style.display==='none')$('speedbtn').click();
@@ -2729,6 +2746,25 @@ $('btn-auto2').onclick=()=>$('btn-auto').click();
 $('btn-reset').onclick=e=>{const b=e.currentTarget;if(b.dataset.armed){TRACKSPEC=normTrack(null);applyStations({});PLAN=defaultPlan($('tt-preset').value);DONE.clear();KNOWN.clear();for(const t of [...trains]){removeTrainGfx(t);}trains.length=0;FORM=null;
     syncRuntime();bootPositions();applyPlan('Restored the starting timetable, the original stations and the original track');b.textContent='Reset to starting timetable';delete b.dataset.armed;}
   else{b.dataset.armed='1';b.textContent='Confirm reset (discards your edits)';setTimeout(()=>{if(b.isConnected&&b.dataset.armed){delete b.dataset.armed;b.textContent='Reset to starting timetable';}},4000);}};
+/* ---------- settings: appearance and experimental mode (remembered in this browser) ---------- */
+const THEME0=document.documentElement.getAttribute('data-theme');
+let SETTINGS={theme:'system',exp:false};try{Object.assign(SETTINGS,JSON.parse(localStorage.getItem('island-rail-settings')||'{}'));}catch(_){}
+let EXP=!!SETTINGS.exp;
+function saveSettings(){try{localStorage.setItem('island-rail-settings',JSON.stringify(SETTINGS));}catch(_){}}
+function applyTheme(){const r=document.documentElement,t=SETTINGS.theme;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);else if(THEME0)r.setAttribute('data-theme',THEME0);else r.removeAttribute('data-theme');
+  document.querySelectorAll('#set-theme [data-th]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.th===t)));
+  if(typeof drawFlows==='function'&&$('flowlegend')&&!$('flowlegend').hidden)setTimeout(drawFlows,0);}
+function applyExp(){EXP=!!SETTINGS.exp;document.querySelector('.app').classList.toggle('basic',!EXP);$('set-exp').checked=EXP;
+  if(!EXP){if(typeof WORK_PICK!=='undefined'&&WORK_PICK){WORK_PICK=null;WORK_NEW=false;svg.classList.remove('picking');}if(typeof cancelPlacing==='function')cancelPlacing(true);if(typeof cancelDrawing==='function')cancelDrawing();if(typeof setTrkEdit==='function')setTrkEdit(false);}
+  else renderEditor();window.dispatchEvent(new Event('resize'));}
+function needExp(){return EXP;}
+(function(){const b=$('btn-settings'),m=$('setmenu');const open=v=>{m.hidden=!v;b.setAttribute('aria-expanded',String(v));};
+  b.onclick=e=>{e.stopPropagation();open(m.hidden);};
+  document.addEventListener('pointerdown',e=>{if(!m.hidden&&!m.contains(e.target)&&!b.contains(e.target))open(false);});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden){open(false);b.focus();}});
+  document.querySelectorAll('#set-theme [data-th]').forEach(x=>x.onclick=()=>{SETTINGS.theme=x.dataset.th;saveSettings();applyTheme();});
+  $('set-exp').onchange=e=>{SETTINGS.exp=e.target.checked;saveSettings();applyExp();toast('Settings',SETTINGS.exp?'Experimental mode on: planning panels are shown':'Experimental mode off: planning panels are hidden');};
+  applyTheme();applyExp();})();
 function setSubtitle(){$('subtitle').textContent=(PRESETS[PLAN.preset]||PRESETS.data8).sub;$('tt-preset').value=PRESETS[PLAN.preset]?PLAN.preset:'data8';}
 setSubtitle();
 $('btn-preset').onclick=()=>{const k=$('tt-preset').value;PLAN=defaultPlan(k);DONE.clear();KNOWN.clear();for(const t of [...trains])removeTrainGfx(t);trains.length=0;FORM=null;
