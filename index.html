@@ -560,6 +560,14 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
 .tpcard h4{margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
 .tprow{display:grid;grid-template-columns:150px 1fr;gap:10px;padding:5px 0;border-top:1px solid var(--line);font-size:13px}.tprow span{color:var(--muted)}.tprow b{font-weight:600}
 @media (max-width:760px){.tpgrid{grid-template-columns:1fr}.tprow{grid-template-columns:110px 1fr}.tptabs{grid-template-columns:repeat(2,1fr)}.trainpage{padding:12px}}
+.srcbody{display:grid;gap:18px;max-width:1100px}
+.srcg h2{margin:0 0 8px;font-family:var(--display);font-size:22px;text-transform:uppercase;letter-spacing:.02em;border-bottom:1px solid var(--line);padding-bottom:4px}
+.srclist{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
+.srcit{border:1px solid var(--line);border-radius:8px;background:var(--panel-2);padding:10px 12px;display:grid;gap:5px;align-content:start}
+.srcit h3{margin:0;font-size:14px;line-height:1.3}.srcit h3 a{color:var(--info);text-decoration:underline;text-underline-offset:2px}
+.srcit p{margin:0;font-size:12.5px;line-height:1.45}.srcg>p{margin:0;font-size:13px}
+.app.basic .src-exp{display:none}
+@media (max-width:600px){#btn-sources span{display:none}.srclist{grid-template-columns:1fr}}
 @media (max-width:600px){#btn-trains span{display:none}}
 .tsf{fill:var(--panel);stroke:currentColor;stroke-width:1.3}.tsg{fill:color-mix(in srgb,var(--info) 18%,transparent);stroke:currentColor;stroke-width:1}
 .tsh{fill:var(--warn);stroke:none}.tsx.batt{fill:var(--ok);stroke:var(--ok);fill-opacity:.3}.tswire{stroke:var(--muted);stroke-width:1;stroke-dasharray:6 3}
@@ -602,6 +610,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
       </div>
       <button class="btn restart" id="btn-restart" type="button" title="Restart today's service from the first departure">↺ Restart day</button>
       <button class="btn setbtn" id="btn-trains" type="button" title="Train types and specifications"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 10h14M9 17l-2 4M15 17l2 4"/><circle cx="9" cy="13.5" r=".6" fill="currentColor"/><circle cx="15" cy="13.5" r=".6" fill="currentColor"/></svg><span>Trains</span></button>
+      <button class="btn setbtn" id="btn-sources" type="button" title="Where the data comes from"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/><path d="M9 8h7M9 12h5"/></svg><span>Sources</span></button>
       <div class="setwrap"><button class="btn setbtn" id="btn-settings" type="button" aria-haspopup="true" aria-expanded="false" title="Settings"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></button>
         <div class="setmenu" id="setmenu" role="dialog" aria-label="Settings" hidden>
           <h4>Settings</h4>
@@ -622,6 +631,10 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
     <div class="tptop"><button class="btn" id="tp-back" type="button">← Back to the map</button><h1>Train types</h1><span class="m">Specifications and side-view schematics for the trains the planner can run on the E&amp;N</span></div>
     <div class="tptabs" id="tp-tabs" role="group" aria-label="Choose a train type"></div>
     <div class="tpbody" id="tp-body"></div>
+  </section>
+  <section class="trainpage srcpage" id="srcpage" hidden aria-label="Information sources">
+    <div class="tptop"><button class="btn" id="src-back" type="button">← Back to the map</button><h1>Sources</h1><span class="m">Where the planner's maps, travel figures and railway data come from, what each is used for, and its limits</span></div>
+    <div class="srcbody" id="src-body"></div>
   </section>
   <main class="main">
     <div class="mapwrap" id="mapwrap">
@@ -1708,7 +1721,7 @@ function srRun(go){const q=$('sr-q').value.trim();const local=srLocal(q);clearTi
     if(e.key==='ArrowDown'){const f=$('sr-res').querySelector('.srrow');if(f){e.preventDefault();f.focus();}}if(e.key==='Escape'){e.stopPropagation();open(false);sb.focus();}});
   $('sr-res').addEventListener('keydown',e=>{const rows=[...$('sr-res').querySelectorAll('.srrow')],i=rows.indexOf(document.activeElement);
     if(e.key==='ArrowDown'&&i<rows.length-1){e.preventDefault();rows[i+1].focus();}if(e.key==='ArrowUp'){e.preventDefault();(i>0?rows[i-1]:$('sr-q')).focus();}if(e.key==='Escape'){open(false);sb.focus();}});
-  document.addEventListener('keydown',e=>{if(e.key==='/'&&!/input|textarea|select/i.test(document.activeElement.tagName)&&$('trainpage').hidden){e.preventDefault();open(true);}});}
+  document.addEventListener('keydown',e=>{if(e.key==='/'&&!/input|textarea|select/i.test(document.activeElement.tagName)&&$('trainpage').hidden&&$('srcpage').hidden){e.preventDefault();open(true);}});}
 
 /* layers panel: layer switches, per-layer info panels and labels */
 {const lp=$('layerpanel'),lb=$('layersbtn');
@@ -3102,13 +3115,57 @@ function renderTrains(){const k=TRAIN_SEL,t=TYPES[k],sp=TRAIN_SPEC[k],F=TRAIN_FO
   // fit short trains to the panel (up to 2.1× for detail); long ones keep at least 1.2× and scroll
   const z=Math.max(1.2,Math.min(2.1,box/W));sv.style.width=(W*z)+'px';
   const ch=d=>{TRAIN_CARS[k]=Math.max(F.min,Math.min(F.max,n+d*step));renderTrains();};$('tp-minus').onclick=()=>ch(-1);$('tp-plus').onclick=()=>ch(1);}
-function openTrains(on){const pg=$('trainpage');pg.hidden=!on;document.querySelector('.app').classList.toggle('tpopen',on);if(on){renderTrains();pg.scrollTop=0;$('tp-back').focus();if(location.hash!=='#trains')history.replaceState(null,'','#trains');}
+function openTrains(on){const pg=$('trainpage');if(on&&$('srcpage')&&!$('srcpage').hidden)openSources(false);pg.hidden=!on;document.querySelector('.app').classList.toggle('tpopen',on||($('srcpage')&&!$('srcpage').hidden));if(on){renderTrains();pg.scrollTop=0;$('tp-back').focus();if(location.hash!=='#trains')history.replaceState(null,'','#trains');}
   else if(location.hash==='#trains')history.replaceState(null,'',location.pathname+location.search);}
 $('btn-trains').onclick=()=>openTrains(true);$('tp-back').onclick=()=>{openTrains(false);$('btn-trains').focus();};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('trainpage').hidden)openTrains(false);});
 window.addEventListener('hashchange',()=>openTrains(location.hash==='#trains'));
 window.addEventListener('resize',()=>{if(!$('trainpage').hidden)renderTrains();});
 if(location.hash==='#trains')openTrains(true);
+/* ---------- Sources page: where each layer's and model's data comes from ---------- */
+const SRC=[
+ {g:'Base map',items:[
+  {n:'OpenStreetMap',u:'https://www.openstreetmap.org/copyright',use:'Coastline, lakes, roads, trails and bike lanes, land use, shopping centres and the bus lanes in service.',d:'Read between 14 and 19 October 2026 through the Overpass and OSM APIs. Bike-lane lines were joined, simplified to about 10 m and pieces under 60 m dropped.',lim:'Only as complete as the mapping, which is strongest in Greater Victoria and Nanaimo.',lic:'© OpenStreetMap contributors, ODbL'},
+  {n:'AWS Terrain Tiles (Mapzen terrarium)',u:'https://registry.opendata.aws/terrain-tiles/',use:'Elevation shading and hillshade.'},
+  {n:'Photon and Nominatim (OpenStreetMap geocoders)',u:'https://photon.komoot.io/',use:'Map search for addresses and places that are not on the map.',d:'Photon is tried first, with Nominatim as the fallback; results are limited to Vancouver Island.',lim:'Needs an internet connection; some hosts block these lookups.'}]},
+ {g:'People and places',items:[
+  {n:'Statistics Canada, 2021 Census: population by dissemination area',u:'https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/index.cfm?Lang=E',use:'Population layer: people per km² of land, homes, and how many people live within 800 m and 3 km of a served station.',d:'1,374 dissemination areas in the seven Island census divisions (839,786 people). Boundaries from the 2021 cartographic boundary file; counts from the Census Profile. Pulled 21 October 2026.',lim:'Two areas are suppressed by Statistics Canada. Station distances are straight lines to each area\'s centre.'},
+  {n:'Statistics Canada, 2021 Census: municipal populations',use:'Municipality labels on the Population layer, and the population weighting for roads without a traffic count.'},
+  {n:'Statistics Canada, 2021 Census: place of work',use:'Jobs layer, by census tract in Victoria and Nanaimo and by municipality elsewhere.'},
+  {n:'Key destinations',use:'69 airports, ferry and cruise terminals, campuses, hospitals, defence sites, the Legislature and major shopping centres.',d:'Locations from OpenStreetMap; passenger and enrolment notes from the airport authorities, BC Ferries, the UVic 2023 Transportation Survey and the CRD 2022 travel survey.'}]},
+ {g:'Travel',items:[
+  {n:'Statistics Canada, 2021 Census: commuting',use:'Travel flows, "Commutes, whole Island": place-to-place commute lines, driving shares and arrival times.',d:'Tables 98-10-0459, 98-10-0462 and 98-10-0503.',lim:'Covers trips to work only.'},
+  {n:'CRD 2022 Origin-Destination Household Travel Survey',u:'https://www.crd.ca/media/file/crd-2022-origin-destination-household-travel-survey-report',use:'Travel flows, "All trips, Greater Victoria": 995,870 daily trips between 21 districts, by time of day.',d:'R.A. Malatest & Associates with David Kriger Consultants. Tables 43–46 (trip matrices), Table 25 (driving shares), Table 47 row totals (transit) and Figure 41 (hourly trip starts).'},
+  {n:'UVic 2023 Transportation Survey',use:'Trips to UVic; Camosun and VIU are scaled from it per student and staff member.'},
+  {n:'Airport passenger totals',use:'Trips to Victoria, Comox and Nanaimo airports (2024–25 figures).'},
+  {n:'BC Ferries',u:'https://www.bcferries.com/routes-fares/schedules',use:'Ferry sailings and terminal traffic pulses at 12 Island terminals.',d:'Seasonal schedules for a Wednesday between 14 October and 11 November 2026; traffic for the year to March 2025.'}]},
+ {g:'Roads and buses',items:[
+  {n:'BC Ministry of Transportation and Transit traffic counts',use:'Traffic congestion layer: weekday average traffic by hour.',d:'Permanent count stations (2025; Six Mile 2024) and 2025 short counts.',lim:'Roads without a count are modelled from nearby population.'},
+  {n:'City of Victoria traffic counts',use:'Traffic congestion layer inside Victoria.'},
+  {n:'ICBC reported crashes',u:'https://public.tableau.com/app/profile/icbc/viz/VancouverIslandCrashes/VIDashboard',use:'Reported crashes layer: 73,912 crashes at 16,768 locations, 2021–2025.',d:'"Vancouver Island Crashes" dashboard, data as of 31 March 2026, pulled 16 October 2026.',lim:'Excludes parking lots and parked vehicles; mid-block crashes are placed between the nearest intersections; no time of day.'},
+  {n:'BC Transit GTFS schedules',u:'https://www.bctransit.com/open-data',use:'BC Transit buses layer and the bus connections listed for each station.',d:'Weekday service for 21 October 2026 in nine transit systems: 4,670 trips.',lim:'Buses move on schedule, not live positions.'},
+  {n:'BC Transit transit priority updates',use:'Bus priority lanes under construction and planned.',d:'"Victoria Regional Rapid Transit" updates, September and November 2025.'}]},
+ {g:'The railway',items:[
+  {n:'E&N Railway track charts (Crouch Engineering, 2003)',use:'Track speed layer and the speed model behind the timetable: posted speeds, curvature and grades.',d:'Victoria Sub MP 0–140 and Port Alberni Sub MP 0–38, last revised 4 June 2003, with the E&N mileage lists for station mileposts.',lim:'Restored speeds are estimates: each 5-mile chart page takes its sharpest curve\'s limit, capped at 60 mph.'},
+  {n:'Wikipedia: Island Rail Corridor route map',u:'https://en.wikipedia.org/wiki/Island_Rail_Corridor',use:'Bridges, tunnels, road crossings and the sections out of service today.',d:'Read 17 October 2026; mileposts from the E&N mileage lists and track charts.',lim:'20 road crossings are placed by interpolation (marked ≈).'},
+  {n:'ICF business case (2022)',use:'The ICF timetable preset, its train times and service pattern (Tables 17 and 18).'},
+  {n:'Transport Canada Grade Crossings Inventory (2023)',u:'https://open.canada.ca/data/en/dataset?q=grade%20crossings%20inventory',use:'Crossing counts, protection and traffic for the crossing upgrade projects.'}]},
+ {g:'Costs',exp:1,items:[
+  {n:'Island Rail Corridor Condition Assessment (WSP for BC MoTI, 2020)',use:'Restoration cost by segment and unit costs for track works (Appendix G).'},
+  {n:'CVRD "Island Rail Corridor – Towards a Shared Vision", Appendix Companion Document (Stantec/Modus, 2025)',use:'Overhead and contingency rates, escalation, train costs, trail costs and reserve-land alternatives.'},
+  {n:'FORT-VI trail study (2023) and CRD E&N Rail Trail',use:'Cost per km of trail along the corridor.'},
+  {n:'Canadian project examples',use:'Crossing gates (CN Otway Road, Prince George, 2021) and rock work (Malahat Village highway project, 2017), escalated to 2026.'}]}];
+function renderSources(){const lnk=s=>s.u?`<a href="${s.u}" target="_blank" rel="noopener">${esc(s.n)}<span aria-hidden="true"> ↗</span></a>`:esc(s.n);
+  $('src-body').innerHTML=SRC.map(g=>`<section class="srcg${g.exp?' src-exp':''}"><h2>${esc(g.g)}</h2><div class="srclist">${g.items.map(s=>`<article class="srcit"><h3>${lnk(s)}</h3><p><b>Used for:</b> ${esc(s.use)}</p>${s.d?`<p>${esc(s.d)}</p>`:''}${s.lim?`<p class="m"><b>Limits:</b> ${esc(s.lim)}</p>`:''}${s.lic?`<p class="m">${esc(s.lic)}</p>`:''}</article>`).join('')}</div></section>`).join('')
+   +`<section class="srcg"><h2>Simulated</h2><p class="m">Riders, car trips avoided, CO₂ and on-time figures, and train positions are simulated from these sources and the timetable. They are estimates for comparing options, not forecasts.</p></section>`;}
+function openSources(on){const pg=$('srcpage');if(on&&!$('trainpage').hidden)openTrains(false);pg.hidden=!on;document.querySelector('.app').classList.toggle('tpopen',on||!$('trainpage').hidden);
+  if(on){renderSources();pg.scrollTop=0;$('src-back').focus();if(location.hash!=='#sources')history.replaceState(null,'','#sources');}
+  else if(location.hash==='#sources')history.replaceState(null,'',location.pathname+location.search);}
+$('btn-sources').onclick=()=>openSources(true);$('src-back').onclick=()=>{openSources(false);$('btn-sources').focus();};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('srcpage').hidden)openSources(false);});
+window.addEventListener('hashchange',()=>openSources(location.hash==='#sources'));
+if(location.hash==='#sources')openSources(true);
+
 function renderPlanPane(){const ck=FPCT+'|'+JSON.stringify(STNSPEC).length+'|'+JSON.stringify(TRACKSPEC).length;if(renderPlanPane.ck!==ck){renderPlanPane.ck=ck;try{renderCompare();}catch(e){console.warn(e);}}
   let km=0,seatkm=0;const used=new Set();for(const tr of PLAN.trips){if(!tr.set||!setOf(tr.set))continue;used.add(tr.set);const l=routeFor(codesOf(tr)).len;km+=l;const f=setOf(tr.set);if(!TYPES[f.type].freight)seatkm+=l*TYPES[f.type].cap;}
   // peak trainsets in service
