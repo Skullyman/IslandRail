@@ -527,6 +527,37 @@ input[type=checkbox],input[type=radio]{accent-color:var(--accent);width:15px;hei
 .bpkey{display:grid;gap:3px}.bpkey span{display:flex;align-items:center;gap:6px}.bpkey b{margin-left:auto}
 i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);flex:none}i.bpk.bp-cons{border-top-style:dashed}i.bpk.bp-plan{border-top-style:dotted}
 .bplist{display:grid;gap:1px;margin-top:4px}.bplist button{all:unset;cursor:pointer;display:flex;align-items:center;gap:6px;font-size:11.5px;padding:2px 0}.bplist button span{margin-left:auto;color:var(--muted)}.bplist button:hover,.bplist button:focus-visible{text-decoration:underline}
+/* train types sub-page */
+.app.tpopen .main{visibility:hidden}.app>.main{grid-row:2;grid-column:1}.trainpage{grid-row:2;grid-column:1;z-index:20}
+.trainpage{overflow:auto;min-height:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 18px 24px;display:grid;gap:14px;align-content:start}
+.tptop{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px}.tptop h1{margin:0;font-family:var(--display);font-weight:800;font-size:28px;text-transform:uppercase;letter-spacing:.02em}.tptop .m{flex-basis:100%}
+.tptabs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.tpbtn{display:grid;gap:1px;text-align:left;border:1.5px solid var(--ctl-line);border-radius:8px;background:var(--ctl-bg);color:var(--ink);padding:7px 10px;cursor:pointer;font:inherit}
+.tpbtn b{font-family:var(--mono);font-size:12px}.tpbtn span{font-size:12.5px}.tpbtn:hover{background:var(--ctl-hov);border-color:var(--ink)}
+.tpbtn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tpbody{display:grid;gap:12px;max-width:1100px}
+.tphead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}.tphead h2{margin:0;font-family:var(--display);font-size:26px;text-transform:uppercase;letter-spacing:.02em}
+.tpin{border:1px solid var(--ok);color:var(--ok);border-radius:12px;padding:2px 10px;font-size:12px;font-weight:700}
+.tpfig{border:1px solid var(--ctl-line);border-radius:10px;padding:10px 12px;background:var(--panel-2);display:grid;gap:6px}
+.tpscroll{overflow-x:auto}.tsvg{display:block;width:100%;min-width:320px;height:auto;color:var(--ink);margin:0 auto}
+.tsb{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round}.tsl{fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round}
+.tsw{fill:none;stroke:currentColor;stroke-width:1;opacity:.8}.tsd{fill:none;stroke:currentColor;stroke-width:1;opacity:.7;stroke-dasharray:3 2}
+.tsk{fill:var(--panel-2);stroke:currentColor;stroke-width:1.6}.tsx{fill:var(--accent);fill-opacity:.25;stroke:var(--accent);stroke-width:1.2}
+.tsx.hatch{fill-opacity:.5;stroke-dasharray:3 2}.trainpage[hidden]{display:none}.tsrail{stroke:var(--muted);stroke-width:2}
+.tsdim{fill:none;stroke:var(--muted);stroke-width:1}.tst{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+.tpdesc{margin:0;font-size:14px;max-width:70ch}
+.tpgrid{display:grid;grid-template-columns:1.3fr 1fr;gap:12px}.tpcard{border:1px solid var(--ctl-line);border-radius:10px;padding:10px 12px}
+.tpcard h4{margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.tprow{display:grid;grid-template-columns:150px 1fr;gap:10px;padding:5px 0;border-top:1px solid var(--line);font-size:13px}.tprow span{color:var(--muted)}.tprow b{font-weight:600}
+@media (max-width:760px){.tpgrid{grid-template-columns:1fr}.tprow{grid-template-columns:110px 1fr}.tptabs{grid-template-columns:repeat(2,1fr)}.trainpage{padding:12px}}
+@media (max-width:600px){#btn-trains span{display:none}}
+.tsf{fill:var(--panel);stroke:currentColor;stroke-width:1.3}.tsg{fill:color-mix(in srgb,var(--info) 18%,transparent);stroke:currentColor;stroke-width:1}
+.tsh{fill:var(--warn);stroke:none}.tsx.batt{fill:var(--ok);stroke:var(--ok);fill-opacity:.3}.tswire{stroke:var(--muted);stroke-width:1;stroke-dasharray:6 3}
+.tstie{stroke:var(--muted);stroke-width:3}.tsl.thin{stroke-width:.8;opacity:.75}.tst.small{font-size:9px}.tsdim.faint{opacity:.6}
+.tsw{stroke-width:.9}.tsb{stroke-width:1.6}
+.tpctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}.tpctll{font-weight:700;font-size:13px}.tpstep{align-items:center}.tpstep b{min-width:34px;text-align:center;font-family:var(--mono);font-size:14px}
+.tpstep button{font-size:18px;line-height:1;padding:4px 12px;font-family:var(--body)}.tpstep button:disabled{opacity:.35;cursor:not-allowed}
+.tpscroll{overflow-x:auto;padding:4px 0}.tsvg{display:block;width:auto;min-width:0;max-width:none;margin:0}
 </style></head>
 <body>
 <noscript><p style="padding:2em;font-family:sans-serif">Island Rail Planner needs JavaScript enabled.</p></noscript>
@@ -545,6 +576,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <button id="sp-12" data-s="12" aria-pressed="false">12×</button>
       </div>
       <button class="btn restart" id="btn-restart" type="button" title="Restart today's service from the first departure">↺ Restart day</button>
+      <button class="btn setbtn" id="btn-trains" type="button" title="Train types and specifications"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 10h14M9 17l-2 4M15 17l2 4"/><circle cx="9" cy="13.5" r=".6" fill="currentColor"/><circle cx="15" cy="13.5" r=".6" fill="currentColor"/></svg><span>Trains</span></button>
       <div class="setwrap"><button class="btn setbtn" id="btn-settings" type="button" aria-haspopup="true" aria-expanded="false" title="Settings"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></button>
         <div class="setmenu" id="setmenu" role="dialog" aria-label="Settings" hidden>
           <h4>Settings</h4>
@@ -561,6 +593,11 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
       <div class="stat"><b id="s-ontime">100%</b><span>On-time arrivals</span></div>
     </div>
   </header>
+  <section class="trainpage" id="trainpage" hidden aria-label="Train types">
+    <div class="tptop"><button class="btn" id="tp-back" type="button">← Back to the map</button><h1>Train types</h1><span class="m">Specifications and side-view schematics for the trains the planner can run on the E&amp;N</span></div>
+    <div class="tptabs" id="tp-tabs" role="group" aria-label="Choose a train type"></div>
+    <div class="tpbody" id="tp-body"></div>
+  </section>
   <main class="main">
     <div class="mapwrap" id="mapwrap">
       <svg id="map" role="img" aria-label="Map of Vancouver Island showing the E&amp;N rail corridor, highways and live train positions"></svg><svg id="mapfx" aria-hidden="true"></svg>
@@ -810,6 +847,7 @@ const vel=u=>VP*(u<A?u/A:u>1-A?(1-u)/A:1);
 /* ---------- train types (suited to Vancouver Island's unelectrified, single-track E&N) ---------- */
 const TYPES={
  dmu2:{name:'Regional DMU ×2',short:'DMU2',sub:'Two 2-car units coupled',cap:360,vmax:120,acc:1.1,desc:'Two regional units run as one train for the peaks: double the seats, same crew.'},
+ lrt:{name:'Light rail / tram-train',short:'LRT',sub:'3-section low-floor tram-train',cap:240,vmax:100,acc:.7,desc:'Electric light rail vehicle that can also run on the street. Needs overhead wires on the E&N (or battery operation), and level boarding from low platforms.'},
  dmu:{name:'Regional DMU',short:'DMU',sub:'2-car diesel multiple unit',cap:180,vmax:120,acc:1,desc:'All-round unit for intercity and regional runs. No overhead wires needed on the E&N.'},
  bemu:{name:'Battery-electric MU',short:'BEMU',sub:'2-car battery multiple unit',cap:170,vmax:120,acc:.8,range:80,desc:'Zero-emission. About 80 km between charges, so it suits CRD commuter and Cowichan runs.'},
  h2:{name:'Hydrogen MU',short:'H2',sub:'2-car fuel-cell multiple unit',cap:160,vmax:120,acc:1,desc:'Zero-emission with the range for a full Victoria–Courtenay round trip.'},
@@ -818,7 +856,7 @@ const TYPES={
  steam:{name:'Heritage excursion',short:'EXC',sub:'Steam or vintage tourist train',cap:120,vmax:30,acc:2,excursion:true,desc:'Tourist service, like the Alberni Pacific Railway. Low speed and long station stops.'},
  frt:{name:'Freight locomotive',short:'FRT',sub:'Road-switcher + freight cars',cap:30,vmax:50,acc:3,freight:true,desc:'Carload freight. Capacity is counted in cars, not seats.'}
 };
-const TYPE_ORDER=['dmu','dmu2','bemu','h2','pp','rdc','steam','frt'];
+const TYPE_ORDER=['dmu','dmu2','bemu','h2','lrt','pp','rdc','steam','frt'];
 const COLORS=['#c8324a','#7b4cc9','#138a9e','#2e9a55','#cf4b97','#3a67d0','#b5651d','#5c6870','#8a7a52','#0f766e','#a21caf','#4d7c0f','#b45309','#0369a1'];
 const SERVICES=['Intercity','Regional','CRD Commute','Express','Freight','Excursion'];
 const DAYS=['Mon','Tue','Wed','Thu','Fri'];
@@ -2715,7 +2753,7 @@ const COST_ALLOW=[// 2026 $M allowances, construction
  ['Structures','Rebuild track through the Snaw-Naw-As reserve, MP 82.8–83.7 (removed 2024), subject to agreement with the Nation',3,0,'Planner allowance: 0.9 mile of new track and crossings.'],
  ['Structures','Shawnigan Lake Road bridge, MP 26.8 (out today)',3,0,'Planner allowance, if not covered by the IRCCA bridge budget. The CVRD report also plans to raise its clearance for the trail.']];
 const STN_MAJOR=new Set(['VIC','WHL','DUN','NAN','CTN','PAL']);
-const TRAIN_COST={dmu:2*6*ESC23,dmu2:4*6*ESC23,bemu:2*7.5*ESC23,h2:2*9*ESC23,pp:(18+4*5)*ESC23,rdc:6,steam:3,frt:0};// $M per trainset, 2026
+const TRAIN_COST={dmu:2*6*ESC23,dmu2:4*6*ESC23,bemu:2*7.5*ESC23,h2:2*9*ESC23,pp:(18+4*5)*ESC23,lrt:7*ESC23,rdc:6,steam:3,frt:0};// $M per trainset, 2026
 const TRAIL_KM={vic:209,alb:61};// corridor km without trail today: Victoria Sub north of Humpback Rd, and the Port Alberni Sub
 const TRAIL_RATE=595800/1e6*ESC23;// $M per km, FORT-VI corridor average incl. bridge decking, crossings, engineering and contingency (2023), escalated
 const OVH=[['Construction supervision',.10],['Engineering',.12],['Project management',.10],['First Nations consultation',.15]];// IRCCA percentages, CVRD Table H-6
@@ -2786,6 +2824,130 @@ function renderCost(){const box=$('plan-cost');if(!box)return;const m=costModel(
   $('co-cont').onchange=e=>{costOpts().cont=+e.target.value;savePlan();renderCost();};
   box.querySelectorAll('input[data-con]').forEach(c=>c.onchange=()=>{setWorkOn(c.dataset.con,c.checked);renderCost();});
   box.querySelectorAll('[data-wopen]').forEach(b=>b.onclick=()=>openWork(b.dataset.wopen));}
+/* ---------- Train types sub-page (#trains): specifications and a detailed side-view schematic, with adjustable car counts ---------- */
+// per-type formation rules: unit = what the +/- buttons add, perCar = people (or freight cars) per added unit, len = metres per unit
+const TRAIN_FORM={
+ dmu:{label:'Passenger cars',min:2,max:4,def:2,base:5.4,len:20.6,cap:90,cost:6*1.093,costBase:0,note:'Articulated cars with a short diesel power module in the middle, as on the Stadler FLIRT DMU.'},
+ dmu2:{label:'Coupled units',min:1,max:3,def:2,base:0,len:47.4,cap:180,cost:12*1.093,costBase:0,note:'Each unit is a 2-car DMU with its power module; units couple automatically and run with one crew.'},
+ bemu:{label:'Passenger cars',min:2,max:4,def:2,base:0,len:21,cap:85,cost:7.5*1.093,costBase:0,note:'Articulated cars with battery packs on the roof and under the floor.'},
+ h2:{label:'Passenger cars',min:2,max:3,def:2,base:0,len:27,cap:80,cost:9*1.093,costBase:0,note:'Fuel cells and hydrogen tanks on the roof, traction batteries under the floor.'},
+ lrt:{label:'Body sections',min:3,max:7,def:3,step:2,base:0,len:12.5,cap:80,cost:2.5*1.093,costBase:0,note:'Low-floor articulated vehicle; sections are added in pairs (3, 5 or 7). Shown with its pantograph raised.'},
+ pp:{label:'Bilevel coaches',min:2,max:10,def:4,base:21,len:25.9,cap:145,cost:5*1.093,costBase:18*1.093,note:'Locomotive at one end and a cab car at the other, so the train never needs turning.'},
+ rdc:{label:'Cars',min:1,max:3,def:1,base:0,len:25.9,cap:90,cost:6,costBase:0,note:'Each Budd car is self-propelled and has a cab at both ends; cars couple together.'},
+ steam:{label:'Heritage coaches',min:1,max:6,def:2,base:12.5,len:16,cap:60,cost:.5,costBase:2,note:'Tank engine with wooden or steel heritage coaches.'},
+ frt:{label:'Freight cars',min:1,max:30,def:6,base:18,len:16,cap:1,cost:0,costBase:0,note:'Mixed freight: boxcars, tank cars, flatcars for logs and lumber, and covered hoppers.'}};
+const TRAIN_SPEC={
+ dmu:{ex:'Stadler FLIRT DMU (Ottawa O-Train Trillium Line, 2022); Alstom Coradia LINT',power:'Diesel-electric power module (two engines) between the passenger cars',top:'120–140 km/h (planner uses 120)',range:'1,000+ km per tank',emis:'Diesel exhaust; can run on renewable diesel (HVO)',access:'Low floor at the doors',fit:'The CVRD report’s recommended technology for the corridor: no electrification, cabs at both ends so no turning needed, sized for regional and commuter runs.',src:'CVRD report Table H-3 (DMU $5–7M per car, 2023)'},
+ dmu2:{ex:'Two regional DMUs coupled (multiple-unit working)',power:'As the regional DMU, every unit powered',top:'120–140 km/h (planner uses 120)',range:'1,000+ km per tank',emis:'As the regional DMU',access:'Low floor at the doors',fit:'West Shore peak trains: more seats with the same crew. Two units need platforms of about 100 m.',src:'Planner assumption: two DMU units'},
+ bemu:{ex:'Stadler FLIRT Akku; Alstom Coradia Continental BEMU; Siemens Mireo Plus B',power:'Electric motors with lithium-ion traction batteries; charge at terminals or under short overhead sections',top:'140–160 km/h (planner uses 120)',range:'About 80 km per charge in the planner (80–150 km in service)',emis:'Zero at the tailpipe',access:'Low floor at the doors',fit:'Suits Langford–Victoria and Duncan–Victoria runs with charging at each end; Courtenay–Victoria would need charging points along the way.',src:'Manufacturer ranges; planner capacity assumption'},
+ h2:{ex:'Alstom Coradia iLint; Siemens Mireo Plus H',power:'Hydrogen fuel cells feeding electric motors, with a buffer battery',top:'140 km/h (planner uses 120)',range:'600–1,000 km per fill',emis:'Water vapour at the tailpipe; depends on how the hydrogen is made',access:'Low floor at the doors',fit:'Zero-emission with the range for a Victoria–Courtenay round trip, but needs a hydrogen supply and fuelling station on the Island.',src:'Manufacturer ranges; planner capacity assumption'},
+ lrt:{ex:'Stadler Citylink tram-train (Sheffield, Chemnitz, Karlsruhe); Alstom Citadis (Ottawa Confederation Line); Alstom Flexity Freedom (Kitchener ION)',power:'Electric, from overhead wires through a roof pantograph; some tram-trains add a diesel or battery pack',top:'80–100 km/h (planner uses 100)',range:'Unlimited under wires; battery versions a few kilometres off-wire',emis:'Zero at the vehicle',access:'100% low floor: level boarding from low platforms or the street',fit:'A tram-train could run on the E&N and then on-street through downtown Victoria, but the line would need overhead wires (or battery operation). The CVRD report did not recommend light rail because of the cost of electrification.',src:'CVRD report Table H-3 (LRT $6–8M per 30 m car, 2023)'},
+ pp:{ex:'West Coast Express (Vancouver) and GO Transit: locomotive with Bombardier/Alstom BiLevel coaches',power:'Diesel-electric locomotive (about 3,000 kW)',top:'130–150 km/h (planner uses 130)',range:'1,000+ km per tank',emis:'Diesel exhaust; one large engine',access:'Lower deck level with high platforms or a bridge plate',fit:'High capacity for West Shore peak commuters but slower to accelerate. The CVRD report did not recommend it: high cost and possible Malahat tunnel clearance limits.',src:'CVRD report Table H-3 (coaches $4–6M, locomotive $18M, 2023)'},
+ rdc:{ex:'Budd Rail Diesel Car (the E&N’s Malahat Dayliner until 2011)',power:'Two underfloor diesel engines with hydraulic drive',top:'about 135 km/h when new (planner uses 100)',range:'about 1,000 km per tank',emis:'Older diesel engines',access:'High floor with steps',fit:'Matches the last passenger service on the line, but Budd cars are no longer built; only refurbished cars are available.',src:'CVRD report Table H-3; planner assumption ($6M refurbished)'},
+ steam:{ex:'Alberni Pacific Railway No. 7, a 1929 Baldwin 2-8-2T tank engine, with heritage coaches',power:'Coal- or oil-fired steam',top:'about 30 km/h on the corridor',range:'Short excursions with water stops',emis:'Smoke and steam',access:'High floor with steps',fit:'Tourist excursions such as the Port Alberni trips: low speed and long station stops.',src:'Planner assumption'},
+ frt:{ex:'A road-switcher diesel locomotive with mixed freight cars, as run by the Southern Railway of Vancouver Island',power:'Diesel-electric locomotive (about 1,500–2,500 kW)',top:'Planner caps freight at 50 mph (80 km/h); 40 mph on Class 3 track',range:'1,000+ km per tank',emis:'Diesel exhaust; each carload keeps several trucks off the highway',access:'—',fit:'Carload freight sharing the line with passenger trains. The CVRD report counts about 900 carloads a year in recent service, down from 8,000.',src:'CVRD report Appendix A; owned by the freight operator, so no cost in the plan'}};
+const TRAIN_CARS={};
+/* --- drawing: 10 px per metre, rail at y=0 (upwards negative) --- */
+const SM=10,mm=v=>+(v*SM).toFixed(1);
+function tdBogie(c,motor){const w=mm(.45);let s=`<rect class="tsf" x="${mm(c-1.75)}" y="${mm(-1.05)}" width="${mm(3.5)}" height="${mm(.42)}" rx="2"/>`;
+  for(const a of [c-1.3,c+1.3])s+=`<circle class="tsk" cx="${mm(a)}" cy="${-w}" r="${w}"/><circle class="tsl" cx="${mm(a)}" cy="${-w}" r="1.2"/>`;
+  if(motor)s+=`<rect class="tsx" x="${mm(c-.7)}" y="${mm(-1.0)}" width="${mm(1.4)}" height="${mm(.3)}"/>`;return s;}
+function tdDoor(x,fl,h){const w=1.3;return `<rect class="tsd" x="${mm(x)}" y="${mm(-fl-h)}" width="${mm(w)}" height="${mm(h)}" rx="1.5"/><path class="tsl thin" d="M${mm(x+w/2)} ${mm(-fl-h)}V${mm(-fl)}"/><rect class="tsw" x="${mm(x+.12)}" y="${mm(-fl-h+.35)}" width="${mm(.45)}" height="${mm(.9)}" rx="1"/><rect class="tsw" x="${mm(x+w-.57)}" y="${mm(-fl-h+.35)}" width="${mm(.45)}" height="${mm(.9)}" rx="1"/>`;}
+function tdWindows(x0,x1,top,h,w=1.5,gap=.35){let s='';const n=Math.floor((x1-x0+gap)/(w+gap));if(n<1)return '';const off=(x1-x0-(n*w+(n-1)*gap))/2;
+  for(let i=0;i<n;i++)s+=`<rect class="tsw" x="${mm(x0+off+i*(w+gap))}" y="${mm(-top)}" width="${mm(w)}" height="${mm(h)}" rx="2"/>`;return s;}
+// a passenger car: o = {len, floor, roof, noseL, noseR ('flirt'|'box'|'lrt'), doors:[m from start], rows:[[bottom,top]...], bogies:[[pos,motor]], roofEq, under}
+function tdCar(x,o){const L=o.len,fl=o.floor,rf=o.roof,g=[];let s=`<g transform="translate(${mm(x)} 0)">`;
+  const nose=(side)=>{const t=side==='L'?o.noseL:o.noseR;if(!t)return null;return t;};
+  const nL=nose('L'),nR=nose('R'),sl=n=>n==='flirt'?2.6:n==='lrt'?1.2:n==='box'?.5:0;const a=sl(nL),b=sl(nR),bot=Math.min(fl,.9);
+  // body outline
+  let d=`M${mm(a?.15:0)} ${mm(-bot+.0)}`;
+  d+=a?`L0 ${mm(-bot-.5)}L0 ${mm(-bot-1.1)}Q${mm(.25)} ${mm(-rf+1.0)} ${mm(a)} ${mm(-rf)}`:`L0 ${mm(-rf+.25)}Q0 ${mm(-rf)} ${mm(.25)} ${mm(-rf)}`;
+  d+=b?`L${mm(L-b)} ${mm(-rf)}Q${mm(L-.25)} ${mm(-rf+1.0)} ${mm(L)} ${mm(-bot-1.1)}L${mm(L)} ${mm(-bot-.5)}L${mm(L-.15)} ${mm(-bot)}`:`L${mm(L-.25)} ${mm(-rf)}Q${mm(L)} ${mm(-rf)} ${mm(L)} ${mm(-rf+.25)}L${mm(L)} ${mm(-bot)}`;
+  d+='Z';s+=`<path class="tsb" d="${d}"/>`;
+  // windscreens and lights
+  if(a){s+=`<path class="tsg" d="M${mm(.35)} ${mm(-rf+1.25)}Q${mm(.6)} ${mm(-rf+.35)} ${mm(a)} ${mm(-rf+.25)}L${mm(a)} ${mm(-rf+1.25)}Z"/><circle class="tsh" cx="${mm(.3)}" cy="${mm(-bot-.75)}" r="2"/>`;}
+  if(b){s+=`<path class="tsg" d="M${mm(L-.35)} ${mm(-rf+1.25)}Q${mm(L-.6)} ${mm(-rf+.35)} ${mm(L-b)} ${mm(-rf+.25)}L${mm(L-b)} ${mm(-rf+1.25)}Z"/><circle class="tsh" cx="${mm(L-.3)}" cy="${mm(-bot-.75)}" r="2"/>`;}
+  // cab side windows
+  if(a)s+=`<rect class="tsw" x="${mm(a+.1)}" y="${mm(-rf+.5)}" width="${mm(.9)}" height="${mm(.9)}" rx="2"/>`;if(b)s+=`<rect class="tsw" x="${mm(L-a-1)}" y="${mm(-rf+.5)}" width="${mm(.9)}" height="${mm(.9)}" rx="2"/>`;
+  // doors and windows between them
+  const dz=(o.doors||[]).map(p=>[p,p+1.3]).sort((p,q)=>p[0]-q[0]);let cur=(a?a+1.2:.4);const segs=[];for(const [p,q] of dz){segs.push([cur,p-.25]);cur=q+.25;}segs.push([cur,L-(b?b+1.2:.4)]);
+  for(const [p] of dz)s+=tdDoor(p,fl,Math.min(2.05,rf-fl-.5));
+  for(const [lo,hi] of o.rows||[[fl+1.0,fl+2.05]])for(const [p,q] of segs)if(q-p>1.2)s+=tdWindows(p,q,hi,hi-lo,o.winW||1.5);
+  // floor / skirt line
+  s+=`<path class="tsl thin" d="M${mm(a?.6:0)} ${mm(-fl)}H${mm(L-(b?.6:0))}"/>`;
+  // underframe equipment and roof equipment
+  for(const u of o.under||[])s+=`<rect class="tsx${u.t==='batt'?' batt':''}" x="${mm(u.at)}" y="${mm(-bot+.0)}" width="${mm(u.len)}" height="${mm(.55)}" rx="1"/>`;
+  for(const r of o.roofEq||[]){if(r.t==='ac')s+=`<rect class="tsx" x="${mm(r.at)}" y="${mm(-rf-.35)}" width="${mm(r.len||2.4)}" height="${mm(.35)}" rx="2"/>`;
+    if(r.t==='exhaust')s+=`<path class="tsl" d="M${mm(r.at)} ${mm(-rf)}v${mm(-.6)}h${mm(.3)}v${mm(.6)}"/>`;
+    if(r.t==='tank')s+=`<rect class="tsx" x="${mm(r.at)}" y="${mm(-rf-.55)}" width="${mm(r.len)}" height="${mm(.55)}" rx="${mm(.27)}"/>`;
+    if(r.t==='batt')s+=`<rect class="tsx batt" x="${mm(r.at)}" y="${mm(-rf-.4)}" width="${mm(r.len)}" height="${mm(.4)}" rx="1"/>`;
+    if(r.t==='panto'){const c=r.at;s+=`<rect class="tsx" x="${mm(c-.8)}" y="${mm(-rf-.25)}" width="${mm(1.6)}" height="${mm(.25)}"/><path class="tsl" d="M${mm(c-.6)} ${mm(-rf-.25)}L${mm(c+.4)} ${mm(-rf-1.1)}L${mm(c-.3)} ${mm(-rf-1.9)}M${mm(c-.9)} ${mm(-rf-1.9)}H${mm(c+.5)}"/><path class="tswire" d="M${mm(-2)} ${mm(-rf-1.95)}H${mm(L+2)}"/>`;}}
+  for(const [p,m] of o.bogies||[])s+=tdBogie(p,m);
+  return s+'</g>';}
+const tdGap=(x,kind)=>kind==='gangway'?`<rect class="tsl thin" x="${mm(x)}" y="${mm(-3.4)}" width="${mm(.5)}" height="${mm(2.4)}"/>`:`<path class="tsl" d="M${mm(x)} ${mm(-1.1)}h${mm(.9)}"/><rect class="tsf" x="${mm(x+.3)}" y="${mm(-1.25)}" width="${mm(.3)}" height="${mm(.3)}"/>`;
+// formations
+function tdTrain(k,n){let x=1,s='';const parts=[];const put=(len,html)=>{s+=html;parts.push([x,len]);x+=len;};
+  const flirtCar=(nL,nR,extra={})=>({len:20.6,floor:.8,roof:4.05,noseL:nL,noseR:nR,doors:nL&&nR?[5.2,14.1]:nL?[5.2,15.8]:nR?[3.5,14.1]:[3.5,15.8],bogies:[],roofEq:[{t:'ac',at:8.8,len:3}],...extra});
+  const PACK=`<rect class="tsb" x="0" y="${mm(-3.75)}" width="${mm(5.4)}" height="${mm(3.75-.9)}" rx="2"/><path class="tsl thin" d="M${mm(.9)} ${mm(-3.4)}V${mm(-1.3)}M${mm(4.5)} ${mm(-3.4)}V${mm(-1.3)}"/>${[1.4,1.9,2.4,2.9,3.4,3.9].map(v=>`<path class="tsl thin" d="M${mm(v)} ${mm(-3.2)}V${mm(-1.7)}"/>`).join('')}<path class="tsl" d="M${mm(1.6)} ${mm(-3.75)}v${mm(-.6)}h${mm(.3)}v${mm(.6)}M${mm(3.4)} ${mm(-3.75)}v${mm(-.6)}h${mm(.3)}v${mm(.6)}"/><rect class="tsx" x="${mm(1)}" y="${mm(-1.45)}" width="${mm(3.4)}" height="${mm(.5)}"/>`;
+  const dmuUnit=(withPack,cars)=>{const x0=x,bodies=[],joints=[];for(let i=0;i<cars;i++){if(withPack&&i===Math.ceil(cars/2))bodies.push('pack');bodies.push(i);}
+    bodies.forEach((bd,j)=>{if(j>0)joints.push(x);if(bd==='pack'){put(5.4,`<g transform="translate(${mm(x)} 0)">${PACK}</g>`);return;}
+      const o=flirtCar(bd===0?'flirt':null,bd===cars-1?'flirt':null);if(k==='bemu'){o.roofEq=[{t:'batt',at:6,len:6},{t:'ac',at:14,len:2.5}];o.under=[{t:'batt',at:6,len:7}];}put(o.len,tdCar(x,o));});
+    for(const jx of joints)s+=tdBogie(jx,false);s+=tdBogie(x0+2.6,true)+tdBogie(x-2.6,true);};
+  if(k==='dmu')dmuUnit(true,n);
+  else if(k==='dmu2'){for(let u=0;u<n;u++){if(u){s+=tdGap(x,'coupler');x+=.9;}dmuUnit(true,2);}}
+  else if(k==='bemu')dmuUnit(false,n);
+  else if(k==='h2'){const x0=x;for(let i=0;i<n;i++){const o={len:27,floor:.8,roof:4.1,noseL:i===0?'flirt':null,noseR:i===n-1?'flirt':null,doors:[i===0?6:4,i===n-1?19:21],roofEq:[{t:'tank',at:7,len:9},{t:'ac',at:18,len:2.6}],under:[{t:'batt',at:10,len:6}],bogies:[]};put(27,tdCar(x,o));if(i<n-1)s+=tdBogie(x,true);}
+    s+=tdBogie(x0+2.8,true)+tdBogie(x-2.8,true);}
+  else if(k==='lrt'){const x0=x;// sections alternate: cab-with-bogie, suspended, bogie
+    for(let i=0;i<n;i++){const cab=i===0||i===n-1,len=cab?12.5:(i%2?6.5:12.5);const o={len,floor:.35,roof:3.45,noseL:i===0?'lrt':null,noseR:i===n-1?'lrt':null,doors:len>8?[cab&&i===0?4.2:len/2-.65]:[2.6],rows:[[1.0,2.75]],winW:1.9,bogies:(i%2===0)?[[len/2,i!==Math.floor(n/2)]]:[],roofEq:i===Math.floor(n/2)?[{t:'panto',at:len/2}]:[{t:'ac',at:len/2-1.2,len:2.4}]};
+      if(cab&&n>1&&i===n-1)o.doors=[len-5.5];put(len,tdCar(x,o));if(i<n-1){s+=tdGap(x-.1,'gangway');}}}
+  else if(k==='pp'){// locomotive
+    const lw=21;s+=`<g transform="translate(${mm(x)} 0)"><path class="tsb" d="M0 ${mm(-1.4)}V${mm(-3.6)}L${mm(.9)} ${mm(-4.55)}H${mm(4.2)}V${mm(-1.4)}Z"/><path class="tsb" d="M${mm(4.2)} ${mm(-1.4)}V${mm(-4.2)}H${mm(lw)}V${mm(-1.4)}Z"/><path class="tsg" d="M${mm(.25)} ${mm(-3.55)}L${mm(.95)} ${mm(-4.3)}H${mm(2.2)}V${mm(-3.55)}Z"/><rect class="tsw" x="${mm(2.5)}" y="${mm(-4.25)}" width="${mm(1.3)}" height="${mm(.75)}" rx="2"/>${Array.from({length:14},(_,i)=>`<path class="tsl thin" d="M${mm(6+i*.8)} ${mm(-3.9)}V${mm(-2.0)}"/>`).join('')}<rect class="tsx" x="${mm(17.5)}" y="${mm(-4.55)}" width="${mm(2.5)}" height="${mm(.35)}"/><rect class="tsx" x="${mm(5)}" y="${mm(-1.4)}" width="${mm(10)}" height="${mm(.45)}"/><circle class="tsh" cx="${mm(.4)}" cy="${mm(-2.0)}" r="2"/></g>`+tdBogie(x+4,true)+tdBogie(x+lw-4,true);parts.push([x,lw]);x+=lw;
+    for(let c=0;c<n;c++){s+=tdGap(x,'coupler');x+=.9;const o={len:25.9,floor:.55,roof:4.85,noseR:c===n-1?'box':null,doors:[3.6,20.9],rows:[[.85,1.85],[2.95,3.95]],winW:1.6,bogies:[[2.7,false],[23.2,false]],roofEq:[]};put(25.9,tdCar(x,o));}}
+  else if(k==='rdc'){for(let c=0;c<n;c++){if(c){s+=tdGap(x,'coupler');x+=.9;}const o={len:25.9,floor:1.3,roof:4.25,noseL:'box',noseR:'box',doors:[1.6,23.0],winW:1.1,bogies:[[3.0,true],[22.9,true]],under:[{t:'eng',at:6,len:3.5},{t:'eng',at:16.4,len:3.5}],roofEq:[{t:'exhaust',at:5},{t:'exhaust',at:20.6},{t:'ac',at:11.5,len:3}]};put(25.9,tdCar(x,o));}}
+  else if(k==='steam'){const ex=x;// 2-8-2T tank engine
+    s+=`<g transform="translate(${mm(ex)} 0)"><rect class="tsb" x="${mm(.6)}" y="${mm(-3.6)}" width="${mm(7.4)}" height="${mm(1.7)}" rx="${mm(.85)}"/><rect class="tsb" x="${mm(1.4)}" y="${mm(-1.9)}" width="${mm(6.4)}" height="${mm(.7)}"/><path class="tsb" d="M${mm(1.2)} ${mm(-3.6)}v${mm(-1.0)}h${mm(.7)}v${mm(1.0)}"/><path class="tsb" d="M${mm(4.0)} ${mm(-3.6)}a${mm(.45)} ${mm(.45)} 0 0 1 ${mm(.9)} 0"/><path class="tsb" d="M${mm(8)} ${mm(-1.2)}V${mm(-4.1)}H${mm(11.4)}V${mm(-1.2)}Z"/><rect class="tsw" x="${mm(8.6)}" y="${mm(-3.7)}" width="${mm(1.0)}" height="${mm(.9)}" rx="2"/><rect class="tsb" x="${mm(3.2)}" y="${mm(-3.0)}" width="${mm(4.6)}" height="${mm(1.1)}"/><path class="tsl" d="M${mm(.3)} ${mm(-1.2)}H${mm(12.2)}"/>`;
+    for(const w of [2.9,4.4,5.9,7.4])s+=`<circle class="tsk" cx="${mm(w)}" cy="${mm(-.62)}" r="${mm(.62)}"/>`;s+=`<path class="tsl" d="M${mm(2.9)} ${mm(-.62)}H${mm(7.4)}"/><circle class="tsk" cx="${mm(1.1)}" cy="${mm(-.4)}" r="${mm(.4)}"/><circle class="tsk" cx="${mm(9.9)}" cy="${mm(-.4)}" r="${mm(.4)}"/></g>`;parts.push([x,12.5]);x+=12.5;
+    for(let c=0;c<n;c++){s+=tdGap(x,'coupler');x+=.9;const o={len:16,floor:1.2,roof:3.9,doors:[.5,14.2],winW:.9,bogies:[[2.4,false],[13.6,false]],roofEq:[]};put(16,tdCar(x,o)+`<path class="tsl" d="M${mm(x+.3)} ${mm(-3.9)}Q${mm(x+8)} ${mm(-4.5)} ${mm(x+15.7)} ${mm(-3.9)}"/>`);}}
+  else if(k==='frt'){const lw=18;s+=`<g transform="translate(${mm(x)} 0)"><path class="tsb" d="M0 ${mm(-1.4)}V${mm(-3.3)}H${mm(2.4)}V${mm(-4.4)}H${mm(5.4)}V${mm(-3.3)}H${mm(lw)}V${mm(-1.4)}Z"/><rect class="tsw" x="${mm(2.8)}" y="${mm(-4.1)}" width="${mm(1.1)}" height="${mm(.7)}" rx="2"/><rect class="tsw" x="${mm(4.1)}" y="${mm(-4.1)}" width="${mm(.9)}" height="${mm(.7)}" rx="2"/>${Array.from({length:12},(_,i)=>`<path class="tsl thin" d="M${mm(6.5+i*.8)} ${mm(-3.1)}V${mm(-1.8)}"/>`).join('')}<rect class="tsx" x="${mm(7)}" y="${mm(-1.4)}" width="${mm(6)}" height="${mm(.4)}"/><circle class="tsh" cx="${mm(.3)}" cy="${mm(-2.6)}" r="2"/></g>`+tdBogie(x+3.5,true)+tdBogie(x+lw-3.5,true);parts.push([x,lw]);x+=lw;
+    const kinds=['box','tank','flat','hop','box','flat'];
+    for(let c=0;c<n;c++){s+=tdGap(x,'coupler');x+=.9;const t=kinds[c%kinds.length],w=t==='tank'?14:t==='flat'?18:16;let h=`<g transform="translate(${mm(x)} 0)">`;
+      if(t==='box')h+=`<rect class="tsb" x="0" y="${mm(-4.6)}" width="${mm(w)}" height="${mm(3.4)}" rx="2"/>${Array.from({length:9},(_,i)=>`<path class="tsl thin" d="M${mm(1+i*1.75)} ${mm(-4.5)}V${mm(-1.3)}"/>`).join('')}<rect class="tsd" x="${mm(w/2-1.5)}" y="${mm(-4.3)}" width="${mm(3)}" height="${mm(2.9)}"/>`;
+      if(t==='tank')h+=`<rect class="tsb" x="0" y="${mm(-3.9)}" width="${mm(w)}" height="${mm(2.5)}" rx="${mm(1.2)}"/><rect class="tsb" x="${mm(w/2-.6)}" y="${mm(-4.4)}" width="${mm(1.2)}" height="${mm(.5)}"/><path class="tsl thin" d="M0 ${mm(-1.3)}H${mm(w)}"/>`;
+      if(t==='flat')h+=`<rect class="tsb" x="0" y="${mm(-1.5)}" width="${mm(w)}" height="${mm(.35)}"/><path class="tsl" d="M${mm(.4)} ${mm(-1.5)}V${mm(-4.2)}M${mm(w-.4)} ${mm(-1.5)}V${mm(-4.2)}"/>${[0,1,2,3].map(i=>`<rect class="tsw" x="${mm(1)}" y="${mm(-2.1-i*.6)}" width="${mm(w-2)}" height="${mm(.55)}" rx="${mm(.27)}"/>`).join('')}`;
+      if(t==='hop')h+=`<path class="tsb" d="M0 ${mm(-4.3)}H${mm(w)}V${mm(-2.4)}L${mm(w-2.5)} ${mm(-1.3)}H${mm(w/2+1)}L${mm(w/2)} ${mm(-2.1)}L${mm(w/2-1)} ${mm(-1.3)}H${mm(2.5)}L0 ${mm(-2.4)}Z"/>${[1,2,3,4,5,6,7].map(i=>`<path class="tsl thin" d="M${mm(i*w/8)} ${mm(-4.2)}V${mm(-2.6)}"/>`).join('')}`;
+      h+='</g>'+tdBogie(x+2,false)+tdBogie(x+w-2,false);put(w,h);}}
+  const L=x-1;const W=mm(x+1);
+  // dimension lines: overall, and each unit
+  let dim=`<path class="tsdim" d="M${mm(1)} ${mm(1.5)}V${mm(2.9)}M${mm(x)} ${mm(1.5)}V${mm(2.9)}M${mm(1)} ${mm(2.2)}H${mm(x)}"/><text class="tst" x="${mm((1+x)/2)}" y="${mm(3.6)}" text-anchor="middle" dy="4">${L.toFixed(1).replace(/\.0$/,'')} m overall</text>`;
+  for(const [px,pl] of parts)dim+=`<path class="tsdim faint" d="M${mm(px)} ${mm(.4)}V${mm(1.1)}"/><text class="tst small" x="${mm(px+pl/2)}" y="${mm(1.15)}" text-anchor="middle">${pl.toFixed(1).replace(/\.0$/,'')}</text>`;
+  return {svg:`<svg class="tsvg" viewBox="0 ${mm(-6.4)} ${W} ${mm(10.6)}" data-w="${W}" role="img" aria-label="Side-view schematic of the ${esc(TYPES[k].name)}"><path class="tsrail" d="M0 0H${W}"/><path class="tstie" d="${Array.from({length:Math.ceil(x/0.65)},(_,i)=>`M${mm(i*.65)} ${mm(.12)}h${mm(.25)}`).join('')}"/>${s}${dim}</svg>`,len:L};}
+let TRAIN_SEL='dmu';
+function renderTrains(){const k=TRAIN_SEL,t=TYPES[k],sp=TRAIN_SPEC[k],F=TRAIN_FORM[k];const n=TRAIN_CARS[k]??F.def;
+  const sc=tdTrain(k,n),inPlan=PLAN.fleet.filter(f=>f.type===k).length;
+  const cap=k==='frt'?n:Math.round(n*F.cap),cost=k==='frt'?0:F.costBase+n*F.cost;
+  $('tp-tabs').innerHTML=TYPE_ORDER.map(x=>`<button type="button" class="tpbtn" data-tk="${x}" aria-pressed="${x===k}"><b>${esc(TYPES[x].short)}</b><span>${esc(TYPES[x].name)}</span></button>`).join('');
+  $('tp-tabs').querySelectorAll('[data-tk]').forEach(b=>b.onclick=()=>{TRAIN_SEL=b.dataset.tk;renderTrains();});
+  const row=(l,v)=>`<div class="tprow"><span>${l}</span><b>${v}</b></div>`,step=F.step||1;
+  $('tp-body').innerHTML=`<div class="tphead"><div><h2>${esc(t.name)}</h2><div class="m">${esc(t.sub)}</div></div>${inPlan?`<span class="tpin">${inPlan} in the current fleet</span>`:''}</div>
+    <div class="tpfig"><div class="tpctl"><span class="tpctll">${esc(F.label)}</span><div class="seg tpstep"><button type="button" id="tp-minus" aria-label="Remove" ${n-step<F.min?'disabled':''}>−</button><b id="tp-n" aria-live="polite">${n}</b><button type="button" id="tp-plus" aria-label="Add" ${n+step>F.max?'disabled':''}>+</button></div><span class="m">${F.min}–${F.max}${step>1?', in steps of '+step:''} · ${esc(F.note)}</span></div>
+      <div class="tpscroll" id="tp-scroll">${sc.svg}</div><div class="m">Side view drawn to scale from typical dimensions (metres marked under each vehicle). Scroll sideways for long trains.</div></div>
+    <p class="tpdesc">${esc(t.desc)}</p>
+    <div class="tpgrid"><div class="tpcard"><h4>Specifications as drawn</h4>${row('Examples',esc(sp.ex))}${row('Formation',`${n} ${esc(F.label.toLowerCase())}`)}${row('Length',`about ${sc.len.toFixed(0)} m`)}${row(k==='frt'?'Capacity':'Capacity',k==='frt'?`${n} freight cars`:`about ${cap} people (seated and standing)`)}${row('Propulsion',esc(sp.power))}${row('Top speed',esc(sp.top))}${row('Range',esc(sp.range))}${row('Emissions',esc(sp.emis))}${row('Boarding',esc(sp.access))}${row('Cost as drawn (2026)',cost?`about $${cost.toFixed(1)}M`:'Freight operator’s equipment')}</div>
+      <div class="tpcard"><h4>In the planner</h4>${row(t.freight?'Capacity (cars)':'Capacity (people)',fmt(t.cap))}${row('Speed limit used',`${t.vmax} km/h`)}${row('Time lost per stop-to-stop run',`${t.acc} min`)}${t.range?row('Battery range',`${t.range} km`):''}${row('Cost per trainset (2026)',TRAIN_COST[k]?`$${TRAIN_COST[k].toFixed(1)}M`:'Not counted (freight operator’s equipment)')}${row('Trainsets in the current fleet',String(inPlan))}
+        <p class="m" style="margin:6px 0 0">The planner runs each type at its standard formation; the car buttons above change the drawing and the figures beside it only.</p>
+        <h4 style="margin-top:12px">Fit for the E&amp;N</h4><p class="m" style="margin:0">${esc(sp.fit)}</p><p class="m" style="margin:6px 0 0"><i>Source: ${esc(sp.src)}.</i></p></div></div>`;
+  const sv=$('tp-scroll').querySelector('svg'),W=+sv.dataset.w,box=$('tp-scroll').clientWidth-4;
+  // fit short trains to the panel (up to 2.1× for detail); long ones keep at least 1.2× and scroll
+  const z=Math.max(1.2,Math.min(2.1,box/W));sv.style.width=(W*z)+'px';
+  const ch=d=>{TRAIN_CARS[k]=Math.max(F.min,Math.min(F.max,n+d*step));renderTrains();};$('tp-minus').onclick=()=>ch(-1);$('tp-plus').onclick=()=>ch(1);}
+function openTrains(on){const pg=$('trainpage');pg.hidden=!on;document.querySelector('.app').classList.toggle('tpopen',on);if(on){renderTrains();pg.scrollTop=0;$('tp-back').focus();if(location.hash!=='#trains')history.replaceState(null,'','#trains');}
+  else if(location.hash==='#trains')history.replaceState(null,'',location.pathname+location.search);}
+$('btn-trains').onclick=()=>openTrains(true);$('tp-back').onclick=()=>{openTrains(false);$('btn-trains').focus();};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('trainpage').hidden)openTrains(false);});
+window.addEventListener('hashchange',()=>openTrains(location.hash==='#trains'));
+window.addEventListener('resize',()=>{if(!$('trainpage').hidden)renderTrains();});
+if(location.hash==='#trains')openTrains(true);
 function renderPlanPane(){const ck=FPCT+'|'+JSON.stringify(STNSPEC).length+'|'+JSON.stringify(TRACKSPEC).length;if(renderPlanPane.ck!==ck){renderPlanPane.ck=ck;try{renderCompare();}catch(e){console.warn(e);}}
   let km=0,seatkm=0;const used=new Set();for(const tr of PLAN.trips){if(!tr.set||!setOf(tr.set))continue;used.add(tr.set);const l=routeFor(codesOf(tr)).len;km+=l;const f=setOf(tr.set);if(!TYPES[f.type].freight)seatkm+=l*TYPES[f.type].cap;}
   // peak trainsets in service
