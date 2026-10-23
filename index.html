@@ -415,6 +415,59 @@ svg.picking{cursor:crosshair}
 .fdopts{display:grid;gap:4px;font-size:11.5px}.fdopts label{display:flex;align-items:center;gap:5px}.fdopts input[type=number]{width:46px;font:inherit;padding:2px 4px;border:1px solid var(--ctl-line);border-radius:5px;background:var(--ctl-bg);color:var(--ink)}
 .fdbtns{display:flex;gap:6px}.fdbtns .btn[disabled]{opacity:.45;cursor:default}.fdlist{display:grid;grid-template-columns:1fr auto;gap:1px 10px;font-size:11.5px;font-variant-numeric:tabular-nums;max-height:180px;overflow:auto}
 .busline{fill:none;stroke-width:1.6px;stroke-linejoin:round;stroke-linecap:round;opacity:.55}.busline.hot{opacity:1;stroke-width:3px}
+/* holiday themes (V63) */
+#thfx{position:absolute;inset:0;pointer-events:none;z-index:2}
+.thweb{position:absolute;top:0;right:58px;pointer-events:none;color:rgba(70,70,80,.55);display:none;z-index:2}
+:root[data-theme=dark] .thweb{color:rgba(230,230,240,.45)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .thweb{color:rgba(230,230,240,.45)}}
+[data-holiday=halloween] .thweb{display:block}
+#setmenu.setmenu{grid-template-columns:minmax(0,1fr);width:min(340px,calc(100vw - 32px))}.setrow.stack{display:grid;gap:5px;justify-content:stretch}
+.setrow select{font:inherit;font-size:12.5px;padding:6px 8px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%;min-width:0}
+.hbus{pointer-events:none}
+.hb-leg{fill:none;stroke:#1c1917;;stroke-linecap:round;stroke-linejoin:round}
+.hb-spider{fill:#1c1917}
+.hb-runner{fill:none;stroke:#b8860b;stroke-linecap:round}
+.hb-sleigh{fill:#c81e1e;stroke:#fff;}
+.hb-heart{fill:#e11d48;stroke:#fff;}
+.hb-stem{fill:none;stroke:#166534;stroke-linecap:round}
+.hb-clover{fill:#16a34a;stroke:#fff;}
+.hb-bunny{fill:#f5efe6;stroke:#8b6f5a;}
+[data-holiday=halloween] .busdot,[data-holiday=winter] .busdot,[data-holiday=valentine] .busdot,[data-holiday=stpatrick] .busdot,[data-holiday=easter] .busdot{stroke:none}
+.thb,.thm,.thf{pointer-events:none}
+.th-glow{fill:none;stroke:#f97316;stroke-width:2.6}.th-glow.th-red{stroke:#dc2626}.th-glow.th-green{stroke:#16a34a}
+.th-pumpkin{fill:#f97316;stroke:#7c2d12;stroke-width:.7}.th-rib{fill:none;stroke:#c2410c;stroke-width:.6}.th-stem{fill:none;stroke:#166534;stroke-width:1.3;stroke-linecap:round}
+.th-face{fill:#3b1d0a;stroke:none}
+.th-ghost{display:none}.train.late .th-ghost{display:inline}.th-ghostbody{fill:#f8fafc;stroke:#64748b;stroke-width:.6;opacity:.92}.th-ghosteye{fill:#1e293b}
+.th-wire{fill:none;stroke:#14532d;stroke-width:1}.th-bulb{stroke:rgba(0,0,0,.35);stroke-width:.4}.th-b0{fill:#ef4444}.th-b1{fill:#22c55e}.th-b2{fill:#facc15}.th-b3{fill:#3b82f6}
+.th-string{stroke:#7c2d12;stroke-width:.7}.th-lantern{fill:#dc2626;stroke:#7f1d1d;stroke-width:.5}.th-cap{fill:#eab308}.th-tassel{stroke:#eab308;stroke-width:1}
+.th-cstem{fill:none;stroke:#14532d;stroke-width:1.1;stroke-linecap:round}.th-clover{fill:#22c55e;stroke:#fff;stroke-width:.5}
+[data-holiday=easter] .train .pillbg{display:none}.th-egg{stroke:#fff;stroke-width:1.5}.th-zig{fill:none;stroke:rgba(255,255,255,.8);stroke-width:1.2;stroke-linejoin:round}
+.th-cdn-out{fill:#d52b1e}.th-cdn-in{fill:#fff}.th-leaf{fill:#d52b1e;stroke:#fff;stroke-width:.5}
+.th-rainbow{fill:none;stroke:url(#th-rbow);stroke-width:2.4}
+.th-spark{fill:#fde68a;stroke:#b45309;stroke-width:.4}
+.th-wreath{fill:none;stroke:#15803d;stroke-width:2.2}.th-bow{fill:#dc2626}
+.thstn{pointer-events:none}
+.frsail{display:none;fill:#e2e8f0;stroke:#475569;stroke-width:.5;opacity:.9}
+[data-holiday=halloween] .frsail{display:inline}
+[data-holiday=halloween] .frhull{fill:#cbd5e1;opacity:.75;stroke:#334155}
+.plx{fill:none;stroke:var(--d-air);stroke-width:.8;stroke-linecap:round}
+[data-holiday=halloween] .plane .plbody{fill:#1f1b2e;stroke:#f97316;stroke-width:.4}
+[data-holiday=winter] .plane .plbody{fill:#7c4a21;stroke:#fff;stroke-width:.4}[data-holiday=winter] .plane .plx{fill:none;stroke:#4a2a10;stroke-width:.9}
+[data-holiday=halloween] .clock{box-shadow:0 0 0 2px #f97316,0 0 16px rgba(249,115,22,.55);background:#1c1205;color:#fdba74}
+[data-holiday=winter] .clock{box-shadow:0 0 0 2px #93c5fd,0 0 14px rgba(147,197,253,.6)}
+[data-holiday=newyear] .clock{box-shadow:0 0 0 2px #eab308,0 0 16px rgba(234,179,8,.55)}
+[data-holiday=lunar] .clock{box-shadow:0 0 0 2px #dc2626,0 0 0 4px #eab308}
+[data-holiday=valentine] .clock{box-shadow:0 0 0 2px #e11d48,0 0 14px rgba(225,29,72,.45)}
+[data-holiday=stpatrick] .clock{box-shadow:0 0 0 2px #16a34a,0 0 14px rgba(22,163,74,.45)}
+[data-holiday=easter] .clock{box-shadow:0 0 0 2px #c4b5fd,0 0 0 4px #fde68a}
+[data-holiday=canada] .clock{box-shadow:0 0 0 2px #d52b1e,0 0 0 4px #fff,0 0 0 6px #d52b1e}
+[data-holiday=pride] .clock{box-shadow:0 0 0 2px #e40303,0 0 0 4px #ff8c00,0 0 0 6px #ffed00,0 0 0 8px #008026,0 0 0 10px #004dff,0 0 0 12px #750787}
+@media (prefers-reduced-motion:no-preference){
+ .th-bulb{animation:thTwinkle 1.4s ease-in-out infinite}
+ .th-spark{animation:thTwinkle 1.2s ease-in-out infinite}
+ .train.late .th-ghost{animation:thBob 2.2s ease-in-out infinite}}
+@keyframes thTwinkle{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes thBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 .busdot{fill:none;stroke:var(--bus);stroke-width:6px;stroke-linecap:round;pointer-events:none;paint-order:stroke}
 .buslegend{max-width:262px}.buslbl text{font-family:var(--body);font-weight:700;fill:var(--ink);text-anchor:middle;paint-order:stroke;stroke:var(--halo);stroke-linejoin:round;pointer-events:none}
 .busno{display:inline-block;min-width:22px;padding:1px 6px;border-radius:4px;color:#fff;font-weight:700;text-align:center;text-shadow:0 0 2px rgba(0,0,0,.5)}.bsys{display:flex;flex-wrap:wrap;gap:2px 10px;font-size:11px;color:var(--muted)}.bsys b{color:var(--ink)}#bstats,#bconn{display:grid;gap:4px}
@@ -529,7 +582,7 @@ input[type=checkbox],input[type=radio]{accent-color:var(--accent);width:15px;hei
 .setmenu p{margin:0}
 .app.basic .panel{display:none!important}
 .app.basic .main{grid-template-columns:minmax(0,1fr)}.app.basic #tip-edit,.app.basic #tip-plan{display:none}
-@media (max-width:600px){.setbtn span{display:none}.setmenu{width:min(300px,calc(100vw - 32px))}}
+@media (max-width:600px){.setbtn span{display:none}.setmenu{width:min(340px,calc(100vw - 32px))}}
 /* bus priority lanes */
 .bpcase{fill:none;stroke:var(--halo);stroke-width:10;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 .bpline{fill:none;stroke:var(--bp);stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
@@ -2080,7 +2133,7 @@ function drawBusNums(){if(!busNums){busLbl.style.display='none';return;}busLbl.s
 function stepBuses(){if(busG.style.display==='none')return;const m=sim,ms=[m,m+1440];let d='';BSYS.forEach(s=>s.now=0);busPos=[];
   for(const t of BTRIPS){if(t.s>m+1440)break;for(const x of ms){if(x<t.s||x>=t.e)continue;const u=(x-t.s)/(t.e-t.s),p=t.sh,s=u*p.L;let i=1;while(i<p.cum.length-1&&p.cum[i]<s)i++;
       const a=p.pts[i-1],b=p.pts[i],sl=p.cum[i]-p.cum[i-1],f=sl?(s-p.cum[i-1])/sl:0,bx=a[0]+(b[0]-a[0])*f,by=a[1]+(b[1]-a[1])*f;d+=`M${bx.toFixed(1)} ${by.toFixed(1)}h0`;busPos.push([bx,by,t,x]);BSYS[BROUTES[t.r].si].now++;}}
-  busDots.setAttribute('d',d);drawBusNums();busAcc++;if(busAcc%8===1)busStats();}
+  busDots.setAttribute('d',window.__holReady&&thBusDraw(busPos)?'':d);drawBusNums();busAcc++;if(busAcc%8===1)busStats();}
 function busStats(){const now=BSYS.reduce((a,s)=>a+s.now,0);
   $('bstats').innerHTML=`<div><b>${fmt(now)}</b> buses on the road at ${hhmm(((Math.floor(sim)%1440)+1440)%1440)}; <b>${fmt(BTRIPS.length)}</b> trips this weekday.</div>`+
     `<div class="bsys">${BSYS.slice().sort((a,b)=>b.trips-a.trips).map(s=>`<span>${esc(s.n)} <b>${s.now}</b>/${fmt(s.trips)}</span>`).join('')}</div>`;}
@@ -2410,7 +2463,7 @@ let airNow=0;
 function stepAir(){if(airG.style.display==='none')return;const m=xpNow(),inv=1/ppu;let n=0;
   for(const f of FL){const s=f.t==='d'?f.m:f.m-f.dur;const u=xpActive(s,f.dur,m);if(u<0)continue;const prog=f.t==='d'?u:1-u;const kmAlong=prog*f.dur*KMPM;const frac=f.ap==='VHB'?prog:Math.min(1,kmAlong/f.km);
     const x=f.o[0]+(f.d[0]-f.o[0])*frac,y=f.o[1]+(f.d[1]-f.o[1])*frac;let ang=Math.atan2(f.d[1]-f.o[1],f.d[0]-f.o[0])*180/Math.PI+90;if(f.t==='a')ang+=180;
-    const g=plane(n++);g.style.display='';g.setAttribute('class','plane'+(f.ap==='VHB'?' sea':''));g.setAttribute('transform',`translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${inv.toFixed(4)}) rotate(${ang.toFixed(0)})`);}
+    const g=plane(n++);g.style.display='';g.setAttribute('class','plane'+(f.ap==='VHB'?' sea':''));g.setAttribute('transform',`translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${inv.toFixed(4)}) ${window.__holReady?thPlaneRot(ang):`rotate(${ang.toFixed(0)})`}`);}
   for(let i=n;i<planePool.length;i++)planePool[i].style.display='none';airNow=n;}
 function showAirTip(k,e){const a=XA[k],m=xpNow(),F=FL.filter(f=>f.ap===k);const dep=F.filter(f=>f.t==='d'),arr=F.filter(f=>f.t==='a');
   const by=new Map();for(const f of F)by.set(f.c,(by.get(f.c)||0)+1);const nx=(L,t)=>L.filter(f=>f.m>=m).slice(0,4).map(f=>`${hhmm(f.m)} ${t} ${esc(f.c)} (${XAL[f.al]||f.al})`).join('<br>')||'none left today';
@@ -3746,7 +3799,7 @@ function applyExp(){EXP=!!SETTINGS.exp;document.querySelector('.app').classList.
   if(!EXP){if(typeof WORK_PICK!=='undefined'&&WORK_PICK){WORK_PICK=null;WORK_NEW=false;svg.classList.remove('picking');}if(typeof cancelPlacing==='function')cancelPlacing(true);if(typeof cancelDrawing==='function')cancelDrawing();if(typeof setTrkEdit==='function')setTrkEdit(false);}
   else renderEditor();window.dispatchEvent(new Event('resize'));}
 function needExp(){return EXP;}
-(function(){const b=$('btn-settings'),m=$('setmenu');const open=v=>{m.hidden=!v;b.setAttribute('aria-expanded',String(v));};
+(function(){const b=$('btn-settings'),m=$('setmenu');const open=v=>{m.hidden=!v;b.setAttribute('aria-expanded',String(v));if(v){m.style.transform='';const r=m.getBoundingClientRect(),vw=document.documentElement.clientWidth;let dx=0;if(r.left<16)dx=16-r.left;else if(r.right>vw-16)dx=vw-16-r.right;if(dx)m.style.transform=`translateX(${Math.round(dx)}px)`;}};
   b.onclick=e=>{e.stopPropagation();open(m.hidden);};
   document.addEventListener('pointerdown',e=>{if(!m.hidden&&!m.contains(e.target)&&!b.contains(e.target))open(false);});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden){open(false);b.focus();}});
@@ -3837,6 +3890,163 @@ function step(dt){
       if(t.delay>0)t.delay=Math.max(0,t.delay-dt*.07);}
   }
 }
+/* ---------- holiday themes (V63) ----------
+   Automatic by date (Pacific time) or chosen in Settings → Theme. Only vehicles and small decorations change; track, stations, labels and
+   numbers stay as they are. All artwork is drawn here from simple shapes. Animation is skipped when the device asks for reduced motion. */
+const HOL_LIST=[
+ ['halloween','Halloween','Oct 24 – Nov 1'],['winter','Winter holidays','Dec 1 – 30'],['newyear','New Year’s Eve','Dec 31 – Jan 1'],
+ ['lunar','Lunar New Year','about a week around it'],['valentine','Valentine’s Day','Feb 13 – 15'],['stpatrick','St. Patrick’s Day','Mar 16 – 18'],
+ ['easter','Easter','Good Friday – Easter Monday'],['pride','Pride','Jun 20 – 29'],['canada','Canada Day','Jun 30 – Jul 1']];
+const HOL_NAME=Object.fromEntries(HOL_LIST.map(([k,n])=>[k,n]));
+const LUNAR_NY={2026:'02-17',2027:'02-06',2028:'01-26',2029:'02-13',2030:'02-03',2031:'01-23',2032:'02-11',2033:'01-31',2034:'02-19',2035:'02-08',2036:'01-28',2037:'02-15',2038:'02-04'};
+function easterSunday(y){const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,
+  i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),mo=Math.floor((h+l-7*m+114)/31),da=((h+l-7*m+114)%31)+1;return Date.UTC(y,mo-1,da);}
+function holidayFor(date=new Date()){let y,mo,da;try{const p=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Vancouver',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date);
+    const g=t=>+p.find(x=>x.type===t).value;y=g('year');mo=g('month');da=g('day');}catch(_){y=date.getFullYear();mo=date.getMonth()+1;da=date.getDate();}
+  const md=mo*100+da,day=Date.UTC(y,mo-1,da),D=864e5,in_=(a,b)=>md>=a&&md<=b;
+  if(md===1231||md===101)return'newyear';
+  if(in_(213,215))return'valentine';
+  if(in_(316,318))return'stpatrick';
+  const es=easterSunday(y);if(day>=es-2*D&&day<=es+D)return'easter';
+  if(in_(630,701))return'canada';
+  if(in_(620,629))return'pride';
+  if(in_(1024,1031)||md===1101)return'halloween';
+  const ln=LUNAR_NY[y];if(ln){const [m2,d2]=ln.split('-').map(Number);const t=Date.UTC(y,m2-1,d2);if(day>=t-2*D&&day<=t+5*D)return'lunar';}
+  if(in_(1201,1230))return'winter';
+  return'standard';}
+let HOL='standard';
+const holReduce=()=>reduceMotion;
+/* --- small drawing helpers (screen pixels; callers scale) --- */
+const circ=(cx,cy,r)=>`M${cx-r} ${cy}a${r} ${r} 0 1 0 ${2*r} 0a${r} ${r} 0 1 0 ${-2*r} 0`;
+const ell=(cx,cy,rx,ry)=>`M${cx-rx} ${cy}a${rx} ${ry} 0 1 0 ${2*rx} 0a${rx} ${ry} 0 1 0 ${-2*rx} 0`;
+// a glyph is an absolute path around (0,0); scale and offset every number pair for each vehicle
+function glyphFn(d){const parts=[];const re=/([MLCQAZHVmlcqazhv])([^MLCQAZHVmlcqazhv]*)/g;let m;
+  while((m=re.exec(d))){const c=m[1],nums=m[2].trim()?m[2].trim().split(/[\s,]+/).map(Number):[];parts.push([c,nums]);}
+  return(x,y,s)=>{let o='';for(const [c,n] of parts){o+=c;if(c==='A'||c==='a'){for(let i=0;i<n.length;i+=7){o+=`${(n[i]*s).toFixed(2)} ${(n[i+1]*s).toFixed(2)} ${n[i+2]} ${n[i+3]} ${n[i+4]} ${(c==='A'?x+n[i+5]*s:n[i+5]*s).toFixed(1)} ${(c==='A'?y+n[i+6]*s:n[i+6]*s).toFixed(1)}`;}}
+    else if(c==='H'||c==='h'){o+=(c==='H'?x+n[0]*s:n[0]*s).toFixed(1);}else if(c==='V'||c==='v'){o+=(c==='V'?y+n[0]*s:n[0]*s).toFixed(1);}
+    else for(let i=0;i<n.length;i+=2){const ab=c===c.toUpperCase();o+=(i?' ':'')+(ab?x+n[i]*s:n[i]*s).toFixed(1)+' '+(ab?y+n[i+1]*s:n[i+1]*s).toFixed(1);}}return o;};}
+// spider legs: 4 per side, two poses
+const spLeg=(sw)=>{let d='';for(const sd of [-1,1])for(let i=0;i<4;i++){const y0=-1.2+i*1.3,a=(i-1.5)*.55+(i%2?sw:-sw);const fx=sd*6.4,fy=y0+(i-1.5)*.9+a*2.4;d+=`M${sd*1.4} ${y0}L${fx.toFixed(2)} ${fy.toFixed(2)}`;}return d;};
+const BUSG={
+ halloween:{layers:[{cls:'hb-leg',sw:1.1,detail:1,v:[glyphFn(spLeg(.35)),glyphFn(spLeg(-.35))]},{cls:'hb-spider',v:[glyphFn(circ(0,1.2,2.8)+circ(0,-2.3,1.7))]}],anim:'legs'},
+ winter:{layers:[{cls:'hb-runner',sw:1.4,v:[glyphFn('M-7 4.2H4.5Q7.5 4.2 7.5 1.6M-5 2.6V4.2M3 2.6V4.2')]},{cls:'hb-sleigh',sw:.8,v:[glyphFn('M-7.5 -1.2H2L5.6 -4.6Q7 -5.6 7 -3.6V-0.6Q7 2.6 3.6 2.6H-5.6Q-7.5 2.6 -7.5 0.6Z')]}]},
+ valentine:{layers:[{cls:'hb-heart',sw:.9,v:[glyphFn('M0 4.8C-6 0.6 -6.8 -3 -4.6 -4.4C-2.8 -5.5 -0.8 -4.4 0 -2.8C0.8 -4.4 2.8 -5.5 4.6 -4.4C6.8 -3 6 0.6 0 4.8Z')]}],anim:'beat'},
+ stpatrick:{layers:[{cls:'hb-stem',sw:1.4,v:[glyphFn('M0 1L1.6 5.6')]},{cls:'hb-clover',sw:.7,v:[glyphFn(circ(0,-2.7,2.3)+circ(-2.5,0.6,2.3)+circ(2.5,0.6,2.3))]}]},
+ easter:{layers:[{cls:'hb-bunny',sw:.9,v:[glyphFn(ell(-0.6,1.4,3.8,2.8)+circ(3.2,-1.3,2.1)+ell(2.4,-5.4,0.85,2.5)+ell(4.1,-5.2,0.85,2.5)+circ(-4.5,0.8,1.2))]}],anim:'hop'},
+};
+/* --- buses --- */
+let hbPaths=null,hbTick=0;const thBus={key:''};
+function thBusDraw(pos){const G=BUSG[HOL];if(!G){if(hbPaths)for(const p of hbPaths)p.setAttribute('d','');return false;}
+  if(!hbPaths){hbPaths=[];}while(hbPaths.length<G.layers.length)hbPaths.push(el('path',{},busFx));
+  hbPaths.forEach((p,i)=>{if(i>=G.layers.length){p.setAttribute('d','');return;}p.setAttribute('class','hbus '+G.layers[i].cls);});
+  const s=1/ppu,now=performance.now(),moving=speed&&!holReduce();
+  // redraw themed buses at most ~25 times a second, or at once after a zoom or theme change
+  const key=HOL+'|'+ppu.toFixed(4)+'|'+pos.length+'|'+vb.x.toFixed(0)+'|'+vb.y.toFixed(0);if(now-hbTick<40&&key===thBus.key)return true;hbTick=now;thBus.key=key;
+  const strs=G.layers.map(()=>'');
+  const mx=vb.w*.05,x0=vb.x-mx,x1=vb.x+vb.w+mx,y0=vb.y-mx,y1=vb.y+vb.h+mx,detail=PX_PER_KM*ppu>=18;
+  for(let i=0;i<pos.length;i++){const [x,y]=pos[i];if(x<x0||x>x1||y<y0||y>y1)continue;let yy=y,k=s;
+    if(G.anim==='hop'&&moving)yy=y-Math.max(0,Math.sin(now/110+i*1.7))*2.6*s;
+    if(G.anim==='beat'&&moving)k=s*(1+.12*Math.max(0,Math.sin(now/160+i)));
+    const v=G.anim==='legs'&&moving?((Math.floor(now/140)+i)&1):0;
+    for(let L=0;L<G.layers.length;L++){if(G.layers[L].detail&&!detail)continue;const vs=G.layers[L].v;strs[L]+=vs[Math.min(v,vs.length-1)](x,yy,k);}}
+  hbPaths.forEach((p,i)=>{p.setAttribute('d',i<strs.length?strs[i]:'');p.style.strokeWidth=i<G.layers.length?((G.layers[i].sw||1)*s).toFixed(4):'';});return true;}
+/* --- trains: decorations behind the badge, on it, and in front --- */
+function thTrain(t){if(!t.ring)return;const inner=t.ring.parentNode;
+  if(!t.thb){t.thb=el('g',{class:'thb'},inner);inner.insertBefore(t.thb,inner.firstChild);t.thm=el('g',{class:'thm'},inner);inner.insertBefore(t.thm,t.tx);t.thf=el('g',{class:'thf'},inner);}
+  for(const g of [t.thb,t.thm,t.thf])g.innerHTML='';
+  const B=t.thb,M=t.thm,F=t.thf;
+  if(HOL==='halloween'){el('rect',{x:-18,y:-10.5,width:36,height:21,rx:7.5,class:'th-glow'},B);
+    const pk=el('g',{transform:'translate(-15 -9)'},F);el('path',{d:ell(0,0,4.6,3.7),class:'th-pumpkin'},pk);el('path',{d:'M-1.6 -3.4V3.4M1.6 -3.4V3.4',class:'th-rib'},pk);
+    el('path',{d:'M-0.3 -3.6l0.8 -2',class:'th-stem'},pk);el('path',{d:'M-2.6 -1l1.2 -1 .9 1zM1.2 -1l1.2 -1 .9 1zM-2.2 1.2Q0 2.8 2.2 1.2',class:'th-face'},pk);
+    const gh=el('g',{class:'th-ghost'},F);el('path',{d:'M-5 4V-2.6Q-5 -8 0 -8Q5 -8 5 -2.6V4L3.3 2.6 1.7 4 0 2.6-1.7 4-3.3 2.6Z',class:'th-ghostbody',transform:'translate(0 -14)'},gh);
+    el('path',{d:circ(-1.7,-17.8,.85)+circ(1.7,-17.8,.85),class:'th-ghosteye'},gh);}
+  else if(HOL==='winter'){el('path',{d:'M-15 -11Q-7.5 -14.5 0 -11Q7.5 -14.5 15 -11',class:'th-wire'},F);
+    [-14,-9.3,-4.6,0,4.6,9.3,14].forEach((x,i)=>el('circle',{cx:x,cy:(i%2?-12.9:-11.4)+1.6,r:2.4,class:'th-bulb th-b'+(i%4),style:`animation-delay:${(i*.27).toFixed(2)}s`},F));}
+  else if(HOL==='lunar'){el('rect',{x:-18,y:-10.5,width:36,height:21,rx:7.5,class:'th-glow th-red'},B);
+    const ln=el('g',{transform:'translate(0 9)'},F);el('path',{d:'M0 0V3',class:'th-string'},ln);el('rect',{x:-3.6,y:3,width:7.2,height:8,rx:2.6,class:'th-lantern'},ln);
+    el('rect',{x:-2.4,y:2.4,width:4.8,height:1.4,class:'th-cap'},ln);el('rect',{x:-2.4,y:10.4,width:4.8,height:1.4,class:'th-cap'},ln);el('path',{d:'M0 11.8V14.6',class:'th-tassel'},ln);}
+  else if(HOL==='stpatrick'){el('rect',{x:-18,y:-10.5,width:36,height:21,rx:7.5,class:'th-glow th-green'},B);const c=el('g',{transform:'translate(-15 -9)'},F);
+    el('path',{d:'M0 1L1 4.6',class:'th-cstem'},c);el('path',{d:circ(0,-2.2,1.9)+circ(-2.1,0.5,1.9)+circ(2.1,0.5,1.9),class:'th-clover'},c);}
+  else if(HOL==='easter'){el('path',{d:ell(0,0,17.5,10.5),class:'th-egg',fill:t.color},M);
+    el('path',{d:'M-17 -3.2L-13 -6.2-9 -3.2-5 -6.2-1 -3.2 3 -6.2 7 -3.2 11 -6.2 15 -3.2 17 -4.6M-17 5L-13 2-9 5-5 2-1 5 3 2 7 5 11 2 15 5 17 3.4',class:'th-zig'},M);}
+  else if(HOL==='canada'){el('rect',{x:-18,y:-11,width:36,height:22,rx:7,class:'th-cdn-out'},B);el('rect',{x:-16.5,y:-9.5,width:33,height:19,rx:6,class:'th-cdn-in'},B);
+    el('path',{d:'M0 -5L.9 -2.6 2.6 -3.3 2.1 -.4 4 -1.5 3.5 .1 5 .6 2.6 2.5 3 3.6 .4 3.1V5.4H-.4V3.1L-3 3.6-2.6 2.5-5 .6-3.5 .1-4 -1.5-2.1 -.4-2.6 -3.3-.9 -2.6Z',class:'th-leaf',transform:'translate(-16 -10) scale(1.05)'},F);}
+  else if(HOL==='pride'){const cols=['#e40303','#ff8c00','#ffed00','#008026','#004dff','#750787'];cols.forEach((c,i)=>el('rect',{x:-15,y:8.6+i*1.25,width:30,height:1.35,fill:c},B));
+    el('rect',{x:-17,y:-10,width:34,height:20,rx:6.5,class:'th-rainbow'},B);}
+  else if(HOL==='newyear'){[[-15,-10],[15,-10],[0,-14]].forEach(([x,y],i)=>el('path',{d:`M${x} ${y-4}L${x+1.2} ${y-1.2} ${x+4} ${y} ${x+1.2} ${y+1.2} ${x} ${y+4} ${x-1.2} ${y+1.2} ${x-4} ${y} ${x-1.2} ${y-1.2}Z`,class:'th-spark',style:`animation-delay:${i*.4}s`},F));}
+}
+/* --- ferries and planes --- */
+const BAT='M0 -3.4C1.4 -5 4.4 -6.6 9 -5.2C7.6 -3.6 7.8 -1.6 9 .6C6.8 -.4 5 0 3.8 2C2.6 .8 1.2 .9 0 3.4C-1.2 .9-2.6 .8-3.8 2C-5 0-6.8 -.4-9 .6C-7.8 -1.6-7.6 -3.6-9 -5.2C-4.4 -6.6-1.4 -5 0 -3.4ZM-1.2 -3.6L-1.6 -5.6-.4 -4.2ZM1.2 -3.6L1.6 -5.6.4 -4.2Z';
+const DEER='M-7 0C-7 -2.5 -3 -3 2 -2.6L4 -4.5 6 -4.4 7.5 -3.2 6 -2.4 5 -1.4C5 1 3 1.6 1 1.4L3.4 3.8 2.6 4.4-.4 1.7H-3.4L-6.2 3.8-7 3.2-5.2 1C-6.4 1.4-7.6 1-7 0Z';
+const DEER_ANT='M4.6 -4.4L3.4 -7.4M4 -5.9L2.4 -6.6M5.7 -4.6L6.6 -7.6M6.1 -6.3L7.8 -6.9';
+function thPlanes(){for(const g of planePool){if(!g)continue;const p=g.querySelector('.plbody');let a=g.querySelector('.plx');if(!a)a=el('path',{class:'plx'},g);
+    if(HOL==='halloween'){p.setAttribute('d',BAT);p.setAttribute('transform','scale(1.15)');a.setAttribute('d','');}
+    else if(HOL==='winter'){p.setAttribute('d',DEER);p.setAttribute('transform','scale(1.35)');a.setAttribute('d',DEER_ANT);a.setAttribute('transform','scale(1.35)');}
+    else{p.setAttribute('d',DEST_ICON.air);p.setAttribute('transform','scale(1.25)');a.setAttribute('d','');}}}
+// reindeer fly level and face their direction instead of turning nose-first
+function thPlaneRot(ang){if(HOL!=='winter')return`rotate(${ang.toFixed(0)})`;const a=((ang-90)%360+360)%360;return a>90&&a<270?'scale(-1 1)':'';}
+function thBoats(){for(const g of ferryPool){if(!g||g.querySelector('.frsail'))continue;el('path',{d:'M-3.4 -2.6L-1.8 -10.4 1.4 -9.6 0.6 -7.8 2.6 -6.6 1.2 -5.2 3 -3.2Z',class:'frsail'},g);}}
+/* --- stations --- */
+let thStnG=[];
+function thStations(){for(const g of thStnG){g.remove();const i=SC.findIndex(x=>x.g===g);if(i>=0)SC.splice(i,1);}thStnG=[];
+  if(!['halloween','winter','lunar'].includes(HOL))return;
+  for(const st of Object.values(STATIONS)){if(st.type!=='pax')continue;const g=scg(st.xy[0],st.xy[1],L.stn,st.major?0:2.1);g.setAttribute('class','thstn');thStnG.push(g);
+    const d=el('g',{transform:'translate(6.5 -6.5)'},g);
+    if(HOL==='halloween'){el('path',{d:ell(0,0,3.6,2.9),class:'th-pumpkin'},d);el('path',{d:'M-0.2 -2.8l.6 -1.6',class:'th-stem'},d);}
+    else if(HOL==='winter'){el('circle',{r:3.1,class:'th-wreath'},d);el('path',{d:'M-1.6 2.6L0 1.6 1.6 2.6 1 3.9 0 2.9-1 3.9Z',class:'th-bow'},d);}
+    else{el('path',{d:'M0 -4.6V-3.2',class:'th-string'},d);el('rect',{x:-2.6,y:-3.2,width:5.2,height:6,rx:2,class:'th-lantern'},d);el('rect',{x:-1.7,y:-3.6,width:3.4,height:1,class:'th-cap'},d);el('rect',{x:-1.7,y:2.4,width:3.4,height:1,class:'th-cap'},d);}}
+  if(typeof updateSC==='function')updateSC();}
+/* --- canvas effects: snow, fireworks, the Halloween web is plain SVG --- */
+const thfx=document.createElement('canvas');thfx.id='thfx';thfx.setAttribute('aria-hidden','true');svg.parentNode.appendChild(thfx);
+const thctx=thfx.getContext('2d');let thW=0,thH=0,thDPR=1;
+function thSize(){const r=svg.getBoundingClientRect();thDPR=Math.min(2,window.devicePixelRatio||1);thW=r.width;thH=r.height;thfx.width=Math.round(thW*thDPR);thfx.height=Math.round(thH*thDPR);thfx.style.width=thW+'px';thfx.style.height=thH+'px';}
+window.addEventListener('resize',thSize);thSize();
+const web=document.createElement('div');web.className='thweb';web.setAttribute('aria-hidden','true');
+web.innerHTML='<svg viewBox="0 0 80 80" width="80" height="80"><g fill="none" stroke="currentColor" stroke-width=".9">'+[0,15,30,45,60,75,90].map(a=>{const r=a*Math.PI/180;return`<path d="M80 0L${(80-Math.cos(r)*80).toFixed(1)} ${(Math.sin(r)*80).toFixed(1)}"/>`;}).join('')+
+  [16,30,44,58,72].map(R=>`<path d="${[0,15,30,45,60,75,90].map((a,i)=>{const r=a*Math.PI/180;return(i?'Q':'M')+(i?`${(80-Math.cos(r-.13)*R*.86).toFixed(1)} ${(Math.sin(r-.13)*R*.86).toFixed(1)} `:'')+`${(80-Math.cos(r)*R).toFixed(1)} ${(Math.sin(r)*R).toFixed(1)}`;}).join('')}"/>`).join('')+
+  '</g><path d="M60 26v10" stroke="currentColor" stroke-width=".7"/><circle cx="60" cy="38" r="2.6" fill="currentColor"/><circle cx="60" cy="35.2" r="1.6" fill="currentColor"/></svg>';
+svg.parentNode.appendChild(web);
+let flakes=[],bursts=[],fwPreview=0,fwNext=0;
+function mapToScreen(xy){const m=svg.getScreenCTM(),r=svg.getBoundingClientRect();if(!m)return null;const p=svg.createSVGPoint();p.x=xy[0];p.y=xy[1];const q=p.matrixTransform(m);return[q.x-r.left,q.y-r.top];}
+const FW_AT=['VIC','NAN','CTN'];
+function fwActive(){if(fwPreview>performance.now())return true;const m=((Math.floor(sim)%1440)+1440)%1440;
+  if(HOL==='newyear')return m>=1430||m<20;if(HOL==='canada')return m>=1320&&m<1410;return false;}
+function mapleR(a){const k=Math.abs(Math.sin(a*2.5));return .55+.45*Math.pow(k,.6)*(Math.abs(Math.cos(a/2))*.5+.5);}
+function spawnBurst(now){const c=FW_AT.filter(c=>STATIONS[c]);if(!c.length)return;const st=STATIONS[c[Math.floor(Math.random()*c.length)]];
+  const maple=HOL==='canada'&&Math.random()<.6;const cols=HOL==='canada'?['#ff3b3b','#ffffff','#ff7a7a']:['#ffd166','#ef476f','#06d6a0','#118ab2','#f8f9fa','#c77dff'];
+  const col=cols[Math.floor(Math.random()*cols.length)],n=maple?54:44,ps=[];
+  for(let i=0;i<n;i++){const a=i/n*Math.PI*2;const r=maple?mapleR(a-Math.PI/2):1;ps.push([Math.cos(a)*r,Math.sin(a)*r*(maple?1:1)]);}
+  bursts.push({xy:st.xy,t0:now,ps,col,size:40+Math.random()*30,dx:(Math.random()-.5)*60,dy:-40-Math.random()*50,maple});}
+function thFx(now){const w=thW,h=thH;thctx.setTransform(thDPR,0,0,thDPR,0,0);thctx.clearRect(0,0,w,h);if(holReduce())return;
+  if(HOL==='winter'){if(flakes.length<90)for(let i=flakes.length;i<90;i++)flakes.push([Math.random()*w,Math.random()*h,1+Math.random()*2.2,Math.random()*6.28]);
+    thctx.fillStyle='rgba(255,255,255,.95)';thctx.strokeStyle='rgba(71,85,105,.55)';thctx.lineWidth=.7;for(const f of flakes){f[1]+=.25+f[2]*.25;f[3]+=.02;f[0]+=Math.sin(f[3])*.3;if(f[1]>h+4){f[1]=-4;f[0]=Math.random()*w;}
+      thctx.beginPath();thctx.arc(f[0],f[1],f[2]+.6,0,6.283);thctx.fill();thctx.stroke();}}
+  if((HOL==='newyear'||HOL==='canada')&&fwActive()&&now>fwNext){spawnBurst(now);fwNext=now+450+Math.random()*500;}
+  bursts=bursts.filter(b=>now-b.t0<1900);
+  for(const b of bursts){const p=mapToScreen(b.xy);if(!p)continue;const u=(now-b.t0)/1900,e=1-Math.pow(1-Math.min(1,u*1.6),3);const cx=p[0]+b.dx,cy=p[1]+b.dy+u*u*30;
+    thctx.globalAlpha=Math.max(0,1-u);thctx.fillStyle=b.col;
+    for(const [x,y] of b.ps){thctx.beginPath();thctx.arc(cx+x*b.size*e,cy+y*b.size*e,1.8,0,6.283);thctx.fill();}
+    thctx.globalAlpha=1;}}
+{let defs=svg.querySelector('defs');if(!defs){defs=el('defs',{},svg);svg.insertBefore(defs,svg.firstChild);}
+  const lg=el('linearGradient',{id:'th-rbow',x1:0,y1:0,x2:1,y2:0},defs);['#e40303','#ff8c00','#ffed00','#008026','#004dff','#750787'].forEach((c,i)=>el('stop',{offset:(i/5).toFixed(2),'stop-color':c},lg));}
+/* --- apply --- */
+function holApply(){const k=SETTINGS.holiday&&SETTINGS.holiday!=='auto'?SETTINGS.holiday:holidayFor();HOL=HOL_NAME[k]?k:'standard';
+  document.documentElement.setAttribute('data-holiday',HOL);
+  for(const t of trains)thTrain(t);thPlanes();thBoats();thStations();flakes=[];bursts=[];
+  if(typeof busPos!=='undefined'&&window.__busReady)stepBuses();
+  const sel=$('set-holiday');if(sel){sel.value=SETTINGS.holiday||'auto';const a=sel.querySelector('option[value=auto]');if(a)a.textContent=`Automatic by date (now: ${HOL==='standard'?'Standard':HOL_NAME[HOL]})`;}}
+function holTick(now){if(HOL==='standard')return;if(HOL==='halloween'){const late=m=>m>=1260||m<240;for(const t of trains){const tr=t.trip;t.g.classList.toggle('late',!!tr&&late(((Math.floor(tr.stops[0].t)%1440)+1440)%1440));}}
+  if(HOL==='winter'||HOL==='newyear'||HOL==='canada'||bursts.length)thFx(now);}
+// settings dropdown
+{const row=document.createElement('div');row.className='setrow stack';row.innerHTML=`<label for="set-holiday">Theme</label><select id="set-holiday"><option value="auto">Automatic by date</option><option value="standard">Standard</option>${HOL_LIST.map(([k,n,w])=>`<option value="${k}">${n} (${w})</option>`).join('')}</select>`;
+  const ap=$('set-theme').closest('.setrow');ap.parentNode.insertBefore(row,ap.nextSibling);
+  $('set-holiday').onchange=e=>{SETTINGS.holiday=e.target.value;saveSettings();holApply();if(HOL==='newyear'||HOL==='canada'){fwPreview=performance.now()+7000;fwNext=0;}};}
+// new trains and recoloured trains pick up the theme; planes and ferries made later too
+{const mk=makeTrainGfx;makeTrainGfx=function(t){mk(t);thTrain(t);};const sty=styleTrainGfx;styleTrainGfx=function(t){sty(t);if(HOL==='easter')thTrain(t);};
+ const pl=plane;plane=function(i){const had=!!planePool[i];const g=pl(i);if(!had)thPlanes();return g;};const bo=boat;boat=function(i){const had=!!ferryPool[i];const g=bo(i);if(!had)thBoats();return g;};
+ const ds=drawStations;drawStations=function(){ds();thStations();};}
+window.__holReady=1;holApply();
+
 function frame(now){
   const dt=Math.min(.1,(now-lastT)/1000);lastT=now;
   if(speed){let m=dt*speed;while(m>0){const d=Math.min(m,.25);step(d);m-=d;}}
@@ -3848,7 +4058,7 @@ function frame(now){
     t.arrow.style.display=t.trip?'':'none';t.arrow.setAttribute('transform',`rotate(${(ang*180/Math.PI).toFixed(1)})`);
     t.warn.style.display=t.blocked>.5?'':'none';t.g.classList.toggle('idle',!t.trip);t.g.classList.toggle('ecs',!!(t.trip&&t.trip.cls==='Empty'));}
   if(selected&&follow){const t=trains.find(x=>x.id===selected);if(t){vb.x+=(t.xy[0]-vb.w/2-vb.x)*.12;vb.y+=(t.xy[1]-vb.h/2-vb.y)*.12;applyVB();}}
-  stepRoadDots(dt);if(window.__flowReady)stepFlowDots(speed?dt*speed:0);if(window.__busReady)stepBuses();if(window.__xportReady)stepXport();
+  stepRoadDots(dt);if(window.__flowReady)stepFlowDots(speed?dt*speed:0);if(window.__busReady)stepBuses();if(window.__xportReady)stepXport();if(window.__holReady)holTick(now);
   const traffic=1-Math.min(.55,S.riders*.85/24000);
   const carMove=speed*dt*(reduceMotion?.4:1);
   for(const c of cars){const on=c.rank<traffic;c.el.style.display=on?'':'none';if(!on)continue;
