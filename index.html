@@ -579,6 +579,19 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
 .tpcard h4{margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
 .tprow{display:grid;grid-template-columns:150px 1fr;gap:10px;padding:5px 0;border-top:1px solid var(--line);font-size:13px}.tprow span{color:var(--muted)}.tprow b{font-weight:600}
 @media (max-width:760px){.tpgrid{grid-template-columns:1fr}.tprow{grid-template-columns:110px 1fr}.tptabs{grid-template-columns:repeat(2,1fr)}.trainpage{padding:12px}}
+.rdgrid{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start;max-width:1250px}
+.rdside{display:grid;gap:8px;position:sticky;top:0;background:var(--panel);padding-bottom:8px}.rdside h3{margin:6px 0 0;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.rdcalc{font-size:15px;padding:10px 14px;background:var(--accent);color:#fff;border-color:var(--accent)}.btn.rdcalc:hover{background:var(--accent);border-color:var(--accent);color:#fff;filter:brightness(1.1)}.rdcalc[disabled]{opacity:.6}
+.rdwarn{border:1px solid var(--warn);color:var(--warn);border-radius:8px;padding:7px 9px;font-size:12px}
+.rdi{display:grid;grid-template-columns:1fr 72px 46px;align-items:center;gap:6px;font-size:12px}.rdi input{font:inherit;padding:3px 5px;border:1.5px solid var(--ctl-line);border-radius:5px;background:var(--ctl-bg);color:var(--ink);width:100%;box-sizing:border-box}.rdi em{font-style:normal;color:var(--muted);font-size:11px}
+.rdbtns{display:flex;gap:6px;margin-top:4px}
+.rdout{display:grid;gap:10px;min-width:0}.rdout h2{margin:10px 0 0;font-family:var(--display);font-size:22px;text-transform:uppercase;letter-spacing:.02em;border-bottom:1px solid var(--line);padding-bottom:3px}.rdout h3{margin:8px 0 4px;font-size:13px}
+.rdkpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}.rdkpis div{border:1px solid var(--line);border-radius:8px;background:var(--panel-2);padding:9px 11px;display:grid;gap:2px}.rdkpis b{font-family:var(--display);font-size:26px;font-variant-numeric:tabular-nums}.rdkpis div:first-child b{color:var(--accent)}.rdkpis span{font-size:11.5px;color:var(--muted)}
+.rdt{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}.rdt th{text-align:left;font-size:11px;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line);padding:4px 6px}.rdt td{padding:4px 6px;border-bottom:1px solid color-mix(in srgb,var(--line) 60%,transparent)}.rdt td:not(:first-child),.rdt th:not(:first-child){text-align:right}.rdt.sm td{padding:3px 4px}
+.rdt td.rdbc{width:28%;text-align:left}.rdbar{display:block;height:9px;border-radius:3px;background:var(--accent);opacity:.75}.rdsum td{font-weight:700;border-top:1.5px solid var(--line)}
+.rdcols{display:grid;grid-template-columns:1fr 1fr;gap:16px}.rdmeth{display:grid;gap:6px;font-size:12.5px;line-height:1.5;max-width:900px}.rdmeth p{margin:0}
+@media (max-width:860px){.rdgrid{grid-template-columns:1fr}.rdside{position:static}.rdcols{grid-template-columns:1fr}}
+
 .srcbody{display:grid;gap:18px;max-width:1100px}
 .srcg h2{margin:0 0 8px;font-family:var(--display);font-size:22px;text-transform:uppercase;letter-spacing:.02em;border-bottom:1px solid var(--line);padding-bottom:4px}
 .srclist{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
@@ -651,6 +664,10 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
     <div class="tptabs" id="tp-tabs" role="group" aria-label="Choose a train type"></div>
     <div class="tpbody" id="tp-body"></div>
   </section>
+  <section class="trainpage rdpage" id="rdpage" hidden aria-label="Ridership forecast">
+    <div class="tptop"><button class="btn" id="rd-back" type="button">← Back to the map</button><h1>Ridership</h1><span class="m">Weekday train ridership forecast for the current timetable, stations, track speeds and bus timing, overall and by region. Change the plan or the assumptions, then press Calculate.</span></div>
+    <div class="rdgrid"><aside class="rdside"><button type="button" class="btn rdcalc" id="rd-calc">Calculate</button><div class="rdwarn" id="rd-stale" hidden>The plan or assumptions have changed since the last calculation. Press Calculate to update.</div><div id="rd-in"></div></aside><div class="rdout" id="rd-out"><div class="m">Press Calculate.</div></div></div>
+  </section>
   <section class="trainpage srcpage" id="srcpage" hidden aria-label="Information sources">
     <div class="tptop"><button class="btn" id="src-back" type="button">← Back to the map</button><h1>Sources</h1><span class="m">Where the planner's maps, travel figures and railway data come from, what each is used for, and its limits</span></div>
     <div class="srcbody" id="src-body"></div>
@@ -683,7 +700,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
       </div>
 <div class="srpanel" id="srpanel" hidden role="search"><div class="srbar"><input id="sr-q" type="search" placeholder="Search places, addresses, stations…" aria-label="Search places and addresses" autocomplete="off" spellcheck="false"><button id="sr-x" type="button" aria-label="Close search">×</button></div><div class="srres" id="sr-res" hidden></div><div class="srinfo" id="sr-info" hidden></div><div class="srfoot">Places beyond the map come from OpenStreetMap (Photon / Nominatim).</div></div>
 <div class="layerpanel" id="layerpanel" hidden role="dialog" aria-label="Layers"><div class="lphead"><h4>Layers</h4><button id="lpclose" aria-label="Close layers panel">×</button></div><div class="lrow lhdr"><span></span><span>Info</span><span>Labels</span></div><div class="lrow"><button class="lsw" id="railbtn" title="Show the corridor out of service" aria-label="Show active railway" aria-pressed="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3L6 21M16 3l2 18"/><path d="M6.6 7h10.8M6.2 12h11.6M5.7 17h12.6" stroke-width="1.6"/></svg><span>Railway and stations</span></button><label class="lck"><input type="checkbox" data-info="legend" checked aria-label="Railway and stations info panel"></label><label class="lck"><input type="checkbox" data-lbl="rail" checked aria-label="Railway and stations labels"></label></div><div class="lrow"><button class="lsw" id="speedbtn" title="Show track speed" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 16a8.5 8.5 0 0 1 17 0"/><path d="M12 16l4.5-5"/><path d="M3 20h18"/></svg><span>Track speed and works</span></button><label class="lck"><input type="checkbox" data-info="speedlegend" checked aria-label="Track speed info panel"></label><label class="lck"><input type="checkbox" data-lbl="speed" checked aria-label="Track speed labels"></label></div><div class="lrow"><button class="lsw" id="trailbtn" title="Hide trails and bike lanes" aria-label="Show trails and bike lanes" aria-pressed="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17" r="3.2"/><circle cx="18.5" cy="17" r="3.2"/><path d="M5.5 17l4-8h6l3 8M9.5 9L12 17h-6.5M15.5 9l-1-3h-2"/></svg><span>Trails and bike lanes</span></button><label class="lck"><span class="na">–</span></label><label class="lck"><input type="checkbox" data-lbl="trail" checked aria-label="Trails and bike lanes labels"></label></div><div class="lrow"><button class="lsw" id="popbtn" title="Show population" aria-label="Show population overlay" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.2c3 .2 5.5 2.6 5.5 5.8"/></svg><span>Population</span></button><label class="lck"><input type="checkbox" data-info="poplegend" checked aria-label="Population info panel"></label><label class="lck"><input type="checkbox" data-lbl="pop" checked aria-label="Population labels"></label></div><div class="lrow"><button class="lsw" id="jobbtn" title="Show jobs and land use" aria-label="Show jobs and land use overlay" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7.5" width="18" height="12" rx="2"/><path d="M8.5 7.5V5.5a1.5 1.5 0 0 1 1.5-1.5h4a1.5 1.5 0 0 1 1.5 1.5v2M3 13h18"/></svg><span>Jobs and land use</span></button><label class="lck"><input type="checkbox" data-info="joblegend" checked aria-label="Jobs and land use info panel"></label><label class="lck"><input type="checkbox" data-lbl="job" checked aria-label="Jobs and land use labels"></label></div><div class="lrow"><button class="lsw" id="flowbtn" title="Show commuting flows" aria-label="Show commuting flows" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17" r="2.2"/><circle cx="19" cy="7" r="2.2"/><path d="M7 15.5C9 9 13 6.5 16.8 6.8"/><path d="M14.5 4.8l2.5 2-2.3 2.3"/></svg><span>Travel flows</span></button><label class="lck"><input type="checkbox" data-info="flowlegend" checked aria-label="Travel flows info panel"></label><label class="lck"><input type="checkbox" data-lbl="flow" checked aria-label="Travel flows labels"></label></div><div class="lrow"><button class="lsw" id="trafbtn" title="Show traffic congestion" aria-label="Show traffic congestion" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 18a9 9 0 1 1 16 0"/><path d="M12 13l4-4"/><circle cx="12" cy="13" r="1.4" fill="currentColor"/></svg><span>Traffic congestion</span></button><label class="lck"><input type="checkbox" data-info="traflegend" checked aria-label="Traffic congestion info panel"></label><label class="lck"><span class="na">–</span></label></div><div class="lrow"><button class="lsw" id="crashbtn" title="Show reported crashes" aria-label="Show ICBC reported crashes" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5L21.5 20h-19z"/><path d="M12 10v4.5M12 17.2v.1"/></svg><span>Reported crashes</span></button><label class="lck"><input type="checkbox" data-info="crashlegend" checked aria-label="Reported crashes info panel"></label><label class="lck"><input type="checkbox" data-lbl="crash" checked aria-label="Reported crashes labels"></label></div><div class="lrow"><button class="lsw" id="destbtn" title="Show key destinations" aria-label="Show key destinations: airports, ferries, campuses, hospitals, shopping centres" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><path d="M9.5 10h5M12 7.5v5"/></svg><span>Key destinations</span></button><label class="lck"><input type="checkbox" data-info="destlegend" checked aria-label="Key destinations info panel"></label><label class="lck"><input type="checkbox" data-lbl="dest" checked aria-label="Key destinations labels"></label></div><div class="lrow"><button class="lsw" id="busbtn" title="Show BC Transit buses" aria-label="Show BC Transit buses" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="14" rx="2.5"/><path d="M5 11h14M8 17.5v2.5M16 17.5v2.5"/><circle cx="8.5" cy="14.2" r=".9" fill="currentColor"/><circle cx="15.5" cy="14.2" r=".9" fill="currentColor"/></svg><span>BC Transit buses</span></button><label class="lck"><input type="checkbox" data-info="buslegend" checked aria-label="BC Transit buses info panel"></label><label class="lck"><input type="checkbox" id="bo-num" checked aria-label="Bus route numbers"></label></div><div class="lrow"><button class="lsw" id="bpbtn" title="Show bus priority lanes" aria-label="Show bus priority lanes" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21L9 3M18 21L15 3"/><path d="M12 6v2.5M12 11.5v2.5M12 17v2.5"/></svg><span>Bus priority lanes</span></button><label class="lck"><input type="checkbox" data-info="bplegend" checked aria-label="Bus priority lanes info panel"></label><label class="lck"><input type="checkbox" data-lbl="bp" checked aria-label="Bus priority lanes labels"></label></div><div class="lrow"><button class="lsw" id="ferrybtn" title="Show ferry routes and sailings" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15l2 4h14l2-4z"/><path d="M6 15V9h12v6M9 9V6h5v3"/><path d="M2 21c2 0 2-1 4-1s2 1 4 1 2-1 4-1 2 1 4 1 2-1 4-1"/></svg><span>Ferries</span></button><label class="lck"><input type="checkbox" data-info="ferrylegend" checked aria-label="Ferries info panel"></label><label class="lck"><input type="checkbox" data-lbl="ferry" checked aria-label="Ferries labels"></label></div><div class="lrow"><button class="lsw" id="airbtn" title="Show flights" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16l20-6-3-2-6 1-5-6H6l2 7-5 2z"/><path d="M4 21h16"/></svg><span>Flights</span></button><label class="lck"><input type="checkbox" data-info="airlegend" checked aria-label="Flights info panel"></label><label class="lck"><input type="checkbox" data-lbl="air" checked aria-label="Flights labels"></label></div><div class="lrow"><button class="lsw" id="freightbtn" title="Show the rail freight barge" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="12" height="8" rx="1"/><path d="M15 10h3l3 3v2h-6"/><circle cx="7" cy="17.5" r="1.6"/><circle cx="17" cy="17.5" r="1.6"/></svg><span>Rail freight</span></button><label class="lck"><input type="checkbox" data-info="freightlegend" checked aria-label="Rail freight info panel"></label><label class="lck"><input type="checkbox" data-lbl="freight" checked aria-label="Rail freight labels"></label></div><div class="lrow lall"><span class="lname">All layers</span><label class="lck"><input type="checkbox" id="infoall" checked aria-label="All info panels"></label><label class="lck"><input type="checkbox" id="lblall" checked aria-label="All labels"></label></div><div class="m">Info shows a layer's panel while the layer is on. Labels shows its names or numbers on the map.</div></div>
-      <div class="legstack"><div class="poplegend" id="poplegend" hidden><h4>Population</h4><div class="m">Statistics Canada, 2021 Census, by dissemination area: people per km² of land.</div>
+      <div class="legstack"><div class="poplegend" id="poplegend" hidden><h4>Population</h4><div class="m">2024 estimate by dissemination area (Statistics Canada 2021 Census grown with BC Stats municipal estimates): people per km² of land.</div>
         <div class="dakey"><span><i class="da-0"></i>&lt;10</span><span><i class="da-1"></i>10</span><span><i class="da-2"></i>100</span><span><i class="da-3"></i>500</span><span><i class="da-4"></i>1.5k</span><span><i class="da-5"></i>3k</span><span><i class="da-6"></i>6k+</span></div>
         <div><b id="pop-walk">0</b> people (<b id="pop-walkp">0%</b>) live within 800 m of one of the <b id="pop-n">0</b> stations served, and <b id="pop-cov">0</b> (<b id="pop-pct">0%</b>) within 3 km, of <b id="pop-tot">0</b> on the Island.</div>
         <div class="m">Rings: 800 m walk and 3 km around served stations, measured to each area's centre. Outlined areas are within 800 m. Hover or tap an area for details.</div></div>
@@ -728,7 +745,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <div class="m">Hover a ◆ station for both directions and its daily profile.</div>
         <div class="m" id="t-enn" hidden>Includes the drivers the Travel flows layer moves to the train (With E&amp;N).</div></div>
       <div class="scale" id="scale"><span id="scale-t">20 km</span><i id="scale-b" style="width:100px"></i></div>
-      <div class="credit">Map data © OpenStreetMap contributors (ODbL). Elevation and hillshade: AWS Terrain Tiles (Mapzen terrarium). Population: Statistics Canada 2021 Census. Jobs: Statistics Canada 2021 Census. Traffic counts: BC MoTI, City of Victoria. Commuting: Statistics Canada 2021 Census. Travel survey: CRD 2022 Origin-Destination Household Travel Survey. Bus schedules: BC Transit GTFS. Sailings and ferry traffic: BC Ferries. UVic and airport traffic figures. Riders and buses are simulated.</div>
+      <div class="credit">Map data © OpenStreetMap contributors (ODbL). Elevation and hillshade: AWS Terrain Tiles (Mapzen terrarium). Population: Statistics Canada 2021 Census, grown to 2024 with BC Stats estimates. Jobs: Statistics Canada 2021 Census. Traffic counts: BC MoTI, City of Victoria. Commuting: Statistics Canada 2021 Census. Travel survey: CRD 2022 Origin-Destination Household Travel Survey. Bus schedules: BC Transit GTFS. Sailings and ferry traffic: BC Ferries. UVic and airport traffic figures. Riders and buses are simulated.</div>
       <div class="toasts" id="toasts" aria-live="polite"></div>
       <div class="tip" id="tip" hidden></div>
       <div class="fsclock" id="fsclock" aria-hidden="true"></div>
@@ -767,7 +784,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
       </div>
       <div class="pane" id="pane-plan" hidden>
         <h3 class="sec">Starting timetable</h3>
-        <div class="pbtns"><select id="tt-preset" aria-label="Starting timetable"><option value="data8">Data-driven, 8 trainsets</option><option value="icf">ICF business case, West Shore every 12 min</option><option value="data">Data-driven, unconstrained fleet</option></select><button class="btn" id="btn-preset" type="button">Load this timetable</button></div>
+        <div class="pbtns"><select id="tt-preset" aria-label="Starting timetable"><option value="data8">Data-driven, 8 trainsets</option><option value="opt">Optimised: West Shore every 10 min</option><option value="optreg">Optimised + regional commuter trains</option><option value="icf">ICF business case, West Shore every 12 min</option><option value="data">Data-driven, unconstrained fleet</option></select><button class="btn" id="btn-preset" type="button">Load this timetable</button></div>
         <div class="ttcmp" id="tt-compare"></div>
         <h3 class="sec">Service plan summary</h3>
         <div class="kpis" id="plan-sum"></div>
@@ -1047,8 +1064,10 @@ function icfLeg(pat,from,to,dep){const a=pat.findIndex(x=>x[0]===from),b=pat.fin
   return pat.slice(a,b+1).filter(x=>STATIONS[x[0]]).map(([c,t])=>({c,t:dep+t-t0}));}
 const PRESETS={icf:{name:'ICF business case, West Shore every 12 min',sub:'ICF business case service · West Shore every 12 minutes · Victoria–Courtenay, Nanaimo and Duncan regional trains'},
   data:{name:'Data-driven (CRD survey and Census)',sub:'Data-driven service · West Shore every 10 min peaks, 15 midday · Cowichan commuter · Duncan–Nanaimo shuttle'}};
+PRESETS.opt={name:'Optimised: West Shore every 10 min',sub:'Optimised for riders per dollar · West Shore every 10 min, 05:30–22:00, both directions'};
+PRESETS.optreg={name:'Optimised + regional commuter trains',sub:'West Shore every 10 min · 3 Nanaimo–Victoria commuter round trips · Courtenay–Victoria intercity'};
 PRESETS.data8={name:'Data-driven, 8 trainsets',sub:'Data-driven service on 8 trainsets · West Shore every 10–20 min · Nanaimo–Victoria commuter · Courtenay intercity · timed with the applied speed projects'};
-function defaultPlan(preset='data8'){const p=preset==='data'?dataPlan():preset==='icf'?icfPlan():data8Best();if(p.preset!=='icf')p.timedSig=worksSig();return p;}
+function defaultPlan(preset='data8'){const p=OPT_CFGS[preset]?optPlan(preset):preset==='data'?dataPlan():preset==='icf'?icfPlan():data8Best();if(p.preset!=='icf')p.timedSig=worksSig();return p;}
 function icfPlan(){
   const fleet=[],trips=[];if(!STATIONS.VIC||!STATIONS.WHL)return{v:3,preset:'icf',fleet,trips,stations:{...STNSPEC},track:TRACKSPEC};
   const trip=(no,cls,tag,set,stops)=>trips.push({id:nid('t'),no:String(no),cls,tag,set,fixed:true,stops});
@@ -1160,6 +1179,29 @@ function dataPlan(){
   fleet.push({id:'P1',name:'Spare set',type:'dmu',home:'WHL'});
   return{v:3,preset:'data',fleet,trips,stations:{...STNSPEC},track:TRACKSPEC};
 }
+/* Optimised timetable (V61): the service pattern that the Ridership page's model and a cost model found carries the most riders for
+   the money (see the Ridership page notes). West Shore headways by period; regional departures listed by line. Timed by the speed model. */
+const OPT_CFGS={opt:{ws:[10,10,10,10,10],lines:{}},
+  optreg:{ws:[10,10,10,10,10],lines:{nan:{I:['05:30','06:10','07:00'],O:['14:30','16:15','17:00']},ctnv:{I:['07:30'],O:['16:30']}}}};
+function optPlan(key='opt'){const OPT_CFG=OPT_CFGS[key];const fleet=[],trips=[];const spec={...STNSPEC,mod:{...(STNSPEC.mod||{})}};
+  if(!STATIONS.VIC||!STATIONS.WHL)return{v:3,preset:key,fleet,trips,stations:spec,track:TRACKSPEC};
+  const sbA=ICF_SB.map(x=>x[0]).filter(x=>STATIONS[x]),nbA=ICF_NB.map(x=>x[0]).filter(x=>STATIONS[x]);const seg=(a,f,t)=>a.slice(a.indexOf(f),a.indexOf(t)+1);
+  const RT={ws:[seg(sbA,'WHL','VIC'),seg(nbA,'VIC','WHL')],nan:[seg(sbA,'NAN','VIC'),seg(nbA,'VIC','NAN')],dun:[seg(sbA,'DUN','VIC'),seg(nbA,'VIC','DUN')],
+    ctnv:[sbA,nbA],ctnn:[seg(sbA,'CTN','NAN'),seg(nbA,'NAN','CTN')],pab:[['PAB','PKS','NAN'],['NAN','PKS','PAB']]};
+  const NAMES={nan:['Nanaimo–Victoria','Victoria–Nanaimo','Regional'],dun:['Duncan–Victoria','Victoria–Duncan','Regional'],ctnv:['Courtenay–Victoria','Victoria–Courtenay','Intercity'],
+    ctnn:['Courtenay–Nanaimo','Nanaimo–Courtenay','Regional'],pab:['Port Alberni–Nanaimo','Nanaimo–Port Alberni','Regional']};
+  const tc={},leg=(codes,dep)=>{const k=codes.join();if(!tc[k])tc[k]=computeTimes(codes,0,'dmu','Regional');return tc[k].map(o=>({c:o.c,t:Math.round((dep+o.t)*2)/2}));};
+  const hm2=s=>{const [a,b]=s.split(':').map(Number);return a*60+b;};const mk=(no,cls,tag,stops)=>({id:nid('t'),no:String(no),cls,tag,set:null,fixed:true,stops});
+  if(OPT_CFG.lines.pab&&(OPT_CFG.lines.pab.I.length||OPT_CFG.lines.pab.O.length))spec.mod.PAB={...(spec.mod.PAB||{}),type:'pax'};
+  let e=100,o=101;const WSP=[[330,390],[390,540],[540,840],[840,1110],[1110,1320]];
+  OPT_CFG.ws.forEach((hw,i)=>{if(!hw)return;const [a,b]=WSP[i];for(let d=a;d<b;d+=hw){const tag=`West Shore · every ${hw} min`;
+    trips.push(mk((e+=2)-2,'CRD Commute',tag,leg(RT.ws[0],d)),mk((o+=2)-2,'CRD Commute',tag,leg(RT.ws[1],d+Math.round(hw/2))));}});
+  let n=1;for(const [k,L] of Object.entries(OPT_CFG.lines)){if(!RT[k])continue;const [ti,to,cls]=NAMES[k];
+    for(const t of L.I)trips.push(mk(n++,cls,ti,leg(RT[k][0],hm2(t))));for(const t of L.O)trips.push(mk(n++,cls,to,leg(RT[k][1],hm2(t))));}
+  const ok=trips.filter(t=>t.stops.every(x=>STATIONS[x.c]||x.c==='PAB'));chainSets(ok,'dmu','S','Train',fleet,6);
+  const cnt={};fleet.forEach(f=>{const L=ok.filter(t=>t.set===f.id);const tg=L.filter(t=>t.cls!=='CRD Commute').map(t=>t.tag).join();const nmz=/Courtenay/.test(tg)?'Island Regional':/Alberni/.test(tg)?'Alberni':/Nanaimo/.test(tg)?'Mid-Island':/Duncan/.test(tg)?'Cowichan':'West Shore';cnt[nmz]=(cnt[nmz]||0)+1;f.name=nmz+' '+cnt[nmz];});
+  fleet.push({id:'P1',name:'Spare set',type:'dmu',home:'WHL'});
+  return{v:3,preset:key,fleet,trips:ok,stations:spec,track:TRACKSPEC};}
 const LS='island-rail-plan-v5';// v5: timetable timed by the speed model with the corridor speed projects
 // v4: data-driven 8-trainset timetable is the default// v3: ICF business case timetable
 function validPlan(p){return p&&Array.isArray(p.fleet)&&Array.isArray(p.trips)&&p.fleet.every(f=>f&&f.id&&TYPES[f.type])&&
@@ -1456,17 +1498,17 @@ function badgeText(t){const tr=t.trip||nextFor(t);if(t.trip&&t.trip.cls==='Empty
 const B64V={};[...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'].forEach((c,i)=>B64V[c]=i);
 function decRing(s){const v=[];let n=0,sh=0;for(const ch of s){const d=B64V[ch];n+=(d&31)*2**sh;if(d&32)sh+=5;else{v.push(n%2?-(n+1)/2:n/2);n=0;sh=0;}}
   const o=[];let x=0,y=0;for(let i=0;i<v.length;i+=2){x+=v[i];y+=v[i+1];o.push(P([x/1e4,y/1e4]));}return o;}
-/* ---------- population overlay (Statistics Canada, 2021 Census, dissemination areas; municipal names as labels) ---------- */
+/* ---------- population overlay (Statistics Canada 2021 Census dissemination areas grown to 2024 with BC Stats estimates; municipal names as labels) ---------- */
 const POP=[
- ['Saanich',117735,-123.381,48.484],['Nanaimo',99863,-123.940,49.166],['Victoria',91867,-123.366,48.428],['Langford',46584,-123.505,48.450],
- ['Campbell River',35519,-125.248,50.024],['North Cowichan',31990,-123.715,48.845],['Courtenay',28420,-124.994,49.687],['Colwood',18961,-123.496,48.424],
- ['Port Alberni',18259,-124.806,49.234],['Oak Bay',17990,-123.318,48.427],['Esquimalt',17533,-123.414,48.432],['Central Saanich',17385,-123.417,48.563],
- ['Sooke',15086,-123.727,48.374],['Comox',14806,-124.928,49.673],['Parksville',13642,-124.312,49.319],['Sidney',12318,-123.399,48.650],
- ['North Saanich',12235,-123.430,48.660],['View Royal',11575,-123.433,48.452],['Qualicum Beach',9303,-124.443,49.348],['Ladysmith',8990,-123.815,48.994],
- ['Metchosin',5067,-123.537,48.382],['Duncan',5047,-123.708,48.779],['Cumberland',4447,-125.030,49.619],['Lantzville',3817,-124.070,49.250],
- ['Lake Cowichan',3325,-124.054,48.825],['Highlands',2482,-123.500,48.516],
- ['Port Hardy',3902,-127.497,50.722],['Tofino',2516,-125.907,49.153],['Port McNeill',2356,-127.085,50.591],['Ucluelet',2066,-125.547,48.942],
- ['Gold River',1246,-126.051,49.778],['Port Alice',739,-127.488,50.425],['Alert Bay',449,-126.93,50.586],['Tahsis',393,-126.664,49.917],['Sayward',334,-125.958,50.384],['Zeballos',126,-126.846,49.981]
+ ['Saanich',125436,-123.381,48.484],['Nanaimo',110707,-123.940,49.166],['Victoria',102856,-123.366,48.428],['Langford',58320,-123.505,48.450],
+ ['Campbell River',38028,-125.248,50.024],['North Cowichan',34495,-123.715,48.845],['Courtenay',32049,-124.994,49.687],['Colwood',22151,-123.496,48.424],
+ ['Port Alberni',19685,-124.806,49.234],['Oak Bay',18813,-123.318,48.427],['Esquimalt',19302,-123.414,48.432],['Central Saanich',18150,-123.417,48.563],
+ ['Sooke',17128,-123.727,48.374],['Comox',15962,-124.928,49.673],['Parksville',14995,-124.312,49.319],['Sidney',13288,-123.399,48.650],
+ ['North Saanich',13340,-123.430,48.660],['View Royal',12619,-123.433,48.452],['Qualicum Beach',9363,-124.443,49.348],['Ladysmith',9903,-123.815,48.994],
+ ['Metchosin',5331,-123.537,48.382],['Duncan',5669,-123.708,48.779],['Cumberland',4962,-125.030,49.619],['Lantzville',4210,-124.070,49.250],
+ ['Lake Cowichan',3717,-124.054,48.825],['Highlands',2618,-123.500,48.516],
+ ['Port Hardy',4148,-127.497,50.722],['Tofino',2767,-125.907,49.153],['Port McNeill',2384,-127.085,50.591],['Ucluelet',2413,-125.547,48.942],
+ ['Gold River',1318,-126.051,49.778],['Port Alice',810,-127.488,50.425],['Alert Bay',499,-126.93,50.586],['Tahsis',378,-126.664,49.917],['Sayward',363,-125.958,50.384],['Zeballos',135,-126.846,49.981]
 ].map(([n,p,lo,la])=>({n,p,ll:[lo,la],xy:P([lo,la])}));
 const popG=el('g',{class:'popl'},L.pop);popG.style.display='none';
 const daG=el('g',{class:'dal'});svg.insertBefore(daG,L.roads);daG.style.display='none';
@@ -1480,11 +1522,17 @@ let DA=null;
 function ringArea(r){let a=0;for(let i=0,j=r.length-1;i<r.length;j=i++)a+=(r[j][0]*r[i][1]-r[i][0]*r[j][1]);return a/2;}
 function ringCentroid(r){let a=0,x=0,y=0;for(let i=0,j=r.length-1;i<r.length;j=i++){const f=r[j][0]*r[i][1]-r[i][0]*r[j][1];a+=f;x+=(r[j][0]+r[i][0])*f;y+=(r[j][1]+r[i][1])*f;}
   if(Math.abs(a)<1e-9){const n=r.length||1;return[r.reduce((s,p)=>s+p[0],0)/n,r.reduce((s,p)=>s+p[1],0)/n];}return[x/(3*a),y/(3*a)];}
+const POPG={ids:"170033170034170035170036170037170038170039170040170041170042170043170044170045170046170047170048170049170051170052170053170054170055170056170063170066170070170071170072170074170075170076170077170079170081170082170084170085170094170095170096170097170098170100170101170102170103170104170105170106170111170112170113170114170115170116170117170118170119170120170121170122170123170124170125170126170127170128170129170130170131170132170133170134170135170136170137170138170139170140170141170142170143170144170145170146170147170148170149170150170151170152170153170154170155170156170157170161170162170163170164170165170166170167170168170169170170170171170172170174170175170177170178170179170180170181170182170184170185170186170187170189170190170191170192170193170194170195170196170197170198170199170200170201170202170203170204170205170206170207170208170209170210170211170212170214170215170216170217170218170219170220170221170222170223170224170225170226170227170228170229170230170231170233170234170235170236170237170238170239170240170241170242170243170244170245170246170247170248170249170250170251170252170253170254170255170256170257170258170259170260170262170263170264170265170266170267170268170270170271170272170273170274170275170276170277170278170279170280170281170282170285170286170287170288170289170290170291170292170293170294170295170296170297170298170299170300170301170302170303170304170305170308170309170310170311170312170313170314170315170316170317170318170319170320170321170322170323170324170325170326170327170328170331170332170335170336170337170338170339170343170344170345170346170347170348170349170350170351170352170353170354170357170359170360170361170362170363170364170365170366170367170368170369170370170371170372170373170375170376170378170379170380170383170384170385170386170387170388170389170390170392170393170396170397170399170402170403170404170405170406170407170408170409170410170413170414170415170416170417170418170419170421170422170423170424170425170426170427170428170429170430170431170432170433170435170437170438170439170440170441170442170443170444170451170452170453170454170455170456170457170458170463170464170466170468170469170470170471170472170473170475170476170478170479170480170481170482170483170484170485170488170489170490170491170492170493170494170495170498170501170502170507170544170545170546170547170548170549170550170551170552170553170554170555170556170557170558170559170560170561170562170563170564170565170566170567170568170569170570170571170574170575170576170577170578170579170581170582170583170584170585170586170587170588170589170590170591170592170593170594170595170596170597170598170599170600170601170602170603170604170610170611170612170613170614170615170617170619170620170621170622170624170625170626170629170630170631170632170633170634170635170636170637170638170639170640170641170642170643170644170645170646170647170648170649170650170651170652170653170654170655170656170659170660170661170662170663170665170666170670170671170678170679170680170681170682170683170684170685170688170689170690170691170692170694170699170700170701170703170704170705170707170708170709170710170711170712170713170715170716170718170719170720170721170722170723170725170726170728170729170730170731170732170733170734170735170736170738170739170741170742170743170744170746170747170748170749170750170751170753170754170755170756170758170759170760170761170762170763170764170765170766170768170769170770170771170772170773170774170776170777170778170781170783170784170785170786170787170789170790170792170793170795170796170797170798170801170802170804170805170806170807170808170809170810170811170814170815170816170817170819170820190152190153190154190155190156190157190158190159190160190161190162190163190164190165190166190167190168190169190170190171190172190173190174190175190176190177190178190179190180190181190182190183190184190185190186190187190190190191190192190193190194190195190196190197190198190199190200190201190202190203190204190205190206190207190208190209190210190211190212190215190216190217190218190219190220190221190222190223190224190225190226190227190228190229190230190231190232190233190234190235190236190237190238190239190240190241190242190243190244190245190246190247190250190253190254190255190256190257190258190259190260190261190262190263190264190265190266190267190268190269190270190271190272190273190274190275190276190277190278190279190280190281190282190283190284190285190286190287190288190289190290190291190292190293190294190295190296190297190298190299190300190301190302190303190304190305190306190307190308190309190310190311190314190315190316190317190318190319190324190327190329190330190331210208210209210210210211210212210213210214210215210216210217210218210219210220210221210222210223210224210225210226210227210228210229210230210231210232210233210234210235210236210237210238210239210240210241210242210243210249210250210251210252210253210254210255210256210257210258210259210260210261210262210263210264210265210266210267210268210269210270210271210272210273210274210275210276210277210278210279210280210281210282210283210284210285210286210287210288210289210290210291210292210293210294210295210296210297210298210299210300210301210302210303210304210305210306210307210308210309210310210311210312210313210314210315210316210317210318210319210320210321210322210323210324210325210326210327210328210329210330210331210332210333210334210335210336210337210338210339210340210341210342210343210344210345210346210347210348210349210350210351210352210353210354210355210356210357210358210359210360210361210362210363210364210365210366210367210368210369210370210371210372210373210374210375210376210377210378210379210380210381210382210383210384210385210386210387210388210389210390210391210392210393210394210395210396210397210398210399210400210401210402210403210404210405210406210407210408210409210410210411210412210413210414210415210416210417210418210419210420210421210422210423210424210425210426210427210428210429210430210431210432210433210434210435210438210439210440210441210442210443210444210445210446210447210448210449210450210451210452210453210454210455210456210457210458210459210460210461210462210463210464210465210466210467210468210469210470210471210472210473210474210475210476210478210479210480210481210484210485230076230079230080230081230083230084230086230087230088230089230090230091230092230093230094230095230096230097230098230099230100230101230102230103230104230105230106230107230108230109230110230111230112230113230114230115230116230117230118230119230120230121230122230123230124230125230126230127230128230129230130230131230132230133230134230135230136230137230138230139230140230141230142230143230144230146230148230149230150230151230152230154230155230156240195240196240197240198240199240200240201240202240203240204240205240206240207240208240209240210240211240212240213240214240215240216240217240218240219240220240221240222240223240225240226240227240228240229240230240231240232240233240234240235240236240237240238240239240240240241240242240243240244240245240246240247240248240249240250240251240252240253240254240255240256240257240258240259240260240261240262240263240264240265240266240267240269240270240271240272240274240275240276240277240278240280240281240283240284240291240292240293240406240407240408240409240410240411240412240413240419240420240423240426240427240429240430240431240436240437240438240439240440240441240442260288260289260290260294260295260296260297260298260299260300260301260303260304260305260306260307260308260309260310260311260312260313260314260315260316260317260318260320260322260323260324260325260326260327260328260329260330260331260332260337260339260341260342260343260344260345260346260347260348260349260350260354260360260361260362260363260364260365260366260367260368260369260370260372260373260374260375260376260378260379260382260384260386260387260388260389260390260391260392260393260394260395260399260400260401260402260403260404260406260408260409260415260419260420260421260422260423260424260426260427260428260432260434260435260436260439260440260442260443260445260448260449260451260453260454430057430061430063430065430066430067430068430069430070430071430072430073430074430075430077430078430079430080430081430083430084430087430089430092430097430106430107430108430109430112430113430114430115430116430117430118430125430126430127430128",pairs:[[0.943, 0.977], [0.973, 1.01], [0.99, 0.993], [1.009, 1.0], [1.01, 0.996], [1.014, 1.007], [1.015, 0.997], [1.015, 1.006], [1.017, 0.985], [1.018, 1.0], [1.02, 1.008], [1.021, 1.012], [1.025, 0.988], [1.029, 1.015], [1.031, 1.011], [1.034, 1.011], [1.038, 1.015], [1.039, 1.02], [1.039, 1.021], [1.04, 1.019], [1.043, 1.024], [1.046, 1.013], [1.046, 1.034], [1.049, 1.034], [1.05, 1.024], [1.053, 1.018], [1.055, 1.028], [1.057, 1.014], [1.062, 1.048], [1.064, 1.042], [1.066, 1.047], [1.067, 1.055], [1.068, 1.044], [1.068, 1.046], [1.069, 1.043], [1.075, 1.008], [1.083, 1.044], [1.086, 1.054], [1.09, 1.04], [1.094, 1.062], [1.107, 1.069], [1.119, 1.06], [1.185, 1.098]],enc:"KKIIIIIIIIIIIIIIIKKKKKKHH333;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ6666666666666QQQQQQQQ666666666666666;;;QQQQQQ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;6;HQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQJJJJJJJJJJJJJJJEHHJ;;;;;;;;;;;;;;;;;;;;;;;JJJJJQQQQQQJJQQQQQQQQ;;;;;JJJJ;;;;;EEEEEEEEYYYYYZZZZZZZZZZZZZZZZ3333333H;;;;;;;ZHZZZZZZZZYYYYYYYZYYYZZYHKIHKKKKKKQQQQQ;;;;;;;;;;;;;;;;;;;;;;;;;;;;6;6666;;Q;QQIIIQQQ6JZ;IIIYEEEHHHHHHHHHHHHHHHHHHHH555VVVHVVVVVVVHHH7777777HHHHVHH;;;HHV333333333KKKKQQ333333333;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;HHHHHVVVHYYYYYYYYQQQQQQQQQQQQQ44444TTTTT444444T444444444444444444444444444444444444444444DDDDDDDDDDWWWWD44444W4WWWWDDDDDDDDDDDDDDDDDDDDDDDDDDD444DDDDDDDD444NNNNNNNNNNNNN44444444444D444444DDDDDDCCCCCCC2222222222222CCCCCCCCCCPPPPPPPCCCCC22C22CCPPPPPPPPCPPPCCCCCCCCCCRRRRRRRCMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMCCMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMCCCMCCMMMMCMCCCCCCCCCCCCCCCCCCCCCCMMMMMPPMPCC:::::::AAAAXXX::::::::B:BBBBBBBB:::::BBBBBBBBBBBBBBBBBB:BBBBBB:BB:::::::::?????0???@<<????G??>>>>>>>>>?>?>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>????????????????>????>>>>>>>>??>>???>>??>???===========UUUUUUU==UUUUUUU=FFFFFFFFFFFFF==========FFFFFUUUUUUUUUUU===UUUUUUUUUUU==OOOOOU=F==FFF==FF===UU=U=UU====U99899988898888111119L999999999119SS99988",csd:{"17021": [1.0207, 1.0118], "17034": [1.0683, 1.0462], "17044": [1.1854, 1.0979], "17041": [1.1189, 1.0601], "17040": [1.0549, 1.028], "17030": [1.0151, 0.9973], "17015": [1.0089, 1.0001], "17052": [1.0901, 1.0396], "17005": [1.0568, 1.0138], "17010": [1.0534, 1.0183], "17047": [1.0462, 1.0129], "17042": [1.015, 1.0062], "17049": [1.0143, 1.0069], "19008": [1.0426, 1.0244], "19021": [1.0659, 1.0469], "19012": [1.0936, 1.062], "19016": [1.083, 1.0438], "21007": [1.0643, 1.042], "21018": [1.0679, 1.0442], "21023": [0.9905, 0.9932], "21008": [1.0691, 1.0426], "23008": [1.0394, 1.0215], "23025": [1.0387, 1.0203], "23019": [1.1074, 1.0691], "24034": [1.0314, 1.0107], "24025": [1.0249, 0.988], "24030": [0.9426, 0.9767], "24039": [1.0491, 1.0342], "24029": [1.0385, 1.015], "26010": [1.0857, 1.0545], "26005": [1.0457, 1.0337], "26014": [1.0673, 1.0548], "43023": [1.0169, 0.9846], "43012": [0.9731, 1.0097], "43017": [1.0616, 1.0479], "43008": [1.0754, 1.0081]},rem:{"17": [1.0496, 1.0237], "19": [1.0103, 0.9961], "21": [1.04, 1.0194], "23": [1.0198, 1.0083], "24": [1.0344, 1.0112], "26": [1.0294, 1.0153], "43": [1.0185, 1.0003]}};
+/* 2024 population: 2021 Census DA counts grown by each municipality's BC Stats 2021→2024 change (rest of each regional district for areas
+   outside municipalities). DAs were matched to municipalities by OpenStreetMap municipal boundaries. g21: 2021→2024, g22: 2022→2024. */
+const POPG_MAP=(()=>{const m=new Map();for(let i=0;i<POPG.enc.length;i++)m.set(POPG.ids.slice(i*6,i*6+6),POPG.pairs[POPG.enc.charCodeAt(i)-48]);return m;})();
+const popGrow=id=>POPG_MAP.get(id)||[1,1];
+const csdGrow=(csd,k=0)=>{const v=POPG.csd[csd];if(v)return v[k];const r=POPG.rem[String(csd).slice(0,2)];return r?r[k]:1;};
 function buildDA(){if(DA)return;DA=[];
   for(const rec of DA_RAW.split(';')){const [id,p,dw,a,g]=rec.split(',');if(!g)continue;const rings=g.split('.').map(decRing).filter(r=>r.length>2);if(!rings.length)continue;
-    const big=rings.reduce((b,r)=>Math.abs(ringArea(r))>Math.abs(ringArea(b))?r:b,rings[0]);const km2=(+a)/100;const sup=p==='';const pop=sup?0:+p;const den=km2>0?pop/km2:0;
+    const big=rings.reduce((b,r)=>Math.abs(ringArea(r))>Math.abs(ringArea(b))?r:b,rings[0]);const km2=(+a)/100;const sup=p==='';const gr=popGrow(id);const pop21=sup?0:+p;const pop=Math.round(pop21*gr[0]);const den=km2>0?pop/km2:0;
     const cls=sup?-1:DA_CLS.findIndex(c=>den<c[0]);
-    const d={id:'59'+id,pop,dw:dw===''?null:+dw,km2,den,sup,cls,c:ringCentroid(big)};
+    const d={id:'59'+id,pop,pop21,g22:gr[1],dw:dw===''?null:Math.round(+dw*gr[0]),km2,den,sup,cls,c:ringCentroid(big)};
     d.el=el('path',{d:rings.map(r=>'M'+r.map(q=>q[0].toFixed(1)+' '+q[1].toFixed(1)).join('L')+'Z').join(''),class:'da '+(sup?'da-s':'da-'+cls),'data-i':DA.length,'vector-effect':'non-scaling-stroke'},daG);DA.push(d);}
   daG.addEventListener('pointerover',e=>{const i=e.target.dataset&&e.target.dataset.i;if(i==null||tipPinned)return;showDATip(DA[+i],e);});
   daG.addEventListener('pointerout',e=>{if(!tipPinned&&e.target.dataset&&e.target.dataset.i!=null)$('tip').hidden=true;});
@@ -1493,7 +1541,7 @@ const nearServed=(xy,served)=>{let best=null;for(const c of served){const s=STAT
 function showDATip(d,e){const nr=nearServed(d.c,servedStops());
   const den=d.den<10?d.den.toFixed(1):fmt(Math.round(d.den));
   placeTip(e,`<h4>Dissemination area ${d.id}</h4>${d.sup?'<div class="m">Population not published for this area (suppressed by Statistics Canada).</div>':`<div><b>${fmt(d.pop)}</b> people · <b>${d.dw==null?'–':fmt(d.dw)}</b> homes</div><div>${den} people per km² · ${d.km2<1?d.km2.toFixed(2):d.km2.toFixed(1)} km² of land</div>`}
-    <div class="m">${nr?`Centre ${nr.d<1?Math.round(nr.d*1000)+' m':nr.d.toFixed(1)+' km'} from ${esc(nm(nr.c))} station`:'No stations served by this timetable.'}</div><div class="m">Statistics Canada, 2021 Census.</div>`);}
+    <div class="m">${nr?`Centre ${nr.d<1?Math.round(nr.d*1000)+' m':nr.d.toFixed(1)+' km'} from ${esc(nm(nr.c))} station`:'No stations served by this timetable.'}</div><div class="m">2024 estimate: Statistics Canada 2021 Census (${fmt(d.pop21)}) grown with BC Stats municipal estimates.</div>`);}
 const WALK_KM=.8,CATCH_KM=3;
 function servedStops(){const s=new Set();for(const tr of PLAN.trips){if(!tr.set||tr.cls==='Freight')continue;for(const x of tr.stops)if(STATIONS[x.c].type==='pax')s.add(x.c);}return s;}
 function updatePop(){buildDA();const served=servedStops();let tot=0,walk=0,near=0,nW=0,nN=0;
@@ -1744,7 +1792,7 @@ function srRun(go){const q=$('sr-q').value.trim();const local=srLocal(q);clearTi
     if(e.key==='ArrowDown'){const f=$('sr-res').querySelector('.srrow');if(f){e.preventDefault();f.focus();}}if(e.key==='Escape'){e.stopPropagation();open(false);sb.focus();}});
   $('sr-res').addEventListener('keydown',e=>{const rows=[...$('sr-res').querySelectorAll('.srrow')],i=rows.indexOf(document.activeElement);
     if(e.key==='ArrowDown'&&i<rows.length-1){e.preventDefault();rows[i+1].focus();}if(e.key==='ArrowUp'){e.preventDefault();(i>0?rows[i-1]:$('sr-q')).focus();}if(e.key==='Escape'){open(false);sb.focus();}});
-  document.addEventListener('keydown',e=>{if(e.key==='/'&&!/input|textarea|select/i.test(document.activeElement.tagName)&&$('trainpage').hidden&&$('srcpage').hidden){e.preventDefault();open(true);}});}
+  document.addEventListener('keydown',e=>{if(e.key==='/'&&!/input|textarea|select/i.test(document.activeElement.tagName)&&$('trainpage').hidden&&$('srcpage').hidden&&$('rdpage').hidden){e.preventDefault();open(true);}});}
 
 /* layers panel: layer switches, per-layer info panels and labels */
 {const lp=$('layerpanel'),lb=$('layersbtn');
@@ -1759,6 +1807,8 @@ function srRun(go){const q=$('sr-q').value.trim();const local=srLocal(q);clearTi
  lbls.forEach(c=>c.addEventListener('change',()=>{applyLbl(c);sync($('lblall'),lbls);}));
  $('infoall').onchange=()=>{const v=$('infoall').checked;infos.forEach(c=>{c.checked=v;applyInfo(c);});};
  $('lblall').onchange=()=>{const v=$('lblall').checked;lbls.forEach(c=>{c.checked=v;applyLbl(c);});};
+ // start with only the railway and stations info panel and labels on
+ infos.forEach(c=>{c.checked=c.dataset.info==='legend';applyInfo(c);});lbls.forEach(c=>{c.checked=c.dataset.lbl==='rail';if(c.id!=='bo-num')applyLbl(c);});sync($('infoall'),infos);sync($('lblall'),lbls);
  document.addEventListener('pointerdown',e=>{if(!lp.hidden&&!lp.contains(e.target)&&!lb.contains(e.target)&&!e.target.closest('#map,#mapfx'))setOpen(false);});}
 const fsEl=()=>document.fullscreenElement||document.webkitFullscreenElement;
 function setFsState(on){const b=$('fsbtn');b.setAttribute('aria-pressed',String(on));b.title=on?'Exit full screen':'Full screen';}
@@ -2466,7 +2516,7 @@ function crashStats(){if($('crashlegend').hidden)return;const q=crashCorridorSha
 $('crashbtn').onclick=()=>{const on=crashG.style.display==='none';if(on)buildCrash();crashG.style.display=on?'':'none';$('crashbtn').setAttribute('aria-pressed',String(on));$('crashlegend').hidden=!on;if(on){crashLevel=-1;cullCrash();crashStats();}};
 
 // defaults: buses on with route numbers; trails and bike lanes off
-$('trailbtn').click();$('bo-num').checked=true;busNums=true;$('busbtn').click();
+$('trailbtn').click();$('bo-num').checked=false;busNums=false;$('busbtn').click();
 /* ---------- source and destination heatmap: commuter homes spread over residential land, workplaces over Census job locations ---------- */
 let FHEAT='off';
 const heatImg=el('image',{class:'fheat',preserveAspectRatio:'none'},flowG);flowG.insertBefore(heatImg,flowG.firstChild);
@@ -3389,7 +3439,7 @@ function renderTrains(){const k=TRAIN_SEL,t=TYPES[k],sp=TRAIN_SPEC[k],F=TRAIN_FO
   // fit short trains to the panel (up to 2.1× for detail); long ones keep at least 1.2× and scroll
   const z=Math.max(1.2,Math.min(2.1,box/W));sv.style.width=(W*z)+'px';
   const ch=d=>{TRAIN_CARS[k]=Math.max(F.min,Math.min(F.max,n+d*step));renderTrains();};$('tp-minus').onclick=()=>ch(-1);$('tp-plus').onclick=()=>ch(1);}
-function openTrains(on){const pg=$('trainpage');if(on&&$('srcpage')&&!$('srcpage').hidden)openSources(false);pg.hidden=!on;document.querySelector('.app').classList.toggle('tpopen',on||($('srcpage')&&!$('srcpage').hidden));if(on){renderTrains();pg.scrollTop=0;$('tp-back').focus();if(location.hash!=='#trains')history.replaceState(null,'','#trains');}
+function openTrains(on){const pg=$('trainpage');if(on&&$('srcpage')&&!$('srcpage').hidden)openSources(false);if(on&&$('rdpage')&&!$('rdpage').hidden)openRidership(false);pg.hidden=!on;document.querySelector('.app').classList.toggle('tpopen',on||($('srcpage')&&!$('srcpage').hidden)||($('rdpage')&&!$('rdpage').hidden));if(on){renderTrains();pg.scrollTop=0;$('tp-back').focus();if(location.hash!=='#trains')history.replaceState(null,'','#trains');}
   else if(location.hash==='#trains')history.replaceState(null,'',location.pathname+location.search);}
 $('btn-trains').onclick=()=>openTrains(true);$('tp-back').onclick=()=>{openTrains(false);$('btn-trains').focus();};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('trainpage').hidden)openTrains(false);});
@@ -3404,7 +3454,7 @@ const SRC=[
   {n:'Photon and Nominatim (OpenStreetMap geocoders)',u:'https://photon.komoot.io/',use:'Map search for addresses and places that are not on the map.',d:'Photon is tried first, with Nominatim as the fallback; results are limited to Vancouver Island.',lim:'Needs an internet connection; some hosts block these lookups.'}]},
  {g:'People and places',items:[
   {n:'Statistics Canada, 2021 Census: population by dissemination area',u:'https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/index.cfm?Lang=E',use:'Population layer: people per km² of land, homes, and how many people live within 800 m and 3 km of a served station.',d:'1,374 dissemination areas in the seven Island census divisions (839,786 people). Boundaries from the 2021 cartographic boundary file; counts from the Census Profile. Pulled 21 October 2026.',lim:'Two areas are suppressed by Statistics Canada. Station distances are straight lines to each area\'s centre.'},
-  {n:'Statistics Canada, 2021 Census: municipal populations',use:'Municipality labels on the Population layer, and the population weighting for roads without a traffic count.'},
+  {n:'BC Stats: municipal and regional district population estimates, 2011–2024',u:'https://www2.gov.bc.ca/gov/content/data/statistics/people-population-community/population/population-estimates',use:'Grows every dissemination area from 2021 to 2024, municipality labels, and the growth applied to commuting and travel-survey trips.',d:'Each dissemination area takes its municipality\'s 2021→2024 change (Langford +18.5%, Colwood +11.9%, Victoria +6.8%, Nanaimo +6.4%, Courtenay +8.6%, Port Alberni +3.9%); areas outside municipalities take the rest of their regional district. Areas were matched to municipalities with OpenStreetMap municipal boundaries. Island total 839,786 (2021 Census) → about 884,700 (2024).',lim:'Growth is assumed even across each municipality. Jobs stay at the 2021 Census.'},
   {n:'Statistics Canada, 2021 Census: place of work',use:'Jobs layer, by census tract in Victoria and Nanaimo and by municipality elsewhere.'},
   {n:'Key destinations',use:'69 airports, ferry and cruise terminals, campuses, hospitals, defence sites, the Legislature and major shopping centres.',d:'Locations from OpenStreetMap; passenger and enrolment notes from the airport authorities, BC Ferries, the UVic 2023 Transportation Survey and the CRD 2022 travel survey.'}]},
  {g:'Travel',items:[
@@ -3413,6 +3463,13 @@ const SRC=[
   {n:'UVic 2023 Transportation Survey',use:'Trips to UVic; Camosun and VIU are scaled from it per student and staff member.'},
   {n:'Airport passenger totals',use:'Trips to Victoria, Comox and Nanaimo airports (2024–25 figures).'},
   {n:'BC Ferries',u:'https://www.bcferries.com/routes-fares/schedules',use:'Ferry sailings and terminal traffic pulses at 12 Island terminals.',d:'Seasonal schedules for a Wednesday between 14 October and 11 November 2026; traffic for the year to March 2025.'}]},
+ {g:'Timetables',items:[
+  {n:'Timetable optimisation and operating cost model (this planner)',use:'The two "Optimised" starting timetables.',d:'Service on each line was added step by step, each time choosing the change that bought the most extra riders per dollar in the planner\'s travel-demand model, then refined by adding, removing and swapping trains. Costs (2026 C$): $300 per train-hour (×1.15 for layovers) and $8 per train-km, $1.25M a year per trainset (including the purchase spread over 30 years at 4%), 15% spare sets, $3M a year of fixed overhead, 295 weekday-equivalent days. Applied to the ICF business-case timetable they give about $24M a year to run (before buying trains), against ICF\'s $12.8M a year in 2020 dollars, so they are on the cautious side.',lim:'Transfers between trains are not modelled, so connecting regional journeys are understated. Results rest on the demand model\'s assumptions; the cost rates are planning values, not an operator\'s quote.'}]},
+ {g:'Ridership forecast',hid:1,items:[
+  {n:'Shantz, Casello, Woudsma and Guerra (2022), commuter rail ridership elasticities on the GO Transit network',u:'https://journals.sagepub.com/doi/full/10.1177/03611981221082573',use:'Elasticities for the direct demand cross-check.',d:'61 GO stations, 2016–2019, by period: population 0.28–0.77, service 0.21–0.57, employment 0.34–0.40, park-and-ride 0.04.'},
+  {n:'West Coast Express (TransLink)',u:'https://en.wikipedia.org/wiki/West_Coast_Express',use:'Calibrates the direct demand cross-check.',d:'About 7,200 weekday riders (Q1 2026) on 5 trains each way from 7 suburban stations; station catchments from BC Stats 2024 municipal populations (Maple Ridge and Coquitlam split between their stations).'},
+  {n:'City of Vancouver, Downtown West and Downtown East study areas',u:'https://vancouver.ca/files/cov/study-area-downtown-west.pdf',use:'Jobs reached by West Coast Express riders (156,530 in 2016) in the direct demand calibration.'},
+  {n:'Ridership model (this planner)',use:'The Ridership page: weekday trips on the trains, overall and by region and station.',d:'An incremental nested logit pivoting on observed transit shares. Markets: the CRD Origin-Destination Household Travel Survey matrix (all purposes, half of each direction leaving from home) and 2021 Census commuting flows with an end outside the CRD, plus non-work trips. Access uses dissemination-area population and job points; train times and frequency come from the current timetable; bus waits from the feeder-bus timing.',lim:'A sketch-planning estimate for comparing plans, not an investment-grade forecast. Trips made inside one Census subdivision outside the CRD are not counted, so regional ridership is understated. Calibrate against a peer system or survey before relying on the totals.'}]},
  {g:'Ferries, flights and freight',items:[
   {n:'BC Ferries seasonal schedules',u:'https://www.bcferries.com/routes-fares/schedules',use:'Ferries layer: every sailing on the 14 BC Ferries routes serving Vancouver Island for Wednesday 21 October 2026.',d:'Read 21 October 2026. Date-specific sailings ("only on", "not available on") are applied for that day. Southern Gulf Islands and multi-stop sailings are shown to their last stop.',lim:'Routes are drawn approximately; vessel positions are simulated from departure and arrival times.'},
   {n:'BC Ferries Annual Report to the BC Ferries Commissioner, fiscal 2025',u:'https://www.bcferries.com/web_image/images/h62/h76/9048649269278.pdf',use:'Ferry ridership: passengers, car equivalents and sailings by route, April 2024 – March 2025.'},
@@ -3440,15 +3497,229 @@ const SRC=[
   {n:'FORT-VI trail study (2023) and CRD E&N Rail Trail',use:'Cost per km of trail along the corridor.'},
   {n:'Canadian project examples',use:'Crossing gates (CN Otway Road, Prince George, 2021) and rock work (Malahat Village highway project, 2017), escalated to 2026.'}]}];
 function renderSources(){const lnk=s=>s.u?`<a href="${s.u}" target="_blank" rel="noopener">${esc(s.n)}<span aria-hidden="true"> ↗</span></a>`:esc(s.n);
-  $('src-body').innerHTML=SRC.map(g=>`<section class="srcg${g.exp?' src-exp':''}"><h2>${esc(g.g)}</h2><div class="srclist">${g.items.map(s=>`<article class="srcit"><h3>${lnk(s)}</h3><p><b>Used for:</b> ${esc(s.use)}</p>${s.d?`<p>${esc(s.d)}</p>`:''}${s.lim?`<p class="m"><b>Limits:</b> ${esc(s.lim)}</p>`:''}${s.lic?`<p class="m">${esc(s.lic)}</p>`:''}</article>`).join('')}</div></section>`).join('')
+  $('src-body').innerHTML=SRC.filter(g=>!g.hid).map(g=>`<section class="srcg${g.exp?' src-exp':''}"><h2>${esc(g.g)}</h2><div class="srclist">${g.items.map(s=>`<article class="srcit"><h3>${lnk(s)}</h3><p><b>Used for:</b> ${esc(s.use)}</p>${s.d?`<p>${esc(s.d)}</p>`:''}${s.lim?`<p class="m"><b>Limits:</b> ${esc(s.lim)}</p>`:''}${s.lic?`<p class="m">${esc(s.lic)}</p>`:''}</article>`).join('')}</div></section>`).join('')
    +`<section class="srcg"><h2>Simulated</h2><p class="m">Riders, car trips avoided, CO₂ and on-time figures, and train positions are simulated from these sources and the timetable. They are estimates for comparing options, not forecasts.</p></section>`;}
-function openSources(on){const pg=$('srcpage');if(on&&!$('trainpage').hidden)openTrains(false);pg.hidden=!on;document.querySelector('.app').classList.toggle('tpopen',on||!$('trainpage').hidden);
+function openSources(on){const pg=$('srcpage');if(on&&!$('trainpage').hidden)openTrains(false);if(on&&!$('rdpage').hidden)openRidership(false);pg.hidden=!on;document.querySelector('.app').classList.toggle('tpopen',on||!$('trainpage').hidden||!$('rdpage').hidden);
   if(on){renderSources();pg.scrollTop=0;$('src-back').focus();if(location.hash!=='#sources')history.replaceState(null,'','#sources');}
   else if(location.hash==='#sources')history.replaceState(null,'',location.pathname+location.search);}
 $('btn-sources').onclick=()=>openSources(true);$('src-back').onclick=()=>{openSources(false);$('btn-sources').focus();};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('srcpage').hidden)openSources(false);});
 window.addEventListener('hashchange',()=>openSources(location.hash==='#sources'));
 if(location.hash==='#sources')openSources(true);
+/* ---------- Ridership forecast page (V60): pivot-point (incremental) logit mode choice ----------
+   Markets: CRD 2022 Origin-Destination survey (all trips between 19 CRD districts, 24 h) and 2021 Census commuting flows for every pair with
+   an end outside the CRD (plus an adjustable allowance for non-work trips). Each zone's homes (2021 Census dissemination areas) and jobs
+   (2021 Census place of work) are split by their best station and access time (walk, bus, or drive and park at the home end).
+   Rail utility is set relative to the car on generalised time (in-vehicle + weighted wait and access + money/VOT + a rail penalty):
+   P_rail = A · s_car·e^ΔU / (1 + s_car·e^ΔU), with ΔU = β(GT_car − GT_rail); A = availability from the number of trains (direct trains only).
+   Riders come from each existing mode in proportion to its share; induced trips added on top. */
+const RD_KEY='island-rail-ridership';
+const RD_IN=[
+ {g:'Fares and costs',k:'fare',n:'Fare within Greater Victoria',d:2.5,u:'$',st:.25},
+ {g:'Fares and costs',k:'fareBase',n:'Regional fare, base',d:2.5,u:'$',st:.25},
+ {g:'Fares and costs',k:'fareKm',n:'Regional fare, per km',d:.10,u:'$/km',st:.01},
+ {g:'Fares and costs',k:'park',n:'Parking downtown Victoria',d:14,u:'$/day',st:1},
+ {g:'Fares and costs',k:'carKm',n:'Car cost drivers notice',d:.22,u:'$/km',st:.01},
+ {g:'Fares and costs',k:'vot',n:'Value of time',d:18,u:'$/h',st:1},
+ {g:'Travel conditions',k:'wsDelay',n:'West Shore – Victoria congestion (daily average)',d:10,u:'min',st:1},
+ {g:'Travel conditions',k:'bonus',n:'Train preferred over bus (central case)',d:5,u:'min',st:1},
+ {g:'Travel conditions',k:'theta',n:'Train–bus similarity (nest)',d:.6,u:'0–1',st:.05},
+ {g:'Travel conditions',k:'floor',n:'Least transit share where buses are rare',d:2,u:'%',st:.5},
+ {g:'Travel conditions',k:'beta',n:'Time sensitivity',d:.04,u:'per min',st:.005},
+ {g:'Markets',k:'nwscale',n:'Scale on non-work trips (1 = matches the highway counts)',d:1,u:'×',st:.1},
+ {g:'Markets',k:'occ',n:'People per vehicle at the highway counts',d:1.3,u:'',st:.05},
+ {g:'Markets',k:'thru',n:'Highway traffic not counted as local travel (trucks, ferry and visitor through trips)',d:20,u:'%',st:1},
+ {g:'Markets',k:'induced',n:'New trips the railway creates',d:5,u:'%',st:1},
+ {g:'Markets',k:'ramp',n:'First-year ridership (share of mature)',d:70,u:'%',st:5},
+ {g:'Markets',k:'annual',n:'Weekday-equivalent days a year',d:295,u:'days',st:5}];
+const RDP={};RD_IN.forEach(x=>RDP[x.k]=x.d);try{Object.assign(RDP,JSON.parse(localStorage.getItem(RD_KEY)||'{}'));}catch(_){}
+const RD_REG=[['crd','Greater Victoria'],['cvrd','Cowichan Valley'],['nan','Nanaimo area'],['ocs','Oceanside'],['cmx','Comox Valley'],['alb','Alberni Valley']];
+const RD_REGN=Object.fromEntries(RD_REG);
+let RD_LAST=null,RD_SIG='';
+// which region a station is in: census division of the nearest dissemination area (Oceanside = Nanaimo RD west of Nanoose)
+function rdRegion(c){const s=STATIONS[c];buildDA();let best=null,bd=1e9;for(const d of DA){const q=Math.hypot(d.c[0]-s.xy[0],d.c[1]-s.xy[1]);if(q<bd){bd=q;best=d;}}
+  const cd=best?best.id.slice(2,4):'17',lon=unP(s.xy)[0];return cd==='17'?'crd':cd==='19'?'cvrd':cd==='21'?(lon<-124.15?'ocs':'nan'):cd==='26'?'cmx':cd==='23'?'alb':'nan';}
+function rdSig(){const s=JSON.stringify([PLAN.trips.filter(t=>t.set&&t.cls!=='Freight').map(t=>t.stops.map(x=>x.c+x.t)),typeof FEED_ACT!=='undefined'&&FEED_ACT,RDP]);let h=0;for(let i=0;i<s.length;i++)h=h*31+s.charCodeAt(i)|0;return h+':'+s.length;}
+// train level of service between station pairs: direct trains only
+function rdLOS(){const M=new Map();for(const tr of PLAN.trips){if(!tr.set||tr.cls==='Freight'||tr.cls==='Empty')continue;const st=tr.stops;
+    for(let i=0;i<st.length;i++)for(let j=i+1;j<st.length;j++){const s=STATIONS[st[i].c],t=STATIONS[st[j].c];if(!s||!t||s.type!=='pax'||t.type!=='pax')continue;
+      const k=st[i].c+'>'+st[j].c;let o=M.get(k);if(!o){o={n:0,ivt:0,deps:[]};M.set(k,o);}o.n++;o.ivt+=st[j].t-st[i].t;o.deps.push(st[i].t);}}
+  for(const o of M.values()){o.ivt/=o.n;o.deps.sort((a,b)=>a-b);const span=o.deps[o.deps.length-1]-o.deps[0];o.hw=o.n>1?Math.max(5,span/(o.n-1)):60;o.wait=Math.min(20,o.hw/2);}return M;}
+// access from one point to each served station: home end may walk, take a bus or drive and park; the other end walks or takes a bus
+function rdAccess(xy,served,home,busWait){let best=null;
+  for(const c of served){const s=STATIONS[c];const km=Math.hypot(s.xy[0]-xy[0],s.xy[1]-xy[1])/PX_PER_KM*1.25;let g=1e9;
+    if(km<=1.2)g=Math.min(g,km*12*1.75);
+    if(km<=5)g=Math.min(g,4*1.75+(busWait[c]??10)*2+km/20*60*1.2+5);
+    if(home&&km<=12&&c!=='VIC')g=Math.min(g,km/40*60+4+3);
+    if(g<1e8&&(!best||g<best.g))best={c,g};}
+  return best;}
+// zone profiles: share of a zone's homes (or jobs) best served by each station, with mean access generalised time
+function rdProfiles(zones,pts,served,home,busWait,zoneOf){const P=zones.map(()=>({tot:0,m:new Map()}));
+  for(const p of pts){const z=zoneOf(p);if(z<0)continue;P[z].tot+=p.w;const a=rdAccess(p.xy,served,home,busWait);if(!a)continue;let o=P[z].m.get(a.c);if(!o){o={w:0,g:0};P[z].m.set(a.c,o);}o.w+=p.w;o.g+=a.g*p.w;}
+  return P.map(p=>[...p.m].map(([c,o])=>({c,f:p.tot?o.w/p.tot:0,g:o.g/o.w})).filter(x=>x.f>.002));}
+const rdNearest=(xy,zs,ok)=>{let b=-1,bd=1e9;zs.forEach((z,i)=>{if(ok&&!ok(z,i))return;const d=(z.xy[0]-xy[0])**2+(z.xy[1]-xy[1])**2;if(d<bd){bd=d;b=i;}});return b;};
+const rdCarT=(km,ws,P)=>km/Math.min(80,25+1.2*km)*60+(ws?P.wsDelay:0);
+function rdCarGT(a,b,km,wsCross,parkDay,P){return rdCarT(km,wsCross,P)+6+(km*P.carKm+parkDay/2)/P.vot*60;}
+function rdFare(s,t,P){const reg=x=>RD_STREG[x];if(reg(s)==='crd'&&reg(t)==='crd')return P.fare;const A=STATIONS[s],B=STATIONS[t];
+  const km=A.line===B.line?Math.abs(A.k-B.k):Math.hypot(A.xy[0]-B.xy[0],A.xy[1]-B.xy[1])/PX_PER_KM*1.15;return P.fareBase+P.fareKm*km;}
+
+/* non-work trips outside the CRD, calibrated so person trips crossing each highway count match the count (2024–25 MoTI counts).
+   CRD zones sit south of every count; island zones (ferry-served) cross none; other zones are placed by where they meet the main line. */
+const RD_SCREENS=[['P-11-900NS','Malahat'],['P-12-4NS','Mt. Sicker (Duncan–Chemainus)'],['P-12-3NS','Cedar (Ladysmith–Nanaimo)'],['P-14-1NS','south of Parksville'],['P-14-5NS','Buckley Bay (with Route 19A)','P-14-4NS']];
+let RD_NWC=null;
+function rdNonwork(P){const key=P.occ+'|'+P.thru;if(RD_NWC&&RD_NWC.key===key)return RD_NWC;
+  const M=LINES.MAIN,kAt=ll=>kOnLine(M,ll).k,ISL=/Salt Spring|Gulf Islands|Gabriola|Quadra|Cortes|Sointula|Alert Bay/,sz=FN.map(z=>ISL.test(z.n)?NaN:z.cd==='17'?0:kAt(unP(z.xy)));const tot=id=>{const t=TDATA[id];return t?t.P.reduce((a,b)=>a+b,0)+t.N.reduce((a,b)=>a+b,0):0;};
+  const scr=RD_SCREENS.map(([id,n,id2])=>{const k=kAt(TDATA[id].p);const cnt=tot(id)+(id2?tot(id2):0);let com=0;
+    for(const [o,d,t] of FLOWS.OD){if((sz[o]-k)*(sz[d]-k)<0)com+=t*csdGrow(FN[o].csd)*.9*2;}
+    const target=cnt*P.occ*(1-P.thru/100);return{n,k,cnt,com,target,f:com>0?Math.max(0,target/com-1):1};});const fm=scr.reduce((a,s)=>a+s.f,0)/scr.length;
+  const f=new Map();for(const [o,d] of FLOWS.OD){const xs=scr.filter(s=>(sz[o]-s.k)*(sz[d]-s.k)<0);f.set(o+'>'+d,xs.length?xs.reduce((a,s)=>a+s.f,0)/xs.length:fm);}
+  RD_NWC={key,f,scr};return RD_NWC;}
+let RD_STREG={},RD_PC=null,RD_SG=null;
+function rdRun(P,detail){buildDA();const served=[...servedStops()];RD_STREG={};for(const c of served)RD_STREG[c]=rdRegion(c);
+  const busWait={};const FR2=typeof FEED_RES!=='undefined'&&FEED_RES?(FEED_ACT?FEED_RES.after.st:FEED_RES.before.st):null;for(const c of served){const w=FR2&&FR2.get(c);busWait[c]=w!=null?Math.min(20,w/2+3):10;}
+  const los=rdLOS();
+  const homes=DA.filter(d=>d.pop>0).map(d=>({xy:d.c,w:d.pop,cd:d.id.slice(2,4)})),jobs=JOBPTS.map(p=>({xy:p.xy,w:p.j}));
+  // zones: CRD survey districts 0–18 and census subdivisions outside the CRD
+  const SZ=SN.slice(0,19),FZ=FN;
+  // access profiles depend only on the stations served and the bus waits at them: cached
+  const pk=served.slice().sort().join()+'|'+served.map(c=>busWait[c].toFixed(1)).join();if(!RD_PC||RD_PC.k!==pk)RD_PC={k:pk,
+    sHome:rdProfiles(SZ,homes.filter(h=>h.cd==='17'),served,true,busWait,p=>rdNearest(p.xy,SZ)),
+    sOth:rdProfiles(SZ,[...homes.filter(h=>h.cd==='17').map(h=>({...h,w:h.w*.5})),...jobs],served,false,busWait,p=>rdNearest(p.xy,SZ)),
+    fHome:rdProfiles(FZ,homes,served,true,busWait,p=>rdNearest(p.xy,FZ,z=>z.cd===p.cd)),
+    fJob:rdProfiles(FZ,jobs,served,false,busWait,p=>rdNearest(p.xy,FZ))};
+  const {sHome,sOth,fHome,fJob}=RD_PC;
+  const R={tot:0,from:{car:0,bus:0,act:0,ind:0},board:{},alight:{},reg:{},regPair:new Map(),pair:new Map(),seg:new Map(),markets:{crd:0,census:0,nonwork:0},per:{},rev:0,carTrips:0,carKm:0};
+  const SWS2=new Set([13,14,15,16]),SCORE2=new Set([4,5,6,7,8,9,10,11,12]);
+  const add=(s,t,v,sc,sb,sa,mk,km,per,fr)=>{R.tot+=v;R.rev+=v*(fr||0);if(per)R.per[per]=(R.per[per]||0)+v;R.board[s]=(R.board[s]||0)+v;R.alight[t]=(R.alight[t]||0)+v;const rs=RD_STREG[s],rt=RD_STREG[t];
+    R.reg[rs]=R.reg[rs]||{b:0,a:0,within:0};R.reg[rt]=R.reg[rt]||{b:0,a:0,within:0};R.reg[rs].b+=v;R.reg[rt].a+=v;if(rs===rt)R.reg[rs].within+=v;
+    const rk=rs+'>'+rt;R.regPair.set(rk,(R.regPair.get(rk)||0)+v);const pk=s+'>'+t;R.pair.set(pk,(R.pair.get(pk)||0)+v);R.markets[mk]+=v;
+    R.from.car+=sc;R.from.bus+=sb;R.from.act+=sa;R.carTrips+=sc/1.25;R.carKm+=sc/1.25*km;};
+  // time of day: AM 05:30–09:00, MD 09:00–15:00, PM 15:00–18:30, EV 18:30–23:00 (departure time at the boarding station)
+  const PW={AM:[330,540],MD:[540,900],PM:[900,1110],EV:[1110,1380]};
+  const waitP=(L,p)=>{const [a,b]=PW[p];let n=0,gap=1e9;for(const t of L.deps){if(t>=a&&t<b)n++;else gap=Math.min(gap,t<a?a-t:t-b+1);}
+    if(n){const hw=(b-a)/n;return Math.min(45,hw<=20?hw/2:10+(hw-20)*.3);}return gap<=60?30+gap*.5:null;};
+  const wc=new Map(),W=(k,p)=>{const key=k+p;if(wc.has(key))return wc.get(key);const L=los.get(k);const v=L?waitP(L,p):null;wc.set(key,v);return v;};
+  // incremental nested logit on round trips: the train joins the bus in a transit nest and is judged on the outbound and return legs
+  // together, in the periods they are made, so a morning train is only useful with a train home. The nest's gain lifts today's transit
+  // share, pivoting on observed shares.
+  const tour=(T,po,pd,pOut,pRet,sc,sb,sa,carGT,mk,km,carT)=>{if(T<=0||!po.length||!pd.length)return;const tot=sc+sb+sa;if(tot<=0)return;
+    const st0=Math.max(sb/tot,P.floor/100),busGT=carT*(km>25?1.8:1.6)+(km>25?30:0)+(mk==='crd'?7:10)*2+8*1.75+(km>25?5:2.5)/P.vot*60,th=P.theta;
+    for(const a of po)for(const b of pd){if(a.c===b.c)continue;const ko=a.c+'>'+b.c,kr=b.c+'>'+a.c;const Lo=los.get(ko),Lr=los.get(kr);if(!Lo||!Lr)continue;
+      const wo=W(ko,pOut),wr=W(kr,pRet);if(wo==null||wr==null)continue;const w=T*a.f*b.f;if(w<=0)continue;
+      const fd=rdFare(a.c,b.c,P),fare=fd/P.vot*60,gt=a.g+b.g+fare+(wo*2+Lo.ivt+wr*2+Lr.ivt)/2;const x=Math.max(-40,Math.min(40,(P.beta*(busGT-gt)+P.beta*P.bonus)/th));
+      const q=1/(1+Math.exp(-x)),dU=th*(x>0?x+Math.log1p(Math.exp(-x)):Math.log1p(Math.exp(x)));const e=st0*Math.exp(dU),pt=e/(e+1-st0);
+      const ak=km<4?.25:.5,oth=(sc+sa*ak)||1,gain=Math.max(0,pt-st0)*w*(sc+sa*ak)/((sc+sa)||1),rail=(st0*w+gain)*q;const vc=Math.min(rail,gain*sc/oth),va=Math.min(rail-vc,gain*sa*ak/oth),vb=Math.max(0,rail-vc-va);
+      if(rail>0){add(a.c,b.c,rail,vc,vb,va,mk,km,pOut,fd);add(b.c,a.c,rail,vc,vb,va,mk,km,pRet,fd);}}};
+  // CRD survey by period (AM, midday, PM, rest of day): a morning trip is the outbound leg of a tour that returns in the PM peak, a PM trip
+  // the return leg of one that left in the AM peak; midday and evening trips are half outbound, half return, within the same period.
+  // Each survey trip is half a tour, so daily trips are kept.
+  // grow the 2022 survey to 2024 by each district's population change (both ends)
+  if(!RD_SG){const a=SN.slice(0,19).map(()=>[0,0]);for(const d of DA){if(!d.pop)continue;const z=rdNearest(d.c,SZ);if(z<0)continue;a[z][0]+=d.pop;a[z][1]+=d.pop/(d.g22||1);}RD_SG=a.map(([x,y])=>y?x/y:1);}
+  const SP=[['AM',SURV.AM],['MD',SURV.MD],['PM',SURV.PM]];
+  for(let o=0;o<19;o++)for(let d=0;d<19;d++){if(o===d||!SURV.M[o][d])continue;const sc=Math.min(.85,SN[o].drv+.1),sb=SN[o].trs,sa=Math.max(0,1-sc-sb);
+    const km=Math.hypot(SN[o].xy[0]-SN[d].xy[0],SN[o].xy[1]-SN[d].xy[1])/PX_PER_KM*1.25;const ws=(SWS2.has(o)&&SCORE2.has(d))||(SCORE2.has(o)&&SWS2.has(d));
+    const park=d===4?P.park*.6:(d===5||d===6)?P.park*.25:0,parkR=o===4?P.park*.6:(o===5||o===6)?P.park*.25:0;const cg=rdCarGT(o,d,km,ws,(park+parkR)/2,P),ct=rdCarT(km,ws,P);
+    const sg=Math.sqrt(RD_SG[o]*RD_SG[d]);const v={AM:SURV.AM[o][d]*sg,MD:SURV.MD[o][d]*sg,PM:SURV.PM[o][d]*sg};v.EV=Math.max(0,SURV.M[o][d]*sg-v.AM-v.MD-v.PM);
+    if(v.AM)tour(v.AM/2,sHome[o],sOth[d],'AM','PM',sc,sb,sa,cg,'crd',km,ct);// leaves home at o in the morning
+    if(v.PM)tour(v.PM/2,sHome[d],sOth[o],'AM','PM',sc,sb,sa,cg,'crd',km,ct);// returning home to d: the tour left d in the morning
+    for(const p of ['MD','EV'])if(v[p]){tour(v[p]/4,sHome[o],sOth[d],p,p,sc,sb,sa,cg,'crd',km,ct);tour(v[p]/4,sHome[d],sOth[o],p,p,sc,sb,sa,cg,'crd',km,ct);}}
+  // Census commuting: pairs with an end outside the CRD, as round trips (85% out in the AM peak and home in the PM peak, 15% midday and evening),
+  // plus non-work round trips spread through the day
+  const NWC=rdNonwork(P);R.screens=NWC.scr;const NWT=[['AM','PM',.4],['AM','MD',.15],['MD','PM',.25],['MD','EV',.1],['PM','EV',.1]];
+  for(const [o,d,t,car,tr,act] of FLOWS.OD){const A=FN[o],B=FN[d];if(A.cd==='17'&&B.cd==='17')continue;const km=Math.hypot(A.xy[0]-B.xy[0],A.xy[1]-B.xy[1])/PX_PER_KM*1.25;
+    const park=B.csd==='17034'?P.park*.5:B.csd==='21007'?3:0;const cg=rdCarGT(o,d,km,false,park/2,P);const T=t*csdGrow(A.csd)*.9;const ct=rdCarT(km,false,P);
+    tour(T*.85,fHome[o],fJob[d],'AM','PM',car,tr,act,cg,'census',km,ct);tour(T*.15,fHome[o],fJob[d],'MD','EV',car,tr,act,cg,'census',km,ct);
+    const N=T*NWC.f.get(o+'>'+d)*P.nwscale;if(N>0)for(const [p1,p2,sh] of NWT)tour(N*sh,fHome[o],fHome[d],p1,p2,car,tr,act,rdCarGT(o,d,km,false,0,P),'nonwork',km,ct);}
+  const ind=R.tot*P.induced/100;R.from.ind=ind;R.totAll=R.tot+ind;R.rev*=R.tot?R.totAll/R.tot:1;
+  if(detail){// spread induced trips like the rest; segment loads along each train's stopping pattern
+    const k=R.tot?R.totAll/R.tot:1;for(const o of [R.board,R.alight])for(const c in o)o[c]*=k;for(const r of Object.values(R.reg)){r.b*=k;r.a*=k;r.within*=k;}for(const [x,v] of R.regPair)R.regPair.set(x,v*k);for(const [x,v] of R.pair)R.pair.set(x,v*k);
+    for(const [pk,v] of R.pair){const [s,t]=pk.split('>');const tr=PLAN.trips.find(q=>q.set&&q.cls!=='Freight'&&q.stops.findIndex(x=>x.c===s)>-1&&q.stops.findIndex(x=>x.c===t)>q.stops.findIndex(x=>x.c===s));if(!tr)continue;
+      const st=tr.stops.map(x=>x.c);const i0=st.indexOf(s),i1=st.indexOf(t);for(let i=i0;i<i1;i++){const key=st[i]+'>'+st[i+1];R.seg.set(key,(R.seg.get(key)||0)+v);}}}
+  R.served=served;return R;}
+/* ---------- direct demand cross-check (V62) ----------
+   Station boardings predicted from what surrounds each station, not from travel times:
+     round trips made from station s each weekday = k × P^a × N^b × D^c
+   P = 2024 residents whose nearest served station is s (within 10 km), N = trains a weekday each way at s, D = jobs within 1.5 km of the
+   stations s reaches directly (at least one train a day, 3 km or more away). Each round trip is two boardings: one at s and one at the
+   destination, shared by jobs × trains. Elasticities from the GO Transit station study (Shantz et al. 2022: population 0.28–0.77,
+   service 0.21–0.57, employment 0.34–0.40). k is set so the same formula reproduces West Coast Express (5 trains each way, 7 suburban
+   stations, downtown Vancouver's 156,530 jobs; about 7,200 weekday riders, Q1 2026). */
+const DD_WCE=[['Mission City',46226],['Port Haney',53245],['Maple Meadows',53245],['Pitt Meadows',21402],['Port Coquitlam',69306],['Coquitlam Central',87124],['Moody Centre',38942]];
+const DD_CASES={low:{a:.3,b:.3,c:.4},central:{a:.45,b:.45,c:.5},high:{a:.6,b:.57,c:.6}};
+function rdDirect(){buildDA();const served=[...servedStops()];const los=rdLOS();const out={};
+  const dep={};for(const tr of PLAN.trips){if(!tr.set||tr.cls==='Freight'||tr.cls==='Empty')continue;tr.stops.slice(0,-1).forEach(x=>{if(STATIONS[x.c]&&STATIONS[x.c].type==='pax')dep[x.c]=(dep[x.c]||0)+1;});}
+  const kmS=(a,b)=>Math.hypot(STATIONS[a].xy[0]-STATIONS[b].xy[0],STATIONS[a].xy[1]-STATIONS[b].xy[1])/PX_PER_KM;
+  const jobs15=c=>{const s=STATIONS[c],r=1.5*PX_PER_KM;let j=0;for(const p of JOBPTS)if(Math.hypot(p.xy[0]-s.xy[0],p.xy[1]-s.xy[1])<r)j+=p.j;return j;};
+  const J={};for(const c of served)J[c]=jobs15(c);
+  const Pc={};for(const c of served)Pc[c]=0;const r10=10*PX_PER_KM;
+  for(const da of DA){if(!da.pop)continue;let b=null,bd=1e9;for(const c of served){const s=STATIONS[c];const dd=Math.hypot(s.xy[0]-da.c[0],s.xy[1]-da.c[1]);if(dd<bd){bd=dd;b=c;}}if(b&&bd<r10)Pc[b]+=da.pop;}
+  for(const [nm2,cs] of Object.entries(DD_CASES)){
+    const kW=3600/DD_WCE.reduce((t,[,p])=>t+Math.pow(p,cs.a)*Math.pow(5,cs.b)*Math.pow(156530,cs.c),0);
+    const B={};let tot=0;for(const c of served)B[c]=0;
+    for(const s of served){const N=(dep[s]||0)/2;if(!N||!Pc[s])continue;const T=served.filter(t=>t!==s&&kmS(s,t)>=3&&(los.get(s+'>'+t)||{n:0}).n>=1);
+      const D=T.reduce((a,t)=>a+J[t],0);if(!D)continue;const H=kW*Math.pow(Pc[s],cs.a)*Math.pow(N,cs.b)*Math.pow(D,cs.c);
+      B[s]+=H;const wsum=T.reduce((a,t)=>a+J[t]*los.get(s+'>'+t).n,0);for(const t of T)B[t]+=H*J[t]*los.get(s+'>'+t).n/wsum;tot+=2*H;}
+    const reg={};for(const c of served){const r=rdRegion(c);reg[r]=(reg[r]||0)+B[c];}
+    out[nm2]={B,tot,reg,k:kW};}
+  out.P=Pc;out.J=J;out.N=Object.fromEntries(served.map(c=>[c,(dep[c]||0)/2]));return out;}
+function rdScen(){const P={...RDP};return{low:{...P,bonus:P.bonus-5,floor:P.floor*.5},central:P,high:{...P,bonus:P.bonus+5,floor:P.floor*1.5}};}
+function rdCalc(){const btn=$('rd-calc');btn.disabled=true;btn.textContent='Calculating…';
+  setTimeout(()=>{try{const S=rdScen();const C=rdRun(S.central,true),Lo=rdRun(S.low,false),Hi=rdRun(S.high,false);RD_LAST={C,lo:Lo.totAll,hi:Hi.totAll,DD:rdDirect(),at:new Date(),sim:hhmm(sim)};RD_SIG=rdSig();rdRender();}
+    catch(err){$('rd-out').innerHTML=`<div class="rdwarn">The calculation failed: ${esc(String(err&&err.message||err))}</div>`;}
+    btn.disabled=false;btn.textContent='Calculate';rdStale();},30);}
+const r10=v=>v>=1000?Math.round(v/100)*100:v>=100?Math.round(v/10)*10:Math.round(v);
+function rdRender(){const R=RD_LAST.C,P=RDP,tot=R.totAll;const f=v=>fmt(r10(v));
+  const regs=RD_REG.filter(([k])=>R.reg[k]);const pairs=[...R.pair].sort((a,b)=>b[1]-a[1]).slice(0,12);const segs=[...R.seg].sort((a,b)=>b[1]-a[1]);const top=segs[0];
+  const stns=R.served.map(c=>({c,b:R.board[c]||0,a:R.alight[c]||0})).sort((a,b)=>(b.b+b.a)-(a.b+a.a));
+  const bar=(v,m)=>`<i class="rdbar" style="width:${m?Math.max(2,v/m*100).toFixed(1):0}%"></i>`;const mx=Math.max(...regs.map(([k])=>R.reg[k].b),1),mxs=Math.max(...stns.map(s=>s.b+s.a),1);
+  $('rd-out').innerHTML=`
+   <div class="rdkpis"><div><b>${f(tot)}</b><span>weekday trips on the trains (central)</span></div><div><b>${f(RD_LAST.lo)}–${f(RD_LAST.hi)}</b><span>low – high range</span></div>
+    <div><b>${(tot*P.annual/1e6).toFixed(2)}M</b><span>trips a year when mature (${fmt(P.annual)} weekday-equivalent days)</span></div><div><b>${(tot*P.annual*P.ramp/100/1e6).toFixed(2)}M</b><span>first year (${P.ramp}% of mature)</span></div>
+    <div><b>${f(R.carTrips)}</b><span>car trips off the road each weekday</span></div><div><b>${f(R.carKm)}</b><span>car-km avoided each weekday</span></div><div><b>$${(R.rev*P.annual/1e6).toFixed(1)}M</b><span>fare revenue a year when mature</span></div></div>
+   <div class="m">Calculated ${RD_LAST.at.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})} for the current timetable (${PLAN.trips.filter(t=>t.set&&t.cls!=='Freight').length} passenger trips, ${R.served.length} stations served)${typeof FEED_ACT!=='undefined'&&FEED_ACT?', with buses timed to the trains':', with buses on the published schedule'}. A trip is one person riding one train, station to station.</div>
+   <h2>By region</h2>
+   <table class="rdt"><thead><tr><th>Region</th><th>Boardings</th><th></th><th>Alightings</th><th>Within the region</th><th>Share</th></tr></thead><tbody>
+    ${regs.map(([k,n])=>{const r=R.reg[k];return`<tr><td>${esc(n)}</td><td>${f(r.b)}</td><td class="rdbc">${bar(r.b,mx)}</td><td>${f(r.a)}</td><td>${f(r.within)}</td><td>${Math.round(r.b/tot*100)}%</td></tr>`;}).join('')}
+    <tr class="rdsum"><td>All regions</td><td>${f(tot)}</td><td></td><td>${f(tot)}</td><td>${f(regs.reduce((a,[k])=>a+R.reg[k].within,0))}</td><td>100%</td></tr></tbody></table>
+   <div class="rdcols"><div><h3>Between regions</h3><table class="rdt sm"><tbody>${[...R.regPair].filter(([k])=>{const [a,b]=k.split('>');return a!==b;}).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([k,v])=>{const [a,b]=k.split('>');return`<tr><td>${esc(RD_REGN[a])} → ${esc(RD_REGN[b])}</td><td>${f(v)}</td></tr>`;}).join('')||'<tr><td>No trips between regions</td></tr>'}</tbody></table></div>
+    <div><h3>Where riders come from</h3><table class="rdt sm"><tbody><tr><td>Would otherwise drive or be driven</td><td>${f(R.from.car)}</td></tr><tr><td>Would otherwise take the bus</td><td>${f(R.from.bus)}</td></tr><tr><td>Would otherwise walk or cycle</td><td>${f(R.from.act)}</td></tr><tr><td>New trips</td><td>${f(R.from.ind)}</td></tr></tbody></table>
+     <h3>Markets</h3><table class="rdt sm"><tbody><tr><td>Trips within Greater Victoria (CRD survey)</td><td>${f(R.markets.crd)}</td></tr><tr><td>Commutes with an end outside the CRD</td><td>${f(R.markets.census)}</td></tr><tr><td>Non-work trips outside the CRD</td><td>${f(R.markets.nonwork)}</td></tr></tbody></table>
+     <h3>By time of day</h3><table class="rdt sm"><tbody>${[['AM','Morning peak (to 09:00)'],['MD','Midday (09:00–15:00)'],['PM','Afternoon peak (15:00–18:30)'],['EV','Evening (after 18:30)']].map(([k,n])=>`<tr><td>${n}</td><td>${f((R.per[k]||0)*(R.tot?tot/R.tot:1))}</td></tr>`).join('')}</tbody></table></div></div>
+   ${R.screens?`<h3>Regional travel checked against highway counts</h3><table class="rdt sm"><thead><tr><th>Count</th><th>Vehicles a day</th><th>People travelling (model)</th><th>Non-work trips per commute</th></tr></thead><tbody>${R.screens.map(x=>`<tr><td>${esc(x.n)}</td><td>${fmt(Math.round(x.cnt))}</td><td>${fmt(Math.round(x.target))}</td><td>${x.f.toFixed(1)}</td></tr>`).join('')}</tbody></table>
+   <div class="m">Non-work trips outside the CRD are set so that commuters plus non-work travellers crossing each count equal the vehicles counted × ${P.occ} people per vehicle, less ${P.thru}% for trucks and ferry or visitor through traffic.</div>`:''}
+   ${RD_LAST.DD?(()=>{const D=RD_LAST.DD,g=x=>f(x||0),rg=(a,b)=>`${g(Math.min(a||0,b||0))}–${g(Math.max(a||0,b||0))}`;const regs2=RD_REG.filter(([k])=>R.reg[k]||D.central.reg[k]);
+    const st2=R.served.slice().sort((a,b)=>(D.central.B[b]+(R.board[b]||0))-(D.central.B[a]+(R.board[a]||0)));
+    return `<h2>Cross-check: direct demand model</h2>
+   <div class="m">A second, independent estimate that predicts boardings from what surrounds each station (residents, trains a day, jobs at the stations it reaches), calibrated so the same formula reproduces West Coast Express. It ignores travel times and today's travel patterns, so where the two disagree the gap shows how much the answer depends on the method.</div>
+   <div class="rdkpis"><div><b>${f(tot)}</b><span>mode-choice model (above)</span></div><div><b>${f(D.central.tot)}</b><span>direct demand, central</span></div><div><b>${rg(D.low.tot,D.high.tot)}</b><span>direct demand, range of elasticities</span></div></div>
+   <table class="rdt"><thead><tr><th>Region</th><th>Mode-choice boardings</th><th>Direct demand boardings</th><th>Direct demand range (elasticities)</th></tr></thead><tbody>
+    ${regs2.map(([k,n])=>`<tr><td>${esc(n)}</td><td>${g(R.reg[k]&&R.reg[k].b)}</td><td>${g(D.central.reg[k])}</td><td>${rg(D.low.reg[k],D.high.reg[k])}</td></tr>`).join('')}
+    <tr><td><b>All regions</b></td><td><b>${f(tot)}</b></td><td><b>${f(D.central.tot)}</b></td><td>${rg(D.low.tot,D.high.tot)}</td></tr></tbody></table>
+   <table class="rdt sm"><thead><tr><th>Station</th><th>Residents nearest (2024)</th><th>Trains each way</th><th>Mode-choice</th><th>Direct demand</th></tr></thead><tbody>
+    ${st2.map(c=>`<tr><td>${esc(nm(c))}</td><td>${fmt(Math.round(D.P[c]/100)*100)}</td><td>${D.N[c]%1?D.N[c].toFixed(1):D.N[c]}</td><td>${g(R.board[c])}</td><td>${g(D.central.B[c])} <span class="m">(${rg(D.low.B[c],D.high.B[c])})</span></td></tr>`).join('')}</tbody></table>`;})():''}
+   <h2>By station</h2><table class="rdt"><thead><tr><th>Station</th><th>Region</th><th>Boardings</th><th>Alightings</th><th></th></tr></thead><tbody>
+    ${stns.map(s=>`<tr><td>${esc(nm(s.c))}</td><td>${esc(RD_REGN[RD_STREG[s.c]]||'')}</td><td>${f(s.b)}</td><td>${f(s.a)}</td><td class="rdbc">${bar(s.b+s.a,mxs)}</td></tr>`).join('')}</tbody></table>
+   <div class="rdcols"><div><h3>Busiest station pairs</h3><table class="rdt sm"><tbody>${pairs.map(([k,v])=>{const [a,b]=k.split('>');return`<tr><td>${esc(nm(a))} → ${esc(nm(b))}</td><td>${f(v)}</td></tr>`;}).join('')}</tbody></table></div>
+    <div><h3>Busiest line sections</h3><table class="rdt sm"><tbody>${segs.slice(0,8).map(([k,v])=>{const [a,b]=k.split('>');return`<tr><td>${esc(nm(a))} → ${esc(nm(b))}</td><td>${f(v)}</td></tr>`;}).join('')}</tbody></table>
+     ${top?`<div class="m">The busiest section carries about ${f(top[1])} riders a weekday in that direction; if a fifth of them travel in the busiest hour, that is about ${f(top[1]*.2)} in one hour.</div>`:''}</div></div>
+   <h2>How this is calculated</h2>
+   <div class="rdmeth"><p>A pivot-point mode-choice model: it starts from trips people already make and estimates how many would switch to the train. Trips within Greater Victoria come from the CRD 2022 Origin-Destination survey (all purposes); trips with an end outside the CRD come from the 2021 Census commuting flows, with an allowance for non-work trips. Each district's homes (2021 Census dissemination areas) and jobs (2021 Census place of work) are split by their best station and how long it takes to reach it on foot, by bus (using each station's bus–train wait), or by driving and parking at the home end.</p>
+    <p>For each trip the train's generalised time (access, wait counted double, time on the train and the fare as time) is compared with the bus (a 7-minute average bus wait inside Greater Victoria, 10 minutes elsewhere; bus fares $2.50, or $5 for trips over 25 km). The train joins the bus as a "transit" choice (a nested logit): a better train both takes riders from the bus and raises the total transit share for that trip, pivoting on today's observed share, so places where few people use transit today gain riders more slowly. New transit riders come from drivers and from walking or cycling in proportion to today's shares, but people who walk or cycle are half as likely to switch (a quarter as likely for trips under 4 km). Where buses are rare, a minimum transit share of ${P.floor}% is assumed. Trips are judged as round trips in the periods people travel (morning peak, midday, afternoon peak, evening), from the CRD survey's period tables and Census commuting: the wait is half the gap between trains in that period (longer gaps count less than half, as people plan around them), a train within an hour of a period still serves it with a penalty, and a trip with no train back home is not taken. Low and high cases change the train's advantage over the bus by 5 minutes and the minimum transit share by half.</p>
+    <p class="m">Limits: direct trains only (no train-to-train transfers); car times use distance-based speeds rather than a traffic model; bus access is estimated, not routed; the district and municipality zones are coarse. The figures are for comparing options and testing assumptions, not an investment-grade forecast. The simulation's "riders carried" counter is separate.</p><p>Direct demand cross-check: round trips from each station = k × residents<sup>a</sup> × trains<sup>b</sup> × jobs reached<sup>c</sup>, with central elasticities a 0.45, b 0.45, c 0.5 (low 0.3/0.3/0.4, high 0.6/0.57/0.6) from the GO Transit station-ridership study, and k set so the formula gives West Coast Express's ~7,200 weekday riders (5 trains each way, downtown Vancouver's 156,530 jobs). Residents are the 2024 population whose nearest station is within 10 km; jobs are 2021 Census jobs within 1.5 km of the stations reached.</p></div>`;}
+function rdStale(){const s=$('rd-stale');if(!s)return;const st=RD_LAST&&rdSig()!==RD_SIG;s.hidden=!st;}
+function rdInputs(){const box=$('rd-in');let g='';box.innerHTML=RD_IN.map(x=>{const h=x.g!==g?`<h3>${esc(x.g)}</h3>`:'';g=x.g;return h+`<label class="rdi"><span>${esc(x.n)}</span><input type="number" step="${x.st}" data-k="${x.k}" value="${RDP[x.k]}"><em>${esc(x.u)}</em></label>`;}).join('')+
+   `<div class="rdbtns"><button type="button" class="btn sm" id="rd-reset">Reset assumptions</button></div>`;
+  box.querySelectorAll('input[data-k]').forEach(i=>i.onchange=()=>{const v=parseFloat(i.value);if(isFinite(v)){RDP[i.dataset.k]=v;try{localStorage.setItem(RD_KEY,JSON.stringify(RDP));}catch(_){}}rdStale();});
+  $('rd-reset').onclick=()=>{RD_IN.forEach(x=>RDP[x.k]=x.d);try{localStorage.removeItem(RD_KEY);}catch(_){}rdInputs();rdStale();};}
+function openRidership(on){const pg=$('rdpage');if(on){if(!$('trainpage').hidden)openTrains(false);if(!$('srcpage').hidden)openSources(false);}pg.hidden=!on;
+  document.querySelector('.app').classList.toggle('tpopen',on||!$('trainpage').hidden||!$('srcpage').hidden);
+  if(on){if(!$('rd-in').children.length)rdInputs();rdStale();pg.scrollTop=0;$('rd-back').focus();if(!RD_LAST)rdCalc();}}
+$('rd-back').onclick=()=>{openRidership(false);};$('rd-calc').onclick=rdCalc;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('rdpage').hidden)openRidership(false);});
+// opened only by typing the word on the map (not in a text box, and with no page open)
+{let buf='';document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+  if(document.querySelector('.app').classList.contains('tpopen'))return;if(!/^[a-z]$/i.test(e.key)){buf='';return;}buf=(buf+e.key.toLowerCase()).slice(-9);if(buf==='ridership'){buf='';openRidership(true);}});}
+
 
 function renderPlanPane(){const ck=FPCT+'|'+JSON.stringify(STNSPEC).length+'|'+JSON.stringify(TRACKSPEC).length;if(renderPlanPane.ck!==ck){renderPlanPane.ck=ck;try{renderCompare();}catch(e){console.warn(e);}}
   let km=0,seatkm=0;const used=new Set();for(const tr of PLAN.trips){if(!tr.set||!setOf(tr.set))continue;used.add(tr.set);const l=routeFor(codesOf(tr)).len;km+=l;const f=setOf(tr.set);if(!TYPES[f.type].freight)seatkm+=l*TYPES[f.type].cap;}
