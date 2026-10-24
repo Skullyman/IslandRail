@@ -5,6 +5,7 @@ A static website: no build step, no database, no server-side code.
 ```
 index.html        the app (map, simulation, editor, overlays; all data embedded)
 favicon.svg
+og-image.jpg      link-preview image for social media (1200×630)
 fonts/            self-hosted web fonts (SIL Open Font License, see LICENSE-*.txt)
 .htaccess         optional Apache compression/caching rules
 ```
@@ -48,3 +49,15 @@ Coastline: Natural Earth / geo-maps. Population: Statistics Canada, 2021 Census.
 Traffic: BC Ministry of Transportation and Transit, Traffic Data Program (Open
 Government Licence – British Columbia). Timetable: Island Corridor Foundation
 potential weekday passenger schedule.
+
+## Social media preview
+
+`index.html` carries Open Graph and Twitter/X tags pointing at
+`https://skullyman.github.io/IslandRail/og-image.jpg`, so links to the site
+show the preview card on Facebook, LinkedIn, X, Bluesky, Mastodon, Slack and
+Discord. If the site moves to another address, update the `og:url`,
+`og:image` and `twitter:image` lines in the `<head>` of `index.html`.
+
+The GitHub repository itself uses a separate image: upload
+`github-social-preview.png` (1280×640) under the repository's
+**Settings → General → Social preview**.
