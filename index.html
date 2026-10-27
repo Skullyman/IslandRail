@@ -714,6 +714,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
       <button class="btn restart" id="btn-restart" type="button" title="Restart today's service from the first departure">↺ Restart day</button>
       <button class="btn setbtn" id="btn-trains" type="button" title="Train types and specifications"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 10h14M9 17l-2 4M15 17l2 4"/><circle cx="9" cy="13.5" r=".6" fill="currentColor"/><circle cx="15" cy="13.5" r=".6" fill="currentColor"/></svg><span>Trains</span></button>
       <button class="btn setbtn" id="btn-sources" type="button" title="Where the data comes from"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/><path d="M9 8h7M9 12h5"/></svg><span>Sources</span></button>
+      <button class="btn setbtn" id="btn-profiles" type="button" title="Track and highway height profiles"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 19h18"/><path d="M3 16l5-6 4 3 4-7 5 6"/></svg><span>Profiles</span></button>
       <div class="setwrap"><button class="btn setbtn" id="btn-settings" type="button" aria-haspopup="true" aria-expanded="false" title="Settings"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></button>
         <div class="setmenu" id="setmenu" role="dialog" aria-label="Settings" hidden>
           <h4>Settings</h4>
@@ -742,6 +743,52 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
   <section class="trainpage srcpage" id="srcpage" hidden aria-label="Information sources">
     <div class="tptop"><button class="btn" id="src-back" type="button">← Back to the map</button><h1>Sources</h1><span class="m">Where the planner's maps, travel figures and railway data come from, what each is used for, and its limits</span></div>
     <div class="srcbody" id="src-body"></div>
+  </section>
+  <section class="trainpage pfpage" id="pfpage" hidden aria-label="Track profiles">
+    <style>
+.pfpage{--pf-rail:var(--rail);--pf-road:var(--hwy);--pf-ink:var(--ink);--pf-muted:var(--muted);--pf-grid:var(--line);--pf-grid2:var(--ctl-line);--pf-bg:var(--panel);--pf-rail-fill:color-mix(in srgb,var(--rail) 14%,transparent);--pf-mono:var(--mono);--pf-body:var(--body);--pf-display:var(--display)}
+.pfpage .pf-ph h2{text-transform:uppercase}
+@media (max-width:600px){#btn-profiles span{display:none}}
+.pf-root{display:grid;gap:16px;max-width:1180px}
+.pf-note{font-size:13.5px;max-width:78ch;margin:0;color:var(--pf-muted)}
+.pf-note b{color:var(--pf-ink)}
+.pf-legend{display:flex;flex-wrap:wrap;gap:18px;font-size:13px;color:var(--pf-ink)}
+.pf-legend span{display:inline-flex;align-items:center;gap:8px}
+.pf-sw{width:28px;height:0;border-top:3px solid var(--pf-rail)}.pf-sw.road{border-top:3px dashed var(--pf-road)}
+.pf-panel{border:1px solid var(--pf-grid2);border-radius:10px;padding:14px;display:grid;gap:10px;min-width:0;background:var(--pf-bg)}
+.pf-ph{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px}
+.pf-ph h2{margin:0;font-family:var(--pf-display);font-weight:800;font-size:24px;letter-spacing:.02em;color:var(--pf-ink)}
+.pf-sub{font-size:13px;color:var(--pf-muted)}
+.pf-ctl{display:flex;flex-wrap:wrap;gap:6px}
+.pf-b{font:500 13px var(--pf-body);background:transparent;color:var(--pf-ink);border:1px solid var(--pf-grid2);border-radius:6px;padding:4px 10px;min-height:30px;cursor:pointer}
+.pf-b:hover{border-color:var(--pf-ink)}.pf-b[aria-pressed="true"]{background:var(--pf-ink);color:var(--pf-bg);border-color:var(--pf-ink)}
+.pf-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.pf-stat{border-top:3px solid var(--pf-rail);padding-top:6px;min-width:0}.pf-stat.road{border-top:3px dashed var(--pf-road)}
+.pf-stat h3{margin:0;font:700 12px var(--pf-body);letter-spacing:.06em;text-transform:uppercase;color:var(--pf-muted)}
+.pf-stat dl{display:grid;grid-template-columns:repeat(4,auto);gap:2px 14px;margin:6px 0 0;justify-content:start}
+.pf-stat dt{font-size:11.5px;color:var(--pf-muted);grid-row:1}.pf-stat dd{margin:0;font:600 14px var(--pf-mono);font-variant-numeric:tabular-nums;grid-row:2;color:var(--pf-ink)}
+.pf-box{position:relative;overflow:hidden;border-radius:4px}
+.pf-main{display:block;width:100%;height:340px;touch-action:none;cursor:grab}.pf-main.drag{cursor:grabbing}
+.pf-ov{display:block;width:100%;height:50px;touch-action:none;cursor:pointer;margin-top:4px}
+.pf-ro{font:12.5px var(--pf-mono);font-variant-numeric:tabular-nums;color:var(--pf-muted);min-height:20px;display:flex;flex-wrap:wrap;gap:4px 18px}
+.pf-ro .pf-r{color:var(--pf-rail)}.pf-ro .pf-d{color:var(--pf-road)}
+.pf-hint{font-size:12.5px;color:var(--pf-muted)}
+.pf-method{font-size:13px;color:var(--pf-muted);max-width:80ch;display:grid;gap:6px}
+.pf-method h3{margin:4px 0 0;font:700 15px var(--pf-body);color:var(--pf-ink)}
+.pf-method p{margin:0}.pf-method a{color:var(--pf-rail)}
+@media (max-width:520px){.pf-main{height:260px}.pf-stat dl{grid-template-columns:repeat(2,auto)}.pf-stat dt,.pf-stat dd{grid-row:auto}}
+    </style>
+    <div class="tptop"><button class="btn" id="pf-back" type="button">← Back to the map</button><h1>Track profiles</h1><span class="m">Height of the E&amp;N rail line against the highway beside it, Victoria to Courtenay and Parksville to Port Alberni</span></div>
+    <div class="pf-root" id="pf-root"><div class="pf-legend"><span><i class="pf-sw"></i>Rail (E&amp;N)</span><span><i class="pf-sw road"></i>Parallel highway</span><span class="pf-hint">Scroll or pinch to zoom · drag to pan · drag the strip below each chart to move along the line · double-click to reset</span></div>
+</div>
+    <div class="pf-method">
+<h3>How these profiles were built</h3>
+<p><b>Routes and distances</b> follow the planner's own track and highway geometry (OpenStreetMap), so stations sit at their true distance along each line. Highway kilometres are measured along the road, so the same town falls at a different kilometre on each line.</p>
+<p><b>Rail heights</b> are fitted to the grade limits on each 5-mile page of the 2003 E&amp;N track charts (Crouch Engineering): the line never climbs or falls faster than the chart allows for that page. The fit is also held to the 100 m terrain contours the map draws from AWS Terrain Tiles, and to a few station heights.</p>
+<p><b>Highway heights</b> follow the same contours plus two published summits: the Malahat at 352 m and Alberni Summit on Highway 4 at 411 m. Cameron Lake (184 m) is used to correct Highway 4 where the coarse terrain overstates the height of the narrow valley.</p>
+<p><b>How exact.</b> Summits and long climbs are good to about ±20 m. Below 100 m the contours give no detail, so coastal stretches are smoothed between known points and small dips and rises are missing. A surveyed track profile would replace these figures.</p>
+</div>
+
   </section>
   <main class="main">
     <div class="mapwrap" id="mapwrap">
@@ -857,6 +904,8 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <h3 class="sec">Starting timetable</h3>
         <div class="pbtns"><select id="tt-preset" aria-label="Starting timetable"><option value="data8">Data-driven, 8 trainsets</option><option value="opt">Optimised: West Shore every 10 min</option><option value="optreg">Optimised + regional commuter trains</option><option value="icf">ICF business case, West Shore every 12 min</option><option value="data">Data-driven, unconstrained fleet</option></select><button class="btn" id="btn-preset" type="button">Load this timetable</button></div>
         <div class="ttcmp" id="tt-compare"></div>
+        <h3 class="sec">Ridership and fare revenue</h3>
+        <div class="planrd" id="plan-rd"></div>
         <h3 class="sec">Service plan summary</h3>
         <div class="kpis" id="plan-sum"></div>
         <div class="pbtns"><button class="btn" id="btn-auto2" type="button">Auto-assign trainsets</button><button class="btn danger" id="btn-reset" type="button">Reset to starting timetable</button></div>
@@ -4107,5 +4156,292 @@ renderEditor();renderHeader();
 requestAnimationFrame(frame);
 
 </script>
+
+<script>
+(function(){
+// Track profiles: rail fitted to the 2003 E&N track-chart grade limits, both lines checked against 100 m terrain contours.
+const PD={"main_rail":{"len":223.8,"e":[8,10,12,13,15,16,18,19,20,20,21,21,21,22,22,22,22,22,23,23,23,23,24,24,24,24,24,24,24,25,25,25,25,26,26,26,27,28,28,29,30,31,32,32,33,34,35,36,36,37,38,39,40,41,43,45,47,50,52,54,57,59,61,62,62,61,60,60,59,58,58,58,58,59,61,63,66,70,73,77,81,85,89,92,96,100,104,108,111,115,119,123,126,130,133,136,139,141,143,145,146,147,148,149,149,150,150,150,150,151,151,152,152,153,154,155,157,158,161,163,166,169,172,175,179,182,185,189,192,196,199,202,206,209,213,216,219,223,226,230,233,236,240,243,247,250,253,257,260,264,267,270,274,277,281,284,287,291,294,294,295,295,295,295,295,296,296,296,296,296,297,297,297,297,297,298,297,294,291,287,284,280,277,274,270,267,263,260,257,253,250,246,243,240,236,233,229,226,223,220,216,213,210,207,204,200,197,194,191,188,184,181,178,175,172,168,165,162,159,156,153,151,149,148,147,146,146,145,145,144,143,142,140,139,137,135,132,129,126,122,119,115,112,108,104,101,97,94,91,90,91,92,94,96,98,100,101,101,100,97,93,90,86,82,79,75,72,68,64,61,57,54,50,46,43,40,37,34,32,30,29,27,26,25,25,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,23,23,22,22,21,20,19,18,17,16,15,14,14,13,13,13,14,14,15,16,17,18,19,20,21,22,22,23,24,24,24,25,25,25,25,25,26,26,26,26,26,26,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,24,24,24,24,24,24,23,23,23,23,22,22,22,22,22,22,22,23,23,23,23,24,24,24,24,24,24,25,25,25,25,25,25,25,25,25,25,25,25,25,24,24,24,24,24,24,24,24,24,24,24,25,25,26,26,27,27,28,29,30,32,33,35,36,38,40,41,43,44,45,45,45,44,42,41,40,38,36,35,33,32,30,29,28,27,27,26,26,25,25,24,24,24,24,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,24,24,24,24,24,24,24,24,25,25,25,25,26,26,27,28,29,30,32,34,36,39,42,46,49,53,57,61,65,69,73,77,81,85,88,92,96,100,103,106,108,110,110,110,110,108,106,104,102,100,99,97,94,91,94,98,100,100,100,99,98,98,98,98,99,100,102,103,104,106,106,105,104,102,100,96,93,90,87,84,80,77,74,71,68,64,61,58,55,52,48,45,42,39,37,34,32,30,29,28,26,26,25,24,24,24,24,24,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,24,24,24,24,24,24,23,23,23,23,22,22,22,22,22,22,22,23,23,23,23,24,24,24,24,24,24,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,26,26,26,27,27,28,28,29,30,31,32,32,33,34,34,35,35,35,34,34,33,32,31,31,30,29,28,28,27,27,26,26,26,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,24,24,24,24,24,24,24,24,24,25,25,25,25,26,26,27,27,28,29,30,31,32,33,35,36,37,38,39,40,40,40,39,38,37,36,35,33,32,31,30,29,28,27,27,26,26,25,25,25,25,24,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,24,24,24,24,23,23,22,22,21,20,20,19,19,18,18,18,18,18,19,19,20,20,21,22,22,23,23,24,24,24,24,25,25,25,25,25,26,26,26,26,26,26,26,26,26,26,26,26,26,26,25,25,25,24,24,23,23,22,21,20,19,18,16,15,14,13,12,11,10,10,10,11,12,13,14,15,17,18,19,20,21,22,23,24,24,25,25,25,26,26,26,26,26,25,25,25,24,24,23,23,22,21,20,20,19,18,17,16,16,15,15,15,16,16,17,18,19,20,20,21,22,22,22,23,23,22,22,22,21,20,20,18,17,16,15,14,13,11,10,9,8],"marks":[[0.0,"Victoria",1],[3.0,"Esquimalt",0],[9.2,"Six Mile",0],[11.5,"Atkins",0],[12.6,"Langford",1],[14.2,"Westhills",0],[30.6,"Malahat",1],[43.8,"Shawnigan Lake",0],[49.8,"Cobble Hill",0],[63.5,"Duncan",1],[82.0,"Chemainus",0],[93.4,"Ladysmith",0],[116.2,"Nanaimo",1],[124.9,"Wellington",0],[129.7,"Lantzville",0],[138.0,"Nanoose Bay",0],[152.1,"Parksville",1],[162.6,"Qualicum Beach",1],[184.6,"Bowser",0],[198.9,"Fanny Bay",0],[209.7,"Union Bay",0],[217.8,"Royston",0],[223.7,"Courtenay",1]],"hi":[35.0,298]},"alb_rail":{"len":62.6,"e":[22,23,24,25,26,28,29,31,32,34,36,38,40,43,45,47,49,52,54,56,58,60,62,65,67,69,71,74,76,78,80,82,84,87,89,91,93,96,98,100,102,104,106,109,111,113,115,118,120,122,124,126,128,131,133,135,137,140,142,144,146,148,150,152,154,157,159,161,163,165,168,170,172,174,176,178,181,183,185,187,190,192,194,196,198,200,203,205,207,209,212,214,216,218,220,222,225,227,229,231,234,236,238,240,242,244,247,249,251,253,256,258,260,262,264,266,269,271,273,275,278,280,282,284,286,288,291,293,295,297,300,300,300,300,300,299,299,299,299,299,300,303,306,309,312,315,318,322,325,328,331,334,338,341,344,347,350,354,357,360,363,366,370,373,376,379,382,386,388,389,389,389,389,388,388,388,388,388,384,381,378,375,372,368,365,362,359,356,352,349,346,343,340,336,333,330,327,324,320,317,314,311,308,304,301,298,295,292,288,285,282,279,276,272,270,267,264,262,259,258,256,254,253,252,251,250,249,248,248,246,245,244,242,240,238,235,233,230,227,224,220,217,214,211,208,204,201,198,195,192,188,185,182,179,176,172,169,166,163,160,156,153,150,147,144,140,137,134,131,128,124,121,118,115,112,108,105,102,99,96,92,89,86,83,80,76,73,70,67,64,60,57,54,51,48,44,41,39,36,34,32,29,28,26,24,22,20,19,17,15,13,11,8,6],"marks":[[0,"Parksville jct",1],[7.6,"Coombs",1],[20.6,"Cameron Lake",1],[37.2,"Arrowsmith Summit",1],[62.6,"Port Alberni",1]],"hi":[33.8,389]},"main_road":{"len":229.8,"e":[15,21,27,33,38,43,47,51,54,56,58,60,61,62,62,63,63,63,63,62,62,62,62,61,61,61,60,60,60,60,59,59,59,59,58,58,58,58,58,58,59,59,60,60,62,63,65,67,69,72,75,79,83,87,90,94,98,100,101,101,100,98,96,93,91,88,87,87,87,88,90,93,96,100,104,107,110,112,113,113,112,110,107,105,102,100,99,98,99,100,102,105,107,109,110,111,111,110,108,106,103,100,98,96,95,95,97,100,104,109,114,119,124,128,132,136,139,141,142,144,144,145,145,145,144,144,144,145,145,147,149,152,156,162,169,178,189,201,215,229,243,257,271,285,299,313,327,340,348,352,349,340,328,314,300,288,277,268,260,254,248,243,238,233,228,224,218,212,206,200,193,187,181,175,170,166,162,159,157,155,153,152,151,151,150,149,148,147,146,144,142,139,135,131,126,120,114,107,100,93,87,81,76,72,68,64,62,60,58,57,56,55,55,55,55,56,56,57,58,60,62,64,67,70,74,77,82,86,91,96,100,104,108,110,112,113,112,110,107,104,100,96,91,86,82,78,74,71,68,65,63,62,60,60,59,58,58,58,58,58,58,58,58,59,59,59,59,60,60,60,60,60,61,61,61,61,62,62,62,62,62,62,62,62,61,60,59,58,56,54,52,49,46,42,39,34,30,26,22,18,16,15,16,18,22,26,30,34,38,42,46,49,52,54,56,58,59,60,61,61,62,62,62,62,62,62,62,61,61,61,61,61,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,59,59,59,59,58,58,58,58,58,58,58,58,58,59,60,61,62,64,66,69,72,76,80,85,90,95,100,105,109,112,114,114,114,112,108,105,100,95,90,85,81,77,73,70,67,65,64,62,61,60,60,60,59,59,59,59,58,58,57,56,54,53,51,49,46,43,40,36,33,30,28,26,25,26,28,30,33,37,40,43,46,49,52,54,56,57,58,59,60,61,61,61,62,62,62,61,61,61,61,61,61,61,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,59,59,59,59,58,58,58,57,57,57,57,57,57,57,58,59,60,62,64,68,71,76,81,86,93,100,107,115,121,128,133,138,143,146,149,151,153,154,154,154,153,151,149,146,142,138,133,127,121,114,107,100,93,87,81,76,72,68,65,63,61,59,58,57,57,57,56,56,56,56,56,57,57,57,57,57,57,58,58,58,59,60,61,62,64,66,68,71,74,78,82,86,91,96,100,104,107,108,109,108,106,103,100,96,92,87,83,79,75,72,69,66,64,62,61,60,59,59,58,58,58,58,58,58,58,59,59,59,59,59,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,59,59,59,59,59,58,58,58,58,58,58,58,59,59,60,61,62,64,66,69,72,75,79,83,87,92,96,100,103,106,107,108,106,104,100,96,91,86,81,77,73,69,66,63,61,59,58,57,57,58,59,61,63,66,70,75,80,86,93,100,107,114,121,127,133,138,142,145,148,151,152,154,155,156,156,156,156,155,154,153,151,149,146,143,139,135,130,125,119,113,106,100,94,88,83,78,73,70,67,64,62,60,59,58,58,57,57,57,57,58,58,58,58,58,59,59,59,59,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,59,59,59,59,58,58,58,57,57,57,57,57,57,57,58,59,60,62,65,68,72,76,81,87,93,100,107,114,120,126,132,136,140,144,146,148,150,151,152,153,153,153,153,153,153,152,152,152,152,151,151,151,151,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,151,151,151,152,152,152,152,153,153,154,154,154,154,153,153,152,150,148,146,143,139,134,129,123,116,108,100,92,83,74,65,57,48,39,30],"marks":[[0.0,"Victoria",1],[4.9,"Esquimalt",0],[10.1,"Six Mile",0],[12.4,"Atkins",0],[13.4,"Langford",1],[14.2,"Westhills",0],[27.9,"Malahat",1],[47.3,"Cobble Hill",0],[60.2,"Duncan",1],[76.2,"Chemainus",0],[88.1,"Ladysmith",0],[125.2,"Nanaimo",1],[132.6,"Wellington",0],[138.6,"Lantzville",0],[146.8,"Nanoose Bay",0],[159.1,"Parksville",1],[168.2,"Qualicum Beach",1],[191.2,"Bowser",0],[205.2,"Fanny Bay",0],[214.5,"Union Bay",0],[229.9,"Courtenay",1]],"hi":[29.8,352]},"alb_road":{"len":37.8,"e":[90,88,87,86,86,88,90,95,100,106,112,118,124,129,133,138,141,144,146,148,150,151,152,152,152,152,152,151,151,150,150,150,149,149,148,148,148,148,148,149,150,152,154,156,159,162,166,171,176,182,188,194,200,205,210,213,215,216,215,213,211,207,204,200,197,195,194,193,192,191,189,188,188,188,188,189,190,191,192,192,192,192,192,193,193,194,195,195,195,194,192,190,189,188,189,190,192,196,200,205,211,216,221,226,231,236,240,245,249,254,259,264,270,277,284,292,300,308,317,326,335,343,351,359,367,374,381,388,395,400,404,407,409,410,411,411,410,409,406,404,400,396,391,385,380,374,368,361,354,346,337,327,317,305,292,278,264,250,236,222,208,195,182,171,160,149,139,129,119,110,100,90,80,71,62,54,47,41,36,32,30,27,26,25,25,26,26,27,29,30],"marks":[[2.1,"Coombs",1],[13.1,"Cameron Lake",1],[29.6,"Arrowsmith Summit",1],[37.8,"Port Alberni",1],[0.0,"Qualicum Beach",1]],"hi":[26.8,411]}};
+const PG={"MAIN":{"anch":[[0,0],[12.57,7.9],[43.79,27.8],[63.47,39.7],[81.95,51.2],[93.36,58.4],[116.2,72.5],[152.07,95.2],[162.61,101.8],[209.68,130.2],[223.69,139.7]],"grade":[[0,5,1.7,-0.4],[5,10,1.8,-0.3],[10,15,1.8,0],[15,20,1.6,-1.3],[20,25,0,-1.6],[25,30,0,-1.5],[30,35,0.9,-1.7],[35,40,1,-1.4],[40,45,1.7,-1.3],[45,50,1.4,-1.1],[50,55,1.3,-0.6],[55,60,0.8,-1.2],[60,65,1.6,-0.6],[65,70,1.2,-1.2],[70,75,1.9,-1.5],[75,80,1.8,-1.5],[80,85,0,-1.5],[85,90,1.6,0],[90,95,1.3,-1],[95,100,1,-0.7],[100,105,1,-0.7],[105,110,0.7,-1.4],[110,115,0.8,-0.6],[115,120,0.9,-1],[120,125,1,-1],[125,130,0.4,-0.7],[130,135,0.6,-0.6],[135,140,0.5,-0.5]]},"ALB":{"anch":[[0,0],[20.55,12],[37.25,21],[62.62,38]],"grade":[[0,5,1,-0.5],[5,10,1,0],[10,15,1,0],[15,20,1.5,0],[20,25,2.2,-1.5],[25,30,0,-1.5],[30,35,0,-1.5],[35,38,0,-1.5]]}};
+const ROUTES=[
+ {id:'main',title:'Victoria – Courtenay',sub:'Victoria Subdivision vs Highway 1, Nanaimo Parkway and Highway 19',line:'MAIN',
+  rail:{name:'E&N Victoria Subdivision',d:PD.main_rail,top:'Malahat summit ≈'},road:{name:'Hwy 1 / Nanaimo Pkwy / Hwy 19',d:PD.main_road,top:'Malahat Summit'}},
+ {id:'alb',title:'Parksville – Port Alberni',sub:'Port Alberni Subdivision vs Highway 4',line:'ALB',
+  rail:{name:'E&N Port Alberni Subdivision',d:PD.alb_rail,top:'Rail summit ≈'},road:{name:'Hwy 4 (from Hwy 19 at Qualicum)',d:PD.alb_road,top:'Alberni Summit'}}];
+const STEP=0.2;
+function prep(s){const e=s.d.e;s.x=e.map((_,i)=>Math.min(i*STEP,s.d.len));s.y=e.slice();s.len=s.d.len;s.marks=s.d.marks.slice();
+  s.marks.push([s.d.hi[0],s.top+' '+s.d.hi[1]+' m',1,1]);}
+function at(s,km){if(km<0||km>s.len)return null;const x=s.x;let lo=0,hi=x.length-1;
+  while(hi-lo>1){const m=(lo+hi)>>1;if(x[m]<=km)lo=m;else hi=m;}const t=x[hi]===x[lo]?0:(km-x[lo])/(x[hi]-x[lo]);return s.y[lo]+(s.y[hi]-s.y[lo])*t;}
+function grade(s,km){const a=Math.max(0,km-0.3),b=Math.min(s.len,km+0.3);if(b<=a)return null;return (at(s,b)-at(s,a))/((b-a)*1000)*100;}
+function kToMP(line,k){const A=PG[line].anch;for(let i=1;i<A.length;i++)if(k<=A[i][0])return A[i-1][1]+(k-A[i-1][0])/(A[i][0]-A[i-1][0])*(A[i][1]-A[i-1][1]);return A[A.length-1][1];}
+function chartBlock(line,k){const mp=kToMP(line,k);for(const b of PG[line].grade)if(mp<b[1]+1e-9)return {mp,b};return null;}
+function stats(s){let up=0,dn=0,ref=s.y[0],steep=0;for(let i=1;i<s.y.length;i++){const e=s.y[i];if(e-ref>=3){up+=e-ref;ref=e;}else if(ref-e>=3){dn+=ref-e;ref=e;}}
+  for(let i=0;i+5<s.y.length;i++){const g=Math.abs(s.y[i+5]-s.y[i])/(s.x[i+5]-s.x[i])/10;if(g>steep)steep=g;}
+  return {len:s.len,hi:Math.max(...s.y),up,dn,steep};}
+const fmt=(n,d=0)=>n.toLocaleString('en-CA',{maximumFractionDigits:d,minimumFractionDigits:d});
+function nice(r,t){const raw=r/t,p=Math.pow(10,Math.floor(Math.log10(raw))),f=raw/p;return (f<1.5?1:f<3?2:f<7?5:10)*p;}
+const M={l:50,r:14,t:30,b:26};
+function mount(root){
+ const panels=[];const cv=n=>getComputedStyle(root).getPropertyValue(n).trim();
+ ROUTES.forEach(R=>{prep(R.rail);prep(R.road);
+  const el=document.createElement('section');el.className='pf-panel';
+  el.innerHTML=`<div class="pf-ph"><div><h2>${R.title}</h2><div class="pf-sub">${R.sub}</div></div>
+   <div class="pf-ctl"><button type="button" class="pf-b" data-a="in" aria-label="Zoom in">+</button><button type="button" class="pf-b" data-a="out" aria-label="Zoom out">−</button>
+   <button type="button" class="pf-b" data-a="reset">Full route</button><button type="button" class="pf-b" data-a="fit" aria-pressed="false" title="Stretch the height scale to what is on screen">Fit height</button></div></div>
+   <div class="pf-stats"></div>
+   <div class="pf-box"><canvas class="pf-main" aria-label="${R.title} height profile"></canvas><canvas class="pf-ov" aria-label="Overview; drag to move the zoom window"></canvas></div>
+   <div class="pf-ro" aria-live="polite"></div>`;
+  root.appendChild(el);
+  const P={R,el,c:el.querySelector('.pf-main'),ov:el.querySelector('.pf-ov'),ro:el.querySelector('.pf-ro'),fit:false,hover:null};
+  P.max=Math.max(R.rail.len,R.road.len);P.v={x0:0,x1:P.max};
+  const card=(s,cls)=>{const t=stats(s);return `<div class="pf-stat ${cls}"><h3>${s.name}</h3><dl><dt>Length</dt><dd>${fmt(t.len,1)} km</dd><dt>High point</dt><dd>${fmt(t.hi)} m</dd><dt>Climb ↑ / ↓</dt><dd>${fmt(t.up)} / ${fmt(t.dn)} m</dd><dt>Steepest (1 km)</dt><dd>${fmt(t.steep,1)} %</dd></dl></div>`;};
+  el.querySelector('.pf-stats').innerHTML=card(R.rail,'')+card(R.road,'road');
+  panels.push(P);wire(P);});
+ function size(c){const r=c.getBoundingClientRect(),d=window.devicePixelRatio||1,w=Math.max(1,Math.round(r.width*d)),h=Math.max(1,Math.round(r.height*d));
+  if(c.width!==w||c.height!==h){c.width=w;c.height=h;}const x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);return{x,W:r.width,H:r.height};}
+ function yr(P){const{rail,road}=P.R;if(!P.fit){const h=Math.max(...rail.y,...road.y);return[0,h*1.12+10];}
+  let lo=1e9,hi=-1e9;for(const s of[rail,road])for(let i=0;i<=200;i++){const e=at(s,P.v.x0+(P.v.x1-P.v.x0)*i/200);if(e!=null){lo=Math.min(lo,e);hi=Math.max(hi,e);}}
+  const p=Math.max(10,(hi-lo)*.12);return[Math.max(0,lo-p),hi+p];}
+ function line(x,s,X,Y,a,b,col,fill,dash,w){a=Math.max(0,a);b=Math.min(s.len,b);if(b<=a)return;const n=Math.max(200,Math.ceil(X(b)-X(a)));const pts=[];
+  for(let i=0;i<=n;i++){const k=a+(b-a)*i/n;pts.push([X(k),Y(at(s,k))]);}
+  if(fill){x.beginPath();x.moveTo(pts[0][0],Y.base);pts.forEach(p=>x.lineTo(p[0],p[1]));x.lineTo(pts[pts.length-1][0],Y.base);x.closePath();x.fillStyle=fill;x.fill();}
+  x.beginPath();pts.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.setLineDash(dash||[]);x.lineWidth=w;x.strokeStyle=col;x.lineJoin='round';x.stroke();x.setLineDash([]);}
+ function draw(P){const{x,W,H}=size(P.c),{rail,road}=P.R,v=P.v;
+  const C={ink:cv('--pf-ink'),mu:cv('--pf-muted'),gr:cv('--pf-grid'),g2:cv('--pf-grid2'),ra:cv('--pf-rail'),rf:cv('--pf-rail-fill'),ro:cv('--pf-road'),bg:cv('--pf-bg'),mono:cv('--pf-mono'),body:cv('--pf-body')};
+  x.clearRect(0,0,W,H);const pw=W-M.l-M.r,ph=H-M.t-M.b,[y0,y1]=yr(P);
+  const X=k=>M.l+(k-v.x0)/(v.x1-v.x0)*pw,Y=e=>M.t+ph-(e-y0)/(y1-y0)*ph;Y.base=M.t+ph;P.pw=pw;
+  x.font='11px '+C.mono;x.textBaseline='middle';x.textAlign='right';const ys=nice(y1-y0,6);
+  for(let e=Math.ceil(y0/ys)*ys;e<=y1;e+=ys){const y=Y(e);x.strokeStyle=e===0?C.g2:C.gr;x.lineWidth=1;x.beginPath();x.moveTo(M.l,y+.5);x.lineTo(W-M.r,y+.5);x.stroke();x.fillStyle=C.mu;x.fillText(fmt(e)+' m',M.l-6,y);}
+  const xs=nice(v.x1-v.x0,Math.max(4,Math.floor(pw/90)));x.textAlign='center';x.textBaseline='top';const fx=Math.ceil(v.x0/xs)*xs;
+  for(let k=fx;k<=v.x1+1e-9;k+=xs){const X0=X(k);x.strokeStyle=C.gr;x.beginPath();x.moveTo(X0+.5,M.t);x.lineTo(X0+.5,M.t+ph);x.stroke();x.fillStyle=C.mu;x.fillText(fmt(k,xs<1?1:0)+(k===fx?' km':''),X0,M.t+ph+7);}
+  x.save();x.beginPath();x.rect(M.l,M.t-2,pw,ph+4);x.clip();
+  line(x,road,X,Y,v.x0,v.x1,C.ro,null,[7,5],2.2);line(x,rail,X,Y,v.x0,v.x1,C.ra,C.rf,null,2.6);
+  const placed=[];const mark=(s,col,above)=>{s.marks.forEach(p=>{const X0=X(p[0]);if(X0<M.l-2||X0>W-M.r+2)return;const e=at(s,p[0]);if(e==null)return;const y=Y(e);
+    x.font=(p[2]?'600 12px ':'12px ')+C.body;const tw=x.measureText(p[1]).width;let ly=above?y-12:y+14;ly=Math.max(M.t+8,Math.min(M.t+ph-8,ly));
+    const lx=Math.max(M.l+tw/2+2,Math.min(W-M.r-tw/2-2,X0));const bx={a:lx-tw/2-4,b:lx+tw/2+4,c:ly-8,d:ly+8};
+    if(placed.some(q=>!(bx.b<q.a||bx.a>q.b||bx.d<q.c||bx.c>q.d))&&!p[3])return;placed.push(bx);
+    x.fillStyle=col;x.beginPath();x.arc(X0,y,p[3]?3.6:2.6,0,7);x.fill();x.textAlign='center';x.textBaseline='middle';x.lineWidth=3;x.strokeStyle=C.bg;x.strokeText(p[1],lx,ly);x.fillStyle=col;x.fillText(p[1],lx,ly);});};
+  mark(rail,C.ra,true);mark(road,C.ro,false);x.restore();
+  if(P.hover!=null){const X0=X(P.hover);x.globalAlpha=.35;x.strokeStyle=C.ink;x.beginPath();x.moveTo(X0+.5,M.t);x.lineTo(X0+.5,M.t+ph);x.stroke();x.globalAlpha=1;
+   [[rail,C.ra],[road,C.ro]].forEach(([s,c])=>{const e=at(s,P.hover);if(e==null)return;x.fillStyle=C.bg;x.strokeStyle=c;x.lineWidth=2;x.beginPath();x.arc(X0,Y(e),4.5,0,7);x.fill();x.stroke();});}
+  const ve=(ph/(y1-y0))/(pw/((v.x1-v.x0)*1000));x.font='11px '+C.mono;x.fillStyle=C.mu;x.textBaseline='middle';x.textAlign='left';x.fillText('Vertical exaggeration ×'+fmt(ve),M.l,12);
+  x.textAlign='right';x.fillText(fmt(v.x0,1)+'–'+fmt(v.x1,1)+' km',W-M.r,12);
+  // overview
+  {const o=size(P.ov),c=o.x,w=o.W,h=o.H,hm=Math.max(...rail.y,...road.y)*1.1;c.clearRect(0,0,w,h);const OX=k=>k/P.max*(w-2)+1,OY=e=>h-2-e/hm*(h-6);OY.base=h-1;
+   c.fillStyle=C.gr;c.fillRect(0,0,w,h);line(c,road,OX,OY,0,P.max,C.ro,null,[4,3],1.2);line(c,rail,OX,OY,0,P.max,C.ra,C.rf,null,1.4);
+   const a=OX(v.x0),b=OX(v.x1);c.globalAlpha=.6;c.fillStyle=C.bg;c.fillRect(0,0,a,h);c.fillRect(b,0,w-b,h);c.globalAlpha=1;c.strokeStyle=C.ink;c.lineWidth=1.5;c.strokeRect(a+.75,.75,Math.max(2,b-a-1.5),h-1.5);}
+  // readout
+  if(P.hover==null){P.ro.textContent='Hover or tap the chart for height and grade at any point.';}
+  else{const k=P.hover,r=at(rail,k),d=at(road,k),g=z=>z==null?'':' · grade '+(z>=0?'+':'')+fmt(z,1)+'%';
+   const cb=r!=null?chartBlock(P.R.line,k):null;
+   P.ro.innerHTML=`<span>km ${fmt(k,1)}</span>`+(r!=null?`<span class="pf-r">Rail ${fmt(r)} m${g(grade(rail,k))}</span>`:'<span class="pf-r">Rail: past end of line</span>')
+    +(cb?`<span class="pf-r">MP ${fmt(cb.mp,1)} · 2003 chart limits on MP ${cb.b[0]}–${cb.b[1]}: +${fmt(cb.b[2],1)}% / ${fmt(cb.b[3],1)}%</span>`:'')
+    +(d!=null?`<span class="pf-d">Road ${fmt(d)} m${g(grade(road,k))}</span>`:'<span class="pf-d">Road: past end of route</span>');}
+ }
+ const pend=new Set();function req(P){if(!pend.size)requestAnimationFrame(()=>{pend.forEach(draw);pend.clear();});pend.add(P);}
+ function clamp(P){let{x0,x1}=P.v,s=Math.min(P.max,Math.max(.5,x1-x0));if(x0<0)x0=0;if(x0+s>P.max)x0=P.max-s;P.v={x0,x1:x0+s};}
+ function zoom(P,k,f){const{x0,x1}=P.v;P.v={x0:k-(k-x0)*f,x1:k+(x1-k)*f};clamp(P);req(P);}
+ function wire(P){const c=P.c,kAt=e=>{const r=c.getBoundingClientRect();return P.v.x0+((e.clientX-r.left)-M.l)/P.pw*(P.v.x1-P.v.x0);};
+  c.addEventListener('wheel',e=>{e.preventDefault();zoom(P,kAt(e),Math.exp((e.deltaY||e.deltaX)*.0015));},{passive:false});
+  const pt=new Map();let pan=null,pin=null;
+  c.addEventListener('pointerdown',e=>{c.setPointerCapture(e.pointerId);pt.set(e.pointerId,e);if(pt.size===1){pan={x:e.clientX,v:{...P.v}};c.classList.add('drag');}
+   if(pt.size===2){const[a,b]=[...pt.values()];pin={d:Math.abs(a.clientX-b.clientX)||1,v:{...P.v},c:kAt({clientX:(a.clientX+b.clientX)/2})};pan=null;}});
+  c.addEventListener('pointermove',e=>{if(pt.has(e.pointerId))pt.set(e.pointerId,e);
+   if(pin&&pt.size===2){const[a,b]=[...pt.values()],f=pin.d/(Math.abs(a.clientX-b.clientX)||1);P.v={x0:pin.c-(pin.c-pin.v.x0)*f,x1:pin.c+(pin.v.x1-pin.c)*f};clamp(P);}
+   else if(pan){const dk=(e.clientX-pan.x)/P.pw*(pan.v.x1-pan.v.x0);P.v={x0:pan.v.x0-dk,x1:pan.v.x1-dk};clamp(P);}
+   const k=kAt(e);P.hover=(k>=P.v.x0&&k<=P.v.x1)?k:null;req(P);});
+  const end=e=>{pt.delete(e.pointerId);if(pt.size<2)pin=null;if(!pt.size){pan=null;c.classList.remove('drag');}};
+  c.addEventListener('pointerup',end);c.addEventListener('pointercancel',end);c.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'){P.hover=null;req(P);}});
+  c.addEventListener('dblclick',()=>{P.v={x0:0,x1:P.max};req(P);});
+  let od=null;const oK=e=>{const r=P.ov.getBoundingClientRect();return(e.clientX-r.left)/r.width*P.max;};
+  P.ov.addEventListener('pointerdown',e=>{P.ov.setPointerCapture(e.pointerId);const k=oK(e),s=P.v.x1-P.v.x0;if(k<P.v.x0||k>P.v.x1){P.v={x0:k-s/2,x1:k+s/2};clamp(P);}od={k,v:{...P.v}};req(P);});
+  P.ov.addEventListener('pointermove',e=>{if(!od)return;const dk=oK(e)-od.k;P.v={x0:od.v.x0+dk,x1:od.v.x1+dk};clamp(P);req(P);});
+  const oe=()=>od=null;P.ov.addEventListener('pointerup',oe);P.ov.addEventListener('pointercancel',oe);
+  P.el.querySelectorAll('[data-a]').forEach(b=>b.addEventListener('click',()=>{const a=b.dataset.a,m=(P.v.x0+P.v.x1)/2;
+   if(a==='in')zoom(P,m,.5);else if(a==='out')zoom(P,m,2);else if(a==='reset'){P.v={x0:0,x1:P.max};req(P);}else{P.fit=!P.fit;b.setAttribute('aria-pressed',P.fit);req(P);}}));}
+ const redraw=()=>panels.forEach(req);
+ new ResizeObserver(redraw).observe(root);
+ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',redraw);
+ new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+ document.fonts&&document.fonts.ready.then(redraw);
+ redraw();return{redraw};
+}
+window.PF_PROFILES={mount};
+})();
+
+(function(){const $=id=>document.getElementById(id),app=document.querySelector('.app');let inst=null;
+ const others=()=>['trainpage','srcpage','rdpage'].some(id=>$(id)&&!$(id).hidden);
+ function openProfiles(on){const pg=$('pfpage');
+  if(on){if(!$('trainpage').hidden)openTrains(false);if(!$('srcpage').hidden)openSources(false);if($('rdpage')&&!$('rdpage').hidden)openRidership(false);}
+  pg.hidden=!on;app.classList.toggle('tpopen',on||others());
+  if(on){if(!inst)inst=PF_PROFILES.mount($('pf-root'));else inst.redraw();pg.scrollTop=0;$('pf-back').focus();if(location.hash!=='#profiles')history.replaceState(null,'','#profiles');}
+  else if(location.hash==='#profiles')history.replaceState(null,'',location.pathname+location.search);}
+ window.openProfiles=openProfiles;
+ $('btn-profiles').onclick=()=>openProfiles(true);
+ $('pf-back').onclick=()=>{openProfiles(false);$('btn-profiles').focus();};
+ ['btn-trains','btn-sources'].forEach(id=>{const b=$(id);b&&b.addEventListener('click',()=>{if(!$('pfpage').hidden){$('pfpage').hidden=true;}},true);});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('pfpage').hidden)openProfiles(false);});
+ window.addEventListener('hashchange',()=>{const on=location.hash==='#profiles';if(on!==!$('pfpage').hidden)openProfiles(on);else if(on)app.classList.add('tpopen');});
+ try{SRC.push({g:'Track profiles',items:[
+  {n:'E&N Railway track charts (Crouch Engineering, 2003)',use:'Grade limits for each 5-mile page, which bound the rail height profile.',d:'Victoria Sub MP 0–140 and Port Alberni Sub MP 0–38. Each page gives its steepest rising and falling grade northbound.',lim:'Only the steepest grade per page is recorded, so the shape within a page is fitted.'},
+  {n:'AWS Terrain Tiles (Mapzen terrarium): 100 m contours',u:'https://registry.opendata.aws/terrain-tiles/',use:'Holds both profiles within the right 100 m band along their length.',lim:'Too coarse in narrow valleys (it puts Cameron Lake above 200 m), and shows nothing below 100 m.'},
+  {n:'Malahat Summit elevation sign (352 m)',u:'https://www.waymarking.com/waymarks/WMARHX_Malahat_Summit_Elevation_352_m',use:'Highway 1 summit height.'},
+  {n:'BC Highway 4 (Wikipedia)',u:'https://en.wikipedia.org/wiki/British_Columbia_Highway_4',use:'Alberni Summit height (411 m) on Highway 4.'},
+  {n:'Cameron Lake (Wikipedia)',u:'https://en.wikipedia.org/wiki/Cameron_Lake_(British_Columbia)',use:'Lake level (184 m), used to correct Highway 4 along the lake.'}]});}catch(e){}
+ if(location.hash==='#profiles')openProfiles(true);
+})();
+</script>
+<script>
+/* ---------- Ridership page: choose which plan to forecast, compare plans, headline annual trips and fares ---------- */
+(function(){
+const $=id=>document.getElementById(id);
+const st=document.createElement('style');
+st.textContent=`
+.rdplan{display:grid;gap:6px;border:1px solid var(--ctl-line);border-radius:10px;padding:10px;background:var(--panel-2)}
+.rdplan label{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700}
+.rdplan select{font:inherit;font-size:13px;padding:7px 8px;border:1.5px solid var(--ctl-line);border-radius:6px;background:var(--ctl-bg);color:var(--ink);width:100%;min-width:0}
+.rdplan .m{font-size:11.5px;color:var(--muted)}
+.rdplan .btn.sm{justify-self:start}
+.rdfor{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0}
+.rdfor span{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.rdfor b{font-family:var(--display);font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+.rdhero{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:10px}
+.rdh{border-radius:12px;padding:16px 18px 14px;display:grid;gap:6px;align-content:start;background:var(--ink);color:var(--bg)}
+.rdh.rev{background:var(--accent);color:#fff}
+.rdh .lbl2{font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;font-weight:700;opacity:.85}
+.rdh .big{font-family:var(--display);font-weight:800;font-size:clamp(46px,7vw,68px);line-height:.92;font-variant-numeric:tabular-nums;letter-spacing:-.005em}
+.rdh .big small{font-size:.45em;font-weight:800;margin-left:4px;letter-spacing:.02em}
+.rdh .rng{font-family:var(--mono);font-size:12.5px;opacity:.9;font-variant-numeric:tabular-nums}
+.rdh .yr1{display:flex;gap:6px 14px;flex-wrap:wrap;border-top:1px solid color-mix(in srgb,currentColor 30%,transparent);padding-top:8px;margin-top:2px;font-size:12.5px}
+.rdh .yr1 b{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.rdcmp{display:grid;gap:6px}
+.rdcmp h2{margin:4px 0 0}
+.rdcmpt{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
+.rdcmpt th,.rdcmpt td{padding:6px 6px;border-bottom:1px solid var(--line);text-align:right;vertical-align:middle}
+.rdcmpt th:first-child,.rdcmpt td:first-child{text-align:left}
+.rdcmpt thead th{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.rdcmpt tr.on td{background:color-mix(in srgb,var(--accent) 9%,transparent)}
+.rdcmpt tr.on td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+.rdcmpt .pn{all:unset;cursor:pointer;font-weight:700}.rdcmpt .pn:hover,.rdcmpt .pn:focus-visible{text-decoration:underline}
+.rdcmpt .v{font-family:var(--display);font-weight:800;font-size:17px}
+.rdcmpt .cb{width:22%;min-width:70px}.rdcmpt .cb i{display:block;height:8px;border-radius:3px;background:var(--ink);opacity:.8}.rdcmpt .cb.r i{background:var(--accent)}
+.rdcmpt .na{color:var(--muted)}
+.rdcmpbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.rdscroll{overflow-x:auto}
+`;
+document.head.appendChild(st);
+
+const NAMES={live:'Plan on the map'};
+const ORDER=['live'];
+for(const o of $('tt-preset').options){NAMES[o.value]=o.textContent;ORDER.push(o.value);}
+let SEL='live';
+const PC={};const FULL={};const SUM={};
+function planFor(k){if(k==='live')return PLAN;const ws=typeof worksSig==='function'?worksSig():'';let c=PC[k];if(!c||c.ws!==ws){c={ws,p:defaultPlan(k)};PC[k]=c;}return c.p;}
+function withPlan(k,fn){if(k==='live')return fn();const keep=PLAN;PLAN=planFor(k);try{return fn();}finally{PLAN=keep;}}
+function sigFor(k){return withPlan(k,rdSig);}
+function liveName(){const p=PRESETS[PLAN.preset];return 'Plan on the map'+(p?` (started from ${NAMES[PLAN.preset]||p.name})`:'');}
+const nameOf=k=>k==='live'?liveName():NAMES[k];
+
+// plan picker in the sidebar
+const side=document.querySelector('.rdside');
+const box=document.createElement('div');box.className='rdplan';
+box.innerHTML=`<label for="rd-plan">Plan to forecast</label><select id="rd-plan"></select>
+ <div class="m" id="rd-plan-note"></div>
+ <button type="button" class="btn sm" id="rd-plan-load" hidden>Load this timetable on the map</button>`;
+side.insertBefore(box,side.firstChild);
+function fillSel(){$('rd-plan').innerHTML=ORDER.map(k=>`<option value="${k}">${esc(k==='live'?liveName():NAMES[k])}</option>`).join('');$('rd-plan').value=SEL;
+  $('rd-plan-note').textContent=SEL==='live'?'The timetable now running on the map, with your edits.':'A starting timetable, forecast without changing the map. Stations, track works and bus timing come from the map.';
+  $('rd-plan-load').hidden=SEL==='live';}
+fillSel();
+$('rd-plan').onchange=()=>{SEL=$('rd-plan').value;fillSel();show(SEL);};
+$('rd-plan-load').onclick=()=>{const k=SEL;$('tt-preset').value=k;$('btn-preset').click();
+  if(FULL[k]){FULL.live=FULL[k];FULL.live.plan='live';}if(SUM[k])SUM.live={...SUM[k]};SEL='live';fillSel();show('live');};
+
+function fresh(k){return FULL[k]&&FULL[k].sig===sigFor(k);}
+function show(k){if(fresh(k)){RD_LAST=FULL[k];RD_SIG=FULL[k].sig;rdRender();rdStale();}else rdCalc();}
+
+function runPlan(k){return withPlan(k,()=>{const S=rdScen();const C=rdRun(S.central,true),Lo=rdRun(S.low,false),Hi=rdRun(S.high,false);
+  return{C,lo:Lo.totAll,hi:Hi.totAll,DD:rdDirect(),at:new Date(),sim:hhmm(sim),plan:k,sig:rdSig()};});}
+function keepSum(k,R){SUM[k]={tot:R.C.totAll,lo:R.lo,hi:R.hi,rev:R.C.rev,sig:R.sig};}
+
+rdCalc=function(){const k=SEL,btn=$('rd-calc');btn.disabled=true;btn.textContent='Calculating…';
+  setTimeout(()=>{try{const R=runPlan(k);FULL[k]=R;keepSum(k,R);RD_LAST=R;RD_SIG=R.sig;rdRender();}
+    catch(err){$('rd-out').innerHTML=`<div class="rdwarn">The calculation failed: ${esc(String(err&&err.message||err))}</div>`;}
+    btn.disabled=false;btn.textContent='Calculate';rdStale();},30);};
+$('rd-calc').onclick=()=>rdCalc();
+
+const baseRender=rdRender;
+const M=v=>v>=1e6?(v/1e6).toFixed(v>=1e7?1:2)+'M':fmt(r10(v));
+const $M=v=>'$'+(v/1e6).toFixed(v>=1e7?1:2)+'M';
+rdRender=function(){const k=RD_LAST.plan||'live';withPlan(k,baseRender);
+  const out=$('rd-out'),P=RDP,R=RD_LAST.C,tot=R.totAll,lo=RD_LAST.lo,hi=RD_LAST.hi,yr=P.annual,ramp=P.ramp/100,rpt=tot?R.rev/tot:0;
+  // the first summary row loses the annual and fare tiles, which move into the headline
+  const k1=out.querySelector('.rdkpis');if(k1){const t=[...k1.children];[2,3,6].forEach(i=>t[i]&&t[i].remove());}
+  const mm=k1&&k1.nextElementSibling;if(mm&&mm.classList.contains('m'))mm.innerHTML=mm.innerHTML.replace('for the current timetable','for this timetable');
+  const head=document.createElement('div');head.className='rdcmp';
+  head.innerHTML=`<p class="rdfor"><span>Forecast for</span><b>${esc(nameOf(k))}</b></p>
+   <div class="rdhero">
+    <div class="rdh"><span class="lbl2">Trips a year, mature</span><span class="big">${M(tot*yr)}</span>
+     <span class="rng">Range ${M(lo*yr)} – ${M(hi*yr)} · ${fmt(yr)} weekday-equivalent days</span>
+     <div class="yr1"><span>First year <b>${M(tot*yr*ramp)}</b></span><span>Weekday <b>${fmt(r10(tot))}</b></span></div></div>
+    <div class="rdh rev"><span class="lbl2">Fare revenue a year, mature</span><span class="big">${$M(R.rev*yr)}</span>
+     <span class="rng">Range ${$M(rpt*lo*yr)} – ${$M(rpt*hi*yr)} · about $${rpt.toFixed(2)} a trip</span>
+     <div class="yr1"><span>First year <b>${$M(R.rev*yr*ramp)}</b></span><span>Weekday <b>$${fmt(Math.round(R.rev/100)*100)}</b></span></div></div>
+   </div>`;
+  out.insertBefore(head,out.firstChild);
+  const cmp=document.createElement('div');cmp.className='rdcmp';cmp.id='rd-cmp';
+  const k1b=out.querySelector('.rdkpis');const anchor=k1b&&k1b.nextElementSibling;
+  out.insertBefore(cmp,anchor?anchor.nextSibling:null);
+  renderCmp();};
+
+function renderCmp(){const c=$('rd-cmp');if(!c)return;const yr=RDP.annual;
+  const rows=ORDER.map(k=>{const s=SUM[k];const ok=s&&s.sig===sigFor(k);return{k,s:ok?s:null};});
+  const mt=Math.max(1,...rows.map(r=>r.s?r.s.tot:0)),mr=Math.max(1,...rows.map(r=>r.s?r.s.rev:0));
+  const missing=rows.filter(r=>!r.s).length;
+  c.innerHTML=`<h2>Compare plans</h2>
+   <div class="rdcmpbar"><span class="m">Every plan uses the assumptions on the left. Choose a plan's name to see its full forecast.</span>
+    ${missing?`<button type="button" class="btn sm" id="rd-all">Calculate the other ${missing} plan${missing>1?'s':''}</button>`:''}</div>
+   <div class="rdscroll"><table class="rdcmpt"><thead><tr><th>Plan</th><th>Weekday trips</th><th>Trips a year</th><th></th><th>Fare revenue a year</th><th></th></tr></thead><tbody>
+   ${rows.map(({k,s})=>`<tr class="${k===(RD_LAST&&RD_LAST.plan||'live')?'on':''}"><td><button type="button" class="pn" data-k="${k}">${esc(nameOf(k))}</button></td>
+     ${s?`<td>${fmt(r10(s.tot))}</td><td class="v">${M(s.tot*yr)}</td><td class="cb"><i style="width:${(s.tot/mt*100).toFixed(1)}%"></i></td><td class="v">${$M(s.rev*yr)}</td><td class="cb r"><i style="width:${(s.rev/mr*100).toFixed(1)}%"></i></td>`
+        :`<td class="na" colspan="5">Not calculated with these assumptions</td>`}</tr>`).join('')}
+   </tbody></table></div>`;
+  c.querySelectorAll('.pn').forEach(b=>b.onclick=()=>{SEL=b.dataset.k;fillSel();show(SEL);});
+  const all=$('rd-all');if(all)all.onclick=()=>{all.disabled=true;const todo=rows.filter(r=>!r.s).map(r=>r.k);let i=0;
+    const step=()=>{if(i>=todo.length){renderCmp();return;}const k=todo[i++];all.textContent=`Calculating ${i} of ${todo.length}…`;
+      setTimeout(()=>{try{const R=runPlan(k);FULL[k]=R;keepSum(k,R);}catch(e){console.warn(e);}step();},30);};step();};}
+
+const baseStale=rdStale;
+rdStale=function(){const s=$('rd-stale');if(!s)return;const k=RD_LAST&&RD_LAST.plan||'live';s.hidden=!(RD_LAST&&sigFor(k)!==RD_SIG);if(!s.hidden)renderCmp();};
+// keep the plan names current when the rider opens the page
+const baseOpen=openRidership;
+openRidership=function(on){if(on)fillSel();baseOpen(on);};
+
+// the loaded plan's forecast on the Plan panel
+const st2=document.createElement('style');
+st2.textContent=`.planrd{display:grid;gap:6px;padding:4px 12px 2px}
+.prd{border-radius:10px;padding:10px 12px;display:grid;gap:2px;background:var(--ink);color:var(--bg)}.prd.rev{background:var(--accent);color:#fff}
+.prd span{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;opacity:.85}
+.prd b{font-family:var(--display);font-weight:800;font-size:38px;line-height:1;font-variant-numeric:tabular-nums}
+.prd em{font-style:normal;font-family:var(--mono);font-size:11.5px;opacity:.9}
+.planrd .m{font-size:11.5px;color:var(--muted)}.planrd .btn{justify-self:start}`;
+document.head.appendChild(st2);
+let prdTok=0;
+function planRd(){const box=$('plan-rd');if(!box||$('pane-plan').hidden)return;const sig=sigFor('live');
+  if(SUM.live&&SUM.live.sig===sig){drawPlanRd();return;}
+  box.innerHTML='<div class="m">Calculating the forecast for this plan…</div>';const tok=++prdTok;
+  setTimeout(()=>{if(tok!==prdTok)return;try{const R=runPlan('live');FULL.live=R;keepSum('live',R);drawPlanRd();}catch(e){box.innerHTML=`<div class="rdwarn">The forecast failed: ${esc(String(e&&e.message||e))}</div>`;}},60);}
+function drawPlanRd(){const s=SUM.live,yr=RDP.annual,ramp=RDP.ramp/100,rpt=s.tot?s.rev/s.tot:0;
+  $('plan-rd').innerHTML=`<div class="prd"><span>Trips a year, mature</span><b>${M(s.tot*yr)}</b><em>Range ${M(s.lo*yr)} – ${M(s.hi*yr)} · first year ${M(s.tot*yr*ramp)}</em><em>${fmt(r10(s.tot))} trips a weekday</em></div>
+   <div class="prd rev"><span>Fare revenue a year, mature</span><b>${$M(s.rev*yr)}</b><em>Range ${$M(rpt*s.lo*yr)} – ${$M(rpt*s.hi*yr)} · first year ${$M(s.rev*yr*ramp)}</em><em>About $${rpt.toFixed(2)} a trip</em></div>
+   <div class="m">Forecast for the timetable on the map, with the ridership page's assumptions. It updates when the plan changes.</div>
+   <button type="button" class="btn sm" id="plan-rd-open">Open the ridership page</button>`;
+  $('plan-rd-open').onclick=()=>{SEL='live';fillSel();openRidership(true);show('live');};}
+const basePP=renderPlanPane;
+renderPlanPane=function(){const r=basePP.apply(this,arguments);planRd();return r;};
+renderPlanPane.ck=basePP.ck;
+})();
+</script>
+
 </body>
 </html>
