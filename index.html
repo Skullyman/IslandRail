@@ -4012,20 +4012,45 @@ const BUSG={
 BUSG.bus={layers:[{cls:'hb-bus',sw:.8,v:[glyphFn('M-4.6 -4.4Q-4.6 -5.9 -3.1 -5.9H3.1Q4.6 -5.9 4.6 -4.4V3.6H-4.6Z')]},{cls:'hb-buswin',v:[glyphFn('M-3.5 -4.7H3.5V-.9H-3.5Z'+circ(-2.6,1.6,.75)+circ(2.6,1.6,.75))]},{cls:'hb-buswh',v:[glyphFn('M-3.9 3.6h2.1v1.8h-2.1zM1.8 3.6h2.1v1.8h-2.1z')]}]};
 /* --- buses --- */
 let hbPaths=null,hbTick=0;const thBus={key:''};
-function thBusDraw(pos){const zoomed=PX_PER_KM*ppu>=18;const G=BUSG[HOL]||(zoomed?BUSG.bus:null);if(!G){if(hbPaths)for(const p of hbPaths)p.setAttribute('d','');thBus.key='';return false;}
-  if(!hbPaths){hbPaths=[];}while(hbPaths.length<G.layers.length)hbPaths.push(el('path',{},busFx));
-  hbPaths.forEach((p,i)=>{if(i>=G.layers.length){p.setAttribute('d','');return;}p.setAttribute('class','hbus '+G.layers[i].cls);});
-  const s=1/ppu,now=performance.now(),moving=speed&&!holReduce();
-  // redraw themed buses at most ~25 times a second, or at once after a zoom or theme change
-  const key=HOL+'|'+(G===BUSG.bus?'b':'')+'|'+ppu.toFixed(4)+'|'+pos.length+'|'+vb.x.toFixed(0)+'|'+vb.y.toFixed(0);if(now-hbTick<40&&key===thBus.key)return true;hbTick=now;thBus.key=key;
-  const strs=G.layers.map(()=>'');
-  const mx=vb.w*.05,x0=vb.x-mx,x1=vb.x+vb.w+mx,y0=vb.y-mx,y1=vb.y+vb.h+mx,detail=PX_PER_KM*ppu>=18;
+/* Buses are drawn as fixed, pre-drawn symbols placed at each bus and scaled to the zoom, so they stay sharp at any zoom.
+   One symbol per look; a pool of <use> elements is reused frame to frame and only buses in view are drawn. */
+const BSYM_SRC={
+ bus:`<path d="M-5.2 -5Q-5.2 -6.7 -3.5 -6.7H3.5Q5.2 -6.7 5.2 -5V4.2H-5.2Z" fill="var(--bus)" stroke="#fff" stroke-width=".9"/><path d="M-4 -5.3H4V-1H-4Z" fill="#fff"/>
+  <circle cx="-3" cy="1.8" r=".85" fill="#fff"/><circle cx="3" cy="1.8" r=".85" fill="#fff"/><path d="M-4.4 4.2h2.4v2h-2.4zM2 4.2h2.4v2h-2.4z" fill="#1f2937"/>`,
+ witch:`<path d="M-9 3.2L7.5 .6" stroke="#7c4a21" stroke-width="1.3" stroke-linecap="round"/><path d="M-8.6 3.1L-12.6 .8-12 3.4-12.8 5.6Z" fill="#d6a85a" stroke="#8a5a1f" stroke-width=".5"/>
+  <path d="M-4.6 2.6Q-6.6 -.6 -4.4 -2.6L-1.4 -3.6Q.4 -.6 2.6 2.2Z" fill="#6d28d9" stroke="#2e1065" stroke-width=".5"/><path d="M-2.4 -3.2Q-6.4 -3.6 -7.6 -1Q-5 -1.6 -3.6 -1Z" fill="#4c1d95"/>
+  <circle cx="0" cy="-5.2" r="1.9" fill="#86efac" stroke="#166534" stroke-width=".4"/><path d="M1.8 -5.3L3.2 -4.6 1.7 -4.4Z" fill="#86efac"/>
+  <ellipse cx="-.2" cy="-6.9" rx="3.4" ry=".75" fill="#111827"/><path d="M-1.9 -7.1L.6 -12.4Q1.2 -11 3.4 -11.4L1.6 -7.1Z" fill="#111827"/><path d="M-1.7 -7.6H1.7" stroke="#a855f7" stroke-width=".8"/>
+  <path d="M.8 -.6L2.6 1.6" stroke="#2e1065" stroke-width=".9" stroke-linecap="round"/>`,
+ elf:`<path d="M-3.6 3.4H3.6L4.8 7.8H-4.8Z" fill="#dc2626" stroke="#fff" stroke-width=".6"/><path d="M-3.2 -.2L-5.8 -1.9-3.3 1.6ZM3.2 -.2L5.8 -1.9 3.3 1.6Z" fill="#f5c9a6" stroke="#9a6b4f" stroke-width=".4"/>
+  <circle cx="0" cy=".4" r="3.4" fill="#f5c9a6" stroke="#9a6b4f" stroke-width=".5"/><circle cx="-1.2" cy=".1" r=".5" fill="#1f2937"/><circle cx="1.2" cy=".1" r=".5" fill="#1f2937"/>
+  <path d="M-.9 1.6Q0 2.4 .9 1.6" fill="none" stroke="#9a3412" stroke-width=".45" stroke-linecap="round"/>
+  <path d="M-3.6 -2.2Q-2 -7.6 1.2 -8.6Q3.8 -9.4 5.2 -7.6Q2.8 -7.8 2.4 -6.4L3.6 -2.2Z" fill="#15803d" stroke="#fff" stroke-width=".5"/><path d="M-3.9 -2.9h7.8v1.4h-7.8z" fill="#fff"/><circle cx="5.4" cy="-7.6" r="1.15" fill="#fff"/>`,
+ heart:`<path d="M0 5C-6.2 .6 -7 -3.1 -4.7 -4.6C-2.9 -5.7 -.8 -4.6 0 -2.9C.8 -4.6 2.9 -5.7 4.7 -4.6C7 -3.1 6.2 .6 0 5Z" fill="#e11d48" stroke="#fff" stroke-width=".9"/>`,
+ clover:`<path d="M0 1L1.7 5.8" stroke="#166534" stroke-width="1.4" stroke-linecap="round"/><circle cx="0" cy="-2.7" r="2.4" fill="#16a34a" stroke="#fff" stroke-width=".7"/>
+  <circle cx="-2.6" cy=".6" r="2.4" fill="#16a34a" stroke="#fff" stroke-width=".7"/><circle cx="2.6" cy=".6" r="2.4" fill="#16a34a" stroke="#fff" stroke-width=".7"/>`,
+ bunny:`<ellipse cx="2.4" cy="-5.4" rx=".9" ry="2.6" fill="#f5efe6" stroke="#8b6f5a" stroke-width=".6"/><ellipse cx="4.1" cy="-5.2" rx=".9" ry="2.6" fill="#f5efe6" stroke="#8b6f5a" stroke-width=".6"/>
+  <ellipse cx="2.4" cy="-5.2" rx=".35" ry="1.6" fill="#f9a8d4"/><ellipse cx="4.1" cy="-5" rx=".35" ry="1.6" fill="#f9a8d4"/>
+  <ellipse cx="-.6" cy="1.4" rx="3.9" ry="2.9" fill="#f5efe6" stroke="#8b6f5a" stroke-width=".6"/><circle cx="3.2" cy="-1.3" r="2.2" fill="#f5efe6" stroke="#8b6f5a" stroke-width=".6"/>
+  <circle cx="-4.6" cy=".8" r="1.25" fill="#fff" stroke="#8b6f5a" stroke-width=".5"/><circle cx="3.9" cy="-1.6" r=".4" fill="#1f2937"/>`};
+const BSYM_FOR={halloween:'witch',winter:'elf',valentine:'heart',stpatrick:'clover',easter:'bunny'};
+{let defs=svgfx.querySelector('defs');if(!defs){defs=el('defs',{},svgfx);svgfx.insertBefore(defs,svgfx.firstChild);}
+ for(const [k,v] of Object.entries(BSYM_SRC)){const g=el('g',{id:'bsym-'+k},defs);g.innerHTML=v;}}
+const busUse=[];
+function thBusHide(from=0){for(let i=from;i<busUse.length;i++)if(busUse[i].style.display!=='none')busUse[i].style.display='none';}
+function thBusDraw(pos){if(hbPaths)for(const p of hbPaths)p.setAttribute('d','');
+  const zoomed=PX_PER_KM*ppu>=18;const sym=BSYM_FOR[HOL]||(zoomed?'bus':null);
+  if(!sym){thBusHide();thBus.key='';return false;}
+  const now=performance.now(),moving=speed&&!holReduce(),s=1/ppu;
+  // redraw at most ~25 times a second, or at once after a zoom, pan or theme change
+  const key=sym+'|'+ppu.toFixed(4)+'|'+pos.length+'|'+vb.x.toFixed(0)+'|'+vb.y.toFixed(0);if(now-hbTick<40&&key===thBus.key)return true;hbTick=now;thBus.key=key;
+  const mx=vb.w*.05,x0=vb.x-mx,x1=vb.x+vb.w+mx,y0=vb.y-mx,y1=vb.y+vb.h+mx;let n=0;
   for(let i=0;i<pos.length;i++){const [x,y]=pos[i];if(x<x0||x>x1||y<y0||y>y1)continue;let yy=y,k=s;
-    if(G.anim==='hop'&&moving)yy=y-Math.max(0,Math.sin(now/110+i*1.7))*2.6*s;
-    if(G.anim==='beat'&&moving)k=s*(1+.12*Math.max(0,Math.sin(now/160+i)));
-    const v=G.anim==='legs'&&moving?((Math.floor(now/140)+i)&1):0;
-    for(let L=0;L<G.layers.length;L++){if(G.layers[L].detail&&!detail)continue;const vs=G.layers[L].v;strs[L]+=vs[Math.min(v,vs.length-1)](x,yy,k);}}
-  hbPaths.forEach((p,i)=>{p.setAttribute('d',i<strs.length?strs[i]:'');p.style.strokeWidth=i<G.layers.length?((G.layers[i].sw||1)*s).toFixed(4):'';});return true;}
+    if(moving){if(sym==='bunny')yy=y-Math.max(0,Math.sin(now/110+i*1.7))*2.6*s;else if(sym==='witch')yy=y+Math.sin(now/260+i*1.3)*1.4*s;else if(sym==='heart')k=s*(1+.12*Math.max(0,Math.sin(now/160+i)));}
+    let u=busUse[n];if(!u){u=busUse[n]=el('use',{class:'hbus'},busFx);}
+    if(u._s!==sym){u.setAttribute('href','#bsym-'+sym);u._s=sym;}
+    u.setAttribute('transform',`translate(${x.toFixed(3)} ${yy.toFixed(3)}) scale(${k.toPrecision(4)})`);if(u.style.display==='none')u.style.display='';n++;}
+  thBusHide(n);return true;}
 /* --- trains: decorations behind the badge, on it, and in front --- */
 function thTrain(t){if(!t.ring)return;const inner=t.ring.parentNode;
   if(!t.thb){t.thb=el('g',{class:'thb'},inner);inner.insertBefore(t.thb,inner.firstChild);t.thm=el('g',{class:'thm'},inner);inner.insertBefore(t.thm,t.icon||t.tx);t.thf=el('g',{class:'thf'},inner);}
