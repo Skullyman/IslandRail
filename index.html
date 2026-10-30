@@ -213,7 +213,8 @@ body.maxmap-on{overflow:hidden}
 @keyframes flow{to{stroke-dashoffset:-12}}
 .car{fill:var(--car)}
 .rail{fill:none;stroke:var(--rail);stroke-linejoin:round;stroke-linecap:butt}
-.rail-tie{fill:none;stroke:var(--land);stroke-linejoin:round}
+.rail-halo{fill:none;stroke:var(--halo,#fff);stroke-opacity:.55;stroke-linejoin:round;stroke-linecap:round}
+svg:not(.zr):not(.legrail) .sleepers{display:none}
 .sleepers{fill:none;stroke:var(--sleeper);stroke-dasharray:2 4.6;stroke-linejoin:round}
 .sleepers.added{stroke-dasharray:1.6 7}.rail.added{stroke-dasharray:9 3}
 .railoff .rail{stroke:var(--rail-off)}.railoff .sleepers{stroke:var(--sleeper-off)}.railoff .rail.added{opacity:.6}
@@ -255,7 +256,7 @@ svg.picking{cursor:crosshair}
 .gapseg{fill:none;stroke:#c62828;stroke-width:9;stroke-dasharray:3 4}.gapseg.fixed{stroke:var(--ok)}
 .infrasum{display:grid;gap:4px;margin-top:6px;border-top:1px solid var(--line);padding-top:8px}.probrow{display:grid;grid-template-columns:16px 1fr auto;gap:6px;align-items:center;font-size:12px}.badt{color:#c62828;font-weight:700}.okt{color:var(--ok);font-weight:700}
 .spdwarn{color:var(--warn);font-size:12px;margin:0}.spdbox p{margin:0}
-.route-hi{fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:.45}
+.route-hi{fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:.2}
 .stn{fill:var(--halo);stroke:var(--ink);stroke-width:1.6;cursor:pointer}
 .stn.major{stroke-width:2.2}
 .lbl{font-family:var(--body);fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px;stroke-linejoin:round}
@@ -812,7 +813,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
 .palbtn[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:-1px}
 .palbtn i{flex:none;width:18px;height:12px;border-radius:3px;border:1px solid rgba(0,0,0,.35);background:linear-gradient(135deg,var(--a) 50%,var(--b) 50%)}
 .seg.dim{opacity:.45}
-.sidings .sidln{fill:none;stroke:var(--ink,#223);stroke-width:2.6;opacity:.85;stroke-linecap:round}.sidings .sid.plan .sidln{stroke:#3b5b92;stroke-dasharray:4 3;opacity:.95}.sidings .sid.built .sidln{stroke:#3b5b92;opacity:.95}.sidings .sid.assumed .sidln{stroke-dasharray:1.5 2.5;opacity:.6}.sidings .sid.dbl .sidln{stroke-width:3.2}.sidings .sid{cursor:help}.sidings .sid:hover .sidln{stroke-width:4;opacity:1}</style></head>
+.sidings .sid.assumed .rail,.sidings .sid.disused .rail{opacity:.45}.sidings .sid.assumed .sleepers,.sidings .sid.disused .sleepers{opacity:.5}.sidings .sidhit{fill:none;stroke:transparent;pointer-events:stroke}.sidings .sid{cursor:help}.sidings .sid:hover .rail{stroke-width:3.6px}</style></head>
 <body>
 <noscript><p style="padding:2em;font-family:sans-serif">Island Rail Planner needs JavaScript enabled.</p></noscript>
 
@@ -914,7 +915,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
     <div class="mapwrap" id="mapwrap">
       <svg id="map" role="img" aria-label="Map of Vancouver Island showing the E&amp;N rail corridor, highways and live train positions"></svg><svg id="mapfx" aria-hidden="true"></svg>
       <div class="legend" aria-hidden="true">
-        <div><svg width="30" height="10" class="legrail"><line x1="1" y1="5" x2="29" y2="5" class="sleepers" stroke-width="9"/><line x1="1" y1="5" x2="29" y2="5" class="rail" stroke-width="6"/><line x1="1" y1="5" x2="29" y2="5" stroke="var(--chip)" stroke-width="2.7"/></svg><span id="leg-rail">E&amp;N rail corridor</span></div>
+        <div><svg width="30" height="10" class="legrail"><line x1="1" y1="5" x2="29" y2="5" class="sleepers" stroke-width="8"/><line x1="1" y1="5" x2="29" y2="5" class="rail" stroke-width="2.6"/></svg><span id="leg-rail">E&amp;N rail corridor: single track</span></div>
         <div><svg width="30" height="10"><line x1="1" y1="5" x2="29" y2="5" stroke="var(--hwy-edge)" stroke-width="7" stroke-linecap="round"/><line x1="1" y1="5" x2="29" y2="5" stroke="var(--hwy)" stroke-width="4.6" stroke-linecap="round"/></svg>Highway</div>
         <div><svg width="30" height="8"><line x1="1" y1="4" x2="29" y2="4" stroke="var(--street-edge)" stroke-width="5" stroke-linecap="round"/><line x1="1" y1="4" x2="29" y2="4" stroke="var(--street)" stroke-width="3" stroke-linecap="round"/></svg>Main road</div>
         <div><svg width="30" height="10"><line x1="1" y1="5" x2="29" y2="5" stroke="var(--halo)" stroke-width="5" stroke-linecap="round"/><line x1="1" y1="5" x2="29" y2="5" stroke="var(--tct)" stroke-width="2.6" stroke-linecap="round"/></svg>Trans Canada Trail</div>
@@ -926,7 +927,8 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <div><svg width="30" height="10"><circle cx="15" cy="5" r="4" fill="var(--halo)" stroke="var(--ink)" stroke-width="1.6"/></svg>Passenger stop</div>
         <div><svg width="30" height="10"><rect x="11" y="1" width="8" height="8" fill="var(--halo)" stroke="var(--ink)" stroke-width="1.6"/></svg>Freight point</div>
         <div><svg width="30" height="10"><circle cx="15" cy="5" r="2.2" fill="var(--muted)"/></svg>Passing point (no stop)</div>
-        <div><svg width="30" height="10"><line x1="2" y1="3" x2="28" y2="3" stroke="var(--ink,#223)" stroke-width="2.4" opacity=".85"/><line x1="2" y1="8" x2="28" y2="8" stroke="#3b5b92" stroke-width="2.4" stroke-dasharray="4 3"/></svg>Siding: existing / proposed</div>
+        <div><svg width="30" height="16" class="legrail"><polyline points="1,12 29,12" class="sleepers" style="fill:none" stroke-width="7"/><polyline points="9,4 21,4" class="sleepers" style="fill:none" stroke-width="7"/><polyline points="1,12 29,12" class="rail" style="fill:none" stroke-width="2.4"/><polyline points="4,12 9,4 21,4 26,12" class="rail" style="fill:none" stroke-width="2.4"/></svg>Siding or double track</div>
+        <div><svg width="30" height="16" class="legrail"><polyline points="1,12 29,12" class="sleepers" style="fill:none" stroke-width="7"/><polyline points="9,4 21,4" class="sleepers" style="fill:none" stroke-width="7"/><polyline points="1,12 29,12" class="rail" style="fill:none" stroke-width="2.4"/><polyline points="4,12 9,4 21,4 26,12" class="rail added" style="fill:none;stroke-dasharray:4 2.5" stroke-width="2.4"/></svg>Proposed track</div>
       </div>
       <div class="mapctl">
         <button id="srbtn" title="Search the map (/)" aria-label="Search for a place or address" aria-pressed="false" aria-expanded="false" aria-controls="srpanel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5.5 5.5"/></svg></button>
@@ -1536,10 +1538,10 @@ function finishTrip(t){
    Costs: MnDOT Midwest Regional Rail cost methodology (2010 US$: passenger siding about $1.45M a mile of track, No. 20 turnouts
    $0.18–0.28M, CTC $0.21M a mile; double track on new embankment $3.0M a mile), escalated to 2026 CAD (×2.2). Order of magnitude. */
 const EXIST_SIDINGS=[
- ['MAIN',5.46,129,'Esquimalt (Admirals Road)','osm'],['MAIN',12.53,363,'Langford','osm'],['MAIN',31.7,387,'Malahat','osm'],['MAIN',49.87,588,'Cobble Hill','osm'],
- ['MAIN',60.83,370,'Duncan (south)','osm'],['MAIN',68.05,224,'Duncan (north)','osm'],['MAIN',103.66,335,'Cassidy','osm'],['MAIN',111.98,204,'Nanaimo (south)','osm'],
+ ['MAIN',5.46,129,'Esquimalt (Admirals Road)','osm'],['MAIN',12.53,363,'Langford','osm'],['MAIN',31.7,387,'Malahat','osm','d'],['MAIN',49.87,588,'Cobble Hill','osm','d'],
+ ['MAIN',60.83,370,'Duncan (south)','osm'],['MAIN',68.05,224,'Duncan (north)','osm'],['MAIN',103.66,335,'Cassidy','osm'],['MAIN',111.98,204,'Nanaimo (south)','osm','d'],
  ['MAIN',123.99,296,'Wellington','osm'],['MAIN',129.7,330,'Lantzville','pp'],['MAIN',138.0,330,'Nanoose Bay','pp'],['MAIN',143.69,238,'Nanoose','osm'],['MAIN',152.79,333,'Parksville','osm'],
- ['MAIN',176.53,375,'Dashwood','osm'],['MAIN',184.6,330,'Bowser','pp'],['MAIN',198.9,330,'Fanny Bay','pp'],['MAIN',209.7,330,'Union Bay','pp'],['MAIN',217.8,330,'Royston','pp'],
+ ['MAIN',176.53,375,'Dashwood','osm','d'],['MAIN',184.6,330,'Bowser','pp'],['MAIN',198.9,330,'Fanny Bay','pp'],['MAIN',209.7,330,'Union Bay','pp'],['MAIN',217.8,330,'Royston','pp'],
  ['ALB',0.26,311,'Parksville junction','osm'],['ALB',7.5,330,'Coombs','pp'],['ALB',20.6,330,'Cameron Lake','pp'],['ALB',37.3,330,'Arrowsmith Summit','pp']];
 // terminals and yards that can hold several trains: [line, from km, to km, name]
 const TERMINALS=[['MAIN',-1,0.9,'Victoria'],['MAIN',13.8,14.7,'Westhills'],['MAIN',115.6,117.0,'Nanaimo (station and Wellcox)'],['MAIN',222.9,999,'Courtenay'],['ALB',61.5,999,'Port Alberni']];
@@ -1554,7 +1556,7 @@ function placesSig(){return JSON.stringify((TRACKSPEC.works||[]).filter(w=>w.on!
 function getPlaces(){const sig=placesSig();if(PLACES&&sig===PLACES_SIG)return PLACES;const P={};
   for(const line of Object.keys(LINES)){const max=lineMax(line),L=[];
     for(const [l,a,b,n] of TERMINALS)if(l===line)L.push({a:Math.max(-1,a),b:Math.min(max+1,b),kind:'term',len:1e9,n,src:'term'});
-    for(const [l,k,len,n,src] of EXIST_SIDINGS)if(l===line)L.push({a:k-len/2000-.05,b:k+len/2000+.05,kind:'siding',len,n,src});
+    for(const [l,k,len,n,src,st] of EXIST_SIDINGS)if(l===line)L.push({a:k-len/2000-.05,b:k+len/2000+.05,kind:'siding',len,n,src,dis:st==='d'});
     for(const w of TRACKSPEC.works||[])if(w.on!==false&&w.line===line&&WORK_TYPES[w.type]&&WORK_TYPES[w.type].track2){const a=mpToK(line,w.a),b=mpToK(line,w.b);
       L.push({a:Math.min(a,b),b:Math.max(a,b),kind:w.type==='double'?'double':'siding',len:Math.abs(b-a)*1000,n:w.name||WORK_TYPES[w.type].s,src:'work',w:w.id,status:w.status});}
     L.sort((x,y)=>x.a-y.a);const M=[];for(const p of L){const q=M[M.length-1];if(q&&p.a<=q.b+.02){q.b=Math.max(q.b,p.b);
@@ -1761,15 +1763,15 @@ HW.forEach(h=>{h.len=h.path.getTotalLength();const pt=P(h.lab);const g=scg(pt[0]
 const cars=[];// highway traffic is drawn as congestion dots (see HSEG)
 
 // rail
-const RAIL_EL={};
-function drawRail(){L.rail.innerHTML='';for(const k in RAIL_EL)delete RAIL_EL[k];
+const RAIL_EL={};const RAIL_W=2.6,TIE_W=8,TRACK_GAP=5;// every track is one red line; parallel tracks sit TRACK_GAP screen pixels apart
+function drawRail(){L.rail.innerHTML='';if(window.__sidG)L.rail.appendChild(window.__sidG);for(const k in RAIL_EL)delete RAIL_EL[k];
   for(const line of Object.keys(LINES)){const pts=LINES[line].map(o=>o.xy.map(v=>v.toFixed(1)).join(',')).join(' ');const u=TRK[line]&&TRK[line].user;
-    const w=line==='MAIN'?1:.9;
-    const t=el('polyline',{points:pts,class:'sleepers'+(u?' added':''),'stroke-width':9*w,'vector-effect':'non-scaling-stroke'},L.rail);
-    const a=el('polyline',{points:pts,class:'rail'+(u?' added':''),'stroke-width':6*w,'vector-effect':'non-scaling-stroke'},L.rail);
-    const b=el('polyline',{points:pts,class:'rail-tie'+(u?' added':''),'stroke-width':2.7*w,'vector-effect':'non-scaling-stroke'},L.rail);RAIL_EL[line]=[t,a,b];}}
+    const hl=el('polyline',{points:pts,class:'rail-halo','stroke-width':6,'vector-effect':'non-scaling-stroke'},L.rail);
+    const t=el('polyline',{points:pts,class:'sleepers'+(u?' added':''),'stroke-width':TIE_W,'vector-effect':'non-scaling-stroke'},L.rail);
+    const a=el('polyline',{points:pts,class:'rail'+(u?' added':''),'stroke-width':RAIL_W,'vector-effect':'non-scaling-stroke'},L.rail);RAIL_EL[line]=[hl,t,a];}
+  if(typeof drawSidings==='function')setTimeout(drawSidings,0);}
 drawRail();
-const routeHi=el('polyline',{class:'route-hi','stroke-width':12,'vector-effect':'non-scaling-stroke'},L.route);
+const routeHi=el('polyline',{class:'route-hi','stroke-width':20,'vector-effect':'non-scaling-stroke'},L.route);
 // stations (redrawn when stations are added or removed)
 const STN_G=[];
 function drawStations(){
@@ -1984,7 +1986,7 @@ function updateHwScale(){for(const s of TST){const x=tIndex(s,sim);hwBand[s.code
   hwScale[h.id]=Math.min(1,sts.reduce((a,s)=>a+tIndex(s,sim),0)/sts.length*1.6+.04);}}
 
 $('railbtn').onclick=()=>{const off=!wrap.classList.contains('railoff');wrap.classList.toggle('railoff',off);for(const k of ['trains','route','stn'])L[k].style.display=off?'none':'';
-  const b=$('railbtn');b.setAttribute('aria-pressed',String(!off));b.title=off?'Show active railway':'Show the corridor out of service';$('leg-rail').textContent=off?'E&N corridor, out of service':'E&N rail corridor';if(off&&tipPinned)hideTip(true);};
+  const b=$('railbtn');b.setAttribute('aria-pressed',String(!off));b.title=off?'Show active railway':'Show the corridor out of service';$('leg-rail').textContent=off?'E&N corridor, out of service':'E&N rail corridor: single track';if(off&&tipPinned)hideTip(true);};
 $('trailbtn').onclick=()=>{const on=L.trails.style.display==='none';L.trails.style.display=on?'':'none';$('trailbtn').setAttribute('aria-pressed',String(on));$('trailbtn').title=on?'Hide trails and bike lanes':'Show trails and bike lanes';document.querySelectorAll('.legbike').forEach(x=>x.hidden=!on);cullBikes();};
 $('popbtn').onclick=()=>{const on=popG.style.display==='none';popG.style.display=on?'':'none';daG.style.display=on?'':'none';$('popbtn').setAttribute('aria-pressed',String(on));$('poplegend').hidden=!on;if(on)updatePop();};
 
@@ -4183,17 +4185,23 @@ function autoSidings(plan,quiet){plan=plan||PLAN;TRACKSPEC.works=(TRACKSPEC.work
   PLACES=null;plan.autoSid=true;if(!quiet&&typeof drawSidings==='function')drawSidings();return{added,meets:meets.length,uncovered:need.length};}
 
 /* ---------- sidings and double track on the map: a thin second line beside the main line ---------- */
-const sidG=el('g',{class:'sidings'},L.rail);let SID_Q=false;
-function drawSidings(){sidG.innerHTML='';const off=8.5/ppu;
+const sidG=el('g',{class:'sidings'},L.rail);window.__sidG=sidG;let SID_Q=false;
+function drawSidings(){sidG.innerHTML='';const off=TRACK_GAP/ppu,taper=TRACK_GAP*3/ppu;
   for(const [line,M] of Object.entries(getPlaces()))for(const pl of M)for(const p of pl.parts){if(p.kind==='term')continue;
-    const a=Math.max(LINES[line][0].k,p.a+.05),b=Math.min(lineMax(line),p.b-.05);if(b<=a)continue;const pts=[];const n=Math.max(2,Math.ceil((b-a)/.05));
-    for(let i=0;i<=n;i++){const k=a+(b-a)*i/n,p0=lineAt(line,Math.max(0,k-.03)),p1=lineAt(line,k+.03),c=lineAt(line,k);const dx=p1[0]-p0[0],dy=p1[1]-p0[1],L2=Math.hypot(dx,dy)||1;pts.push([c[0]-dy/L2*off,c[1]+dx/L2*off]);}
-    const st=p.src==='work'?(p.status==='built'?'built':'plan'):p.src==='pp'?'assumed':'exist';
-    const g=el('g',{class:'sid '+st+(p.kind==='double'?' dbl':'')},sidG);
-    el('polyline',{points:pts.map(q=>q[0].toFixed(2)+','+q[1].toFixed(2)).join(' '),class:'sidln','vector-effect':'non-scaling-stroke'},g);
+    const a=Math.max(LINES[line][0].k,p.a+.05),b=Math.min(lineMax(line),p.b-.05);if(b<=a)continue;
+    const n=Math.max(8,Math.ceil((b-a)/.03)),C=[];let acc=0,prev=null;
+    for(let i=0;i<=n;i++){const k=a+(b-a)*i/n,c=lineAt(line,k);if(prev)acc+=Math.hypot(c[0]-prev[0],c[1]-prev[1]);prev=c;C.push({k,c,d:acc});}
+    const tot=acc,pts=C.map(({k,c,d})=>{const p0=lineAt(line,Math.max(0,k-.03)),p1=lineAt(line,k+.03),dx=p1[0]-p0[0],dy=p1[1]-p0[1],L2=Math.hypot(dx,dy)||1;
+      const f=Math.min(1,d/taper,(tot-d)/taper),o=off*(f<1?Math.sin(f*Math.PI/2):1);return[c[0]-dy/L2*o,c[1]+dx/L2*o];});
+    const st=p.src==='work'?(p.status==='built'?'built':'plan'):p.src==='pp'?'assumed':p.dis?'disused':'exist';
+    const g=el('g',{class:'sid '+st+(p.kind==='double'?' dbl':'')},sidG),P2=pts.map(q=>q[0].toFixed(2)+','+q[1].toFixed(2)).join(' ');
+    el('polyline',{points:P2,class:'rail-halo','stroke-width':6,'vector-effect':'non-scaling-stroke'},g);
+    el('polyline',{points:P2,class:'sleepers'+(st==='plan'?' added':''),'stroke-width':TIE_W,'vector-effect':'non-scaling-stroke'},g);
+    el('polyline',{points:P2,class:'rail sidln'+(st==='plan'?' added':''),'stroke-width':RAIL_W,'vector-effect':'non-scaling-stroke'},g);
+    el('polyline',{points:P2,class:'sidhit','stroke-width':12,'vector-effect':'non-scaling-stroke'},g);
     const tip=`<b>${esc(p.n)}</b><br>${p.kind==='double'?'Double track':'Passing siding'} · ${(p.kind==='double'?((p.b-p.a)).toFixed(1)+' km':Math.round(p.len)+' m')}<br>`+
-      (st==='exist'?'Existing siding (OpenStreetMap)':st==='assumed'?'Passing point · siding length assumed (330 m), not verified':p.status==='built'?'Built (track work)':'Proposed in this plan (track work, '+esc(p.status||'idea')+')')+
-      (p.kind==='siding'?`<br>Fits trains up to ${Math.round(p.len)} m: `+Object.entries(TRAIN_LEN).filter(([k,v])=>v<=p.len&&TYPES[k]).map(([k])=>TYPES[k].short||TYPES[k].name).join(', '):'');
+      (st==='exist'?'Existing siding (OpenStreetMap)':st==='disused'?'Existing siding, disused (OpenStreetMap)':st==='assumed'?'Passing point · siding length assumed (330 m), not verified':p.status==='built'?'Built (track work)':'Proposed in this plan (track work, '+esc(p.status||'idea')+')')+
+      (p.kind==='siding'?`<br>Fits trains up to ${Math.round(p.len)} m long: `+Object.entries(TRAIN_LEN).filter(([k,v])=>v<=p.len&&TYPES[k]).map(([k])=>TYPES[k].short||TYPES[k].name).join(', '):'');
     g.addEventListener('pointerenter',e=>{if(!tipPinned)placeTip(e,tip);});g.addEventListener('pointermove',e=>{if(!tipPinned)placeTip(e,tip);});g.addEventListener('pointerleave',()=>{if(!tipPinned)$('tip').hidden=true;});}}
 window.__sidQ=()=>{if(SID_Q)return;SID_Q=true;requestAnimationFrame(()=>{SID_Q=false;drawSidings();});};
 // first visit (or a plan saved before sidings existed): add the sidings the timetable needs once
