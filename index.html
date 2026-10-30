@@ -434,6 +434,92 @@ svg.picking{cursor:crosshair}
 .fdopts{display:grid;gap:4px;font-size:11.5px}.fdopts label{display:flex;align-items:center;gap:5px}.fdopts input[type=number]{width:46px;font:inherit;padding:2px 4px;border:1px solid var(--ctl-line);border-radius:5px;background:var(--ctl-bg);color:var(--ink)}
 .fdbtns{display:flex;gap:6px}.fdbtns .btn[disabled]{opacity:.45;cursor:default}.fdlist{display:grid;grid-template-columns:1fr auto;gap:1px 10px;font-size:11.5px;font-variant-numeric:tabular-nums;max-height:180px;overflow:auto}
 .busline{fill:none;stroke-width:1.6px;stroke-linejoin:round;stroke-linecap:round;opacity:.55}.busline.hot{opacity:1;stroke-width:3px}
+/* holiday themes (V63) */
+#thfx{position:absolute;inset:0;pointer-events:none;z-index:2}
+.thweb{position:absolute;top:0;right:58px;pointer-events:none;color:rgba(70,70,80,.55);display:none;z-index:2}
+:root[data-theme=dark] .thweb{color:rgba(230,230,240,.45)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .thweb{color:rgba(230,230,240,.45)}}
+[data-holiday=halloween] .thweb{display:block}
+#setmenu.setmenu{grid-template-columns:minmax(0,1fr);width:min(340px,calc(100vw - 32px))}.setrow.stack{display:grid;gap:5px;justify-content:stretch}
+.setrow select{font:inherit;font-size:12.5px;padding:6px 8px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%;min-width:0}
+.noinfo-tankerlegend #tankerlegend{display:none!important}.nolbl-tanker .tklbl{display:none}
+.tkhull{fill:#9a3412;stroke:#fff;stroke-width:1.2}.tkhull.still{fill:#a8a29e}.tkdeck{fill:none;stroke:#fed7aa;stroke-width:.9}.tkship{cursor:pointer}
+.tklbl{font-family:var(--body);font-size:10.5px;font-weight:700;fill:#7c2d12;paint-order:stroke;stroke:var(--halo);stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.tkkey{display:flex;gap:12px;font-size:11px}.tkkey span{display:flex;align-items:center;gap:4px}#tkstats{display:grid;gap:3px}
+.hbus{pointer-events:none}
+.hb-bus{fill:var(--bus);stroke:#fff}.hb-buswin{fill:#fff}.hb-buswh{fill:#1f2937}
+.hb-elfbody{fill:#dc2626;stroke:#fff}.hb-elfface{fill:#f5c9a6;stroke:#9a6b4f}.hb-elfhat{fill:#15803d;stroke:#fff}.hb-elftrim{fill:#fff}.hb-elfeye{fill:#1f2937}
+
+.hb-leg{fill:none;stroke:#1c1917;;stroke-linecap:round;stroke-linejoin:round}
+.hb-spider{fill:#1c1917}
+.hb-runner{fill:none;stroke:#b8860b;stroke-linecap:round}
+.hb-sleigh{fill:#c81e1e;stroke:#fff;}
+.hb-heart{fill:#e11d48;stroke:#fff;}
+.hb-stem{fill:none;stroke:#166534;stroke-linecap:round}
+.hb-clover{fill:#16a34a;stroke:#fff;}
+.hb-bunny{fill:#f5efe6;stroke:#8b6f5a;}
+[data-holiday=halloween] .busdot,[data-holiday=winter] .busdot,[data-holiday=valentine] .busdot,[data-holiday=stpatrick] .busdot,[data-holiday=easter] .busdot{stroke:none}
+.thb,.thm,.thf{pointer-events:none}
+.th-glow{fill:none;stroke:#f97316;stroke-width:2.6}.th-glow.th-red{stroke:#dc2626}.th-glow.th-green{stroke:#16a34a}
+.th-pumpkin{fill:#f97316;stroke:#7c2d12;stroke-width:.7}.th-rib{fill:none;stroke:#c2410c;stroke-width:.6}.th-stem{fill:none;stroke:#166534;stroke-width:1.3;stroke-linecap:round}
+.th-face{fill:#3b1d0a;stroke:none}
+.th-ghost{display:none}.train.late .th-ghost{display:inline}.th-ghostbody{fill:#f8fafc;stroke:#64748b;stroke-width:.6;opacity:.92}.th-ghosteye{fill:#1e293b}
+.th-wire{fill:none;stroke:#14532d;stroke-width:1}.th-bulb{stroke:rgba(0,0,0,.35);stroke-width:.4}.th-b0{fill:#ef4444}.th-b1{fill:#22c55e}.th-b2{fill:#facc15}.th-b3{fill:#3b82f6}
+.th-string{stroke:#7c2d12;stroke-width:.7}.th-lantern{fill:#dc2626;stroke:#7f1d1d;stroke-width:.5}.th-cap{fill:#eab308}.th-tassel{stroke:#eab308;stroke-width:1}
+.th-cstem{fill:none;stroke:#14532d;stroke-width:1.1;stroke-linecap:round}.th-clover{fill:#22c55e;stroke:#fff;stroke-width:.5}
+[data-holiday]:not([data-holiday=standard]) .train .pillbg,[data-holiday]:not([data-holiday=standard]) .train .tico{display:none}.th-egg{stroke:#fff;stroke-width:1.5}.th-zig{fill:none;stroke:rgba(255,255,255,.8);stroke-width:1.2;stroke-linejoin:round}
+.th-cdn-out{fill:#d52b1e}.th-cdn-in{fill:#fff}.th-leaf{fill:#d52b1e;stroke:#fff;stroke-width:.5}
+.th-rainbow{fill:none;stroke:url(#th-rbow);stroke-width:2.4}
+.th-spark{fill:#fde68a;stroke:#b45309;stroke-width:.4}
+.th-wreath{fill:none;stroke:#15803d;stroke-width:2.2}.th-bow{fill:#dc2626}
+.thstn{pointer-events:none}
+.frsail{display:none;fill:#e2e8f0;stroke:#475569;stroke-width:.5;opacity:.9}
+[data-holiday=halloween] .frsail{display:inline}
+[data-holiday=halloween] .frhull{fill:#cbd5e1;opacity:.75;stroke:#334155}
+.plx{fill:none;stroke:var(--d-air);stroke-width:.8;stroke-linecap:round}
+[data-holiday=halloween] .plane .plbody{fill:#1f1b2e;stroke:#f97316;stroke-width:.4}
+[data-holiday=winter] .plane .plbody{fill:#7c4a21;stroke:#fff;stroke-width:.4}[data-holiday=winter] .plane .plx{fill:none;stroke:#4a2a10;stroke-width:.9}
+[data-holiday=halloween] .clock{box-shadow:0 0 0 2px #f97316,0 0 16px rgba(249,115,22,.55);background:#1c1205;color:#fdba74}
+[data-holiday=winter] .clock{box-shadow:0 0 0 2px #93c5fd,0 0 14px rgba(147,197,253,.6)}
+[data-holiday=newyear] .clock{box-shadow:0 0 0 2px #eab308,0 0 16px rgba(234,179,8,.55)}
+[data-holiday=lunar] .clock{box-shadow:0 0 0 2px #dc2626,0 0 0 4px #eab308}
+[data-holiday=valentine] .clock{box-shadow:0 0 0 2px #e11d48,0 0 14px rgba(225,29,72,.45)}
+[data-holiday=stpatrick] .clock{box-shadow:0 0 0 2px #16a34a,0 0 14px rgba(22,163,74,.45)}
+[data-holiday=easter] .clock{box-shadow:0 0 0 2px #c4b5fd,0 0 0 4px #fde68a}
+[data-holiday=canada] .clock{box-shadow:0 0 0 2px #d52b1e,0 0 0 4px #fff,0 0 0 6px #d52b1e}
+[data-holiday=pride] .clock{box-shadow:0 0 0 2px #e40303,0 0 0 4px #ff8c00,0 0 0 6px #ffed00,0 0 0 8px #008026,0 0 0 10px #004dff,0 0 0 12px #750787}
+@media (prefers-reduced-motion:no-preference){
+ .th-bulb{animation:thTwinkle 1.4s ease-in-out infinite}
+ .th-spark{animation:thTwinkle 1.2s ease-in-out infinite}
+ .train.late .th-ghost{animation:thBob 2.2s ease-in-out infinite}}
+@keyframes thTwinkle{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes thBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.busdot{fill:none;stroke:var(--bus);stroke-width:6px;stroke-linecap:round;pointer-events:none;paint-order:stroke}
+.buslegend{max-width:262px}.buslbl text{font-family:var(--body);font-weight:700;fill:var(--ink);text-anchor:middle;paint-order:stroke;stroke:var(--halo);stroke-linejoin:round;pointer-events:none}
+.busno{display:inline-block;min-width:22px;padding:1px 6px;border-radius:4px;color:#fff;font-weight:700;text-align:center;text-shadow:0 0 2px rgba(0,0,0,.5)}.bsys{display:flex;flex-wrap:wrap;gap:2px 10px;font-size:11px;color:var(--muted)}.bsys b{color:var(--ink)}#bstats,#bconn{display:grid;gap:4px}
+.fgenbg{fill:var(--chip);stroke:var(--job);stroke-width:1.5;cursor:help}.fgenic{fill:none;stroke:var(--job);stroke-width:1.2;stroke-linejoin:round;pointer-events:none}
+.fopts{display:grid;grid-template-columns:1fr 1fr;gap:3px 8px;font-size:11px}.fopts label{display:flex;align-items:center;gap:4px}.fopts input{accent-color:var(--flow);margin:0}
+.kd{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:3px;vertical-align:-1px}.kd.car{background:var(--flow)}.kd.rail{background:var(--rail)}.kd.gen{background:var(--job)}.kd.cg0{background:var(--cg0)}.kd.cg1{background:var(--cg1)}.kd.cg2{background:var(--cg2)}
+.fheat{pointer-events:none;opacity:.85}.hramp{display:inline-block;width:46px;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--heat-src),transparent 50%,var(--heat-dst))}
+.rdots{display:none}.fcong .rdots{display:inline}.traffic .tseg{display:none}
+.flowkey{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:10.5px;color:var(--muted)}.flowkey i{display:block;width:22px;border-radius:3px;background:var(--flow);opacity:.75}
+.traflegend{left:auto;right:56px;bottom:46px;max-width:260px}
+.tdirs{display:grid;gap:2px;margin:6px 0 3px}
+.tdirs div{display:flex;align-items:center;gap:6px}
+.tdirs b{margin-left:auto;font-variant-numeric:tabular-nums}
+.sw{width:10px;height:3px;border-radius:2px;display:inline-block}
+.sp-pk{background:var(--accent)}.sp-nk{background:var(--info)}
+.tspark{display:block;margin-top:4px}
+.tspark polyline{fill:none;stroke-width:1.6}
+.tspark .sp-p{stroke:var(--accent)}.tspark .sp-n{stroke:var(--info)}
+.tspark .sp-now{stroke:var(--muted);stroke-dasharray:2 2}
+.tspark text{font-family:var(--mono);font-size:9px;fill:var(--muted)}
+@media (max-width:980px){.panel .pane{max-height:75vh}}
+.work.off .workband{stroke-opacity:.16;stroke-dasharray:2 7;stroke-width:12}.work.off .workdot{fill-opacity:.45}.work.off .worklbl{opacity:.7}
+.tip.act{pointer-events:auto}.tipchk{display:flex;gap:6px;align-items:center;margin-top:6px;font-weight:600;cursor:pointer}.tip .pbtns{display:flex;gap:6px;margin-top:6px}
+.wkon{display:flex;gap:4px;align-items:center;font-size:11px;cursor:pointer}.wkrow.off b{opacity:.7}.wkrow.off .wkico{opacity:.5}
+.wkwarn{border:1px solid var(--accent);border-radius:8px;padding:6px 8px;margin:6px 0;font-size:12px;display:grid;gap:6px}
+.wksum{font-size:12px;display:grid;gap:3px;margin:6px 0}
 /* V42: stronger controls in the panels */
 .btn,.lsw,.mapctl button,.seg,.tabs{border-color:var(--ctl-line)}
 .btn,.lsw,.mapctl button{background:var(--ctl-bg);color:var(--ink)}
@@ -4273,7 +4359,204 @@ function step(dt){
       if(t.delay>0)t.delay=Math.max(0,t.delay-dt*.07);dispatchTrack(t);}
   }
 }
-
+/* ---------- holiday themes (V63) ----------
+   Automatic by date (Pacific time) or chosen in Settings → Theme. Only vehicles and small decorations change; track, stations, labels and
+   numbers stay as they are. All artwork is drawn here from simple shapes. Animation is skipped when the device asks for reduced motion. */
+const HOL_LIST=[
+ ['halloween','Halloween','Oct 24 – Nov 1'],['winter','Winter holidays','Dec 1 – 30'],['newyear','New Year’s Eve','Dec 31 – Jan 1'],
+ ['lunar','Lunar New Year','about a week around it'],['valentine','Valentine’s Day','Feb 13 – 15'],['stpatrick','St. Patrick’s Day','Mar 16 – 18'],
+ ['easter','Easter','Good Friday – Easter Monday'],['pride','Pride','Jun 20 – 29'],['canada','Canada Day','Jun 30 – Jul 1']];
+const HOL_NAME=Object.fromEntries(HOL_LIST.map(([k,n])=>[k,n]));
+const LUNAR_NY={2026:'02-17',2027:'02-06',2028:'01-26',2029:'02-13',2030:'02-03',2031:'01-23',2032:'02-11',2033:'01-31',2034:'02-19',2035:'02-08',2036:'01-28',2037:'02-15',2038:'02-04'};
+function easterSunday(y){const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,
+  i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),mo=Math.floor((h+l-7*m+114)/31),da=((h+l-7*m+114)%31)+1;return Date.UTC(y,mo-1,da);}
+function holidayFor(date=new Date()){let y,mo,da;try{const p=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Vancouver',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date);
+    const g=t=>+p.find(x=>x.type===t).value;y=g('year');mo=g('month');da=g('day');}catch(_){y=date.getFullYear();mo=date.getMonth()+1;da=date.getDate();}
+  const md=mo*100+da,day=Date.UTC(y,mo-1,da),D=864e5,in_=(a,b)=>md>=a&&md<=b;
+  if(md===1231||md===101)return'newyear';
+  if(in_(213,215))return'valentine';
+  if(in_(316,318))return'stpatrick';
+  const es=easterSunday(y);if(day>=es-2*D&&day<=es+D)return'easter';
+  if(in_(630,701))return'canada';
+  if(in_(620,629))return'pride';
+  if(in_(1024,1031)||md===1101)return'halloween';
+  const ln=LUNAR_NY[y];if(ln){const [m2,d2]=ln.split('-').map(Number);const t=Date.UTC(y,m2-1,d2);if(day>=t-2*D&&day<=t+5*D)return'lunar';}
+  if(in_(1201,1230))return'winter';
+  return'standard';}
+let HOL='standard';
+const holReduce=()=>reduceMotion;
+/* --- small drawing helpers (screen pixels; callers scale) --- */
+const circ=(cx,cy,r)=>`M${cx-r} ${cy}a${r} ${r} 0 1 0 ${2*r} 0a${r} ${r} 0 1 0 ${-2*r} 0`;
+const ell=(cx,cy,rx,ry)=>`M${cx-rx} ${cy}a${rx} ${ry} 0 1 0 ${2*rx} 0a${rx} ${ry} 0 1 0 ${-2*rx} 0`;
+// a glyph is an absolute path around (0,0); scale and offset every number pair for each vehicle
+function glyphFn(d){const parts=[];const re=/([MLCQAZHVmlcqazhv])([^MLCQAZHVmlcqazhv]*)/g;let m;
+  while((m=re.exec(d))){const c=m[1],nums=(m[2].match(/-?(?:\d+\.?\d*|\.\d+)(?:e-?\d+)?/gi)||[]).map(Number);parts.push([c,nums]);}
+  return(x,y,s)=>{let o='';for(const [c,n] of parts){o+=c;if(c==='A'||c==='a'){for(let i=0;i<n.length;i+=7){o+=`${(n[i]*s).toFixed(2)} ${(n[i+1]*s).toFixed(2)} ${n[i+2]} ${n[i+3]} ${n[i+4]} ${(c==='A'?x+n[i+5]*s:n[i+5]*s).toFixed(1)} ${(c==='A'?y+n[i+6]*s:n[i+6]*s).toFixed(1)}`;}}
+    else if(c==='H'||c==='h'){o+=(c==='H'?x+n[0]*s:n[0]*s).toFixed(1);}else if(c==='V'||c==='v'){o+=(c==='V'?y+n[0]*s:n[0]*s).toFixed(1);}
+    else for(let i=0;i<n.length;i+=2){const ab=c===c.toUpperCase();o+=(i?' ':'')+(ab?x+n[i]*s:n[i]*s).toFixed(1)+' '+(ab?y+n[i+1]*s:n[i+1]*s).toFixed(1);}}return o;};}
+// spider legs: 4 per side, two poses
+const spLeg=(sw)=>{let d='';for(const sd of [-1,1])for(let i=0;i<4;i++){const y0=-1.2+i*1.3,a=(i-1.5)*.55+(i%2?sw:-sw);const fx=sd*6.4,fy=y0+(i-1.5)*.9+a*2.4;d+=`M${sd*1.4} ${y0}L${fx.toFixed(2)} ${fy.toFixed(2)}`;}return d;};
+const BUSG={
+ halloween:{layers:[{cls:'hb-leg',sw:1.1,detail:1,v:[glyphFn(spLeg(.35)),glyphFn(spLeg(-.35))]},{cls:'hb-spider',v:[glyphFn(circ(0,1.2,2.8)+circ(0,-2.3,1.7))]}],anim:'legs'},
+ winter:{layers:[{cls:'hb-elfbody',sw:.6,v:[glyphFn('M-3.4 3.4H3.4L4.6 7.6H-4.6Z')]},{cls:'hb-elfface',sw:.5,v:[glyphFn(circ(0,.4,3.4)+'M-3.1 -.2L-5.6 -1.8-3.2 1.6ZM3.1 -.2L5.6 -1.8 3.2 1.6Z')]},{cls:'hb-elfeye',detail:1,v:[glyphFn(circ(-1.2,.1,.5)+circ(1.2,.1,.5))]},{cls:'hb-elfhat',sw:.5,v:[glyphFn('M-3.6 -2.2Q-2 -7.6 1.2 -8.6Q3.8 -9.4 5.2 -7.6Q2.8 -7.8 2.4 -6.4L3.6 -2.2Z')]},{cls:'hb-elftrim',v:[glyphFn('M-3.9 -2.9h7.8v1.4h-7.8z'+circ(5.4,-7.6,1.15))]}]},
+ valentine:{layers:[{cls:'hb-heart',sw:.9,v:[glyphFn('M0 4.8C-6 0.6 -6.8 -3 -4.6 -4.4C-2.8 -5.5 -0.8 -4.4 0 -2.8C0.8 -4.4 2.8 -5.5 4.6 -4.4C6.8 -3 6 0.6 0 4.8Z')]}],anim:'beat'},
+ stpatrick:{layers:[{cls:'hb-stem',sw:1.4,v:[glyphFn('M0 1L1.6 5.6')]},{cls:'hb-clover',sw:.7,v:[glyphFn(circ(0,-2.7,2.3)+circ(-2.5,0.6,2.3)+circ(2.5,0.6,2.3))]}]},
+ easter:{layers:[{cls:'hb-bunny',sw:.9,v:[glyphFn(ell(-0.6,1.4,3.8,2.8)+circ(3.2,-1.3,2.1)+ell(2.4,-5.4,0.85,2.5)+ell(4.1,-5.2,0.85,2.5)+circ(-4.5,0.8,1.2))]}],anim:'hop'},
+};
+BUSG.bus={layers:[{cls:'hb-bus',sw:.8,v:[glyphFn('M-4.6 -4.4Q-4.6 -5.9 -3.1 -5.9H3.1Q4.6 -5.9 4.6 -4.4V3.6H-4.6Z')]},{cls:'hb-buswin',v:[glyphFn('M-3.5 -4.7H3.5V-.9H-3.5Z'+circ(-2.6,1.6,.75)+circ(2.6,1.6,.75))]},{cls:'hb-buswh',v:[glyphFn('M-3.9 3.6h2.1v1.8h-2.1zM1.8 3.6h2.1v1.8h-2.1z')]}]};
+/* --- buses --- */
+let hbPaths=null,hbTick=0;const thBus={key:''};
+/* Buses are drawn as fixed, pre-drawn symbols placed at each bus and scaled to the zoom, so they stay sharp at any zoom.
+   One symbol per look; a pool of <use> elements is reused frame to frame and only buses in view are drawn. */
+const BSYM_SRC={
+ bus:`<path d="M-5.2 -5Q-5.2 -6.7 -3.5 -6.7H3.5Q5.2 -6.7 5.2 -5V4.2H-5.2Z" fill="var(--bus)" stroke="#fff" stroke-width=".9"/><path d="M-4 -5.3H4V-1H-4Z" fill="#fff"/>
+  <circle cx="-3" cy="1.8" r=".85" fill="#fff"/><circle cx="3" cy="1.8" r=".85" fill="#fff"/><path d="M-4.4 4.2h2.4v2h-2.4zM2 4.2h2.4v2h-2.4z" fill="#1f2937"/>`,
+ witch:`<path d="M-9 3.2L7.5 .6" stroke="#7c4a21" stroke-width="1.3" stroke-linecap="round"/><path d="M-8.6 3.1L-12.6 .8-12 3.4-12.8 5.6Z" fill="#d6a85a" stroke="#8a5a1f" stroke-width=".5"/>
+  <path d="M-4.6 2.6Q-6.6 -.6 -4.4 -2.6L-1.4 -3.6Q.4 -.6 2.6 2.2Z" fill="#6d28d9" stroke="#2e1065" stroke-width=".5"/><path d="M-2.4 -3.2Q-6.4 -3.6 -7.6 -1Q-5 -1.6 -3.6 -1Z" fill="#4c1d95"/>
+  <circle cx="0" cy="-5.2" r="1.9" fill="#86efac" stroke="#166534" stroke-width=".4"/><path d="M1.8 -5.3L3.2 -4.6 1.7 -4.4Z" fill="#86efac"/>
+  <ellipse cx="-.2" cy="-6.9" rx="3.4" ry=".75" fill="#111827"/><path d="M-1.9 -7.1L.6 -12.4Q1.2 -11 3.4 -11.4L1.6 -7.1Z" fill="#111827"/><path d="M-1.7 -7.6H1.7" stroke="#a855f7" stroke-width=".8"/>
+  <path d="M.8 -.6L2.6 1.6" stroke="#2e1065" stroke-width=".9" stroke-linecap="round"/>`,
+ elf:`<path d="M-3.6 3.4H3.6L4.8 7.8H-4.8Z" fill="#dc2626" stroke="#fff" stroke-width=".6"/><path d="M-3.2 -.2L-5.8 -1.9-3.3 1.6ZM3.2 -.2L5.8 -1.9 3.3 1.6Z" fill="#f5c9a6" stroke="#9a6b4f" stroke-width=".4"/>
+  <circle cx="0" cy=".4" r="3.4" fill="#f5c9a6" stroke="#9a6b4f" stroke-width=".5"/><circle cx="-1.2" cy=".1" r=".5" fill="#1f2937"/><circle cx="1.2" cy=".1" r=".5" fill="#1f2937"/>
+  <path d="M-.9 1.6Q0 2.4 .9 1.6" fill="none" stroke="#9a3412" stroke-width=".45" stroke-linecap="round"/>
+  <path d="M-3.6 -2.2Q-2 -7.6 1.2 -8.6Q3.8 -9.4 5.2 -7.6Q2.8 -7.8 2.4 -6.4L3.6 -2.2Z" fill="#15803d" stroke="#fff" stroke-width=".5"/><path d="M-3.9 -2.9h7.8v1.4h-7.8z" fill="#fff"/><circle cx="5.4" cy="-7.6" r="1.15" fill="#fff"/>`,
+ heart:`<path d="M0 5C-6.2 .6 -7 -3.1 -4.7 -4.6C-2.9 -5.7 -.8 -4.6 0 -2.9C.8 -4.6 2.9 -5.7 4.7 -4.6C7 -3.1 6.2 .6 0 5Z" fill="#e11d48" stroke="#fff" stroke-width=".9"/>`,
+ clover:`<path d="M0 1L1.7 5.8" stroke="#166534" stroke-width="1.4" stroke-linecap="round"/><circle cx="0" cy="-2.7" r="2.4" fill="#16a34a" stroke="#fff" stroke-width=".7"/>
+  <circle cx="-2.6" cy=".6" r="2.4" fill="#16a34a" stroke="#fff" stroke-width=".7"/><circle cx="2.6" cy=".6" r="2.4" fill="#16a34a" stroke="#fff" stroke-width=".7"/>`,
+ bunny:`<ellipse cx="2.4" cy="-5.4" rx=".9" ry="2.6" fill="#f5efe6" stroke="#8b6f5a" stroke-width=".6"/><ellipse cx="4.1" cy="-5.2" rx=".9" ry="2.6" fill="#f5efe6" stroke="#8b6f5a" stroke-width=".6"/>
+  <ellipse cx="2.4" cy="-5.2" rx=".35" ry="1.6" fill="#f9a8d4"/><ellipse cx="4.1" cy="-5" rx=".35" ry="1.6" fill="#f9a8d4"/>
+  <ellipse cx="-.6" cy="1.4" rx="3.9" ry="2.9" fill="#f5efe6" stroke="#8b6f5a" stroke-width=".6"/><circle cx="3.2" cy="-1.3" r="2.2" fill="#f5efe6" stroke="#8b6f5a" stroke-width=".6"/>
+  <circle cx="-4.6" cy=".8" r="1.25" fill="#fff" stroke="#8b6f5a" stroke-width=".5"/><circle cx="3.9" cy="-1.6" r=".4" fill="#1f2937"/>`};
+const BSYM_FOR={halloween:'witch',winter:'elf',valentine:'heart',stpatrick:'clover',easter:'bunny'};
+{let defs=svgfx.querySelector('defs');if(!defs){defs=el('defs',{},svgfx);svgfx.insertBefore(defs,svgfx.firstChild);}
+ for(const [k,v] of Object.entries(BSYM_SRC)){const g=el('g',{id:'bsym-'+k},defs);g.innerHTML=v;}}
+const busUse=[];
+function thBusHide(from=0){for(let i=from;i<busUse.length;i++)if(busUse[i].style.display!=='none')busUse[i].style.display='none';}
+function thBusDraw(pos){if(hbPaths)for(const p of hbPaths)p.setAttribute('d','');
+  const zoomed=PX_PER_KM*ppu>=18;const sym=BSYM_FOR[HOL]||(zoomed?'bus':null);
+  if(!sym){thBusHide();thBus.key='';return false;}
+  const now=performance.now(),moving=speed&&!holReduce(),s=1/ppu;
+  // redraw at most ~25 times a second, or at once after a zoom, pan or theme change
+  const key=sym+'|'+ppu.toFixed(4)+'|'+pos.length+'|'+vb.x.toFixed(0)+'|'+vb.y.toFixed(0);if(now-hbTick<40&&key===thBus.key)return true;hbTick=now;thBus.key=key;
+  const mx=vb.w*.05,x0=vb.x-mx,x1=vb.x+vb.w+mx,y0=vb.y-mx,y1=vb.y+vb.h+mx;let n=0;
+  for(let i=0;i<pos.length;i++){const [x,y]=pos[i];if(x<x0||x>x1||y<y0||y>y1)continue;let yy=y,k=s;
+    if(moving){if(sym==='bunny')yy=y-Math.max(0,Math.sin(now/110+i*1.7))*2.6*s;else if(sym==='witch')yy=y+Math.sin(now/260+i*1.3)*1.4*s;else if(sym==='heart')k=s*(1+.12*Math.max(0,Math.sin(now/160+i)));}
+    let u=busUse[n];if(!u){u=busUse[n]=el('use',{class:'hbus'},busFx);}
+    if(u._s!==sym){u.setAttribute('href','#bsym-'+sym);u._s=sym;}
+    u.setAttribute('transform',`translate(${x.toFixed(3)} ${yy.toFixed(3)}) scale(${k.toPrecision(4)})`);if(u.style.display==='none')u.style.display='';n++;}
+  thBusHide(n);return true;}
+/* --- trains: decorations behind the badge, on it, and in front --- */
+function thTrain(t){if(!t.ring)return;const inner=t.ring.parentNode;
+  if(!t.thb){t.thb=el('g',{class:'thb'},inner);inner.insertBefore(t.thb,inner.firstChild);t.thm=el('g',{class:'thm'},inner);inner.insertBefore(t.thm,t.icon||t.tx);t.thf=el('g',{class:'thf'},inner);}
+  for(const g of [t.thb,t.thm,t.thf])g.innerHTML='';t.thm.removeAttribute('transform');
+  const M=t.thm,F=t.thf,P=(d,a)=>el('path',{d,...a},M);
+  if(HOL==='halloween'){// jack-o'-lantern
+    P(ell(-5,1.6,5.2,7.6)+ell(5,1.6,5.2,7.6),{fill:'#ea580c',stroke:'#7c2d12','stroke-width':.7});P(ell(0,1.6,5.6,8.2),{fill:'#f97316',stroke:'#7c2d12','stroke-width':.7});
+    P('M-1 -6.2Q0 -10 2.4 -10.8L3 -9.5Q1.3 -8.8 1.2 -6.2Z',{fill:'#166534'});
+    P('M-5.2 -1.4L-2.4 -3.9-1.5 -.7ZM5.2 -1.4L2.4 -3.9 1.5 -.7ZM0 -.2L1.1 1.5H-1.1ZM-5.8 2.8Q0 8.8 5.8 2.8L4.5 3.7 3.4 2.8 2 4 0 3.1-2 4-3.4 2.8-4.5 3.7Z',{fill:'#fde047',stroke:'#7c2d12','stroke-width':.4});
+    const gh=el('g',{class:'th-ghost'},F);el('path',{d:'M-5 4V-2.6Q-5 -8 0 -8Q5 -8 5 -2.6V4L3.3 2.6 1.7 4 0 2.6-1.7 4-3.3 2.6Z',class:'th-ghostbody',transform:'translate(0 -17)'},gh);
+    el('path',{d:circ(-1.7,-20.8,.85)+circ(1.7,-20.8,.85),class:'th-ghosteye'},gh);}
+  else if(HOL==='winter'){// sleigh with presents, faces its direction of travel
+    P('M-9.5 -9.5h5.4v5.6h-5.4z',{fill:'#16a34a',stroke:'#fff','stroke-width':.5});P('M-6.8 -9.5v5.6M-9.5 -6.7h5.4',{stroke:'#facc15','stroke-width':.9});
+    P('M-3.6 -8h4.6v4.4h-4.6z',{fill:'#2563eb',stroke:'#fff','stroke-width':.5});P('M-1.3 -8v4.4',{stroke:'#facc15','stroke-width':.9});
+    P('M-11 -3H3.4L7.2 -7.4Q9.8 -10 10.8 -7V0.2Q10.8 4.2 6.8 4.2H-8.6Q-11 4.2 -11 1.8Z',{fill:'#c81e1e',stroke:'#facc15','stroke-width':.8});
+    P('M-12.2 8H8.2Q12.4 8 12.4 4.4M-8 4.2V8M4.4 4.2V8',{fill:'none',stroke:'#b8860b','stroke-width':1.7,'stroke-linecap':'round'});}
+  else if(HOL==='valentine'){// flower bouquet
+    P('M0 9.6L-3.4 -1M0 9.6V-2M0 9.6L3.4 -1',{stroke:'#15803d','stroke-width':1.2,fill:'none'});
+    P(ell(-7,-1.8,2.6,1.3)+ell(7,-1.8,2.6,1.3),{fill:'#22c55e'});
+    P('M-6.8 -.6L0 11.6 6.8 -.6Z',{fill:'#fbcfe8',stroke:'#db2777','stroke-width':.6});
+    P('M-2.4 4.4L0 5.7 2.4 4.4 1.6 7.2 0 6.3-1.6 7.2Z',{fill:'#e11d48'});
+    P(circ(-4.3,-4.2,3.1),{fill:'#e11d48',stroke:'#fff','stroke-width':.5});P(circ(4.3,-4.6,3.1),{fill:'#f472b6',stroke:'#fff','stroke-width':.5});P(circ(0,-7.6,3.3),{fill:'#be123c',stroke:'#fff','stroke-width':.5});
+    P(circ(-4.3,-4.2,.9)+circ(4.3,-4.6,.9)+circ(0,-7.6,.9),{fill:'#fde047'});}
+  else if(HOL==='lunar'){// red lantern
+    P('M0 -14.6V-11',{stroke:'#7c2d12','stroke-width':.8});P('M-4.2 -11.6h8.4v2.4h-8.4z',{fill:'#eab308'});
+    P(ell(0,-.6,8.6,9.4),{fill:'#dc2626',stroke:'#7f1d1d','stroke-width':.6});P('M-4.2 -9Q-8 -.6 -4.2 7.8M0 -10V8.8M4.2 -9Q8 -.6 4.2 7.8',{fill:'none',stroke:'#fde047','stroke-width':.7});
+    P('M-4.2 8h8.4v2.4h-8.4z',{fill:'#eab308'});P('M0 10.4V15.6M-1.3 15.6V12.4M1.3 15.6V12.4',{stroke:'#eab308','stroke-width':1});}
+  else if(HOL==='stpatrick'){// leprechaun hat
+    P(ell(0,6.6,11.5,2.8),{fill:'#14532d'});P('M-6.6 6.6L-5.6 -9.4H5.6L6.6 6.6Z',{fill:'#16a34a',stroke:'#14532d','stroke-width':.6});
+    P('M-6.3 1H6.3V4.4H-6.3Z',{fill:'#111'});P('M-2.2 .5H2.2V4.9H-2.2Z',{fill:'none',stroke:'#facc15','stroke-width':1.2});
+    P(circ(-.9,-4.6,1.4)+circ(.9,-4.6,1.4)+circ(0,-6.1,1.4),{fill:'#4ade80'});}
+  else if(HOL==='easter'){// decorated egg in the trainset colour
+    P('M0 -13.2C6.8 -13.2 10.6 -3 10.6 3.4C10.6 9.2 6 12.2 0 12.2C-6 12.2 -10.6 9.2 -10.6 3.4C-10.6 -3 -6.8 -13.2 0 -13.2Z',{class:'th-egg',fill:t.color});
+    P('M-9.6 -3.8L-7 -6.2-4.4 -3.8-1.8 -6.2.8 -3.8 3.4 -6.2 6 -3.8 8.6 -6.2 9.8 -5M-10.4 7.4L-7.8 5-5.2 7.4-2.6 5 0 7.4 2.6 5 5.2 7.4 7.8 5 10.2 7',{class:'th-zig'});
+    P(circ(-5,1.4,1.2)+circ(0,1.4,1.2)+circ(5,1.4,1.2)+circ(-2.5,-9,1)+circ(2.5,-9,1),{fill:'#fff',opacity:.9});}
+  else if(HOL==='canada'){// maple leaf
+    P('M0 -5L.9 -2.6 2.6 -3.3 2.1 -.4 4 -1.5 3.5 .1 5 .6 2.6 2.5 3 3.6 .4 3.1V5.4H-.4V3.1L-3 3.6-2.6 2.5-5 .6-3.5 .1-4 -1.5-2.1 -.4-2.6 -3.3-.9 -2.6Z',{fill:'#d52b1e',stroke:'#fff','stroke-width':.35,transform:'scale(2.35)'});}
+  else if(HOL==='pride'){// rainbow with clouds
+    ['#e40303','#ff8c00','#ffed00','#008026','#004dff','#750787'].forEach((c,i)=>{const r=11.5-i*1.65;P(`M${-r} 4A${r} ${r} 0 0 1 ${r} 4`,{fill:'none',stroke:c,'stroke-width':1.75});});
+    P(circ(-9.6,4.6,2.6)+circ(-6.8,5.4,2.2)+circ(9.6,4.6,2.6)+circ(6.8,5.4,2.2),{fill:'#fff',stroke:'#94a3b8','stroke-width':.5});}
+  else if(HOL==='newyear'){// firework star
+    const rays=[];for(let i=0;i<12;i++){const a=i/12*6.2832,r=i%2?7.5:11.5;rays.push(`M${(Math.cos(a)*3).toFixed(2)} ${(Math.sin(a)*3).toFixed(2)}L${(Math.cos(a)*r).toFixed(2)} ${(Math.sin(a)*r).toFixed(2)}`);}
+    P(rays.filter((_,i)=>i%2===0).join(''),{stroke:'#eab308','stroke-width':1.8,'stroke-linecap':'round'});P(rays.filter((_,i)=>i%2).join(''),{stroke:'#ef4444','stroke-width':1.4,'stroke-linecap':'round'});
+    P(circ(0,0,3.4),{fill:'#fde68a',stroke:'#b45309','stroke-width':.5,class:'th-spark'});}
+}
+/* --- ferries and planes --- */
+const BAT='M0 -3.4C1.4 -5 4.4 -6.6 9 -5.2C7.6 -3.6 7.8 -1.6 9 .6C6.8 -.4 5 0 3.8 2C2.6 .8 1.2 .9 0 3.4C-1.2 .9-2.6 .8-3.8 2C-5 0-6.8 -.4-9 .6C-7.8 -1.6-7.6 -3.6-9 -5.2C-4.4 -6.6-1.4 -5 0 -3.4ZM-1.2 -3.6L-1.6 -5.6-.4 -4.2ZM1.2 -3.6L1.6 -5.6.4 -4.2Z';
+const DEER='M-7 0C-7 -2.5 -3 -3 2 -2.6L4 -4.5 6 -4.4 7.5 -3.2 6 -2.4 5 -1.4C5 1 3 1.6 1 1.4L3.4 3.8 2.6 4.4-.4 1.7H-3.4L-6.2 3.8-7 3.2-5.2 1C-6.4 1.4-7.6 1-7 0Z';
+const DEER_ANT='M4.6 -4.4L3.4 -7.4M4 -5.9L2.4 -6.6M5.7 -4.6L6.6 -7.6M6.1 -6.3L7.8 -6.9';
+function thPlanes(){for(const g of planePool){if(!g)continue;const p=g.querySelector('.plbody');let a=g.querySelector('.plx');if(!a)a=el('path',{class:'plx'},g);
+    if(HOL==='halloween'){p.setAttribute('d',BAT);p.setAttribute('transform','scale(1.15)');a.setAttribute('d','');}
+    else if(HOL==='winter'){p.setAttribute('d',DEER);p.setAttribute('transform','scale(1.35)');a.setAttribute('d',DEER_ANT);a.setAttribute('transform','scale(1.35)');}
+    else{p.setAttribute('d',DEST_ICON.air);p.setAttribute('transform','scale(1.25)');a.setAttribute('d','');}}}
+// reindeer fly level and face their direction instead of turning nose-first
+function thPlaneRot(ang){if(HOL!=='winter')return`rotate(${ang.toFixed(0)})`;const a=((ang-90)%360+360)%360;return a>90&&a<270?'scale(-1 1)':'';}
+function thBoats(){for(const g of ferryPool){if(!g||g.querySelector('.frsail'))continue;el('path',{d:'M-3.4 -2.6L-1.8 -10.4 1.4 -9.6 0.6 -7.8 2.6 -6.6 1.2 -5.2 3 -3.2Z',class:'frsail'},g);}}
+/* --- stations --- */
+let thStnG=[];
+function thStations(){for(const g of thStnG){g.remove();const i=SC.findIndex(x=>x.g===g);if(i>=0)SC.splice(i,1);}thStnG=[];
+  if(!['halloween','winter','lunar'].includes(HOL))return;
+  for(const st of Object.values(STATIONS)){if(st.type!=='pax')continue;const g=scg(st.xy[0],st.xy[1],L.stn,st.major?0:2.1);g.setAttribute('class','thstn');thStnG.push(g);
+    const d=el('g',{transform:'translate(6.5 -6.5)'},g);
+    if(HOL==='halloween'){el('path',{d:ell(0,0,3.6,2.9),class:'th-pumpkin'},d);el('path',{d:'M-0.2 -2.8l.6 -1.6',class:'th-stem'},d);}
+    else if(HOL==='winter'){el('circle',{r:3.1,class:'th-wreath'},d);el('path',{d:'M-1.6 2.6L0 1.6 1.6 2.6 1 3.9 0 2.9-1 3.9Z',class:'th-bow'},d);}
+    else{el('path',{d:'M0 -4.6V-3.2',class:'th-string'},d);el('rect',{x:-2.6,y:-3.2,width:5.2,height:6,rx:2,class:'th-lantern'},d);el('rect',{x:-1.7,y:-3.6,width:3.4,height:1,class:'th-cap'},d);el('rect',{x:-1.7,y:2.4,width:3.4,height:1,class:'th-cap'},d);}}
+  if(typeof updateSC==='function')updateSC();}
+/* --- canvas effects: snow, fireworks, the Halloween web is plain SVG --- */
+const thfx=document.createElement('canvas');thfx.id='thfx';thfx.setAttribute('aria-hidden','true');svg.parentNode.appendChild(thfx);
+const thctx=thfx.getContext('2d');let thW=0,thH=0,thDPR=1;
+function thSize(){const r=svg.getBoundingClientRect();thDPR=Math.min(2,window.devicePixelRatio||1);thW=r.width;thH=r.height;thfx.width=Math.round(thW*thDPR);thfx.height=Math.round(thH*thDPR);thfx.style.width=thW+'px';thfx.style.height=thH+'px';}
+window.addEventListener('resize',thSize);thSize();
+const web=document.createElement('div');web.className='thweb';web.setAttribute('aria-hidden','true');
+web.innerHTML='<svg viewBox="0 0 80 80" width="80" height="80"><g fill="none" stroke="currentColor" stroke-width=".9">'+[0,15,30,45,60,75,90].map(a=>{const r=a*Math.PI/180;return`<path d="M80 0L${(80-Math.cos(r)*80).toFixed(1)} ${(Math.sin(r)*80).toFixed(1)}"/>`;}).join('')+
+  [16,30,44,58,72].map(R=>`<path d="${[0,15,30,45,60,75,90].map((a,i)=>{const r=a*Math.PI/180;return(i?'Q':'M')+(i?`${(80-Math.cos(r-.13)*R*.86).toFixed(1)} ${(Math.sin(r-.13)*R*.86).toFixed(1)} `:'')+`${(80-Math.cos(r)*R).toFixed(1)} ${(Math.sin(r)*R).toFixed(1)}`;}).join('')}"/>`).join('')+
+  '</g><path d="M60 26v10" stroke="currentColor" stroke-width=".7"/><circle cx="60" cy="38" r="2.6" fill="currentColor"/><circle cx="60" cy="35.2" r="1.6" fill="currentColor"/></svg>';
+svg.parentNode.appendChild(web);
+let flakes=[],bursts=[],fwPreview=0,fwNext=0;
+function mapToScreen(xy){const m=svg.getScreenCTM(),r=svg.getBoundingClientRect();if(!m)return null;const p=svg.createSVGPoint();p.x=xy[0];p.y=xy[1];const q=p.matrixTransform(m);return[q.x-r.left,q.y-r.top];}
+const FW_AT=['VIC','NAN','CTN'];
+function fwActive(){if(fwPreview>performance.now())return true;const m=((Math.floor(sim)%1440)+1440)%1440;
+  if(HOL==='newyear')return m>=1430||m<20;if(HOL==='canada')return m>=1320&&m<1410;return false;}
+function mapleR(a){const k=Math.abs(Math.sin(a*2.5));return .55+.45*Math.pow(k,.6)*(Math.abs(Math.cos(a/2))*.5+.5);}
+function spawnBurst(now){const c=FW_AT.filter(c=>STATIONS[c]);if(!c.length)return;const st=STATIONS[c[Math.floor(Math.random()*c.length)]];
+  const maple=HOL==='canada'&&Math.random()<.6;const cols=HOL==='canada'?['#ff3b3b','#ffffff','#ff7a7a']:['#ffd166','#ef476f','#06d6a0','#118ab2','#f8f9fa','#c77dff'];
+  const col=cols[Math.floor(Math.random()*cols.length)],n=maple?54:44,ps=[];
+  for(let i=0;i<n;i++){const a=i/n*Math.PI*2;const r=maple?mapleR(a-Math.PI/2):1;ps.push([Math.cos(a)*r,Math.sin(a)*r*(maple?1:1)]);}
+  bursts.push({xy:st.xy,t0:now,ps,col,size:40+Math.random()*30,dx:(Math.random()-.5)*60,dy:-40-Math.random()*50,maple});}
+function thFx(now){const w=thW,h=thH;thctx.setTransform(thDPR,0,0,thDPR,0,0);thctx.clearRect(0,0,w,h);if(holReduce())return;
+  if(HOL==='winter'){if(flakes.length<90)for(let i=flakes.length;i<90;i++)flakes.push([Math.random()*w,Math.random()*h,1+Math.random()*2.2,Math.random()*6.28]);
+    thctx.fillStyle='rgba(255,255,255,.95)';thctx.strokeStyle='rgba(71,85,105,.55)';thctx.lineWidth=.7;for(const f of flakes){f[1]+=.25+f[2]*.25;f[3]+=.02;f[0]+=Math.sin(f[3])*.3;if(f[1]>h+4){f[1]=-4;f[0]=Math.random()*w;}
+      thctx.beginPath();thctx.arc(f[0],f[1],f[2]+.6,0,6.283);thctx.fill();thctx.stroke();}}
+  if((HOL==='newyear'||HOL==='canada')&&fwActive()&&now>fwNext){spawnBurst(now);fwNext=now+450+Math.random()*500;}
+  bursts=bursts.filter(b=>now-b.t0<1900);
+  for(const b of bursts){const p=mapToScreen(b.xy);if(!p)continue;const u=(now-b.t0)/1900,e=1-Math.pow(1-Math.min(1,u*1.6),3);const cx=p[0]+b.dx,cy=p[1]+b.dy+u*u*30;
+    thctx.globalAlpha=Math.max(0,1-u);thctx.fillStyle=b.col;
+    for(const [x,y] of b.ps){thctx.beginPath();thctx.arc(cx+x*b.size*e,cy+y*b.size*e,1.8,0,6.283);thctx.fill();}
+    thctx.globalAlpha=1;}}
+{let defs=svg.querySelector('defs');if(!defs){defs=el('defs',{},svg);svg.insertBefore(defs,svg.firstChild);}
+  const lg=el('linearGradient',{id:'th-rbow',x1:0,y1:0,x2:1,y2:0},defs);['#e40303','#ff8c00','#ffed00','#008026','#004dff','#750787'].forEach((c,i)=>el('stop',{offset:(i/5).toFixed(2),'stop-color':c},lg));}
+/* --- apply --- */
+function holApply(){HOL='standard';// holiday themes removed: always the standard look (the bus symbols and other shared drawing below stay)
+  document.documentElement.setAttribute('data-holiday',HOL);
+  for(const t of trains)thTrain(t);thPlanes();thBoats();thStations();flakes=[];bursts=[];thctx.setTransform(1,0,0,1,0,0);thctx.clearRect(0,0,thfx.width,thfx.height);
+  if(typeof busPos!=='undefined'&&window.__busReady)stepBuses();
+  const sel=$('set-holiday');if(sel){sel.value=SETTINGS.holiday||'auto';const a=sel.querySelector('option[value=auto]');if(a)a.textContent=`Automatic by date (now: ${HOL==='standard'?'Standard':HOL_NAME[HOL]})`;}}
+function holTick(now){if(HOL==='standard')return;if(HOL==='winter')for(const t of trains)if(t.thm)t.thm.setAttribute('transform',Math.cos(t.ang||0)<-.05?'scale(-1 1)':'');if(HOL==='halloween'){const late=m=>m>=1260||m<240;for(const t of trains){const tr=t.trip;t.g.classList.toggle('late',!!tr&&late(((Math.floor(tr.stops[0].t)%1440)+1440)%1440));}}
+  if(HOL==='winter'||HOL==='newyear'||HOL==='canada'||bursts.length)thFx(now);}
+// new trains and recoloured trains pick up the theme; planes and ferries made later too
+{const mk=makeTrainGfx;makeTrainGfx=function(t){mk(t);thTrain(t);};const sty=styleTrainGfx;styleTrainGfx=function(t){sty(t);if(HOL==='easter')thTrain(t);};
+ const pl=plane;plane=function(i){const had=!!planePool[i];const g=pl(i);if(!had)thPlanes();return g;};const bo=boat;boat=function(i){const had=!!ferryPool[i];const g=bo(i);if(!had)thBoats();return g;};
+ const ds=drawStations;drawStations=function(){ds();thStations();};}
+window.__holReady=1;holApply();
 
 /* ---------- live tankers (V71): positions from the island-rail-tankers relay (AISStream.io) ---------- */
 const TANKER_URL='https://island-rail-tankers.give2islandrail.workers.dev/tankers';// the relay address, e.g. https://island-rail-tankers.<account>.workers.dev/tankers — empty until the relay is set up
