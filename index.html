@@ -27,7 +27,7 @@
 :root{
   --bg:#e8ebe4; --panel:#f7f7f2; --panel-2:#eef0ea; --ink:#1b2421; --muted:#5a6863; --line:#cfd5cd; --bp:#0a66c2; --ctl-line:#7b8882; --ctl-bg:#ffffff; --ctl-hov:#e9eee9;
   --sea:#b3d3de; --sea-ink:#3d6b75; --land:#cbbd96; --land-edge:#7a6d4d; --lake:#c0dbe3; --grid:rgba(40,70,80,.13);
-  --rail:#8c1d2c; --rail-tie:#f6efe4; --sleeper:#6b5a45; --rail-off:#8f8f8a; --sleeper-off:#b7b2a6; --bike-p:#1f8a3b; --bike-l:#3fae5a; --hwy:#d38a22; --hwy-case:#fff8ea; --hwy-flow:#fffdf5; --car:#6d4a10;
+  --rail:#8c1d2c; --rail-prop:#1d5fd1; --rail-tie:#f6efe4; --sleeper:#6b5a45; --rail-off:#8f8f8a; --sleeper-off:#b7b2a6; --bike-p:#1f8a3b; --bike-l:#3fae5a; --hwy:#d38a22; --hwy-case:#fff8ea; --hwy-flow:#fffdf5; --car:#6d4a10;
   --accent:#8c1d2c; --ok:#2c7a4b; --info:#2f5f9e; --warn:#a86a10; --bad:#b42318;
   --halo:#f7f4ea; --chip:#ffffff; --contour:rgba(122,92,48,.30); --contour-idx:rgba(110,78,36,.55); --elev:#5d4a2a; --hill-op:.85; --pop:#2563b8; --lu-res:#f0a53a; --lu-op:.34; --lu-com:#0f9f8a; --lu-ins:#2f8fd0; --lu-ind:#6e8794; --job:#0b7a6b; --t0:#5fa36a; --t1:#b6c544; --t2:#e8b030; --t3:#e0702b; --t4:#c42d2d; --road:#1b1d1c; --road-case:#f4efe2; --cg0:#3ad66b; --cg1:#f2c200; --cg2:#e0261b; --trail:#6a4bc4; --tct:#4b2fa3; --flow:#2f3f63; --bus:#0b6e4f; --d-air:#3a67d0; --d-ferry:#0f766e; --d-edu:#7b4cc9; --d-hosp:#c8324a; --d-def:#5c6870; --d-gov:#b5651d; --d-shop:#b0287f; --sp0:#7f0018;--sp1:#e0283a;--sp2:#c2348f;--sp3:#7b52c7;--sp4:#2b7bbf;--sp5:#0f9f8f; --crk0:#f0c27a;--crk1:#e58a3a;--crk2:#cf4b2a;--crk3:#9e1a1f; --heat-src:#e0601f; --heat-dst:#1f6fb8; --street:#fffdf6; --street-edge:#c9bea6; --hwy-edge:#b9781f;
   --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
@@ -37,13 +37,13 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0d1517; --panel:#131e21; --panel-2:#18262a; --ink:#e6ece8; --muted:#94a6a0; --line:#25363a; --bp:#5cb2ff; --ctl-line:#6b8a90; --ctl-bg:#203338; --ctl-hov:#2b454c;
   --sea:#0d2930; --sea-ink:#6fa3ad; --land:#1c2a25; --land-edge:#3d5148; --lake:#12333b; --grid:rgba(160,200,210,.09);
-  --rail:#e2566b; --rail-tie:#1c2a25; --sleeper:#a08a6a; --rail-off:#a3aba6; --sleeper-off:#6c7570; --bike-p:#4fd27a; --bike-l:#2f9e55; --hwy:#e2a03e; --hwy-case:#2b2a20; --hwy-flow:#3a3420; --car:#ffd58a;
+  --rail:#e2566b; --rail-prop:#6ea8ff; --rail-tie:#1c2a25; --sleeper:#a08a6a; --rail-off:#a3aba6; --sleeper-off:#6c7570; --bike-p:#4fd27a; --bike-l:#2f9e55; --hwy:#e2a03e; --hwy-case:#2b2a20; --hwy-flow:#3a3420; --car:#ffd58a;
   --accent:#ee7586; --ok:#4cc27c; --info:#6c9ee6; --warn:#e5a53b; --bad:#ff6b5e;
   --halo:#1c2a25; --chip:#1b2a2e; --contour:rgba(214,196,150,.18); --contour-idx:rgba(224,206,160,.36); --elev:#e8dcc0; --hill-op:.6; --pop:#7fb0ff; --lu-res:#ffb956; --lu-op:.17; --lu-com:#2fd1b6; --lu-ins:#5fb6f2; --lu-ind:#9db6c2; --job:#3fe0c5; --t0:#6fc27e; --t1:#cbd95a; --t2:#f2c14a; --t3:#f08a45; --t4:#ff5a4f; --road:#030504; --road-case:#7d9088; --cg0:#52e882; --cg1:#ffd426; --cg2:#ff4636; --trail:#b39bff; --tct:#d2c4ff; --flow:#bccbe8; --bus:#4fd1a1; --d-air:#5b86e8; --d-ferry:#2bb3a3; --d-edu:#9d77e0; --d-hosp:#e2566b; --d-def:#8a99a3; --d-gov:#d4893f; --d-shop:#e05aae; --sp0:#ff4d6a;--sp1:#ff7a6b;--sp2:#f06cc0;--sp3:#a98bff;--sp4:#5aa9ff;--sp5:#2fd1bd; --crk0:#f6cf86;--crk1:#f59a4a;--crk2:#ff6a45;--crk3:#ff3b4a; --heat-src:#ff8a3d; --heat-dst:#4aa8ff; --street:#4b5a55; --street-edge:#18221f; --hwy-edge:#2a1f0c; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0d1517; --panel:#131e21; --panel-2:#18262a; --ink:#e6ece8; --muted:#94a6a0; --line:#25363a; --bp:#5cb2ff; --ctl-line:#6b8a90; --ctl-bg:#203338; --ctl-hov:#2b454c;
   --sea:#0d2930; --sea-ink:#6fa3ad; --land:#1c2a25; --land-edge:#3d5148; --lake:#12333b; --grid:rgba(160,200,210,.09);
-  --rail:#e2566b; --rail-tie:#1c2a25; --sleeper:#a08a6a; --rail-off:#a3aba6; --sleeper-off:#6c7570; --bike-p:#4fd27a; --bike-l:#2f9e55; --hwy:#e2a03e; --hwy-case:#2b2a20; --hwy-flow:#3a3420; --car:#ffd58a;
+  --rail:#e2566b; --rail-prop:#6ea8ff; --rail-tie:#1c2a25; --sleeper:#a08a6a; --rail-off:#a3aba6; --sleeper-off:#6c7570; --bike-p:#4fd27a; --bike-l:#2f9e55; --hwy:#e2a03e; --hwy-case:#2b2a20; --hwy-flow:#3a3420; --car:#ffd58a;
   --accent:#ee7586; --ok:#4cc27c; --info:#6c9ee6; --warn:#e5a53b; --bad:#ff6b5e;
   --halo:#1c2a25; --chip:#1b2a2e; --contour:rgba(214,196,150,.18); --contour-idx:rgba(224,206,160,.36); --elev:#e8dcc0; --hill-op:.6; --pop:#7fb0ff; --lu-res:#ffb956; --lu-op:.17; --lu-com:#2fd1b6; --lu-ins:#5fb6f2; --lu-ind:#9db6c2; --job:#3fe0c5; --t0:#6fc27e; --t1:#cbd95a; --t2:#f2c14a; --t3:#f08a45; --t4:#ff5a4f; --road:#030504; --road-case:#7d9088; --cg0:#52e882; --cg1:#ffd426; --cg2:#ff4636; --trail:#b39bff; --tct:#d2c4ff; --flow:#bccbe8; --bus:#4fd1a1; --d-air:#5b86e8; --d-ferry:#2bb3a3; --d-edu:#9d77e0; --d-hosp:#e2566b; --d-def:#8a99a3; --d-gov:#d4893f; --d-shop:#e05aae; --sp0:#ff4d6a;--sp1:#ff7a6b;--sp2:#f06cc0;--sp3:#a98bff;--sp4:#5aa9ff;--sp5:#2fd1bd; --crk0:#f6cf86;--crk1:#f59a4a;--crk2:#ff6a45;--crk3:#ff3b4a; --heat-src:#ff8a3d; --heat-dst:#4aa8ff; --street:#4b5a55; --street-edge:#18221f; --hwy-edge:#2a1f0c; color-scheme:dark}
 html,body{height:100%}
@@ -214,9 +214,9 @@ body.maxmap-on{overflow:hidden}
 .car{fill:var(--car)}
 .rail{fill:none;stroke:var(--rail);stroke-linejoin:round;stroke-linecap:butt}
 .rail-halo{fill:none;stroke:var(--halo,#fff);stroke-opacity:.55;stroke-linejoin:round;stroke-linecap:round}
-svg:not(.zr):not(.legrail) .sleepers{display:none}
+.sleepers{display:none}
 .sleepers{fill:none;stroke:var(--sleeper);stroke-dasharray:2 4.6;stroke-linejoin:round}
-.sleepers.added{stroke-dasharray:1.6 7}.rail.added{stroke-dasharray:9 3}
+.sleepers.added{stroke-dasharray:1.6 7}.rail.added{stroke:var(--rail-prop)}
 .railoff .rail{stroke:var(--rail-off)}.railoff .sleepers{stroke:var(--sleeper-off)}.railoff .rail.added{opacity:.6}
 .bikep{fill:none;stroke:var(--bike-p);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 .bikel{fill:none;stroke:var(--bike-l);stroke-width:1.2;stroke-dasharray:3 2.5;stroke-linecap:round;opacity:.85}
@@ -915,7 +915,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
     <div class="mapwrap" id="mapwrap">
       <svg id="map" role="img" aria-label="Map of Vancouver Island showing the E&amp;N rail corridor, highways and live train positions"></svg><svg id="mapfx" aria-hidden="true"></svg>
       <div class="legend" aria-hidden="true">
-        <div><svg width="30" height="10" class="legrail"><line x1="1" y1="5" x2="29" y2="5" class="sleepers" stroke-width="8"/><line x1="1" y1="5" x2="29" y2="5" class="rail" stroke-width="2.6"/></svg><span id="leg-rail">E&amp;N rail corridor: single track</span></div>
+        <div><svg width="30" height="10" class="legrail"><line x1="1" y1="5" x2="29" y2="5" class="rail" stroke-width="2.6"/></svg><span id="leg-rail">E&amp;N rail corridor: single track</span></div>
         <div><svg width="30" height="10"><line x1="1" y1="5" x2="29" y2="5" stroke="var(--hwy-edge)" stroke-width="7" stroke-linecap="round"/><line x1="1" y1="5" x2="29" y2="5" stroke="var(--hwy)" stroke-width="4.6" stroke-linecap="round"/></svg>Highway</div>
         <div><svg width="30" height="8"><line x1="1" y1="4" x2="29" y2="4" stroke="var(--street-edge)" stroke-width="5" stroke-linecap="round"/><line x1="1" y1="4" x2="29" y2="4" stroke="var(--street)" stroke-width="3" stroke-linecap="round"/></svg>Main road</div>
         <div><svg width="30" height="10"><line x1="1" y1="5" x2="29" y2="5" stroke="var(--halo)" stroke-width="5" stroke-linecap="round"/><line x1="1" y1="5" x2="29" y2="5" stroke="var(--tct)" stroke-width="2.6" stroke-linecap="round"/></svg>Trans Canada Trail</div>
@@ -927,8 +927,8 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <div><svg width="30" height="10"><circle cx="15" cy="5" r="4" fill="var(--halo)" stroke="var(--ink)" stroke-width="1.6"/></svg>Passenger stop</div>
         <div><svg width="30" height="10"><rect x="11" y="1" width="8" height="8" fill="var(--halo)" stroke="var(--ink)" stroke-width="1.6"/></svg>Freight point</div>
         <div><svg width="30" height="10"><circle cx="15" cy="5" r="2.2" fill="var(--muted)"/></svg>Passing point (no stop)</div>
-        <div><svg width="30" height="16" class="legrail"><polyline points="1,12 29,12" class="sleepers" style="fill:none" stroke-width="7"/><polyline points="9,4 21,4" class="sleepers" style="fill:none" stroke-width="7"/><polyline points="1,12 29,12" class="rail" style="fill:none" stroke-width="2.4"/><polyline points="4,12 9,4 21,4 26,12" class="rail" style="fill:none" stroke-width="2.4"/></svg>Siding or double track</div>
-        <div><svg width="30" height="16" class="legrail"><polyline points="1,12 29,12" class="sleepers" style="fill:none" stroke-width="7"/><polyline points="9,4 21,4" class="sleepers" style="fill:none" stroke-width="7"/><polyline points="1,12 29,12" class="rail" style="fill:none" stroke-width="2.4"/><polyline points="4,12 9,4 21,4 26,12" class="rail added" style="fill:none;stroke-dasharray:4 2.5" stroke-width="2.4"/></svg>Proposed track</div>
+        <div><svg width="30" height="16" class="legrail"><polyline points="1,12 29,12" class="rail" style="fill:none" stroke-width="2.4"/><polyline points="4,12 9,4 21,4 26,12" class="rail" style="fill:none" stroke-width="2.4"/></svg>Siding or double track</div>
+        <div><svg width="30" height="16" class="legrail"><polyline points="1,12 29,12" class="rail" style="fill:none" stroke-width="2.4"/><polyline points="4,12 9,4 21,4 26,12" class="rail added" style="fill:none" stroke-width="2.4"/></svg>Proposed track</div>
       </div>
       <div class="mapctl">
         <button id="srbtn" title="Search the map (/)" aria-label="Search for a place or address" aria-pressed="false" aria-expanded="false" aria-controls="srpanel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5.5 5.5"/></svg></button>
