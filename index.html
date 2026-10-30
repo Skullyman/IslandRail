@@ -798,6 +798,10 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
   --contour:rgba(255,255,255,.09);--contour-idx:rgba(255,255,255,.2);--elev:#f4f4f5;--hill-op:.5;--bathy:rgba(255,255,255,.08);--bathy-strong:rgba(255,255,255,.15)}
 .palsel{display:flex;align-items:center;gap:8px;flex:1;justify-content:flex-end}.palsel select{font:inherit;font-size:12px;padding:5px 8px;border-radius:6px;min-width:160px}
 .palsel i{flex:none;width:22px;height:14px;border-radius:3px;border:1px solid rgba(0,0,0,.35);background:linear-gradient(135deg,var(--land) 50%,var(--sea) 50%)}
+
+.hcbtn{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;width:100%;text-align:left;border:2px solid var(--ctl-line);border-radius:8px;background:var(--ctl-bg);color:var(--ink);font:inherit;font-size:13px;padding:9px 11px;cursor:pointer}
+.hcbtn .m{display:block;font-size:11.5px;margin-top:1px}.hcbtn:hover{border-color:var(--ink)}
+.hcbtn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}.hcbtn[aria-pressed="true"] .m{color:inherit;opacity:.85}
 .setrow.palrow{align-items:flex-start}.palgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:5px;flex:1}
 .palbtn{display:flex;align-items:center;gap:6px;border:1px solid var(--ctl-line);border-radius:6px;background:var(--ctl-bg);color:var(--ink);font:inherit;font-size:11.5px;padding:4px 7px;cursor:pointer;text-align:left}
 .palbtn[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:-1px}
@@ -827,7 +831,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
       <div class="setwrap"><button class="btn setbtn" id="btn-settings" type="button" aria-haspopup="true" aria-expanded="false" title="Settings"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></button>
         <div class="setmenu" id="setmenu" role="dialog" aria-label="Settings" hidden>
           <h4>Settings</h4>
-          <div class="setrow"><span>Appearance</span><div class="seg" role="group" aria-label="Appearance" id="set-theme"><button type="button" data-th="system">System</button><button type="button" data-th="light">Light</button><button type="button" data-th="dark">Dark</button></div></div>
+          <button type="button" class="hcbtn" id="set-hc" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg><span><b>High contrast</b><span class="m" id="set-hc-m">Off: tap to turn on</span></span></button>
           <div class="setrow palrow"><span>Colour theme</span><div class="palsel"><i aria-hidden="true"></i><select id="set-pal" aria-label="Colour theme"><option value="standard">Standard</option><option value="chart">Chart</option><option value="forest">Forest</option><option value="night">Night (dark)</option><option value="contrast">High contrast</option><option value="vibrant">Vibrant</option><option value="sunset">Sunset (dark)</option><option value="arctic">Arctic</option><option value="graphite">Graphite (dark)</option></select></div></div>
           <label class="setexp"><input type="checkbox" id="set-exp"><span><b>Experimental mode</b><span class="m">Shows the planning tools: Timetable, Fleet, Stations, Track, Works and Plan panels. These are early and still changing.</span></span></label>
           <p class="m">Settings are remembered in this browser.</p>
@@ -4010,14 +4014,13 @@ $('btn-reset').onclick=e=>{const b=e.currentTarget;if(b.dataset.armed){TRACKSPEC
   else{b.dataset.armed='1';b.textContent='Confirm reset (discards your edits)';setTimeout(()=>{if(b.isConnected&&b.dataset.armed){delete b.dataset.armed;b.textContent='Reset to starting timetable';}},4000);}};
 /* ---------- settings: appearance and experimental mode (remembered in this browser) ---------- */
 const THEME0=document.documentElement.getAttribute('data-theme');
-let SETTINGS={theme:'system',palette:'standard',exp:false};try{Object.assign(SETTINGS,JSON.parse(localStorage.getItem('island-rail-settings')||'{}'));}catch(_){}
+let SETTINGS={theme:'system',palette:'standard',prevPalette:'standard',exp:false};try{Object.assign(SETTINGS,JSON.parse(localStorage.getItem('island-rail-settings')||'{}'));}catch(_){}
 let EXP=!!SETTINGS.exp;
 function saveSettings(){try{localStorage.setItem('island-rail-settings',JSON.stringify(SETTINGS));}catch(_){}}
 const PAL_BASE={chart:'light',forest:'light',contrast:'light',night:'dark',vibrant:'light',arctic:'light',sunset:'dark',graphite:'dark'};
 function applyTheme(){const r=document.documentElement,t=SETTINGS.theme,pal=PAL_BASE[SETTINGS.palette]?SETTINGS.palette:'standard';
-  if(pal!=='standard'){r.setAttribute('data-palette',pal);r.setAttribute('data-theme',PAL_BASE[pal]);}else{r.removeAttribute('data-palette');if(t==='light'||t==='dark')r.setAttribute('data-theme',t);else if(THEME0)r.setAttribute('data-theme',THEME0);else r.removeAttribute('data-theme');}
-  const ps=$('set-pal');if(ps)ps.value=pal;const sg=$('set-theme');if(sg){sg.classList.toggle('dim',pal!=='standard');sg.title=pal!=='standard'?'Choose the Standard colour theme to switch between light and dark':'';}
-  document.querySelectorAll('#set-theme [data-th]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.th===t)));
+  if(pal!=='standard'){r.setAttribute('data-palette',pal);r.setAttribute('data-theme',PAL_BASE[pal]);}else{r.removeAttribute('data-palette');if(THEME0)r.setAttribute('data-theme',THEME0);else r.removeAttribute('data-theme');}
+  const ps=$('set-pal');if(ps)ps.value=pal;const hc=$('set-hc');if(hc){hc.setAttribute('aria-pressed',String(pal==='contrast'));$('set-hc-m').textContent=pal==='contrast'?'On: tap to turn off':'Off: tap to turn on';}
   if(typeof drawFlows==='function'&&$('flowlegend')&&!$('flowlegend').hidden)setTimeout(drawFlows,0);}
 function applyExp(){EXP=!!SETTINGS.exp;document.querySelector('.app').classList.toggle('basic',!EXP);$('set-exp').checked=EXP;
   if(!EXP){if(typeof WORK_PICK!=='undefined'&&WORK_PICK){WORK_PICK=null;WORK_NEW=false;svg.classList.remove('picking');}if(typeof cancelPlacing==='function')cancelPlacing(true);if(typeof cancelDrawing==='function')cancelDrawing();if(typeof setTrkEdit==='function')setTrkEdit(false);}
@@ -4027,8 +4030,8 @@ function needExp(){return EXP;}
   b.onclick=e=>{e.stopPropagation();open(m.hidden);};
   document.addEventListener('pointerdown',e=>{if(!m.hidden&&!m.contains(e.target)&&!b.contains(e.target))open(false);});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden){open(false);b.focus();}});
-  document.querySelectorAll('#set-theme [data-th]').forEach(x=>x.onclick=()=>{SETTINGS.theme=x.dataset.th;SETTINGS.palette='standard';saveSettings();applyTheme();});
-  $('set-pal').onchange=e=>{SETTINGS.palette=e.target.value;saveSettings();applyTheme();};
+  $('set-hc').onclick=()=>{if(SETTINGS.palette==='contrast')SETTINGS.palette=SETTINGS.prevPalette&&SETTINGS.prevPalette!=='contrast'?SETTINGS.prevPalette:'standard';else{SETTINGS.prevPalette=SETTINGS.palette||'standard';SETTINGS.palette='contrast';}saveSettings();applyTheme();};
+  $('set-pal').onchange=e=>{SETTINGS.palette=e.target.value;if(e.target.value!=='contrast')SETTINGS.prevPalette=e.target.value;saveSettings();applyTheme();};
   $('set-exp').onchange=e=>{SETTINGS.exp=e.target.checked;saveSettings();applyExp();toast('Settings',SETTINGS.exp?'Experimental mode on: planning panels are shown':'Experimental mode off: planning panels are hidden');};
   applyTheme();applyExp();})();
 function setSubtitle(){$('subtitle').textContent=(PRESETS[PLAN.preset]||PRESETS.data8).sub;$('tt-preset').value=PRESETS[PLAN.preset]?PLAN.preset:'data8';}
@@ -4310,7 +4313,7 @@ function holTick(now){if(HOL==='standard')return;if(HOL==='winter')for(const t o
   if(HOL==='winter'||HOL==='newyear'||HOL==='canada'||bursts.length)thFx(now);}
 // settings dropdown
 {const row=document.createElement('div');row.className='setrow stack';row.innerHTML=`<label for="set-holiday">Theme</label><select id="set-holiday"><option value="auto">Automatic by date</option><option value="standard">Standard</option>${HOL_LIST.map(([k,n,w])=>`<option value="${k}">${n} (${w})</option>`).join('')}</select>`;
-  const ap=$('set-theme').closest('.setrow');ap.parentNode.insertBefore(row,ap.nextSibling);
+  const ap=$('set-hc');ap.parentNode.insertBefore(row,ap.nextSibling);
   $('set-holiday').onchange=e=>{SETTINGS.holiday=e.target.value;saveSettings();holApply();if(HOL==='newyear'||HOL==='canada'){fwPreview=performance.now()+7000;fwNext=0;}};}
 // new trains and recoloured trains pick up the theme; planes and ferries made later too
 {const mk=makeTrainGfx;makeTrainGfx=function(t){mk(t);thTrain(t);};const sty=styleTrainGfx;styleTrainGfx=function(t){sty(t);if(HOL==='easter')thTrain(t);};
