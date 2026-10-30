@@ -812,7 +812,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
 .palbtn[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:-1px}
 .palbtn i{flex:none;width:18px;height:12px;border-radius:3px;border:1px solid rgba(0,0,0,.35);background:linear-gradient(135deg,var(--a) 50%,var(--b) 50%)}
 .seg.dim{opacity:.45}
-</style></head>
+.sidings .sidln{fill:none;stroke:var(--ink,#223);stroke-width:2.6;opacity:.85;stroke-linecap:round}.sidings .sid.plan .sidln{stroke:#3b5b92;stroke-dasharray:4 3;opacity:.95}.sidings .sid.built .sidln{stroke:#3b5b92;opacity:.95}.sidings .sid.assumed .sidln{stroke-dasharray:1.5 2.5;opacity:.6}.sidings .sid.dbl .sidln{stroke-width:3.2}.sidings .sid{cursor:help}.sidings .sid:hover .sidln{stroke-width:4;opacity:1}</style></head>
 <body>
 <noscript><p style="padding:2em;font-family:sans-serif">Island Rail Planner needs JavaScript enabled.</p></noscript>
 
@@ -847,6 +847,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
       <div class="stat"><b id="s-run">0</b><span>Trains running</span></div>
       <div class="stat"><b id="s-riders">0</b><span>Riders carried</span></div>
       <div class="stat"><b id="s-cars">0</b><span>Car trips avoided</span></div>
+      <div class="stat" title="Times a train waited at a siding or passing point for an opposing train on single track, and the minutes spent waiting"><b id="s-meet">0</b><span>Single-track meets</span></div>
       <div class="stat"><b id="s-co2">0 kg</b><span>CO₂ avoided (est.)</span></div>
     </div>
   </header>
@@ -925,6 +926,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <div><svg width="30" height="10"><circle cx="15" cy="5" r="4" fill="var(--halo)" stroke="var(--ink)" stroke-width="1.6"/></svg>Passenger stop</div>
         <div><svg width="30" height="10"><rect x="11" y="1" width="8" height="8" fill="var(--halo)" stroke="var(--ink)" stroke-width="1.6"/></svg>Freight point</div>
         <div><svg width="30" height="10"><circle cx="15" cy="5" r="2.2" fill="var(--muted)"/></svg>Passing point (no stop)</div>
+        <div><svg width="30" height="10"><line x1="2" y1="3" x2="28" y2="3" stroke="var(--ink,#223)" stroke-width="2.4" opacity=".85"/><line x1="2" y1="8" x2="28" y2="8" stroke="#3b5b92" stroke-width="2.4" stroke-dasharray="4 3"/></svg>Siding: existing / proposed</div>
       </div>
       <div class="mapctl">
         <button id="srbtn" title="Search the map (/)" aria-label="Search for a place or address" aria-pressed="false" aria-expanded="false" aria-controls="srpanel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5.5 5.5"/></svg></button>
@@ -1018,7 +1020,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <div class="pbtns" id="trkresetbox" hidden><button class="btn danger" id="btn-trkreset" type="button">Undo all track changes</button></div>
       </div>
       <div class="pane" id="pane-works" hidden>
-        <div class="toolbar"><button class="btn primary" id="wk-new" type="button">+ New work</button><span class="grow"></span><span class="m" id="wk-count"></span></div>
+        <div class="toolbar"><button class="btn primary" id="wk-new" type="button">+ New work</button><button class="btn" id="wk-sid" type="button" title="Finds where opposing trains in this timetable meet away from a siding and adds a passing siding or double track there, replacing the ones added before">Add the sidings this timetable needs</button><span class="grow"></span><span class="m" id="wk-count"></span></div>
         <div id="worksbox" class="worksbox"></div>
       </div>
       <div class="pane" id="pane-plan" hidden>
@@ -1042,12 +1044,13 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
           <li>ICF timetable: the service pattern from the Island Corridor Foundation business case (Tables 17 and 18), using its stop times. The West Shore line is tightened to a train every 12 minutes: Westhills → Victoria 06:00–15:00 and Victoria → Westhills 09:15–17:30. Trainsets out of position run back empty. Victoria ↔ Courtenay and Victoria ↔ Nanaimo have 3 trains a day each way; Duncan has 2 morning trains to Victoria and 2 afternoon trains back. Use the Timetable and Fleet tabs to change it.</li>
           <li>Single track: a 12-minute service in both directions needs trains to pass every few minutes. That would require double track or several long passing loops between Victoria and Westhills, which this simulation does not model.</li>
           <li>Run times for new or changed trips use the track speeds chosen in the Track tab. The default is the 2003 E&amp;N track charts with speeds raised where the curves allow, up to 60 mph; the 2003 posted speeds and the earlier simple bands are the alternatives. Each train type's top speed still caps the result. The ICF and data-driven timetables keep the ICF running times unless you retime them.</li>
-          <li>Trainsets turn around in 3 minutes and run empty to reposition when needed. Trains running in the same direction stay at least one signal block (1 km) apart and never overtake: a train that catches up waits at a signal and picks up the delay. Trains meeting head-on on single track are not modelled.</li>
+          <li>Trainsets turn around in 3 minutes and run empty to reposition when needed. Trains running in the same direction stay at least one signal block (1 km) apart and never overtake: a train that catches up waits at a signal and picks up the delay. The line is single track: before a train enters a single-track section, the dispatcher checks no opposing train is in it. Otherwise it waits at the siding, passing point or station track it is on. Whoever reaches the siding first holds there; on a tie, intercity trains go before regional trains, which go before commuter trains. Waiting through a siding adds about a minute for the switches. A meet needs a siding at least as long as the shorter train. Waits add to the train's delay and appear as Single-track meets.</li>
+          <li>Sidings: existing sidings come from OpenStreetMap (read 30 Oct 2026), with lengths measured from the track. Passing points with no siding mapped use an assumed 330 m. Each starting timetable adds the passing sidings or double track it needs as proposed works, wherever its trains meet away from an existing siding. Costs are order of magnitude: about $5.5M for a 1 km passing siding with turnouts and signals, plus $3.5M a further km, and about $5M a km of double track plus $2M for turnouts and signals (MnDOT Midwest Regional Rail cost methodology, 2010 US$, escalated to 2026 CAD).</li>
           <li>Highway traffic: BC Ministry of Transportation Traffic Data Program annual hourly day-of-week summaries (Monday–Friday averaged). Lane counts from OpenStreetMap; lane capacity assumed at 1,900 veh/h on freeway sections, 1,700 on highways with intersections, 1,400–1,500 on two-lane or arterial sections.</li>
           <li>Road congestion dots: on highways the dot colour comes from the measured hourly counts above (green under 40% of estimated capacity, yellow 40–60%, red over 60%). Highway counts now include the 2025 Colwood interchange station (P-11-6NS) and twelve 2025 MoTI short counts on Highways 1, 14, 17, 19 and 19A, so segments between permanent stations use the nearest measured count. Roads with a public count are coloured from it: City of Victoria Open Data traffic counts (2019–2026, one-way daily volumes, spread over the day with the urban weekday profile; nearby sections of the same street share the count) and MoTI 2025 short counts on the Comox Valley Parkway and Brechin Road. Measured roads use about 800 veh/h per lane at signals (green under 45%, yellow 45–75%, red over). Every other local and connector road has no public count (Saanich, Langford, Colwood and Nanaimo publish none), so its colour is a modelled estimate: the weekday hourly shape of the urban count stations × how much population lives within a few kilometres (2021 Census) × road class. Hover a road to see whether it is measured or modelled. MoTI's segment AADT layer was not used because its values date from 2012.</li>
           <li>Jobs: Statistics Canada 2021 Census, employed people by usual place of work (tables 98-10-0496 by census tract and 98-10-0495 by municipality); people who worked at home are listed but not placed on the map. Each tract's jobs are spread over its OpenStreetMap commercial, institutional and industrial land (weighted 1 : 0.6 : 0.4 per hectare). "Jobs within 800 m" counts that spread, so it is approximate. The 2021 Census ran during the pandemic, and 2026 place-of-work results are due in 2027.</li>
           <li>Stations: new stations snap to the existing E&amp;N alignment. Adding a stop to existing trips interpolates its time and adds 1 minute to later stops; removing a stop takes 1 minute off. Demand (0–10) sets how many riders a station generates.</li>
-          <li>Track: use the Track tab to drag the alignment or draw new track. When you move a section of existing track, the distance between its stations grows or shrinks with the new length, and run times follow. New track joins the line where you start drawing, gets a station at its far end, and runs at the design speed you choose. All track is treated as single track; trains meeting head-on are not simulated, so double track is not modelled. Changing track does not retime existing trips; trips that become too tight are flagged.</li>
+          <li>Track: use the Track tab to drag the alignment or draw new track. When you move a section of existing track, the distance between its stations grows or shrinks with the new length, and run times follow. New track joins the line where you start drawing, gets a station at its far end, and runs at the design speed you choose. Track is single except at sidings, terminals and double track you add as works (Passing siding or Double track). Changing track does not retime existing trips; trips that become too tight are flagged.</li>
           <li>Map coverage: the whole of Vancouver Island, from Victoria to Port Hardy and Cape Scott, so track can be drawn to any part of it (use ▢ to see the whole island). Hillshade is computed at about 200 m and contours from a 400 m elevation grid (AWS Terrain Tiles, zoom 11), so very small landforms are smoothed. The mainland is shown flat and pale. North of Campbell River the map has highways (19, 28, 30), lakes, towns and population, but no local roads, trails, jobs or traffic counts.</li>
           <li>Edits are saved in this browser only. Use Copy plan to keep or share them.</li>
         </ul>
@@ -1219,7 +1222,8 @@ const WORK_TYPES={
  slope:{n:'Slope stabilization or retaining wall',s:'Slope',i:'◢',c:'#8a6d3b',g:'corr',nospeed:true,d:'Retaining walls, slope drainage and erosion protection along cuts and fills. No effect on train speeds in the planner.'},
  env:{n:'Environmental remediation',s:'Remediation',i:'♻',c:'#6b8e23',g:'corr',nospeed:true,d:'Site investigation and clean-up of contaminated soil (creosote ties, fuel, old yards) and habitat restoration. No effect on train speeds.'},
  utility:{n:'Utility corridor: fibre, power, water or sewer',s:'Utility',i:'ϟ',c:'#c28a00',g:'corr',nospeed:true,d:'Places or relocates utilities in the corridor: fibre-optic cable, power lines, water mains and sewers, and their crossings under the track. Can earn lease revenue for the corridor owner.'},
- siding:{n:'Passing siding or double track',s:'Siding',i:'⇉',c:'#3b5b92',g:'sys',nospeed:true,d:'Adds a passing siding or a stretch of second track so trains can meet. Does not change speed limits; capacity is not modelled yet.'},
+ siding:{n:'Passing siding',s:'Siding',i:'⇉',c:'#3b5b92',g:'sys',nospeed:true,track2:true,d:'A second track beside the main line where trains can wait for an opposing train to pass. Its length decides which trains fit. Does not change speed limits.'},
+ double:{n:'Double track',s:'Double track',i:'‖',c:'#1f4e8c',g:'sys',nospeed:true,track2:true,d:'A full second main track over the range, so trains in opposite directions pass anywhere along it. Does not change speed limits.'},
  signal:{n:'Signals and train control',s:'Signals',i:'◉',c:'#a33b5a',g:'sys',nospeed:true,d:'Block signals, centralized traffic control or positive train control in the range. No effect on speed limits in the planner.'},
  electrify:{n:'Electrification (overhead wires)',s:'Electrification',i:'⌁',c:'#5a4fcf',g:'sys',nospeed:true,d:'Overhead contact wire and power supply, needed for light rail or electric trains. No effect on speed limits in the planner.'},
  station:{n:'Station, platform or stop',s:'Station',i:'▭',c:'#9b2c4d',g:'sys',nospeed:true,d:'New or rebuilt station, platform, shelter, accessibility or parking. Add the stop itself in the Stations tab.'},
@@ -1258,7 +1262,7 @@ const DEFAULT_WORKS=[
   notes:'Largest single gain, about 13 minutes. Cost basis: about $8M per mile for rock cuts and side-hill realignment, from the 2017 Malahat Village highway project ($34M for 5 km of widening with blasting, about $15M per mile in 2026) scaled down for a single-track corridor. Range $90–240M. Needs a geotechnical study before it can be costed properly.'},
  {id:'p41-cv2',type:'curve',line:'ALB',a:10,b:36.95,deg:6,name:'Curve easing: Arrowsmith grade',status:'idea',cost:215,on:false,
   notes:'About 19 minutes on the Port Alberni Sub. Same $8M per mile basis as the Malahat curve easing, over 27 miles of mountain grade.'}];
-const worksSig=()=>SPEED_PROF+'|'+(TRACKSPEC.works||[]).filter(w=>w.on!==false).map(w=>[w.type,w.line,w.a,w.b,w.deg??''].join(':')).sort().join(',');
+const worksSig=()=>SPEED_PROF+'|'+(TRACKSPEC.works||[]).filter(w=>w.on!==false&&!(WORK_TYPES[w.type]&&WORK_TYPES[w.type].track2)).map(w=>[w.type,w.line,w.a,w.b,w.deg??''].join(':')).sort().join(',');
 // effective speed (mph) at a milepost: 2003 posted, curve limit, track class, town limits and any track works
 function effMph(line,mp,fr,works){const T=TRKSPD[line];const look=L=>{for(const x of L)if(mp<x[1])return x;return L[L.length-1];};
   const p=look(T.posted),D=look(T.curve)[2];const town=(URBAN[line]||[]).some(([a,b])=>mp>=a&&mp<b);
@@ -1519,13 +1523,74 @@ function processStop(t,i){
 }
 function stopAt(t,i){while(t.lastStop<i){t.lastStop++;processStop(t,t.lastStop);}}
 function finishTrip(t){
-  const tr=t.trip;t.at=tr.to;t.trip=null;t.moving=false;t.v=0;
+  const tr=t.trip;t.at=tr.to;t.trip=null;t.moving=false;t.v=0;t.gap=null;t.want=null;t.swHold=0;
   if(tr.cls==='Empty')return;
   DONE.add(tr.id);const late=t.delay>5;
   if(!tr.freight){S.arr++;if(!late)S.ontime++;logEvt(`${tr.no} arrived ${nm(tr.to)} ${late?`${Math.round(t.delay)} min late`:'on time'}`);}
 }
 
 /* ---------- signal blocks: trains in the same direction keep their distance and never overtake ---------- */
+/* ---------- sidings, double track and single-track dispatching ----------
+   Existing sidings: OpenStreetMap railway=rail/disused service=siding along the E&N (read 30 Oct 2026), lengths measured from the
+   track geometry. Passing points with no siding in OpenStreetMap use an assumed 330 m (the typical E&N siding length there).
+   Costs: MnDOT Midwest Regional Rail cost methodology (2010 US$: passenger siding about $1.45M a mile of track, No. 20 turnouts
+   $0.18–0.28M, CTC $0.21M a mile; double track on new embankment $3.0M a mile), escalated to 2026 CAD (×2.2). Order of magnitude. */
+const EXIST_SIDINGS=[
+ ['MAIN',5.46,129,'Esquimalt (Admirals Road)','osm'],['MAIN',12.53,363,'Langford','osm'],['MAIN',31.7,387,'Malahat','osm'],['MAIN',49.87,588,'Cobble Hill','osm'],
+ ['MAIN',60.83,370,'Duncan (south)','osm'],['MAIN',68.05,224,'Duncan (north)','osm'],['MAIN',103.66,335,'Cassidy','osm'],['MAIN',111.98,204,'Nanaimo (south)','osm'],
+ ['MAIN',123.99,296,'Wellington','osm'],['MAIN',129.7,330,'Lantzville','pp'],['MAIN',138.0,330,'Nanoose Bay','pp'],['MAIN',143.69,238,'Nanoose','osm'],['MAIN',152.79,333,'Parksville','osm'],
+ ['MAIN',176.53,375,'Dashwood','osm'],['MAIN',184.6,330,'Bowser','pp'],['MAIN',198.9,330,'Fanny Bay','pp'],['MAIN',209.7,330,'Union Bay','pp'],['MAIN',217.8,330,'Royston','pp'],
+ ['ALB',0.26,311,'Parksville junction','osm'],['ALB',7.5,330,'Coombs','pp'],['ALB',20.6,330,'Cameron Lake','pp'],['ALB',37.3,330,'Arrowsmith Summit','pp']];
+// terminals and yards that can hold several trains: [line, from km, to km, name]
+const TERMINALS=[['MAIN',-1,0.9,'Victoria'],['MAIN',13.8,14.7,'Westhills'],['MAIN',115.6,117.0,'Nanaimo (station and Wellcox)'],['MAIN',222.9,999,'Courtenay'],['ALB',61.5,999,'Port Alberni']];
+const TRAIN_LEN={dmu2:100,lrt:40,dmu:50,bemu:50,h2:50,pp:130,rdc:26,steam:140,frt:300};
+const trainLen=t=>TRAIN_LEN[t.type]||60;
+function track2Cost(type,line,a,b){try{const km=Math.max(.1,Math.abs(mpToK(line,b)-mpToK(line,a)));
+  return type==='siding'?+(5.5+Math.max(0,km-1)*3.5).toFixed(1):type==='double'?+(2+km*5).toFixed(1):null;}catch(_){return null;}}
+let DISPATCH=true;
+let PLACES=null,PLACES_SIG='';
+function placesSig(){return JSON.stringify((TRACKSPEC.works||[]).filter(w=>w.on!==false&&WORK_TYPES[w.type]&&WORK_TYPES[w.type].track2).map(w=>[w.type,w.line,w.a,w.b]))+'|'+Object.keys(LINES).join();}
+// passing places by line: sorted, merged intervals [a,b] in km with kind term | double | siding and a usable length in metres
+function getPlaces(){const sig=placesSig();if(PLACES&&sig===PLACES_SIG)return PLACES;const P={};
+  for(const line of Object.keys(LINES)){const max=lineMax(line),L=[];
+    for(const [l,a,b,n] of TERMINALS)if(l===line)L.push({a:Math.max(-1,a),b:Math.min(max+1,b),kind:'term',len:1e9,n,src:'term'});
+    for(const [l,k,len,n,src] of EXIST_SIDINGS)if(l===line)L.push({a:k-len/2000-.05,b:k+len/2000+.05,kind:'siding',len,n,src});
+    for(const w of TRACKSPEC.works||[])if(w.on!==false&&w.line===line&&WORK_TYPES[w.type]&&WORK_TYPES[w.type].track2){const a=mpToK(line,w.a),b=mpToK(line,w.b);
+      L.push({a:Math.min(a,b),b:Math.max(a,b),kind:w.type==='double'?'double':'siding',len:Math.abs(b-a)*1000,n:w.name||WORK_TYPES[w.type].s,src:'work',w:w.id,status:w.status});}
+    L.sort((x,y)=>x.a-y.a);const M=[];for(const p of L){const q=M[M.length-1];if(q&&p.a<=q.b+.02){q.b=Math.max(q.b,p.b);
+      const rk={term:3,double:2,siding:1};if(rk[p.kind]>rk[q.kind]){q.kind=p.kind;}q.len=q.kind==='siding'?Math.max(q.len,p.len):1e9;q.parts.push(p);}else M.push({...p,parts:[p]});}
+    P[line]=M;}
+  PLACES=P;PLACES_SIG=sig;return P;}
+// the single-track section (gap) at a position, or null inside a passing place
+function gapAt(line,k){const M=getPlaces()[line];if(!M)return null;let i=0;while(i<M.length&&M[i].b<k)i++;if(i<M.length&&M[i].a<=k)return null;return line+':'+i;}
+function placeAt(line,k){const M=getPlaces()[line]||[];return M.find(p=>p.a<=k&&k<=p.b)||null;}
+// the passing place a train reaches at the far end of gap g, travelling in direction dir
+function farPlace(g,dir){const [line,i]=g.split(':');const M=getPlaces()[line]||[];return dir>0?M[+i]||null:M[+i-1]||null;}
+const CLS_RANK={Intercity:3,Regional:2,'CRD Commute':1};
+const clsRank=t=>t.trip?CLS_RANK[t.trip.cls]||0:0;
+function meetFits(p,a,b){return !p||p.kind!=='siding'||Math.min(trainLen(a),trainLen(b))<=p.len;}
+// may train t enter single-track section g in direction dir now?
+function canEnter(t,g,dir){const tw=t.want===g?t.waitT:sim;
+  if(t.want===g&&sim-t.waitT>25){if(!t.overrideLogged){t.overrideLogged=true;logEvt(`${t.trip.no} released by the dispatcher after a long wait on single track`,true);}return{ok:true};}
+  for(const o of trains){if(o===t||!o.trip)continue;
+    if(o.gap===g&&o.gdir!==dir)return{ok:false,who:o};
+    if(o.want===g&&o.wdir!==dir){const fp=farPlace(g,dir);if(!meetFits(fp,t,o))return{ok:false,who:o};
+      if(o.waitT<tw-.5||(Math.abs(o.waitT-tw)<=.5&&clsRank(o)>clsRank(t)))return{ok:false,who:o};}}
+  return{ok:true};}
+// called before a train moves to route position ns; false = hold here for a meet
+function dispatchOK(t,ns,dt){if(!DISPATCH)return true;if(t.swHold>0){t.swHold-=dt;holdAtSignal(t,dt,null,true);return false;}
+  const p=trackPos(t,ns),g=gapAt(p.line,p.k);if(!g||g===t.gap)return true;
+  const r=canEnter(t,g,p.dir);
+  if(r.ok){const waited=t.want===g?sim-t.waitT:0;t.gap=g;t.gdir=p.dir;t.want=null;
+    if(waited>.3){const pl=placeAt(trackPos(t,t.s).line,trackPos(t,t.s).k);S.meets=(S.meets||0)+1;S.meetMin=(S.meetMin||0)+waited;if(pl){(S.meetAt||(S.meetAt={}))[pl.n]=(S.meetAt[pl.n]||0)+waited;}
+      if(pl&&pl.kind==='siding'&&waited<25){t.swHold=1;}}// switching allowance: about a minute through the siding switches
+    return t.swHold>0?(holdAtSignal(t,dt,null,true),t.swHold-=dt,false):true;}
+  if(t.want!==g){t.want=g;t.wdir=p.dir;t.waitT=sim;t.overrideLogged=false;
+    const here=trackPos(t,t.s),pl=placeAt(here.line,here.k);if(t.trip.cls!=='Empty')logEvt(`${t.trip.no} waits${pl?' at '+pl.n:''} for ${r.who&&r.who.trip?r.who.trip.no:'an opposing train'} on single track`);}
+  holdAtSignal(t,dt,r.who,true);return false;}
+// keep each train's single-track claim in step with where it actually is
+function dispatchTrack(t){if(!t.trip){t.gap=null;t.want=null;t.swHold=0;return;}const p=trackPos(t,t.s),g=gapAt(p.line,p.k);
+  if(!g){t.gap=null;return;}if(t.gap!==g){t.gap=g;t.gdir=p.dir;}}
 const BLOCK_KM=1;// minimum spacing between following trains (one signal block)
 function trackPos(t,s){const r=t.trip.route;const q=routeAt(r,s);const q2=routeAt(r,Math.min(r.len,s+.2)),q0=routeAt(r,Math.max(0,s-.2));
   let dir=Math.sign(q2.line===q.line?q2.k-q.k:q.k-q0.k)||t.dirLast||1;t.dirLast=dir;return{line:q.line,k:q.k,dir};}
@@ -1536,7 +1601,7 @@ function leaderGap(t,ns){// km of clear track ahead of t if it moved to ns; Infi
     if(!ahead)continue;const d=cur.dir*(p.k-nxt.k);if(d<gap){gap=d;who=o;}}
   return{gap,who};}
 /* ---------- time-of-day demand ---------- */
-function holdAtSignal(t,dt,who){t.delay+=dt;t.v=0;t.moving=false;t.blocked=(t.blocked||0)+dt;t.heldTot=(t.heldTot||0)+dt;
+function holdAtSignal(t,dt,who,meet){t.delay+=dt;t.v=0;t.moving=false;t.blocked=(t.blocked||0)+dt;t.heldTot=(t.heldTot||0)+dt;if(meet)return;
   if(t.heldTot>2&&!t.heldLogged&&t.trip.cls!=='Empty'){t.heldLogged=true;logEvt(`${t.trip.no} slowed by signals behind ${who&&who.trip?who.trip.no:'another train'}`,true);}}
 function demand(m){const h=(m/60)%24;if(h<5)return .05;const g=(c,w)=>Math.exp(-((h-c)**2)/(2*w*w));return .35+1.3*g(7.7,1)+1.1*g(16.8,1.2)+.25*g(12.5,2);}
 const hhmm=m=>{m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(Math.floor(m%60)).padStart(2,'0');};
@@ -1927,7 +1992,7 @@ $('popbtn').onclick=()=>{const on=popG.style.display==='none';popG.style.display
 const wrap=$('mapwrap');let vb={x:0,y:0,w:1000,h:H},ppu=1;
 const FIT={x:150,y:30,w:800,h:950},FIT_ISL={x:-1450,y:-1220,w:2700,h:2280};
 function fit(F=FIT){const r=wrap.getBoundingClientRect();const ar=r.width/r.height;let w=F.w,h=F.h;if(w/h<ar)w=h*ar;else h=w/ar;vb={x:F.x+F.w/2-w/2,y:F.y+F.h/2-h/2,w,h};applyVB();}
-function applyVB(){if(!dotsQueued&&typeof rebuildDots==='function'){dotsQueued=true;requestAnimationFrame(rebuildDots);}if(typeof trkEdit!=='undefined'&&trkEdit)queueHandles();if(typeof drawing!=='undefined'&&drawing&&drawing.pts.length)requestAnimationFrame(()=>drawDraft());const r=wrap.getBoundingClientRect();const ar=r.width/r.height||1;vb.h=vb.w/ar;ppu=r.width/vb.w;svg.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);svgfx.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);updateSC();updateScale();if(typeof cullBikes==='function')cullBikes();if(typeof cullCrash==='function')cullCrash();if(window.__marReady)marineZoom();if(window.__lnotesQ)window.__lnotesQ();}
+function applyVB(){if(!dotsQueued&&typeof rebuildDots==='function'){dotsQueued=true;requestAnimationFrame(rebuildDots);}if(typeof trkEdit!=='undefined'&&trkEdit)queueHandles();if(typeof drawing!=='undefined'&&drawing&&drawing.pts.length)requestAnimationFrame(()=>drawDraft());const r=wrap.getBoundingClientRect();const ar=r.width/r.height||1;vb.h=vb.w/ar;ppu=r.width/vb.w;svg.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);svgfx.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);updateSC();updateScale();if(typeof cullBikes==='function')cullBikes();if(typeof cullCrash==='function')cullCrash();if(window.__marReady)marineZoom();if(window.__lnotesQ)window.__lnotesQ();if(window.__sidQ)window.__sidQ();}
 function zoomAt(f,cx,cy){const r=wrap.getBoundingClientRect();const sx=vb.x+(cx-r.left)/ppu,sy=vb.y+(cy-r.top)/ppu;const nw=Math.max(8,Math.min(3300,vb.w/f));const nf=vb.w/nw;vb.w=nw;vb.h=vb.h/nf;vb.x=sx-(cx-r.left)/(r.width/vb.w);vb.y=sy-(cy-r.top)/(r.width/vb.w);applyVB();}
 function zoomFactor(){return 1000/vb.w*(FIT.w/1000)/(FIT.w/1000);} // relative to full width
 function updateSC(){const inv=1/ppu;const z=800/vb.w;svg.classList.toggle('z2',z>=1.8);svg.classList.toggle('zr',z>=1.4);svg.classList.toggle('zt',z>=2.4);svg.classList.toggle('zo',z<.9);for(const s of SC){const show=z>=s.minZoom&&z<s.maxZoom;s.g.style.display=show?'':'none';if(show)s.g.setAttribute('transform',`translate(${s.x.toFixed(2)} ${s.y.toFixed(2)}) scale(${inv.toFixed(4)})${s.rot?` rotate(${s.rot})`:''}`);}
@@ -3314,11 +3379,11 @@ function openWork(id,noZoom){if(!needExp())return;const w=findWork(id);if(!w)ret
 function closeWork(){WORK_SEL=null;WORK_SNAP=null;WORK_PICK=null;svg.classList.remove('picking');renderWorks();drawWorksOnMap();}
 // every change: speeds, layer and panel update at once; the heavier timetable checks follow a moment later
 let worksT=null;
-function worksChanged(msg,loud){MINCACHE.clear();savePlan();if(L.speed.style.display!=='none'){drawSpeedLayer();speedStats();}else drawWorksOnMap();renderWorks();
+function worksChanged(msg,loud){MINCACHE.clear();PLACES=null;if(window.__sidQ)window.__sidQ();savePlan();if(L.speed.style.display!=='none'){drawSpeedLayer();speedStats();}else drawWorksOnMap();renderWorks();
   clearTimeout(worksT);worksT=setTimeout(()=>applyPlan(loud?msg:''),loud?0:500);}
 const commitWorks=msg=>worksChanged(msg,true);
 function createWork(o){if(!needExp())return null;const t=WORK_TYPES[o.type];const w={id:newWorkId(),type:o.type,line:o.line,a:+o.a.toFixed(2),b:+o.b.toFixed(2),name:o.name||`${t.s}, MP ${o.a.toFixed(1)}–${o.b.toFixed(1)}`,
-    deg:t.deg!==undefined?(o.deg??t.deg):undefined,status:o.status||'idea',cost:o.cost??null,notes:o.notes||'',project:null,on:true,fresh:true};
+    deg:t.deg!==undefined?(o.deg??t.deg):undefined,status:o.status||'idea',cost:o.cost??track2Cost(o.type,o.line,o.a,o.b),notes:o.notes||'',project:null,on:true,fresh:true};
   (TRACKSPEC.works||(TRACKSPEC.works=[])).push(w);WORK_SEL=w.id;WORK_SNAP=null;WORK_NEW=false;WORK_PICK=null;svg.classList.remove('picking');
   if(tab!=='works')switchTab('works');if(L.speed.style.display==='none')$('speedbtn').click();
   const ef=workEffect(w);worksChanged(`Added ${w.name}${ef.saved>.05?`: saves ${ef.saved.toFixed(1)} min`:''}`,true);zoomToWork(w.id);
@@ -4018,11 +4083,11 @@ $('btn-auto2').onclick=()=>$('btn-auto').click();
 $('btn-blank').onclick=e=>{const b=e.currentTarget,lbl='Start from a blank slate';
   if(!b.dataset.armed){b.dataset.armed='1';b.textContent='Confirm: clear timetable, fleet, new stations and new track';setTimeout(()=>{if(b.isConnected&&b.dataset.armed){delete b.dataset.armed;b.textContent=lbl;}},4000);return;}
   delete b.dataset.armed;b.textContent=lbl;
-  const sp=JSON.parse(JSON.stringify(STNSPEC||{}));sp.add=[];TRACKSPEC.lines=[];applyStations(sp);
+  const sp=JSON.parse(JSON.stringify(STNSPEC||{}));sp.add=[];TRACKSPEC.lines=[];TRACKSPEC.works=(TRACKSPEC.works||[]).filter(w=>w.project!=='auto');PLACES=null;applyStations(sp);drawSidings();
   PLAN.trips=[];PLAN.fleet=[];PLAN.dropped=[];DONE.clear();KNOWN.clear();for(const t of [...trains])removeTrainGfx(t);trains.length=0;FORM=null;
   syncRuntime();bootPositions();applyPlan('Cleared the timetable, fleet, added stations and added track: a blank slate');setSubtitle();
   toast('Blank slate','The timetable, fleet, added stations and added track are cleared. The corridor, track works and station edits are kept.');};
-$('btn-reset').onclick=e=>{const b=e.currentTarget;if(b.dataset.armed){TRACKSPEC=normTrack(null);applyStations({});PLAN=defaultPlan($('tt-preset').value);DONE.clear();KNOWN.clear();for(const t of [...trains]){removeTrainGfx(t);}trains.length=0;FORM=null;
+$('btn-reset').onclick=e=>{const b=e.currentTarget;if(b.dataset.armed){TRACKSPEC=normTrack(null);applyStations({});PLAN=defaultPlan($('tt-preset').value);autoSidings(PLAN);DONE.clear();KNOWN.clear();for(const t of [...trains]){removeTrainGfx(t);}trains.length=0;FORM=null;
     syncRuntime();bootPositions();applyPlan('Restored the starting timetable, the original stations and the original track');b.textContent='Reset to starting timetable';delete b.dataset.armed;}
   else{b.dataset.armed='1';b.textContent='Confirm reset (discards your edits)';setTimeout(()=>{if(b.isConnected&&b.dataset.armed){delete b.dataset.armed;b.textContent='Reset to starting timetable';}},4000);}};
 /* ---------- settings: appearance and experimental mode (remembered in this browser) ---------- */
@@ -4047,10 +4112,11 @@ function needExp(){return EXP;}
   $('set-pal').onchange=e=>{SETTINGS.palette=e.target.value;if(e.target.value!=='contrast')SETTINGS.prevPalette=e.target.value;saveSettings();applyTheme();};
   $('set-exp').onchange=e=>{SETTINGS.exp=e.target.checked;saveSettings();applyExp();toast('Settings',SETTINGS.exp?'Experimental mode on: planning panels are shown':'Experimental mode off: planning panels are hidden');};
   applyTheme();applyExp();})();
+$('wk-sid').onclick=()=>{const r=autoSidings(PLAN);worksChanged(r.added.length?`Added ${r.added.length} siding${r.added.length>1?'s':''} or double-track section${r.added.length>1?'s':''} for ${r.uncovered} meet${r.uncovered>1?'s':''} away from existing sidings (${r.meets} scheduled meets in all)`:`All ${r.meets} scheduled meets fall at existing sidings, stations or double track: nothing to add`,true);};
 function setSubtitle(){$('subtitle').textContent=!PLAN.trips.length&&!PLAN.fleet.length?'E&N corridor · Blank slate: no trains or trainsets yet · add trainsets and trips to build a service':(PRESETS[PLAN.preset]||PRESETS.data8).sub;$('tt-preset').value=PRESETS[PLAN.preset]?PLAN.preset:'data8';}
 setSubtitle();
-$('btn-preset').onclick=()=>{const k=$('tt-preset').value;PLAN=defaultPlan(k);DONE.clear();KNOWN.clear();for(const t of [...trains])removeTrainGfx(t);trains.length=0;FORM=null;
-  syncRuntime();bootPositions();setSubtitle();applyPlan(`Loaded the ${PRESETS[k].name} timetable. Stations and track are unchanged.`);};
+$('btn-preset').onclick=()=>{const k=$('tt-preset').value;PLAN=defaultPlan(k);const AS=autoSidings(PLAN);DONE.clear();KNOWN.clear();for(const t of [...trains])removeTrainGfx(t);trains.length=0;FORM=null;
+  syncRuntime();bootPositions();setSubtitle();applyPlan(`Loaded the ${PRESETS[k].name} timetable. Stations and track are unchanged${AS.added.length?`, apart from ${AS.added.length} siding${AS.added.length>1?'s':''} or double-track section${AS.added.length>1?'s':''} this timetable needs (see Works)`:''}.`);};
 // side-by-side numbers for the two starting timetables
 function presetStats(P){let km=0,seats=0,wsDay=0,peakIn=0;const sets=new Set();
   for(const tr of P.trips){const f=P.fleet.find(x=>x.id===tr.set);if(!f)continue;sets.add(f.id);const l=routeFor(codesOf(tr)).len;km+=l;
@@ -4079,7 +4145,7 @@ function renderHeader(){
   $('s-riders').textContent=fmt(S.riders);$('s-cars').textContent=fmt(S.riders*.85);
   const co2=S.pkm*.13;$('s-co2').textContent=co2>=10000?(co2/1000).toFixed(1)+' t':fmt(co2)+' kg';
 
-  $('s-run').textContent=trains.filter(t=>t.trip&&t.trip.cls!=='Empty').length;
+  $('s-run').textContent=trains.filter(t=>t.trip&&t.trip.cls!=='Empty').length;$('s-meet').textContent=(S.meets||0)+(S.meets?' · '+Math.round(S.meetMin||0)+' min':'');
 }
 function select(id,center){selected=id;const t=trains.find(x=>x.id===id);if(!t)return;const tr=t.trip||nextFor(t);
   if(tr){routeHi.setAttribute('points',tr.route.pts.map(p=>p.xy.map(v=>v.toFixed(1)).join(',')).join(' '));routeHi.setAttribute('stroke',t.color);}else routeHi.setAttribute('points','');
@@ -4088,6 +4154,51 @@ function select(id,center){selected=id;const t=trains.find(x=>x.id===id);if(!t)r
   if(tab==='fleet')renderFleet();}
 
 /* ---------- log / toasts ---------- */
+
+/* ---------- the sidings a timetable needs: find where opposing trains meet and add a siding or double track there ---------- */
+function tripSamples(tr,dt=.25){let o;try{o=prep(tr);}catch(_){return null;}const st=o.stops,out=[];if(st.length<2)return null;
+  for(let tm=o.dep;tm<=o.arr+1e-6;tm+=dt){let s;let i=0;while(i<st.length-1&&st[i+1].arr<=tm)i++;
+    if(i>=st.length-1)s=st[st.length-1].s;else if(tm<=st[i].dep)s=st[i].s;else{const a=st[i],b=st[i+1];const u=(tm-a.dep)/Math.max(.01,b.arr-a.dep);s=a.s+(b.s-a.s)*ease(Math.max(0,Math.min(1,u)));}
+    const q=routeAt(o.route,s);out.push([q.line,q.k]);}
+  const dirs={};for(const l of new Set(out.map(x=>x[0]))){const ks=out.filter(x=>x[0]===l);dirs[l]=Math.sign(ks[ks.length-1][1]-ks[0][1])||1;}
+  return{t0:Math.ceil(o.dep/dt)*dt===o.dep?o.dep:o.dep,dt,pts:out,dirs,no:tr.no,cls:tr.cls};}
+function planMeets(trips){const dt=.25,S=[];for(const tr of trips){const x=tripSamples(tr,dt);if(x)S.push(x);}const M=[];
+  for(let i=0;i<S.length;i++)for(let j=i+1;j<S.length;j++){const A=S[i],B=S[j];const a0=A.t0,a1=A.t0+(A.pts.length-1)*dt,b0=B.t0,b1=B.t0+(B.pts.length-1)*dt;
+    const t0=Math.max(a0,b0),t1=Math.min(a1,b1);if(t1<=t0)continue;let prev=null;
+    for(let tm=t0;tm<=t1+1e-6;tm+=dt){const pa=A.pts[Math.round((tm-a0)/dt)],pb=B.pts[Math.round((tm-b0)/dt)];if(!pa||!pb||pa[0]!==pb[0]||A.dirs[pa[0]]===B.dirs[pa[0]]){prev=null;continue;}
+      const d=pa[1]-pb[1];if(prev!==null&&(Math.sign(d)!==Math.sign(prev)||d===0)){M.push({line:pa[0],k:(pa[1]+pb[1])/2,t:tm,a:A.no,b:B.no});prev=null;continue;}prev=d;}}
+  return M;}
+function meetCovered(m,tol=.8){const p=(getPlaces()[m.line]||[]).find(p=>p.a-tol<=m.k&&m.k<=p.b+tol);return !!p;}
+// removes the sidings this tool added before, then adds what the plan's meets need; returns the works added
+function autoSidings(plan,quiet){plan=plan||PLAN;TRACKSPEC.works=(TRACKSPEC.works||[]).filter(w=>w.project!=='auto');PLACES=null;
+  const meets=planMeets(plan.trips||[]),need=meets.filter(m=>!meetCovered(m)),added=[];
+  for(const line of Object.keys(LINES)){const ks=need.filter(m=>m.line===line).sort((x,y)=>x.k-y.k);let cl=null;const C=[];
+    for(const m of ks){if(cl&&m.k-cl.b<=2.5){cl.b=m.k;cl.n++;}else{cl={a:m.k,b:m.k,n:1};C.push(cl);}}
+    for(const c of C){let a=c.a-1,b=c.b+1;const dbl=b-a>4.5||c.n>=25;if(dbl&&b-a<4){a-=(4-(b-a))/2;b=a+4;}const max=lineMax(line);a=Math.max(0,a);b=Math.min(max,b);if(b-a<1)continue;
+      const near=s=>{let best=null,bd=1e9;for(const st of Object.values(STATIONS)){if(st.line!==line)continue;const d=Math.abs(st.k-(a+b)/2);if(d<bd){bd=d;best=st;}}return best?best.n:'the line';};
+      const type=dbl?'double':'siding',ma=+kToMP(line,a).toFixed(2),mb=+kToMP(line,b).toFixed(2);
+      const w={id:newWorkId(),type,line,a:ma,b:mb,name:(dbl?'Double track near ':'Passing siding near ')+near(),status:'proposed',cost:track2Cost(type,line,ma,mb),
+        notes:`Added for the ${(PRESETS[plan.preset]||{name:'current'}).name} timetable: ${c.n} scheduled meet${c.n>1?'s':''} between opposing trains fall here, away from any existing siding.`,project:'auto',on:true};
+      TRACKSPEC.works.push(w);added.push(w);}}
+  PLACES=null;plan.autoSid=true;if(!quiet&&typeof drawSidings==='function')drawSidings();return{added,meets:meets.length,uncovered:need.length};}
+
+/* ---------- sidings and double track on the map: a thin second line beside the main line ---------- */
+const sidG=el('g',{class:'sidings'},L.rail);let SID_Q=false;
+function drawSidings(){sidG.innerHTML='';const off=8.5/ppu;
+  for(const [line,M] of Object.entries(getPlaces()))for(const pl of M)for(const p of pl.parts){if(p.kind==='term')continue;
+    const a=Math.max(LINES[line][0].k,p.a+.05),b=Math.min(lineMax(line),p.b-.05);if(b<=a)continue;const pts=[];const n=Math.max(2,Math.ceil((b-a)/.05));
+    for(let i=0;i<=n;i++){const k=a+(b-a)*i/n,p0=lineAt(line,Math.max(0,k-.03)),p1=lineAt(line,k+.03),c=lineAt(line,k);const dx=p1[0]-p0[0],dy=p1[1]-p0[1],L2=Math.hypot(dx,dy)||1;pts.push([c[0]-dy/L2*off,c[1]+dx/L2*off]);}
+    const st=p.src==='work'?(p.status==='built'?'built':'plan'):p.src==='pp'?'assumed':'exist';
+    const g=el('g',{class:'sid '+st+(p.kind==='double'?' dbl':'')},sidG);
+    el('polyline',{points:pts.map(q=>q[0].toFixed(2)+','+q[1].toFixed(2)).join(' '),class:'sidln','vector-effect':'non-scaling-stroke'},g);
+    const tip=`<b>${esc(p.n)}</b><br>${p.kind==='double'?'Double track':'Passing siding'} · ${(p.kind==='double'?((p.b-p.a)).toFixed(1)+' km':Math.round(p.len)+' m')}<br>`+
+      (st==='exist'?'Existing siding (OpenStreetMap)':st==='assumed'?'Passing point · siding length assumed (330 m), not verified':p.status==='built'?'Built (track work)':'Proposed in this plan (track work, '+esc(p.status||'idea')+')')+
+      (p.kind==='siding'?`<br>Fits trains up to ${Math.round(p.len)} m: `+Object.entries(TRAIN_LEN).filter(([k,v])=>v<=p.len&&TYPES[k]).map(([k])=>TYPES[k].short||TYPES[k].name).join(', '):'');
+    g.addEventListener('pointerenter',e=>{if(!tipPinned)placeTip(e,tip);});g.addEventListener('pointermove',e=>{if(!tipPinned)placeTip(e,tip);});g.addEventListener('pointerleave',()=>{if(!tipPinned)$('tip').hidden=true;});}}
+window.__sidQ=()=>{if(SID_Q)return;SID_Q=true;requestAnimationFrame(()=>{SID_Q=false;drawSidings();});};
+// first visit (or a plan saved before sidings existed): add the sidings the timetable needs once
+if(!PLAN.autoSid&&(PLAN.trips||[]).length){try{autoSidings(PLAN,true);savePlan();}catch(e){console.warn('sidings',e);}}
+PLAN.autoSid=true;setTimeout(drawSidings,0);
 function logEvt(msg,warn){const li=document.createElement('li');li.innerHTML=`<time>${hhmm(sim)}</time><span></span>`;li.lastChild.textContent=msg;if(warn)li.style.color='var(--bad)';const ol=$('log');ol.prepend(li);while(ol.children.length>30)ol.lastChild.remove();}
 function toast(h,msg){const d=document.createElement('div');d.className='toast';d.innerHTML='<b></b><span></span>';d.firstChild.textContent=h;d.lastChild.textContent=msg;const box=$('toasts');box.appendChild(d);while(box.children.length>3)box.firstChild.remove();setTimeout(()=>d.remove(),3600);}
 
@@ -4123,12 +4234,12 @@ function step(dt){
     if(tc<st[i].dep&&i>0){t.s=st[i].s;t.v=0;t.moving=false;stopAt(t,i);if(t.delay>0)t.delay=Math.max(0,t.delay-dt*.3);}
     else if(tc<st[i].dep){t.s=st[0].s;t.v=0;t.moving=false;}
     else{const a=st[i],b=st[i+1];const T=Math.max(.5,b.arr-a.dep);const u=Math.min(1,(tc-a.dep)/T);
-      if(u>=1){if(b.s>t.s+1e-6){const L=leaderGap(t,b.s);if(L.gap<BLOCK_KM){holdAtSignal(t,dt,L.who);continue;}}t.s=b.s;t.v=0;t.moving=false;stopAt(t,i+1);continue;}
+      if(u>=1){if(b.s>t.s+1e-6){if(!dispatchOK(t,b.s,dt))continue;const L=leaderGap(t,b.s);if(L.gap<BLOCK_KM){holdAtSignal(t,dt,L.who);continue;}}t.s=b.s;t.v=0;t.moving=false;stopAt(t,i+1);dispatchTrack(t);continue;}
       const ns=a.s+(b.s-a.s)*ease(u);
-      if(ns>t.s+1e-6){const L=leaderGap(t,ns);if(L.gap<BLOCK_KM){holdAtSignal(t,dt,L.who);continue;}}
+      if(ns>t.s+1e-6){if(!dispatchOK(t,ns,dt))continue;const L=leaderGap(t,ns);if(L.gap<BLOCK_KM){holdAtSignal(t,dt,L.who);continue;}}
       if(t.blocked)t.blocked=0;
       if(!t.freight&&tr.cls!=='Empty'&&Math.abs(ns-t.s)<3)S.pkm+=t.load*Math.abs(ns-t.s);t.s=ns;t.v=vel(u)*Math.abs(b.s-a.s)/T*60;t.moving=true;stopAt(t,i);
-      if(t.delay>0)t.delay=Math.max(0,t.delay-dt*.07);}
+      if(t.delay>0)t.delay=Math.max(0,t.delay-dt*.07);dispatchTrack(t);}
   }
 }
 /* ---------- holiday themes (V63) ----------
