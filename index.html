@@ -802,6 +802,11 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
 .hcbtn{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;width:100%;text-align:left;border:2px solid var(--ctl-line);border-radius:8px;background:var(--ctl-bg);color:var(--ink);font:inherit;font-size:13px;padding:9px 11px;cursor:pointer}
 .hcbtn .m{display:block;font-size:11.5px;margin-top:1px}.hcbtn:hover{border-color:var(--ink)}
 .hcbtn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}.hcbtn[aria-pressed="true"] .m{color:inherit;opacity:.85}
+
+.sharebox{display:grid;gap:7px;border:1px solid var(--ctl-line);border-radius:8px;padding:9px 10px}.sharebox .m{display:block;font-size:11.5px;margin-top:2px}
+.sharebox #share-make{justify-self:start;font-size:12px;padding:6px 10px;border-radius:6px;cursor:pointer}
+.shareout{display:grid;grid-template-columns:1fr auto;gap:6px}.shareout input{font-family:var(--mono);font-size:11.5px;padding:5px 7px;border-radius:5px;border:1px solid var(--ctl-line);background:var(--ctl-bg);color:var(--ink);min-width:0}
+.shareout .btn{font-size:12px;padding:5px 10px;border-radius:6px;cursor:pointer}
 .setrow.palrow{align-items:flex-start}.palgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:5px;flex:1}
 .palbtn{display:flex;align-items:center;gap:6px;border:1px solid var(--ctl-line);border-radius:6px;background:var(--ctl-bg);color:var(--ink);font:inherit;font-size:11.5px;padding:4px 7px;cursor:pointer;text-align:left}
 .palbtn[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:-1px}
@@ -834,6 +839,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
           <button type="button" class="hcbtn" id="set-hc" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg><span><b>High contrast</b><span class="m" id="set-hc-m">Off: tap to turn on</span></span></button>
           <div class="setrow palrow"><span>Colour theme</span><div class="palsel"><i aria-hidden="true"></i><select id="set-pal" aria-label="Colour theme"><option value="standard">Standard</option><option value="chart">Chart</option><option value="forest">Forest</option><option value="night">Night (dark)</option><option value="contrast">High contrast</option><option value="vibrant">Vibrant</option><option value="sunset">Sunset (dark)</option><option value="arctic">Arctic</option><option value="graphite">Graphite (dark)</option></select></div></div>
           <label class="setexp"><input type="checkbox" id="set-exp"><span><b>Experimental mode</b><span class="m">Shows the planning tools: Timetable, Fleet, Stations, Track, Works and Plan panels. These are early and still changing.</span></span></label>
+          <div class="sharebox"><div><b>Share this view</b><span class="m">Saves the layers, colour theme, map position and clock, plus the timetable, fleet, stations, track changes and works, as a short link. Nothing is saved until you create a link, and no personal information is stored.</span></div><button type="button" class="btn" id="share-make">Create share link</button><div class="shareout" id="share-out" hidden><input id="share-url" readonly aria-label="Share link"><button type="button" class="btn" id="share-copy">Copy</button></div><div class="m" id="share-msg" role="status"></div></div>
           <p class="m">Settings are remembered in this browser.</p>
         </div></div>
     </div>
@@ -4519,6 +4525,41 @@ let tdInfoSet=false;
 $('tidebtn').onclick=()=>{const on=tdG.style.display==='none';tdG.style.display=on?'':'none';$('tidebtn').setAttribute('aria-pressed',String(on));$('tidelegend').hidden=!on;
   flShow(on);if(on){if(!tdInfoSet){tdInfoSet=true;const c=document.querySelector('[data-info=tidelegend]');if(c&&!c.checked)c.click();}TD.prevSim=null;stepTides(true);tdLoad();}else if(tipPinned==null)hideTip();};
 {const sx3=stepXport;stepXport=function(){sx3();stepTides();};}
+/* ---------- share links: save the current view to the relay and open saved views from #c=CODE ---------- */
+const RELAY_BASE=TANKER_URL.replace(/\/tankers$/,''),SHARE_BASE='https://map.restoreislandrail.com/';
+function cfgCollect(){const lp=$('layerpanel');return{app:'island-rail-planner',v:1,made:new Date().toISOString(),
+  view:{x:+vb.x.toFixed(2),y:+vb.y.toFixed(2),w:+vb.w.toFixed(2)},
+  layers:[...lp.querySelectorAll('.lsw')].filter(b=>b.getAttribute('aria-pressed')==='true').map(b=>b.id),
+  info:[...lp.querySelectorAll('[data-info]')].filter(c=>c.checked).map(c=>c.dataset.info),
+  lbl:[...lp.querySelectorAll('[data-lbl]')].filter(c=>c.checked).map(c=>c.dataset.lbl),busNums:!!$('bo-num').checked,
+  palette:SETTINGS.palette||'standard',holiday:SETTINGS.holiday||'auto',clock:{sim:Math.round(sim),day,speed},tide:{rate:+$('tdrate').value||0},
+  plan:(PLAN.stations=STNSPEC,PLAN.track=TRACKSPEC,JSON.parse(JSON.stringify(PLAN)))};}// timetable, fleet, stations, track changes and works
+function cfgApply(c){
+  try{if(c.plan&&validPlan(c.plan)){try{localStorage.setItem(LS+'-before-share',JSON.stringify(PLAN));}catch(_){}
+    PLAN=c.plan;TRACKSPEC=normTrack(c.plan.track);applyStations(c.plan.stations);syncRuntime();bootPositions();applyPlan('Opened the timetable from a shared link');}}catch(e){console.warn('shared timetable',e);}
+  // colour theme and holiday theme for this visit only (the viewer's own choices are not overwritten)
+  if(c.palette&&(c.palette==='standard'||PAL_BASE[c.palette])){SETTINGS.palette=c.palette;applyTheme();}
+  if(c.holiday&&typeof holApply==='function'){SETTINGS.holiday=c.holiday;holApply();const s=$('set-holiday');if(s)s.value=c.holiday;}
+  const lp=$('layerpanel');if(Array.isArray(c.layers))for(const b of lp.querySelectorAll('.lsw')){const want=c.layers.includes(b.id);if((b.getAttribute('aria-pressed')==='true')!==want)b.click();}
+  const setCk=(sel,key,list)=>{if(!Array.isArray(list))return;for(const x of lp.querySelectorAll(sel)){const w=list.includes(x.dataset[key]);if(x.checked!==w){x.checked=w;x.dispatchEvent(new Event('change',{bubbles:true}));}}};
+  setCk('[data-info]','info',c.info);setCk('[data-lbl]','lbl',c.lbl);
+  if(typeof c.busNums==='boolean'&&$('bo-num').checked!==c.busNums){$('bo-num').checked=c.busNums;$('bo-num').dispatchEvent(new Event('change',{bubbles:true}));}
+  if(c.clock&&isFinite(c.clock.sim)){sim=Math.max(0,Math.min(1439,+c.clock.sim));if(isFinite(c.clock.day))day=+c.clock.day;bootPositions();const sb=document.querySelector(`#speeds button[data-s="${+c.clock.speed}"]`);if(sb)sb.click();}
+  if(c.tide&&isFinite(c.tide.rate)&&typeof tdSetRate==='function')tdSetRate(c.tide.rate);
+  if(c.view&&isFinite(c.view.x)&&isFinite(c.view.w)&&c.view.w>4){vb.x=c.view.x;vb.y=c.view.y;vb.w=c.view.w;applyVB();}
+  if(typeof renderHeader==='function')renderHeader();}
+async function shareMake(){const b=$('share-make'),msg=$('share-msg');b.disabled=true;msg.textContent='Saving…';
+  try{const r=await fetch(RELAY_BASE+'/config',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(cfgCollect())});const j=await r.json().catch(()=>({}));
+    if(!r.ok||!j.id)throw new Error(j.error||('HTTP '+r.status));const url=SHARE_BASE+'#c='+j.id;$('share-url').value=url;$('share-out').hidden=false;msg.textContent='Anyone with this link sees this view.';
+    try{await navigator.clipboard.writeText(url);msg.textContent='Link copied. Anyone with it sees this view.';}catch(_){}}
+  catch(e){msg.textContent='Could not save the view ('+(e.message||e)+').';}finally{b.disabled=false;b.textContent='Create a new link';}}
+$('share-make').onclick=shareMake;
+$('share-copy').onclick=async()=>{const i=$('share-url');try{await navigator.clipboard.writeText(i.value);}catch(_){i.select();try{document.execCommand('copy');}catch(__){}}$('share-msg').textContent='Link copied.';};
+async function shareOpen(){const m=/[#&?]c=([2-9A-Za-z]{7})\b/.exec(location.hash+location.search);if(!m)return;
+  try{const r=await fetch(RELAY_BASE+'/config?id='+m[1].toUpperCase());const c=await r.json();if(!r.ok)throw new Error(c.error||('HTTP '+r.status));
+    cfgApply(c);toast('Shared view',`Opened a map view shared on ${new Date(c.made||Date.now()).toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'})}`);}
+  catch(e){toast('Shared view',String(e.message||e));}}
+setTimeout(shareOpen,600);window.addEventListener('hashchange',shareOpen);
 function frame(now){
   const dt=Math.min(.1,(now-lastT)/1000);lastT=now;
   if(speed){let m=dt*speed;while(m>0){const d=Math.min(m,.25);step(d);m-=d;}}
