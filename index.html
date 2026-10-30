@@ -770,18 +770,19 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
 .tdbarl{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
 
 /* colour themes (Settings → Colour theme); each builds on the light or dark base */
-:root[data-palette="chart"]{--bg:#eef2f3;--panel:#fbfcfc;--panel-2:#f0f4f5;--ink:#14202a;--muted:#536170;--line:#cdd7dd;--ctl-line:#7d8c97;--ctl-hov:#e6eef2;
-  --sea:#d6eaf5;--sea-ink:#1d5c88;--land:#efd68a;--land-edge:#6d5a26;--lake:#c9e2f0;--grid:rgba(20,60,95,.2);--halo:#fffbea;--chip:#ffffff;
-  --contour:rgba(110,82,24,.34);--contour-idx:rgba(96,68,16,.62);--elev:#5a4512;--hill-op:.5;--bathy:rgba(25,95,150,.38);--bathy-strong:rgba(25,95,150,.55)}
-:root[data-palette="forest"]{--bg:#e5ebe0;--panel:#f6f8f2;--panel-2:#ecf1e6;--ink:#18251b;--muted:#536352;--line:#c8d3c1;--ctl-line:#76866f;--ctl-hov:#e4ebdd;
-  --sea:#a9d0de;--sea-ink:#24586a;--land:#a7b886;--land-edge:#5f7044;--lake:#a6cad6;--grid:rgba(25,60,45,.15);--halo:#f2f6ea;--chip:#ffffff;
-  --contour:rgba(52,72,22,.32);--contour-idx:rgba(42,62,16,.58);--elev:#33421c;--hill-op:.95;--bathy:rgba(20,70,90,.24);--bathy-strong:rgba(20,70,90,.36)}
-:root[data-palette="night"]{--bg:#060c17;--panel:#0c1524;--panel-2:#111c30;--ink:#e1e8f5;--muted:#8b98b1;--line:#1e2b42;--ctl-line:#56698e;--ctl-bg:#152137;--ctl-hov:#20304d;
-  --sea:#030d19;--sea-ink:#7ea8d6;--land:#27324a;--land-edge:#45557a;--lake:#0a1c33;--grid:rgba(140,170,230,.10);--halo:#1d2638;--chip:#132036;
-  --contour:rgba(170,190,235,.15);--contour-idx:rgba(185,205,245,.32);--elev:#dde5f5;--hill-op:.55;--bathy:rgba(120,165,230,.13);--bathy-strong:rgba(120,165,230,.22)}
-:root[data-palette="contrast"]{--bg:#f3f3f1;--panel:#ffffff;--panel-2:#f1f1ee;--ink:#000;--muted:#333;--line:#8c8c8c;--ctl-line:#2b2b2b;--ctl-bg:#fff;--ctl-hov:#e8e8e8;
-  --sea:#5f9fd2;--sea-ink:#0a2f57;--land:#fbf8ee;--land-edge:#1f1f1f;--lake:#7fb4e0;--grid:rgba(0,25,55,.28);--halo:#ffffff;--chip:#ffffff;
-  --contour:rgba(60,40,10,.42);--contour-idx:rgba(40,25,0,.75);--elev:#2a1c00;--hill-op:.65;--bathy:rgba(5,40,85,.32);--bathy-strong:rgba(5,40,85,.5)}
+/* colour themes: modern palettes (slate/sky, sage/teal, midnight indigo, crisp high contrast) on the light or dark base */
+:root[data-palette="chart"]{--bg:#f1f5f9;--panel:#ffffff;--panel-2:#f8fafc;--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--ctl-line:#cbd5e1;--ctl-bg:#ffffff;--ctl-hov:#f1f5f9;
+  --sea:#b7daf2;--sea-ink:#0369a1;--land:#efe5cd;--land-edge:#b8a682;--lake:#c9e4f6;--grid:rgba(14,116,144,.16);--halo:#ffffff;--chip:#ffffff;
+  --contour:rgba(120,98,60,.26);--contour-idx:rgba(110,88,50,.5);--elev:#57472a;--hill-op:.45;--bathy:rgba(2,132,199,.32);--bathy-strong:rgba(2,132,199,.5)}
+:root[data-palette="forest"]{--bg:#f2f5f0;--panel:#fcfdfb;--panel-2:#f4f7f2;--ink:#1c2a22;--muted:#5f7066;--line:#dde5dc;--ctl-line:#b9c7bb;--ctl-bg:#ffffff;--ctl-hov:#eef3ec;
+  --sea:#9dd0da;--sea-ink:#0f766e;--land:#c4d4ae;--land-edge:#7f9670;--lake:#b0dbe3;--grid:rgba(15,118,110,.14);--halo:#f8faf6;--chip:#ffffff;
+  --contour:rgba(62,88,52,.26);--contour-idx:rgba(52,78,42,.5);--elev:#2f4429;--hill-op:.8;--bathy:rgba(13,148,136,.28);--bathy-strong:rgba(13,148,136,.42)}
+:root[data-palette="night"]{--bg:#0b1020;--panel:#111827;--panel-2:#162033;--ink:#e5e9f2;--muted:#94a3b8;--line:#1f2a3d;--ctl-line:#3b4a66;--ctl-bg:#162033;--ctl-hov:#1e2a42;
+  --sea:#0a0f1e;--sea-ink:#818cf8;--land:#1f2a40;--land-edge:#3d4c6b;--lake:#111a30;--grid:rgba(129,140,248,.10);--halo:#1f2a40;--chip:#162033;
+  --contour:rgba(165,180,252,.14);--contour-idx:rgba(165,180,252,.28);--elev:#e0e7ff;--hill-op:.5;--bathy:rgba(129,140,248,.14);--bathy-strong:rgba(129,140,248,.24)}
+:root[data-palette="contrast"]{--bg:#fafafa;--panel:#ffffff;--panel-2:#f4f4f5;--ink:#09090b;--muted:#3f3f46;--line:#a1a1aa;--ctl-line:#18181b;--ctl-bg:#ffffff;--ctl-hov:#e4e4e7;
+  --sea:#3b82f6;--sea-ink:#0b2a6b;--land:#ffffff;--land-edge:#09090b;--lake:#60a5fa;--grid:rgba(9,9,11,.22);--halo:#ffffff;--chip:#ffffff;
+  --contour:rgba(39,39,42,.32);--contour-idx:rgba(24,24,27,.62);--elev:#18181b;--hill-op:.55;--bathy:rgba(255,255,255,.38);--bathy-strong:rgba(255,255,255,.6)}
 .setrow.palrow{align-items:flex-start}.palgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:5px;flex:1}
 .palbtn{display:flex;align-items:center;gap:6px;border:1px solid var(--ctl-line);border-radius:6px;background:var(--ctl-bg);color:var(--ink);font:inherit;font-size:11.5px;padding:4px 7px;cursor:pointer;text-align:left}
 .palbtn[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:-1px}
@@ -812,7 +813,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <div class="setmenu" id="setmenu" role="dialog" aria-label="Settings" hidden>
           <h4>Settings</h4>
           <div class="setrow"><span>Appearance</span><div class="seg" role="group" aria-label="Appearance" id="set-theme"><button type="button" data-th="system">System</button><button type="button" data-th="light">Light</button><button type="button" data-th="dark">Dark</button></div></div>
-          <div class="setrow palrow"><span>Colour theme</span><div class="palgrid" role="group" aria-label="Colour theme" id="set-pal"><button type="button" class="palbtn" data-pal="standard" aria-pressed="false"><i style="--a:#cbbd96;--b:#b3d3de"></i>Standard</button><button type="button" class="palbtn" data-pal="chart" aria-pressed="false"><i style="--a:#efd68a;--b:#d6eaf5"></i>Chart</button><button type="button" class="palbtn" data-pal="forest" aria-pressed="false"><i style="--a:#a7b886;--b:#a9d0de"></i>Forest</button><button type="button" class="palbtn" data-pal="night" aria-pressed="false"><i style="--a:#27324a;--b:#030d19"></i>Night</button><button type="button" class="palbtn" data-pal="contrast" aria-pressed="false"><i style="--a:#fbf8ee;--b:#5f9fd2"></i>High contrast</button></div></div>
+          <div class="setrow palrow"><span>Colour theme</span><div class="palgrid" role="group" aria-label="Colour theme" id="set-pal"><button type="button" class="palbtn" data-pal="standard" aria-pressed="false"><i style="--a:#cbbd96;--b:#b3d3de"></i>Standard</button><button type="button" class="palbtn" data-pal="chart" aria-pressed="false"><i style="--a:#efe5cd;--b:#b7daf2"></i>Chart</button><button type="button" class="palbtn" data-pal="forest" aria-pressed="false"><i style="--a:#c4d4ae;--b:#9dd0da"></i>Forest</button><button type="button" class="palbtn" data-pal="night" aria-pressed="false"><i style="--a:#1f2a40;--b:#0a0f1e"></i>Night</button><button type="button" class="palbtn" data-pal="contrast" aria-pressed="false"><i style="--a:#ffffff;--b:#3b82f6"></i>High contrast</button></div></div>
           <label class="setexp"><input type="checkbox" id="set-exp"><span><b>Experimental mode</b><span class="m">Shows the planning tools: Timetable, Fleet, Stations, Track, Works and Plan panels. These are early and still changing.</span></span></label>
           <p class="m">Settings are remembered in this browser.</p>
         </div></div>
