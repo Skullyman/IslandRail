@@ -783,6 +783,21 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
 :root[data-palette="contrast"]{--bg:#fafafa;--panel:#ffffff;--panel-2:#f4f4f5;--ink:#09090b;--muted:#3f3f46;--line:#a1a1aa;--ctl-line:#18181b;--ctl-bg:#ffffff;--ctl-hov:#e4e4e7;
   --sea:#3b82f6;--sea-ink:#0b2a6b;--land:#ffffff;--land-edge:#09090b;--lake:#60a5fa;--grid:rgba(9,9,11,.22);--halo:#ffffff;--chip:#ffffff;
   --contour:rgba(39,39,42,.32);--contour-idx:rgba(24,24,27,.62);--elev:#18181b;--hill-op:.55;--bathy:rgba(255,255,255,.38);--bathy-strong:rgba(255,255,255,.6)}
+
+:root[data-palette="vibrant"]{--bg:#fdf6ff;--panel:#ffffff;--panel-2:#faf2ff;--ink:#1e1b4b;--muted:#6b5b95;--line:#ead9fb;--ctl-line:#c4a7f0;--ctl-bg:#ffffff;--ctl-hov:#f5eaff;
+  --sea:#22c3e6;--sea-ink:#0b4f6c;--land:#ffe27a;--land-edge:#e0721f;--lake:#5ad6f0;--grid:rgba(124,58,237,.16);--halo:#fffaf0;--chip:#ffffff;
+  --contour:rgba(214,92,24,.36);--contour-idx:rgba(190,60,10,.62);--elev:#7c2d12;--hill-op:.55;--bathy:rgba(255,255,255,.45);--bathy-strong:rgba(255,255,255,.7);--accent:#db2777}
+:root[data-palette="sunset"]{--bg:#140b1f;--panel:#1d1029;--panel-2:#251533;--ink:#fde8f0;--muted:#c4a3c0;--line:#3a2347;--ctl-line:#6b4778;--ctl-bg:#251533;--ctl-hov:#331d45;
+  --sea:#120a26;--sea-ink:#fb923c;--land:#3b2244;--land-edge:#7a4a7e;--lake:#1c1236;--grid:rgba(251,146,60,.10);--halo:#3b2244;--chip:#251533;
+  --contour:rgba(251,191,36,.14);--contour-idx:rgba(251,191,36,.3);--elev:#fde68a;--hill-op:.55;--bathy:rgba(244,114,182,.16);--bathy-strong:rgba(244,114,182,.28);--accent:#fb7185}
+:root[data-palette="arctic"]{--bg:#f4f8fb;--panel:#ffffff;--panel-2:#f2f7fa;--ink:#102a3c;--muted:#5b7486;--line:#dbe7ef;--ctl-line:#b6cad8;--ctl-bg:#ffffff;--ctl-hov:#eaf2f7;
+  --sea:#9fc9e3;--sea-ink:#155e86;--land:#f7fafc;--land-edge:#8aa4b6;--lake:#b8d8ec;--grid:rgba(21,94,134,.14);--halo:#ffffff;--chip:#ffffff;
+  --contour:rgba(70,100,125,.22);--contour-idx:rgba(60,90,115,.45);--elev:#1e3a4f;--hill-op:.6;--bathy:rgba(255,255,255,.4);--bathy-strong:rgba(255,255,255,.62)}
+:root[data-palette="graphite"]{--bg:#0f1012;--panel:#17181b;--panel-2:#1d1f23;--ink:#ececee;--muted:#9a9ca3;--line:#2a2c31;--ctl-line:#4a4d55;--ctl-bg:#1d1f23;--ctl-hov:#272a30;
+  --sea:#0b0c0e;--sea-ink:#a1a1aa;--land:#2a2c31;--land-edge:#4d5058;--lake:#141518;--grid:rgba(255,255,255,.06);--halo:#2a2c31;--chip:#1d1f23;
+  --contour:rgba(255,255,255,.09);--contour-idx:rgba(255,255,255,.2);--elev:#f4f4f5;--hill-op:.5;--bathy:rgba(255,255,255,.08);--bathy-strong:rgba(255,255,255,.15)}
+.palsel{display:flex;align-items:center;gap:8px;flex:1;justify-content:flex-end}.palsel select{font:inherit;font-size:12px;padding:5px 8px;border-radius:6px;min-width:160px}
+.palsel i{flex:none;width:22px;height:14px;border-radius:3px;border:1px solid rgba(0,0,0,.35);background:linear-gradient(135deg,var(--land) 50%,var(--sea) 50%)}
 .setrow.palrow{align-items:flex-start}.palgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:5px;flex:1}
 .palbtn{display:flex;align-items:center;gap:6px;border:1px solid var(--ctl-line);border-radius:6px;background:var(--ctl-bg);color:var(--ink);font:inherit;font-size:11.5px;padding:4px 7px;cursor:pointer;text-align:left}
 .palbtn[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:-1px}
@@ -813,7 +828,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <div class="setmenu" id="setmenu" role="dialog" aria-label="Settings" hidden>
           <h4>Settings</h4>
           <div class="setrow"><span>Appearance</span><div class="seg" role="group" aria-label="Appearance" id="set-theme"><button type="button" data-th="system">System</button><button type="button" data-th="light">Light</button><button type="button" data-th="dark">Dark</button></div></div>
-          <div class="setrow palrow"><span>Colour theme</span><div class="palgrid" role="group" aria-label="Colour theme" id="set-pal"><button type="button" class="palbtn" data-pal="standard" aria-pressed="false"><i style="--a:#cbbd96;--b:#b3d3de"></i>Standard</button><button type="button" class="palbtn" data-pal="chart" aria-pressed="false"><i style="--a:#efe5cd;--b:#b7daf2"></i>Chart</button><button type="button" class="palbtn" data-pal="forest" aria-pressed="false"><i style="--a:#c4d4ae;--b:#9dd0da"></i>Forest</button><button type="button" class="palbtn" data-pal="night" aria-pressed="false"><i style="--a:#1f2a40;--b:#0a0f1e"></i>Night</button><button type="button" class="palbtn" data-pal="contrast" aria-pressed="false"><i style="--a:#ffffff;--b:#3b82f6"></i>High contrast</button></div></div>
+          <div class="setrow palrow"><span>Colour theme</span><div class="palsel"><i aria-hidden="true"></i><select id="set-pal" aria-label="Colour theme"><option value="standard">Standard</option><option value="chart">Chart</option><option value="forest">Forest</option><option value="night">Night (dark)</option><option value="contrast">High contrast</option><option value="vibrant">Vibrant</option><option value="sunset">Sunset (dark)</option><option value="arctic">Arctic</option><option value="graphite">Graphite (dark)</option></select></div></div>
           <label class="setexp"><input type="checkbox" id="set-exp"><span><b>Experimental mode</b><span class="m">Shows the planning tools: Timetable, Fleet, Stations, Track, Works and Plan panels. These are early and still changing.</span></span></label>
           <p class="m">Settings are remembered in this browser.</p>
         </div></div>
@@ -3998,10 +4013,10 @@ const THEME0=document.documentElement.getAttribute('data-theme');
 let SETTINGS={theme:'system',palette:'standard',exp:false};try{Object.assign(SETTINGS,JSON.parse(localStorage.getItem('island-rail-settings')||'{}'));}catch(_){}
 let EXP=!!SETTINGS.exp;
 function saveSettings(){try{localStorage.setItem('island-rail-settings',JSON.stringify(SETTINGS));}catch(_){}}
-const PAL_BASE={chart:'light',forest:'light',contrast:'light',night:'dark'};
+const PAL_BASE={chart:'light',forest:'light',contrast:'light',night:'dark',vibrant:'light',arctic:'light',sunset:'dark',graphite:'dark'};
 function applyTheme(){const r=document.documentElement,t=SETTINGS.theme,pal=PAL_BASE[SETTINGS.palette]?SETTINGS.palette:'standard';
   if(pal!=='standard'){r.setAttribute('data-palette',pal);r.setAttribute('data-theme',PAL_BASE[pal]);}else{r.removeAttribute('data-palette');if(t==='light'||t==='dark')r.setAttribute('data-theme',t);else if(THEME0)r.setAttribute('data-theme',THEME0);else r.removeAttribute('data-theme');}
-  document.querySelectorAll('#set-pal [data-pal]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pal===pal)));const sg=$('set-theme');if(sg){sg.classList.toggle('dim',pal!=='standard');sg.title=pal!=='standard'?'Choose the Standard colour theme to switch between light and dark':'';}
+  const ps=$('set-pal');if(ps)ps.value=pal;const sg=$('set-theme');if(sg){sg.classList.toggle('dim',pal!=='standard');sg.title=pal!=='standard'?'Choose the Standard colour theme to switch between light and dark':'';}
   document.querySelectorAll('#set-theme [data-th]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.th===t)));
   if(typeof drawFlows==='function'&&$('flowlegend')&&!$('flowlegend').hidden)setTimeout(drawFlows,0);}
 function applyExp(){EXP=!!SETTINGS.exp;document.querySelector('.app').classList.toggle('basic',!EXP);$('set-exp').checked=EXP;
@@ -4013,7 +4028,7 @@ function needExp(){return EXP;}
   document.addEventListener('pointerdown',e=>{if(!m.hidden&&!m.contains(e.target)&&!b.contains(e.target))open(false);});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden){open(false);b.focus();}});
   document.querySelectorAll('#set-theme [data-th]').forEach(x=>x.onclick=()=>{SETTINGS.theme=x.dataset.th;SETTINGS.palette='standard';saveSettings();applyTheme();});
-  document.querySelectorAll('#set-pal [data-pal]').forEach(x=>x.onclick=()=>{SETTINGS.palette=x.dataset.pal;saveSettings();applyTheme();});
+  $('set-pal').onchange=e=>{SETTINGS.palette=e.target.value;saveSettings();applyTheme();};
   $('set-exp').onchange=e=>{SETTINGS.exp=e.target.checked;saveSettings();applyExp();toast('Settings',SETTINGS.exp?'Experimental mode on: planning panels are shown':'Experimental mode off: planning panels are hidden');};
   applyTheme();applyExp();})();
 function setSubtitle(){$('subtitle').textContent=(PRESETS[PLAN.preset]||PRESETS.data8).sub;$('tt-preset').value=PRESETS[PLAN.preset]?PLAN.preset:'data8';}
