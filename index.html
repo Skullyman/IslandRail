@@ -4178,7 +4178,7 @@ function meetCovered(m,tol=.8){const p=(getPlaces()[m.line]||[]).find(p=>p.a-tol
 //    and a cluster of meets longer than 2.5 km becomes double track (running meets)
 //  - elsewhere a cluster of meets spanning more than 4.5 km becomes double track
 //  - major bridges and the tunnel stay single track (short pinch points), as railways usually leave them
-const SID_VER=4;// bump when the rules for adding sidings, double track or station tracks change
+const SID_VER=5;// bump when the rules for adding sidings, double track or station tracks change
 const SID_RULE={len:2,joinKm:3,freqPerHr:3,dblSpanFreq:2.5,dblSpan:4.5,structBuf:.15};
 function singleTrackStructures(line){return INFRA.filter(s=>s.l===line&&(s.k==='h'||s.k==='t')&&s.s!=='removed').map(s=>({k:mpToK(line,s.m),n:s.n}));}
 // trains an hour in the quieter direction past km k, in the busiest hour of the day
@@ -4228,18 +4228,20 @@ function autoSidings(plan,quiet){plan=plan||PLAN;TRACKSPEC.works=(TRACKSPEC.work
 function layoverPeaks(plan){const by={};for(const tr of plan.trips||[]){let o;try{o=prep(tr);}catch(_){continue;}(by[tr.set]||(by[tr.set]=[])).push(o);}
   const occ={};for(const L of Object.values(by)){L.sort((a,b)=>a.dep-b.dep);for(let i=1;i<L.length;i++){const a=L[i-1],b=L[i];if(a.to===b.from&&b.dep>a.arr)(occ[a.to]||(occ[a.to]=[])).push([a.arr,b.dep]);}}
   const out={};for(const [c,I] of Object.entries(occ)){const ev=I.flatMap(([a,b])=>[[a,1],[b,-1]]).sort((x,y)=>x[0]-y[0]||x[1]-y[1]);let n=0,m=0;for(const e of ev){n+=e[1];m=Math.max(m,n);}out[c]=m;}return out;}
-const STN_TRACK_CAP={VIC:2};// Victoria: two station tracks beside the main line at the end of the track
+const STN_TRACK_CAP={VIC:2};// Victoria: two tracks beside the main line at the end of the track (a second main track counts as one)
 function stationTracks(plan){const out=[],pk=layoverPeaks(plan);
   for(const [c,n] of Object.entries(pk)){const st=STATIONS[c];if(!st||!LINES[st.line])continue;const line=st.line,k=st.k,lo=LINES[line][0].k,hi=lineMax(line),L=.3;
     const end=k-lo<L||hi-k<L;if(n<2&&!end)continue;// a terminus at the end of the line also keeps one spare track for a late or failed train
     // existing sidings within 1 km already hold trains
-    const have=EXIST_SIDINGS.filter(([l,kk,,,,st])=>l===line&&st!=='d'&&Math.abs(kk-k)<=1).length;/* disused sidings need rebuilding, so they are not counted */const need=Math.min(n-1-have+(end?1:0),STN_TRACK_CAP[c]??99);if(need<1)continue;
+    const have=EXIST_SIDINGS.filter(([l,kk,,,,st])=>l===line&&st!=='d'&&Math.abs(kk-k)<=1).length;/* disused sidings need rebuilding, so they are not counted */// a second main track running into the station counts as one of its tracks
+    const dbl=(getPlaces()[line]||[]).some(p=>p.parts.some(q=>q.kind==='double'&&q.a<=k+.05&&q.b>=k-.05))?1:0;
+    const need=Math.min(n-1-have+(end?1:0),STN_TRACK_CAP[c]??99)-dbl;if(need<1)continue;
     let a=k-lo<L?k:hi-k<L?k-L:k-L/2,b=a+L;
     // run the station track on to a siding or double track that ends close by, rather than leaving a short gap with two turnouts
     for(const p of (getPlaces()[line]||[]))for(const q of p.parts){if(q.kind==='term')continue;if(q.b<a&&a-q.b<.4)a=q.b;if(q.a>b&&q.a-b<.4)b=q.a;}
     const ma=+kToMP(line,Math.max(lo,a)).toFixed(2),mb=+kToMP(line,Math.min(hi,b)).toFixed(2);if(mb<=ma)continue;
     for(let i=0;i<need;i++)out.push({id:newWorkId(),type:'siding',line,a:ma,b:mb,name:`${st.n} station track ${i+2}`,status:'proposed',cost:3,
-      notes:`Added for the ${(PRESETS[plan.preset]||{name:'current'}).name} timetable: up to ${n} trainsets stand at ${st.n} at once between trips, so the station needs ${n+(end?1:0)} tracks${end?', including a spare at the end of the line for a late or failed train':''} (the main track counts as one${have?`, ${have} existing siding nearby`:''}). About 300 m of track with two turnouts and signals; platforms not included.`,project:'auto',on:true});}
+      notes:`Added for the ${(PRESETS[plan.preset]||{name:'current'}).name} timetable: up to ${n} trainsets stand at ${st.n} at once between trips, so the station needs ${n+(end?1:0)} tracks${STN_TRACK_CAP[c]?` (capped at ${STN_TRACK_CAP[c]+1})`:''}${dbl?', with the second main track counted as one':''}${end?', including a spare at the end of the line for a late or failed train':''} (the main track counts as one${have?`, ${have} existing siding nearby`:''}). About 300 m of track with two turnouts and signals; platforms not included.`,project:'auto',on:true});}
   return out;}
 /* ---------- sidings and double track on the map: a thin second line beside the main line ---------- */
 const sidG=el('g',{class:'sidings'},L.rail);window.__sidG=sidG;let SID_Q=false;
