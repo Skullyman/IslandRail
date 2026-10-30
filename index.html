@@ -916,6 +916,8 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
       <svg id="map" role="img" aria-label="Map of Vancouver Island showing the E&amp;N rail corridor, highways and live train positions"></svg><svg id="mapfx" aria-hidden="true"></svg>
       <div class="legend" aria-hidden="true">
         <div><svg width="30" height="10" class="legrail"><line x1="1" y1="5" x2="29" y2="5" class="rail" stroke-width="2.6"/></svg><span id="leg-rail">E&amp;N rail corridor: single track</span></div>
+        <div><svg width="30" height="16" class="legrail"><polyline points="1,12 29,12" class="rail" style="fill:none" stroke-width="2.4"/><polyline points="4,12 9,4 21,4 26,12" class="rail" style="fill:none" stroke-width="2.4"/></svg>Siding or double track</div>
+        <div><svg width="30" height="16" class="legrail"><polyline points="1,12 29,12" class="rail" style="fill:none" stroke-width="2.4"/><polyline points="4,12 9,4 21,4 26,12" class="rail added" style="fill:none" stroke-width="2.4"/></svg>Proposed track</div>
         <div><svg width="30" height="10"><line x1="1" y1="5" x2="29" y2="5" stroke="var(--hwy-edge)" stroke-width="7" stroke-linecap="round"/><line x1="1" y1="5" x2="29" y2="5" stroke="var(--hwy)" stroke-width="4.6" stroke-linecap="round"/></svg>Highway</div>
         <div><svg width="30" height="8"><line x1="1" y1="4" x2="29" y2="4" stroke="var(--street-edge)" stroke-width="5" stroke-linecap="round"/><line x1="1" y1="4" x2="29" y2="4" stroke="var(--street)" stroke-width="3" stroke-linecap="round"/></svg>Main road</div>
         <div><svg width="30" height="10"><line x1="1" y1="5" x2="29" y2="5" stroke="var(--halo)" stroke-width="5" stroke-linecap="round"/><line x1="1" y1="5" x2="29" y2="5" stroke="var(--tct)" stroke-width="2.6" stroke-linecap="round"/></svg>Trans Canada Trail</div>
@@ -927,8 +929,6 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <div><svg width="30" height="10"><circle cx="15" cy="5" r="4" fill="var(--halo)" stroke="var(--ink)" stroke-width="1.6"/></svg>Passenger stop</div>
         <div><svg width="30" height="10"><rect x="11" y="1" width="8" height="8" fill="var(--halo)" stroke="var(--ink)" stroke-width="1.6"/></svg>Freight point</div>
         <div><svg width="30" height="10"><circle cx="15" cy="5" r="2.2" fill="var(--muted)"/></svg>Passing point (no stop)</div>
-        <div><svg width="30" height="16" class="legrail"><polyline points="1,12 29,12" class="rail" style="fill:none" stroke-width="2.4"/><polyline points="4,12 9,4 21,4 26,12" class="rail" style="fill:none" stroke-width="2.4"/></svg>Siding or double track</div>
-        <div><svg width="30" height="16" class="legrail"><polyline points="1,12 29,12" class="rail" style="fill:none" stroke-width="2.4"/><polyline points="4,12 9,4 21,4 26,12" class="rail added" style="fill:none" stroke-width="2.4"/></svg>Proposed track</div>
       </div>
       <div class="mapctl">
         <button id="srbtn" title="Search the map (/)" aria-label="Search for a place or address" aria-pressed="false" aria-expanded="false" aria-controls="srpanel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5.5 5.5"/></svg></button>
@@ -2128,15 +2128,15 @@ function srRun(go){const q=$('sr-q').value.trim();const local=srLocal(q);clearTi
 /* layers panel: collapsible groups with counts, reset and all-off buttons, on-map chips, notes when a layer shows nothing here */
 {const lp=$('layerpanel');
  const GR=[['Rail',['railbtn','speedbtn','freightbtn']],['People and places',['popbtn','jobbtn','destbtn','flowbtn']],['Roads and transit',['trafbtn','crashbtn','busbtn','bpbtn','trailbtn']],['Marine and air',['ferrybtn','mlanebtn','mresbtn','tidebtn','tankerbtn','airbtn']]];
- let OPEN={};try{OPEN=JSON.parse(localStorage.getItem('island-rail-lgroups')||'{}')||{};}catch(_){}
+ const OPEN={};// every group starts folded when the page loads; a group stays open or folded as you leave it until the next visit
  const allRow=lp.querySelector('.lrow.lall');
  const nm=b=>b.querySelector('span').firstChild.textContent;
  const grs=GR.map(([t,ids],gi)=>{const g=document.createElement('div');g.className='lgrp';const hd=document.createElement('button');hd.type='button';hd.className='lgh';
    const body=document.createElement('div');body.className='lgb';body.id='lgb'+gi;hd.setAttribute('aria-controls',body.id);
    hd.innerHTML='<svg class="lgchev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2l4 4-4 4"/></svg><span>'+t+'</span><span class="lgc"></span>';
    ids=ids.filter(id=>$(id));ids.forEach(id=>{const btn=$(id),row=btn.closest('.lrow');body.appendChild(row);const s=btn.querySelector('span');s.classList.add('lnm');const n=document.createElement('small');n.className='lnote';n.hidden=true;s.appendChild(n);});
-   const open=OPEN[t]!==false;g.classList.toggle('closed',!open);hd.setAttribute('aria-expanded',String(open));
-   hd.onclick=()=>{const c=g.classList.toggle('closed');hd.setAttribute('aria-expanded',String(!c));OPEN[t]=!c;try{localStorage.setItem('island-rail-lgroups',JSON.stringify(OPEN));}catch(_){}};
+   const open=OPEN[t]===true;g.classList.toggle('closed',!open);hd.setAttribute('aria-expanded',String(open));
+   hd.onclick=()=>{const c=g.classList.toggle('closed');hd.setAttribute('aria-expanded',String(!c));OPEN[t]=!c;};
    g.append(hd,body);lp.insertBefore(g,allRow);return{g,hd,ids};});
  const acts=document.createElement('div');acts.className='lacts';acts.innerHTML='<button type="button" class="btn" id="lreset">Reset to default</button><button type="button" class="btn" id="lnone">Turn all off</button>';
  allRow.after(acts);
