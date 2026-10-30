@@ -813,7 +813,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
 .palbtn[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:-1px}
 .palbtn i{flex:none;width:18px;height:12px;border-radius:3px;border:1px solid rgba(0,0,0,.35);background:linear-gradient(135deg,var(--a) 50%,var(--b) 50%)}
 .seg.dim{opacity:.45}
-.sidings .sid.assumed .rail,.sidings .sid.disused .rail{opacity:.45}.sidings .sid.assumed .sleepers,.sidings .sid.disused .sleepers{opacity:.5}.sidings .sidhit{fill:none;stroke:transparent;pointer-events:stroke}.sidings .sid{cursor:help}.sidings .sid:hover .rail{stroke-width:3.6px}</style></head>
+.sidings .sidp.assumed .rail,.sidings .sidp.disused .rail{opacity:.45}.sidings .sid.assumed .sleepers,.sidings .sid.disused .sleepers{opacity:.5}.sidings .sidhit{fill:none;stroke:transparent;pointer-events:stroke}.sidings .sid{cursor:help}.sidings .sidp:hover .rail{stroke-width:3.6px}.sidings .sidp{cursor:help}</style></head>
 <body>
 <noscript><p style="padding:2em;font-family:sans-serif">Island Rail Planner needs JavaScript enabled.</p></noscript>
 
@@ -1047,7 +1047,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
           <li>Single track: a 12-minute service in both directions needs trains to pass every few minutes. That would require double track or several long passing loops between Victoria and Westhills, which this simulation does not model.</li>
           <li>Run times for new or changed trips use the track speeds chosen in the Track tab. The default is the 2003 E&amp;N track charts with speeds raised where the curves allow, up to 60 mph; the 2003 posted speeds and the earlier simple bands are the alternatives. Each train type's top speed still caps the result. The ICF and data-driven timetables keep the ICF running times unless you retime them.</li>
           <li>Trainsets turn around in 3 minutes and run empty to reposition when needed. Trains running in the same direction stay at least one signal block (1 km) apart and never overtake: a train that catches up waits at a signal and picks up the delay. The line is single track: before a train enters a single-track section, the dispatcher checks no opposing train is in it. Otherwise it waits at the siding, passing point or station track it is on. Whoever reaches the siding first holds there; on a tie, intercity trains go before regional trains, which go before commuter trains. Waiting through a siding adds about a minute for the switches. A meet needs a siding at least as long as the shorter train. Waits add to the train's delay and appear as Single-track meets.</li>
-          <li>Sidings: existing sidings come from OpenStreetMap (read 30 Oct 2026), with lengths measured from the track. Passing points with no siding mapped use an assumed 330 m. Each starting timetable adds the track it needs as proposed works, following normal railway practice: a passing siding wherever its trains meet away from an existing siding; double track where trains run every 20 minutes or more often each way and sidings would be less than 3 km apart, or where meets are spread along the line; major bridges and the Malahat Tunnel stay single track. Costs are order of magnitude: about $5.5M for a 1 km passing siding with turnouts and signals, plus $3.5M a further km, and about $5M a km of double track plus $2M for turnouts and signals (MnDOT Midwest Regional Rail cost methodology, 2010 US$, escalated to 2026 CAD).</li>
+          <li>Sidings: existing sidings come from OpenStreetMap (read 30 Oct 2026), with lengths measured from the track. Passing points with no siding mapped use an assumed 330 m. Each starting timetable adds the track it needs as proposed works, following normal railway practice: a passing siding wherever its trains meet away from an existing siding; double track where trains run every 20 minutes or more often each way and sidings would be less than 3 km apart, or where meets are spread along the line; major bridges and the Malahat Tunnel stay single track. Stations where trains stand between trips get enough station tracks for the most trains there at once (about 300 m each, $3M with turnouts and signals; the main track counts as one, and disused sidings are not counted). Costs are order of magnitude: about $5.5M for a 1 km passing siding with turnouts and signals, plus $3.5M a further km, and about $5M a km of double track plus $2M for turnouts and signals (MnDOT Midwest Regional Rail cost methodology, 2010 US$, escalated to 2026 CAD).</li>
           <li>Highway traffic: BC Ministry of Transportation Traffic Data Program annual hourly day-of-week summaries (Monday–Friday averaged). Lane counts from OpenStreetMap; lane capacity assumed at 1,900 veh/h on freeway sections, 1,700 on highways with intersections, 1,400–1,500 on two-lane or arterial sections.</li>
           <li>Road congestion dots: on highways the dot colour comes from the measured hourly counts above (green under 40% of estimated capacity, yellow 40–60%, red over 60%). Highway counts now include the 2025 Colwood interchange station (P-11-6NS) and twelve 2025 MoTI short counts on Highways 1, 14, 17, 19 and 19A, so segments between permanent stations use the nearest measured count. Roads with a public count are coloured from it: City of Victoria Open Data traffic counts (2019–2026, one-way daily volumes, spread over the day with the urban weekday profile; nearby sections of the same street share the count) and MoTI 2025 short counts on the Comox Valley Parkway and Brechin Road. Measured roads use about 800 veh/h per lane at signals (green under 45%, yellow 45–75%, red over). Every other local and connector road has no public count (Saanich, Langford, Colwood and Nanaimo publish none), so its colour is a modelled estimate: the weekday hourly shape of the urban count stations × how much population lives within a few kilometres (2021 Census) × road class. Hover a road to see whether it is measured or modelled. MoTI's segment AADT layer was not used because its values date from 2012.</li>
           <li>Jobs: Statistics Canada 2021 Census, employed people by usual place of work (tables 98-10-0496 by census tract and 98-10-0495 by municipality); people who worked at home are listed but not placed on the map. Each tract's jobs are spread over its OpenStreetMap commercial, institutional and industrial land (weighted 1 : 0.6 : 0.4 per hectare). "Jobs within 800 m" counts that spread, so it is approximate. The 2021 Census ran during the pandemic, and 2026 place-of-work results are due in 2027.</li>
@@ -1538,7 +1538,7 @@ function finishTrip(t){
    Costs: MnDOT Midwest Regional Rail cost methodology (2010 US$: passenger siding about $1.45M a mile of track, No. 20 turnouts
    $0.18–0.28M, CTC $0.21M a mile; double track on new embankment $3.0M a mile), escalated to 2026 CAD (×2.2). Order of magnitude. */
 const EXIST_SIDINGS=[
- ['MAIN',5.46,129,'Esquimalt (Admirals Road)','osm'],['MAIN',12.53,363,'Langford','osm'],['MAIN',31.7,387,'Malahat','osm','d'],['MAIN',49.87,588,'Cobble Hill','osm','d'],
+ ['MAIN',0.56,509,'Victoria (Harbour Road)','osm','d'],['MAIN',5.46,129,'Esquimalt (Admirals Road)','osm'],['MAIN',12.53,363,'Langford','osm'],['MAIN',31.7,387,'Malahat','osm','d'],['MAIN',49.87,588,'Cobble Hill','osm','d'],
  ['MAIN',60.83,370,'Duncan (south)','osm'],['MAIN',68.05,224,'Duncan (north)','osm'],['MAIN',103.66,335,'Cassidy','osm'],['MAIN',111.98,204,'Nanaimo (south)','osm','d'],
  ['MAIN',123.99,296,'Wellington','osm'],['MAIN',129.7,330,'Lantzville','pp'],['MAIN',138.0,330,'Nanoose Bay','pp'],['MAIN',143.69,238,'Nanoose','osm'],['MAIN',152.79,333,'Parksville','osm'],
  ['MAIN',176.53,375,'Dashwood','osm','d'],['MAIN',184.6,330,'Bowser','pp'],['MAIN',198.9,330,'Fanny Bay','pp'],['MAIN',209.7,330,'Union Bay','pp'],['MAIN',217.8,330,'Royston','pp'],
@@ -1765,7 +1765,7 @@ const cars=[];// highway traffic is drawn as congestion dots (see HSEG)
 // rail
 const RAIL_EL={};const RAIL_W=2.6,TIE_W=8,TRACK_GAP=5;// every track is one red line; parallel tracks sit TRACK_GAP screen pixels apart
 function drawRail(){L.rail.innerHTML='';if(window.__sidG)L.rail.appendChild(window.__sidG);for(const k in RAIL_EL)delete RAIL_EL[k];
-  for(const line of Object.keys(LINES)){const pts=LINES[line].map(o=>o.xy.map(v=>v.toFixed(1)).join(',')).join(' ');const u=TRK[line]&&TRK[line].user;
+  for(const line of Object.keys(LINES)){const pts=LINES[line].map(o=>o.xy.map(v=>v.toFixed(3)).join(',')).join(' ');const u=TRK[line]&&TRK[line].user;
     const hl=el('polyline',{points:pts,class:'rail-halo','stroke-width':6,'vector-effect':'non-scaling-stroke'},L.rail);
     const t=el('polyline',{points:pts,class:'sleepers'+(u?' added':''),'stroke-width':TIE_W,'vector-effect':'non-scaling-stroke'},L.rail);
     const a=el('polyline',{points:pts,class:'rail'+(u?' added':''),'stroke-width':RAIL_W,'vector-effect':'non-scaling-stroke'},L.rail);RAIL_EL[line]=[hl,t,a];}
@@ -4218,27 +4218,68 @@ function autoSidings(plan,quiet){plan=plan||PLAN;TRACKSPEC.works=(TRACKSPEC.work
     const w={id:newWorkId(),type,line,a:ma,b:mb,name:type==='double'&&b-a>5&&near(a)!==near(b)?`Double track, ${near(a)}–${near(b)}`:(type==='double'?'Double track near ':'Passing siding near ')+near(),status:'proposed',cost:track2Cost(type,line,ma,mb),
       notes:`Added for the ${(PRESETS[plan.preset]||{name:'current'}).name} timetable: ${s.why}${s.n?` (${s.n} scheduled meet${s.n>1?'s':''} a day)`:''}.`+(s.pinch?` ${s.pinch.join(' and ')} stay${s.pinch.length>1?'':'s'} single track.`:''),project:'auto',on:true};
     TRACKSPEC.works.push(w);added.push(w);}
+  // station tracks: enough tracks at each station for the most trains laid over there at once (the main track counts as one)
+  PLACES=null;for(const w of stationTracks(plan)){TRACKSPEC.works.push(w);added.push(w);}
   PLACES=null;plan.autoSid=true;if(!quiet&&typeof drawSidings==='function')drawSidings();return{added,meets:meets.length,uncovered:need.length};}
 
+
+// peak number of trainsets standing at each station between trips (layovers and turnbacks)
+function layoverPeaks(plan){const by={};for(const tr of plan.trips||[]){let o;try{o=prep(tr);}catch(_){continue;}(by[tr.set]||(by[tr.set]=[])).push(o);}
+  const occ={};for(const L of Object.values(by)){L.sort((a,b)=>a.dep-b.dep);for(let i=1;i<L.length;i++){const a=L[i-1],b=L[i];if(a.to===b.from&&b.dep>a.arr)(occ[a.to]||(occ[a.to]=[])).push([a.arr,b.dep]);}}
+  const out={};for(const [c,I] of Object.entries(occ)){const ev=I.flatMap(([a,b])=>[[a,1],[b,-1]]).sort((x,y)=>x[0]-y[0]||x[1]-y[1]);let n=0,m=0;for(const e of ev){n+=e[1];m=Math.max(m,n);}out[c]=m;}return out;}
+function stationTracks(plan){const out=[],pk=layoverPeaks(plan);
+  for(const [c,n] of Object.entries(pk)){const st=STATIONS[c];if(!st||!LINES[st.line]||n<2)continue;const line=st.line,k=st.k,lo=LINES[line][0].k,hi=lineMax(line),L=.3;
+    // existing sidings within 1 km already hold trains
+    const have=EXIST_SIDINGS.filter(([l,kk,,,,st])=>l===line&&st!=='d'&&Math.abs(kk-k)<=1).length;/* disused sidings need rebuilding, so they are not counted */const need=n-1-have;if(need<1)continue;
+    let a=k-lo<L?k:hi-k<L?k-L:k-L/2,b=a+L;
+    // run the station track on to a siding or double track that ends close by, rather than leaving a short gap with two turnouts
+    for(const p of (getPlaces()[line]||[]))for(const q of p.parts){if(q.kind==='term')continue;if(q.b<a&&a-q.b<.4)a=q.b;if(q.a>b&&q.a-b<.4)b=q.a;}
+    const ma=+kToMP(line,Math.max(lo,a)).toFixed(2),mb=+kToMP(line,Math.min(hi,b)).toFixed(2);if(mb<=ma)continue;
+    for(let i=0;i<need;i++)out.push({id:newWorkId(),type:'siding',line,a:ma,b:mb,name:`${st.n} station track ${i+2}`,status:'proposed',cost:3,
+      notes:`Added for the ${(PRESETS[plan.preset]||{name:'current'}).name} timetable: up to ${n} trainsets stand at ${st.n} at once between trips, so the station needs ${n} tracks (the main track counts as one${have?`, ${have} existing siding nearby`:''}). About 300 m of track with two turnouts and signals; platforms not included.`,project:'auto',on:true});}
+  return out;}
 /* ---------- sidings and double track on the map: a thin second line beside the main line ---------- */
 const sidG=el('g',{class:'sidings'},L.rail);window.__sidG=sidG;let SID_Q=false;
-function drawSidings(){sidG.innerHTML='';const off=TRACK_GAP/ppu,taper=TRACK_GAP*3/ppu;
-  for(const [line,M] of Object.entries(getPlaces()))for(const pl of M)for(const p of pl.parts){if(p.kind==='term')continue;
-    const a=Math.max(LINES[line][0].k,p.a+.05),b=Math.min(lineMax(line),p.b-.05);if(b<=a)continue;
-    const n=Math.max(8,Math.ceil((b-a)/.03)),C=[];let acc=0,prev=null;
-    for(let i=0;i<=n;i++){const k=a+(b-a)*i/n,c=lineAt(line,k);if(prev)acc+=Math.hypot(c[0]-prev[0],c[1]-prev[1]);prev=c;C.push({k,c,d:acc});}
-    const tot=acc,pts=C.map(({k,c,d})=>{const p0=lineAt(line,Math.max(0,k-.03)),p1=lineAt(line,k+.03),dx=p1[0]-p0[0],dy=p1[1]-p0[1],L2=Math.hypot(dx,dy)||1;
-      const f=Math.min(1,d/taper,(tot-d)/taper),o=off*(f<1?Math.sin(f*Math.PI/2):1);return[c[0]-dy/L2*o,c[1]+dx/L2*o];});
-    const st=p.src==='work'?(p.status==='built'?'built':'plan'):p.src==='pp'?'assumed':p.dis?'disused':'exist';
-    const g=el('g',{class:'sid '+st+(p.kind==='double'?' dbl':'')},sidG),P2=pts.map(q=>q[0].toFixed(2)+','+q[1].toFixed(2)).join(' ');
-    el('polyline',{points:P2,class:'rail-halo','stroke-width':6,'vector-effect':'non-scaling-stroke'},g);
-    el('polyline',{points:P2,class:'sleepers'+(st==='plan'?' added':''),'stroke-width':TIE_W,'vector-effect':'non-scaling-stroke'},g);
-    el('polyline',{points:P2,class:'rail sidln'+(st==='plan'?' added':''),'stroke-width':RAIL_W,'vector-effect':'non-scaling-stroke'},g);
-    el('polyline',{points:P2,class:'sidhit','stroke-width':12,'vector-effect':'non-scaling-stroke'},g);
-    const tip=`<b>${esc(p.n)}</b><br>${p.kind==='double'?'Double track':'Passing siding'} · ${(p.kind==='double'?((p.b-p.a)).toFixed(1)+' km':Math.round(p.len)+' m')}<br>`+
-      (st==='exist'?'Existing siding (OpenStreetMap)':st==='disused'?'Existing siding, disused (OpenStreetMap)':st==='assumed'?'Passing point · siding length assumed (330 m), not verified':p.status==='built'?'Built (track work)':'Proposed in this plan (track work, '+esc(p.status||'idea')+')')+
-      (p.kind==='siding'?`<br>Fits trains up to ${Math.round(p.len)} m long: `+Object.entries(TRAIN_LEN).filter(([k,v])=>v<=p.len&&TYPES[k]).map(([k])=>TYPES[k].short||TYPES[k].name).join(', '):'');
-    g.addEventListener('pointerenter',e=>{if(!tipPinned)placeTip(e,tip);});g.addEventListener('pointermove',e=>{if(!tipPinned)placeTip(e,tip);});g.addEventListener('pointerleave',()=>{if(!tipPinned)$('tip').hidden=true;});}}
+// points along the line from km a to b, offset sideways by d svg units (miter joins at the line's own vertices), with a taper at each end
+function offsetPts(line,a,b,d,taperKm,taperA=true,taperB=true,extra=[]){const V=LINES[line],ks=[a,...extra.filter(x=>x>a&&x<b)];
+  for(const v of V)if(v.k>a+1e-4&&v.k<b-1e-4)ks.push(v.k);ks.push(b);
+  for(let i=1;i<=6;i++){if(taperA)ks.push(Math.min(b,a+taperKm*i/6));if(taperB)ks.push(Math.max(a,b-taperKm*i/6));}
+  const K=[...new Set(ks.map(x=>+x.toFixed(5)))].sort((x,y)=>x-y);
+  const segN=(i)=>{const p=V[i-1].xy,q=V[i].xy,dx=q[0]-p[0],dy=q[1]-p[1],l=Math.hypot(dx,dy);return l?[-dy/l,dx/l]:null;};
+  const nAt=k=>{let i=1;while(i<V.length-1&&V[i].k<k-1e-6)i++;let n=segN(i);for(let j=i;!n&&j<V.length-1;j++)n=segN(j+1);for(let j=i;!n&&j>1;j--)n=segN(j-1);n=n||[0,1];
+    if(Math.abs(V[i].k-k)<1e-4&&i<V.length-1){let m=null;for(let j=i+1;!m&&j<V.length;j++)m=segN(j);if(m){let sx=n[0]+m[0],sy=n[1]+m[1];const L=Math.hypot(sx,sy);if(L>.2){sx/=L;sy/=L;const c=sx*n[0]+sy*n[1];const s=1/Math.max(.5,c);return[sx*s,sy*s];}}}
+    return n;};
+  return K.map(k=>{const c=lineAt(line,k),n=nAt(k);let f=1;if(taperA&&k-a<taperKm)f=Math.min(f,(k-a)/taperKm);if(taperB&&b-k<taperKm)f=Math.min(f,(b-k)/taperKm);f=f<1?Math.sin(f*Math.PI/2):1;
+    return{k,x:c[0]+n[0]*d*f,y:c[1]+n[1]*d*f};});}
+function drawSidings(){sidG.innerHTML='';const gap=TRACK_GAP/ppu;
+  const stOf=p=>p.src==='work'?(p.status==='built'?'built':'plan'):p.src==='pp'?'assumed':p.dis?'disused':'exist';
+  const rank={assumed:0,disused:0,plan:1,exist:2,built:2};
+  for(const [line,M] of Object.entries(getPlaces()))for(const pl of M){
+    const parts=pl.parts.filter(p=>p.kind!=='term').map(p=>({...p,a:Math.max(LINES[line][0].k,p.src==='work'?p.a:p.a+.05),b:Math.min(lineMax(line),p.src==='work'?p.b:p.b-.05),st:stOf(p)})).filter(p=>p.b>p.a).sort((x,y)=>x.a-y.a||(y.kind==='double')-(x.kind==='double'));
+    // lanes: a siding inside double track uses the second track; otherwise overlapping sidings each get a lane, alternating sides
+    // an existing siding inside proposed double track becomes part of the second track; new sidings and station tracks get their own
+    const share=(p,q)=>(p.kind==='double'&&q.src!=='work')||(q.kind==='double'&&p.src!=='work');
+    const lanes=[];for(const p of parts){let li=0;
+      for(;;li++){const ln=lanes[li]||(lanes[li]=[]);if(!ln.some(q=>q.a<p.b-1e-4&&p.a<q.b-1e-4&&!share(p,q)))break;}
+      lanes[li].push(p);p.lane=li;}
+    lanes.forEach((ln,li)=>{const side=li%2?-1:1,d=side*gap*(Math.floor(li/2)+1);
+      // runs: overlapping or touching parts in this lane form one continuous track, tapered only at its two ends
+      const runs=[];for(const p of ln.slice().sort((x,y)=>x.a-y.a)){const r=runs[runs.length-1];if(r&&p.a<=r.b+.3){r.b=Math.max(r.b,p.b);r.parts.push(p);}else runs.push({a:p.a,b:p.b,parts:[p]});}
+      for(const r of runs){const s0=lineAt(line,r.a),s1=lineAt(line,Math.min(r.b,r.a+.1));const svgPerKm=Math.hypot(s1[0]-s0[0],s1[1]-s0[1])/Math.max(.01,Math.min(r.b,r.a+.1)-r.a)||1;
+        const tk=Math.min((r.b-r.a)/3,gap*3*(Math.floor(li/2)+1)/svgPerKm);
+        const atStart=r.a<=LINES[line][0].k+.03,atEnd=r.b>=lineMax(line)-.03;// a track ending at the end of the line is a stub: no turnout there
+        const P=offsetPts(line,r.a,r.b,d,tk,!atStart,!atEnd,r.parts.flatMap(p=>{const o=[p.a,p.b];for(let x=p.a;x<p.b;x+=.05)o.push(x);return o;}));
+        const g=el('g',{class:'sid lane'+li},sidG);
+        el('polyline',{points:P.map(q=>q.x.toFixed(3)+','+q.y.toFixed(3)).join(' '),class:'rail-halo','stroke-width':6,'vector-effect':'non-scaling-stroke'},g);
+        // colour each part along the run; existing track drawn over proposed where they share it
+        for(const p of r.parts.slice().sort((x,y)=>rank[x.st]-rank[y.st])){const Q=P.filter(q=>q.k>=p.a-1e-4&&q.k<=p.b+1e-4);if(Q.length<2)continue;
+          const pg=el('g',{class:'sidp '+p.st+(p.kind==='double'?' dbl':'')},g),pts=Q.map(q=>q.x.toFixed(3)+','+q.y.toFixed(3)).join(' ');
+          el('polyline',{points:pts,class:'rail sidln'+(p.st==='plan'?' added':''),'stroke-width':RAIL_W,'vector-effect':'non-scaling-stroke'},pg);
+          el('polyline',{points:pts,class:'sidhit','stroke-width':12,'vector-effect':'non-scaling-stroke'},pg);
+          const tip=`<b>${esc(p.n)}</b><br>${p.kind==='double'?'Double track':/station track/.test(p.n)?'Station track':'Passing siding'} · ${(p.kind==='double'?((p.b-p.a)).toFixed(1)+' km':Math.round(p.len)+' m')}<br>`+
+            (p.st==='exist'?'Existing siding (OpenStreetMap)':p.st==='disused'?'Existing siding, disused (OpenStreetMap)':p.st==='assumed'?'Passing point · siding length assumed (330 m), not verified':p.st==='built'?'Built (track work)':'Proposed in this plan (track work, '+esc(p.status||'idea')+')')+
+            (p.kind==='siding'?`<br>Fits trains up to ${Math.round(p.len)} m long: `+Object.entries(TRAIN_LEN).filter(([k,v])=>v<=p.len&&TYPES[k]).map(([k])=>TYPES[k].short||TYPES[k].name).join(', '):'');
+          pg.addEventListener('pointerenter',e=>{if(!tipPinned)placeTip(e,tip);});pg.addEventListener('pointermove',e=>{if(!tipPinned)placeTip(e,tip);});pg.addEventListener('pointerleave',()=>{if(!tipPinned)$('tip').hidden=true;});}}});}}
 window.__sidQ=()=>{if(SID_Q)return;SID_Q=true;requestAnimationFrame(()=>{SID_Q=false;drawSidings();});};
 // first visit (or a plan saved before sidings existed): add the sidings the timetable needs once
 if(!PLAN.autoSid&&(PLAN.trips||[]).length){try{autoSidings(PLAN,true);savePlan();}catch(e){console.warn('sidings',e);}}
