@@ -1030,7 +1030,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <div class="planrd" id="plan-rd"></div>
         <h3 class="sec">Service plan summary</h3>
         <div class="kpis" id="plan-sum"></div>
-        <div class="pbtns"><button class="btn" id="btn-auto2" type="button">Auto-assign trainsets</button><button class="btn danger" id="btn-reset" type="button">Reset to starting timetable</button></div>
+        <div class="pbtns"><button class="btn" id="btn-auto2" type="button">Auto-assign trainsets</button><button class="btn danger" id="btn-reset" type="button">Reset to starting timetable</button><button class="btn danger" id="btn-blank" type="button" title="Removes every train, trainset, added station and added track, keeping the existing corridor, works and station edits">Start from a blank slate</button></div>
         <h3 class="sec">Capital cost</h3>
         <div class="plancost" id="plan-cost"></div>
         <h3 class="sec">Share or back up this plan</h3>
@@ -4015,6 +4015,14 @@ function renderPlanPane(){const ck=FPCT+'|'+JSON.stringify(STNSPEC).length+'|'+J
   renderCost();
 }
 $('btn-auto2').onclick=()=>$('btn-auto').click();
+// blank slate for planners: no timetable, no trainsets, no added stations or added track (the corridor, works and notices stay)
+$('btn-blank').onclick=e=>{const b=e.currentTarget,lbl='Start from a blank slate';
+  if(!b.dataset.armed){b.dataset.armed='1';b.textContent='Confirm: clear timetable, fleet, new stations and new track';setTimeout(()=>{if(b.isConnected&&b.dataset.armed){delete b.dataset.armed;b.textContent=lbl;}},4000);return;}
+  delete b.dataset.armed;b.textContent=lbl;
+  const sp=JSON.parse(JSON.stringify(STNSPEC||{}));sp.add=[];TRACKSPEC.lines=[];applyStations(sp);
+  PLAN.trips=[];PLAN.fleet=[];PLAN.dropped=[];DONE.clear();KNOWN.clear();for(const t of [...trains])removeTrainGfx(t);trains.length=0;FORM=null;
+  syncRuntime();bootPositions();applyPlan('Cleared the timetable, fleet, added stations and added track: a blank slate');setSubtitle();
+  toast('Blank slate','The timetable, fleet, added stations and added track are cleared. The corridor, track works and station edits are kept.');};
 $('btn-reset').onclick=e=>{const b=e.currentTarget;if(b.dataset.armed){TRACKSPEC=normTrack(null);applyStations({});PLAN=defaultPlan($('tt-preset').value);DONE.clear();KNOWN.clear();for(const t of [...trains]){removeTrainGfx(t);}trains.length=0;FORM=null;
     syncRuntime();bootPositions();applyPlan('Restored the starting timetable, the original stations and the original track');b.textContent='Reset to starting timetable';delete b.dataset.armed;}
   else{b.dataset.armed='1';b.textContent='Confirm reset (discards your edits)';setTimeout(()=>{if(b.isConnected&&b.dataset.armed){delete b.dataset.armed;b.textContent='Reset to starting timetable';}},4000);}};
@@ -4040,7 +4048,7 @@ function needExp(){return EXP;}
   $('set-pal').onchange=e=>{SETTINGS.palette=e.target.value;if(e.target.value!=='contrast')SETTINGS.prevPalette=e.target.value;saveSettings();applyTheme();};
   $('set-exp').onchange=e=>{SETTINGS.exp=e.target.checked;saveSettings();applyExp();toast('Settings',SETTINGS.exp?'Experimental mode on: planning panels are shown':'Experimental mode off: planning panels are hidden');};
   applyTheme();applyExp();})();
-function setSubtitle(){$('subtitle').textContent=(PRESETS[PLAN.preset]||PRESETS.data8).sub;$('tt-preset').value=PRESETS[PLAN.preset]?PLAN.preset:'data8';}
+function setSubtitle(){$('subtitle').textContent=!PLAN.trips.length&&!PLAN.fleet.length?'E&N corridor · Blank slate: no trains or trainsets yet · add trainsets and trips to build a service':(PRESETS[PLAN.preset]||PRESETS.data8).sub;$('tt-preset').value=PRESETS[PLAN.preset]?PLAN.preset:'data8';}
 setSubtitle();
 $('btn-preset').onclick=()=>{const k=$('tt-preset').value;PLAN=defaultPlan(k);DONE.clear();KNOWN.clear();for(const t of [...trains])removeTrainGfx(t);trains.length=0;FORM=null;
   syncRuntime();bootPositions();setSubtitle();applyPlan(`Loaded the ${PRESETS[k].name} timetable. Stations and track are unchanged.`);};
