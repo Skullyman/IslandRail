@@ -4253,7 +4253,7 @@ function offsetPts(line,a,b,d,taperKm,taperA=true,taperB=true,extra=[]){const V=
     return n;};
   return K.map(k=>{const c=lineAt(line,k),n=nAt(k);let f=1;if(taperA&&k-a<taperKm)f=Math.min(f,(k-a)/taperKm);if(taperB&&b-k<taperKm)f=Math.min(f,(b-k)/taperKm);f=f<1?Math.sin(f*Math.PI/2):1;
     return{k,x:c[0]+n[0]*d*f,y:c[1]+n[1]*d*f};});}
-function drawSidings(){sidG.innerHTML='';const gap=TRACK_GAP/ppu;
+function drawSidings(){sidG.innerHTML='';const gap=TRACK_GAP/ppu;LANE_RUNS={};
   const stOf=p=>p.src==='work'?(p.status==='built'?'built':'plan'):p.src==='pp'?'assumed':p.dis?'disused':'exist';
   const rank={assumed:0,disused:0,plan:1,exist:2,built:2};
   for(const [line,M] of Object.entries(getPlaces()))for(const pl of M){
@@ -4270,6 +4270,8 @@ function drawSidings(){sidG.innerHTML='';const gap=TRACK_GAP/ppu;
       for(const r of runs){const s0=lineAt(line,r.a),s1=lineAt(line,Math.min(r.b,r.a+.1));const svgPerKm=Math.hypot(s1[0]-s0[0],s1[1]-s0[1])/Math.max(.01,Math.min(r.b,r.a+.1)-r.a)||1;
         const tk=Math.min((r.b-r.a)/3,gap*3*(Math.floor(li/2)+1)/svgPerKm);
         const atStart=r.a<=LINES[line][0].k+.03,atEnd=r.b>=lineMax(line)-.03;// a track ending at the end of the line is a stub: no turnout there
+        (LANE_RUNS[line]||(LANE_RUNS[line]=[])).push({a:r.a,b:r.b,tk,px:side*TRACK_GAP*(Math.floor(li/2)+1),ta:!atStart,tb:!atEnd,
+          dbl:r.parts.filter(p=>p.kind==='double').map(p=>[p.a,p.b]),stn:r.parts.some(p=>/station track/.test(p.n||''))});
         const P=offsetPts(line,r.a,r.b,d,tk,!atStart,!atEnd,r.parts.flatMap(p=>{const o=[p.a,p.b];for(let x=p.a;x<p.b;x+=.05)o.push(x);return o;}));
         const g=el('g',{class:'sid lane'+li},sidG);
         el('polyline',{points:P.map(q=>q.x.toFixed(3)+','+q.y.toFixed(3)).join(' '),class:'rail-halo','stroke-width':6,'vector-effect':'non-scaling-stroke'},g);
@@ -4766,13 +4768,39 @@ async function shareOpen(){const m=/[#&?]c=([2-9A-Za-z]{7})\b/.exec(location.has
     cfgApply(c);toast('Shared view',`Opened a map view shared on ${new Date(c.made||Date.now()).toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'})}`);}
   catch(e){toast('Shared view',String(e.message||e));}}
 setTimeout(shareOpen,600);window.addEventListener('hashchange',shareOpen);
+
+/* ---------- which track a train is on where there are two or more ----------
+   Double track: right-hand running, so trains heading away from Victoria use the second track and trains towards Victoria the main track.
+   Passing sidings: the train that waits for a meet pulls into the siding; the other train runs through on the main track.
+   Stations with station tracks: trains standing between trips take the main track first, then the station tracks. */
+let LANE_RUNS={};
+function laneF(r,k){let f=1;if(r.ta&&k-r.a<r.tk)f=Math.min(f,(k-r.a)/r.tk);if(r.tb&&r.b-k<r.tk)f=Math.min(f,(r.b-k)/r.tk);return f<=0?0:f<1?Math.sin(f*Math.PI/2):1;}
+function runsAt(line,k){return (LANE_RUNS[line]||[]).filter(r=>k>=r.a-1e-4&&k<=r.b+1e-4);}
+function lineNormal(line,k){const p0=lineAt(line,Math.max(0,k-.02)),p1=lineAt(line,k+.02),dx=p1[0]-p0[0],dy=p1[1]-p0[1],l=Math.hypot(dx,dy)||1;return[-dy/l,dx/l];}
+// sideways offset in screen pixels for a train on a trip at (line, k) heading dir
+function tripLane(t,line,k,dir){const R=runsAt(line,k);if(!R.length)return 0;
+  const waiting=(t.want&&!t.moving)||t.swHold>0;
+  if(waiting){const s=R.filter(r=>!r.dbl.length).sort((x,y)=>Math.abs(x.px)-Math.abs(y.px))[0];if(s)return s.px;}
+  const dr=R.find(r=>r.dbl.some(([a,b])=>k>=a-1e-4&&k<=b+1e-4));
+  return dr&&dir>0?dr.px*laneF(dr,k):0;}
+// trains standing at stations: share out the tracks there
+function idleLanes(){const by={};for(const t of trains)if(!t.trip&&t.at)(by[t.at]||(by[t.at]=[])).push(t);const out=new Map();
+  for(const [c,L] of Object.entries(by)){const st=STATIONS[c];if(!st||!LINES[st.line]){L.forEach(t=>out.set(t,0));continue;}
+    const slots=[0,...runsAt(st.line,st.k).sort((x,y)=>(y.stn-x.stn)||Math.abs(x.px)-Math.abs(y.px)).map(r=>r.px*laneF(r,st.k))];
+    L.sort((a,b)=>String(a.id).localeCompare(String(b.id),undefined,{numeric:true})).forEach((t,i)=>out.set(t,slots[i%slots.length]));}
+  return out;}
 function frame(now){
   const dt=Math.min(.1,(now-lastT)/1000);lastT=now;
   if(speed){let m=dt*speed;while(m>0){const d=Math.min(m,.25);step(d);m-=d;}}
   const inv=1/ppu;
+  const IDL=idleLanes();
   for(const t of trains){
-    let ang=0;
-    if(t.trip){const q=routeAt(t.trip.route,t.s);t.xy=q.xy;ang=q.ang;}else t.xy=stnAny(t.at).xy;t.ang=ang;
+    let ang=0,lat=0,nrm=null;
+    if(t.trip){const q=routeAt(t.trip.route,t.s);t.xy=q.xy;ang=q.ang;if(LINES[q.line]){const dir=trackPos(t,t.s).dir;lat=tripLane(t,q.line,q.k,dir);if(lat)nrm=lineNormal(q.line,q.k);}}
+    else{t.xy=stnAny(t.at).xy;const st=STATIONS[t.at];lat=IDL.get(t)||0;if(lat&&st&&LINES[st.line])nrm=lineNormal(st.line,st.k);else lat=0;}
+    // ease across between tracks rather than jumping
+    t.lat=t.lat==null?lat:t.lat+(lat-t.lat)*Math.min(1,dt*8);if(Math.abs(t.lat)>.01&&(nrm||t.nrm)){nrm=nrm||t.nrm;t.nrm=nrm;t.xy=[t.xy[0]+nrm[0]*t.lat*inv,t.xy[1]+nrm[1]*t.lat*inv];}
+    t.ang=ang;
     t.g.setAttribute('transform',`translate(${t.xy[0].toFixed(2)} ${t.xy[1].toFixed(2)}) scale(${inv.toFixed(4)})`);
     t.arrow.style.display=t.trip?'':'none';t.arrow.setAttribute('transform',`rotate(${(ang*180/Math.PI).toFixed(1)})`);
     t.warn.style.display=t.blocked>.5?'':'none';t.g.classList.toggle('idle',!t.trip);t.g.classList.toggle('ecs',!!(t.trip&&t.trip.cls==='Empty'));}
