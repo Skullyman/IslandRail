@@ -1027,7 +1027,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
       </div>
       <div class="pane" id="pane-plan" hidden>
         <h3 class="sec">Starting timetable</h3>
-        <div class="pbtns"><select id="tt-preset" aria-label="Starting timetable"><option value="data8">Data-driven, 8 trainsets</option><option value="opt">Optimised: West Shore every 10 min</option><option value="optreg">Optimised + regional commuter trains</option><option value="icf">ICF business case, West Shore every 12 min</option><option value="data">Data-driven, unconstrained fleet</option></select><button class="btn" id="btn-preset" type="button">Load this timetable</button></div>
+        <div class="pbtns"><select id="tt-preset" aria-label="Starting timetable"><option value="data8">Data-driven, 8 trainsets</option><option value="opt">Optimised: West Shore every 10 min</option><option value="optreg">Optimised + regional commuter trains</option><option value="icf">ICF business case (baseline), West Shore every 12 min</option><option value="data">Data-driven, unconstrained fleet</option></select><button class="btn" id="btn-preset" type="button">Load this timetable</button></div>
         <div class="ttcmp" id="tt-compare"></div>
         <h3 class="sec">Ridership and fare revenue</h3>
         <div class="planrd" id="plan-rd"></div>
@@ -1047,6 +1047,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
           <li>Single track: a 12-minute service in both directions needs trains to pass every few minutes. That would require double track or several long passing loops between Victoria and Westhills, which this simulation does not model.</li>
           <li>Run times for new or changed trips use the track speeds chosen in the Track tab. The default is the 2003 E&amp;N track charts with speeds raised where the curves allow, up to 60 mph; the 2003 posted speeds and the earlier simple bands are the alternatives. Each train type's top speed still caps the result. The ICF and data-driven timetables keep the ICF running times unless you retime them.</li>
           <li>Trainsets turn around in 3 minutes and run empty to reposition when needed. Trains running in the same direction stay at least one signal block (1 km) apart and never overtake: a train that catches up waits at a signal and picks up the delay. The line is single track: before a train enters a single-track section, the dispatcher checks no opposing train is in it. Otherwise it waits at the siding, passing point or station track it is on. Whoever reaches the siding first holds there; on a tie, intercity trains go before regional trains, which go before commuter trains. Waiting through a siding adds about a minute for the switches. A meet needs a siding at least as long as the shorter train. Waits add to the train's delay and appear as Single-track meets.</li>
+          <li>Timetables: the ICF business case timetable is kept as published, as the baseline. The data-driven and optimised timetables are fitted to the track: Victoria–Westhills is double track wherever the West Shore runs every 20 minutes or more often; every other train is moved by the smallest amount (West Shore up to 4 minutes, commuter trains up to 15, other trains up to 30) so it meets opposing trains only at existing sidings, passing points, terminals or the double track, and never follows another train closer than a signal block; and the trips are then worked by the fewest trainsets that can cover them, with empty runs only where they save a set. Empty trains leave so as to arrive about 5 minutes before their next trip, and not right beside a service train.</li>
           <li>Sidings: existing sidings come from OpenStreetMap (read 30 Oct 2026), with lengths measured from the track. Passing points with no siding mapped use an assumed 330 m. Yard tracks and industrial spurs are drawn from the same OpenStreetMap data (as shown on OpenRailwayMap); in-use yard tracks of 150 m or more beside the line near a station count as that station's tracks. Each starting timetable adds the track it needs as proposed works, following normal railway practice: a passing siding wherever its trains meet away from an existing siding; double track where trains run every 20 minutes or more often each way and sidings would be less than 3 km apart, or where meets are spread along the line; major bridges and the Malahat Tunnel stay single track. Stations where trains stand between trips get enough station tracks for the most trains there at once (about 300 m each, $3M with turnouts and signals; the main track counts as one, and disused sidings are not counted). Costs are order of magnitude: about $5.5M for a 1 km passing siding with turnouts and signals, plus $3.5M a further km, and about $5M a km of double track plus $2M for turnouts and signals (MnDOT Midwest Regional Rail cost methodology, 2010 US$, escalated to 2026 CAD).</li>
           <li>Highway traffic: BC Ministry of Transportation Traffic Data Program annual hourly day-of-week summaries (Monday–Friday averaged). Lane counts from OpenStreetMap; lane capacity assumed at 1,900 veh/h on freeway sections, 1,700 on highways with intersections, 1,400–1,500 on two-lane or arterial sections.</li>
           <li>Road congestion dots: on highways the dot colour comes from the measured hourly counts above (green under 40% of estimated capacity, yellow 40–60%, red over 60%). Highway counts now include the 2025 Colwood interchange station (P-11-6NS) and twelve 2025 MoTI short counts on Highways 1, 14, 17, 19 and 19A, so segments between permanent stations use the nearest measured count. Roads with a public count are coloured from it: City of Victoria Open Data traffic counts (2019–2026, one-way daily volumes, spread over the day with the urban weekday profile; nearby sections of the same street share the count) and MoTI 2025 short counts on the Comox Valley Parkway and Brechin Road. Measured roads use about 800 veh/h per lane at signals (green under 45%, yellow 45–75%, red over). Every other local and connector road has no public count (Saanich, Langford, Colwood and Nanaimo publish none), so its colour is a modelled estimate: the weekday hourly shape of the urban count stations × how much population lives within a few kilometres (2021 Census) × road class. Hover a road to see whether it is measured or modelled. MoTI's segment AADT layer was not used because its values date from 2012.</li>
@@ -1298,6 +1299,17 @@ function prep(tr){const o={...tr,stops:tr.stops.map(x=>({...x}))};o.freight=tr.c
   o.stops.forEach((x,i)=>{x.s=o.route.stops.find(r=>r.c===x.c).s;x.dep=x.t;x.arr=i===0||i===n-1?x.t:x.t-dwellFor(tr.cls);});
   o.dep=tripDep(tr);o.arr=tripArr(tr);o.from=o.stops[0].c;o.to=o.stops[n-1].c;return o;}
 
+// existing sidings, terminals and train lengths (used by the timetable builders below and by the dispatcher)
+const EXIST_SIDINGS=[
+ ['MAIN',0.56,509,'Victoria (Harbour Road)','osm','d'],['MAIN',5.46,129,'Esquimalt (Admirals Road)','osm'],['MAIN',12.53,363,'Langford','osm'],['MAIN',31.7,387,'Malahat','osm','d'],['MAIN',49.87,588,'Cobble Hill','osm','d'],
+ ['MAIN',60.83,370,'Duncan (south)','osm'],['MAIN',68.05,224,'Duncan (north)','osm'],['MAIN',103.66,335,'Cassidy','osm'],['MAIN',111.98,204,'Nanaimo (south)','osm','d'],
+ ['MAIN',123.99,296,'Wellington','osm'],['MAIN',129.7,330,'Lantzville','pp'],['MAIN',138.0,330,'Nanoose Bay','pp'],['MAIN',143.69,238,'Nanoose','osm'],['MAIN',152.79,333,'Parksville','osm'],
+ ['MAIN',176.53,375,'Dashwood','osm','d'],['MAIN',184.6,330,'Bowser','pp'],['MAIN',198.9,330,'Fanny Bay','pp'],['MAIN',209.7,330,'Union Bay','pp'],['MAIN',217.8,330,'Royston','pp'],
+ ['ALB',0.26,311,'Parksville junction','osm'],['ALB',7.5,330,'Coombs','pp'],['ALB',20.6,330,'Cameron Lake','pp'],['ALB',37.3,330,'Arrowsmith Summit','pp']];
+// terminals and yards that can hold several trains: [line, from km, to km, name]
+const TERMINALS=[['MAIN',-1,0.9,'Victoria'],['MAIN',13.8,14.7,'Westhills'],['MAIN',115.6,117.0,'Nanaimo (station and Wellcox)'],['MAIN',222.9,999,'Courtenay'],['ALB',61.5,999,'Port Alberni']];
+const TRAIN_LEN={dmu2:100,lrt:40,dmu:50,bemu:50,h2:50,pp:130,rdc:26,steam:140,frt:300};
+const trainLen=t=>TRAIN_LEN[t.type]||60;
 /* ---------- the plan (fleet + timetable): ICF business case service pattern (Tables 17 and 18), with the West Shore line every 12 minutes ---------- */
 // stop times in minutes from the first departure, from ICF Table 17 (Courtenay 05:54 to Victoria 09:44 southbound; Victoria 16:51 to Courtenay 20:41 northbound)
 const ICF_SB=[['CTN',0],['QUB',51],['PKS',61],['NAN',92],['LDY',112],['DUN',138],['SHL',163],['WHL',199],['LAN',204],['ATK',208],['SMI',211],['ESQ',218],['VIC',230]];
@@ -1309,12 +1321,16 @@ function mdlLeg(pat,from,to,dep){const a=pat.findIndex(x=>x[0]===from),b=pat.fin
   return computeTimes(codes,dep,'dmu','Regional').map(o=>({c:o.c,t:Math.round(o.t*2)/2}));}
 function icfLeg(pat,from,to,dep){const a=pat.findIndex(x=>x[0]===from),b=pat.findIndex(x=>x[0]===to);const t0=pat[a][1];
   return pat.slice(a,b+1).filter(x=>STATIONS[x[0]]).map(([c,t])=>({c,t:dep+t-t0}));}
-const PRESETS={icf:{name:'ICF business case, West Shore every 12 min',sub:'ICF business case service · West Shore every 12 minutes · Victoria–Courtenay, Nanaimo and Duncan regional trains'},
+const PRESETS={icf:{name:'ICF business case (baseline), West Shore every 12 min',sub:'ICF business case service · West Shore every 12 minutes · Victoria–Courtenay, Nanaimo and Duncan regional trains'},
   data:{name:'Data-driven (CRD survey and Census)',sub:'Data-driven service · West Shore every 10 min peaks, 15 midday · Cowichan commuter · Duncan–Nanaimo shuttle'}};
 PRESETS.opt={name:'Optimised: West Shore every 10 min',sub:'Optimised for riders per dollar · West Shore every 10 min, 05:30–22:00, both directions'};
 PRESETS.optreg={name:'Optimised + regional commuter trains',sub:'West Shore every 10 min · 3 Nanaimo–Victoria commuter round trips · Courtenay–Victoria intercity'};
 PRESETS.data8={name:'Data-driven, 8 trainsets',sub:'Data-driven service on 8 trainsets · West Shore every 10–20 min · Nanaimo–Victoria commuter · Courtenay intercity · timed with the applied speed projects'};
-function defaultPlan(preset='data8'){const p=OPT_CFGS[preset]?optPlan(preset):preset==='data'?dataPlan():preset==='icf'?icfPlan():data8Best();if(p.preset!=='icf')p.timedSig=worksSig();return p;}
+const PLAN_CACHE=new Map();
+function defaultPlan(preset='data8'){const key=preset+'|'+worksSig()+'|'+JSON.stringify(STNSPEC)+'|'+JSON.stringify(TRACKSPEC.lines||[])+'|'+JSON.stringify(TRACKSPEC.geom||{});
+  if(PLAN_CACHE.has(key)){const p=JSON.parse(PLAN_CACHE.get(key));p.stations={...STNSPEC};p.track=TRACKSPEC;return p;}
+  const p=fitPlan(OPT_CFGS[preset]?optPlan(preset):preset==='data'?dataPlan():preset==='icf'?icfPlan():data8Best());if(p.preset!=='icf')p.timedSig=worksSig();
+  PLAN_CACHE.set(key,JSON.stringify({...p,stations:undefined,track:undefined}));p.stations={...STNSPEC};p.track=TRACKSPEC;return p;}
 function icfPlan(){
   const fleet=[],trips=[];if(!STATIONS.VIC||!STATIONS.WHL)return{v:3,preset:'icf',fleet,trips,stations:{...STNSPEC},track:TRACKSPEC};
   const trip=(no,cls,tag,set,stops)=>trips.push({id:nid('t'),no:String(no),cls,tag,set,fixed:true,stops});
@@ -1449,14 +1465,94 @@ function optPlan(key='opt'){const OPT_CFG=OPT_CFGS[key];const fleet=[],trips=[];
   const cnt={};fleet.forEach(f=>{const L=ok.filter(t=>t.set===f.id);const tg=L.filter(t=>t.cls!=='CRD Commute').map(t=>t.tag).join();const nmz=/Courtenay/.test(tg)?'Island Regional':/Alberni/.test(tg)?'Alberni':/Nanaimo/.test(tg)?'Mid-Island':/Duncan/.test(tg)?'Cowichan':'West Shore';cnt[nmz]=(cnt[nmz]||0)+1;f.name=nmz+' '+cnt[nmz];});
   fleet.push({id:'P1',name:'Spare set',type:'dmu',home:'WHL'});
   return{v:3,preset:key,fleet,trips:ok,stations:spec,track:TRACKSPEC};}
-const LS='island-rail-plan-v5';// v5: timetable timed by the speed model with the corridor speed projects
+
+/* ---------- fitting a timetable to the track (v97) ----------
+   The data-driven and optimised timetables are fitted to the track before use:
+   1. West Shore trips run Victoria–Westhills, which is planned as double track wherever the West Shore runs every 20 minutes or more often.
+   2. Every other trip is moved by up to 15 minutes (the smallest move that works) so that it meets opposing trains only at existing sidings,
+      passing points, terminals or the double track, and never follows another train closer than one signal block. Intercity trains go first.
+   3. The trips are then shared out over the fewest trainsets that can work them (most trips a set can follow on from, empty runs only when needed).
+   The ICF business case timetable is kept exactly as published as the baseline. */
+function planPlaces(){const P={};for(const line of Object.keys(LINES)){const L=[];
+    for(const [l,a,b] of TERMINALS)if(l===line)L.push([a,b,1]);
+    for(const [l,k,len] of EXIST_SIDINGS)if(l===line)L.push([k-len/2000-.05,k+len/2000+.05,0]);
+    if(STATIONS.WHL&&STATIONS.WHL.line===line)L.push([0,STATIONS.WHL.k+.3,0]);
+    P[line]=L;}return P;}
+function fitSamples(tr,dt=.25){let o;try{o=prep(tr);}catch(_){return null;}const st=o.stops,pts=[];if(st.length<2)return null;
+  const t0=Math.round(o.dep/dt)*dt;
+  for(let tm=t0;tm<=o.arr+1e-6;tm+=dt){let s,i=0;while(i<st.length-1&&st[i+1].arr<=tm)i++;
+    if(i>=st.length-1)s=st[st.length-1].s;else if(tm<=st[i].dep)s=st[i].s;else{const a=st[i],b=st[i+1];const u=(tm-a.dep)/Math.max(.01,b.arr-a.dep);s=a.s+(b.s-a.s)*ease(Math.max(0,Math.min(1,u)));}
+    const q=routeAt(o.route,s);pts.push([q.line,q.k]);}
+  const dirs={};for(const l of new Set(pts.map(x=>x[0]))){const ks=pts.filter(x=>x[0]===l);dirs[l]=Math.sign(ks[ks.length-1][1]-ks[0][1])||1;}
+  return{t0,dt,pts,dirs};}
+// conflicts between trip samples A and the fixed trips: meets away from a passing place, and trains in the same direction closer than a block
+function fitConflicts(A,FIX,PL){let c=0;const cov=(l,k,tol)=>(PL[l]||[]).some(([a,b])=>k>=a-tol&&k<=b+tol);
+  const inTerm=(l,k)=>(PL[l]||[]).some(([a,b,t])=>t&&k>=a&&k<=b);
+  const a0=A.t0,a1=A.t0+(A.pts.length-1)*A.dt;
+  for(const B of FIX){const b0=B.t0,b1=B.t0+(B.pts.length-1)*B.dt,t0=Math.max(a0,b0),t1=Math.min(a1,b1);if(t1<t0)continue;let prev=null,follow=false;
+    for(let tm=t0;tm<=t1+1e-6;tm+=A.dt){const pa=A.pts[Math.round((tm-a0)/A.dt)],pb=B.pts[Math.round((tm-b0)/B.dt)];if(!pa||!pb||pa[0]!==pb[0]){prev=null;continue;}
+      const l=pa[0],d=pa[1]-pb[1];
+      if(A.dirs[l]!==B.dirs[l]){if(prev!==null&&(Math.sign(d)!==Math.sign(prev)||d===0)){if(!cov(l,(pa[1]+pb[1])/2,.8))c+=10;prev=null;continue;}prev=d;}
+      else if(!follow&&Math.abs(d)<1.2&&!inTerm(l,pa[1])&&!inTerm(l,pb[1])){follow=true;c+=10;}}}
+  return c;}
+const shiftTrip=(tr,d)=>({...tr,stops:tr.stops.map(x=>({...x,t:Math.round((x.t+d)*2)/2}))});
+// fewest trainsets: a maximum matching of "set can work trip j after trip i" (same station first, empty runs only if they help)
+function chainMinSets(trips,type,lay=5){const T=[...trips].sort((a,b)=>tripDep(a)-tripDep(b)),n=T.length;
+  const fst=t=>t.stops[0].c,lst=t=>t.stops[t.stops.length-1].c;
+  const adj=T.map((t,i)=>{const to=lst(t),ta=tripArr(t),same=[],dh=[];
+    for(let j=0;j<n;j++){if(j===i)continue;const u=T[j],fr=fst(u),dep=tripDep(u);if(dep<ta)continue;
+      if(fr===to){if(ta+lay<=dep+.01)same.push(j);}else if(ta+lay+minDuration([to,fr],type,'Empty')+lay<=dep+.01)dh.push(j);}
+    const byDep=(a,b)=>tripDep(T[a])-tripDep(T[b]);same.sort(byDep);dh.sort(byDep);return{same,dh};});
+  const mL=new Array(n).fill(-1),mR=new Array(n).fill(-1);
+  const kuhn=(i,seen,dh)=>{for(const j of dh?[...adj[i].same,...adj[i].dh]:adj[i].same){if(seen[j])continue;seen[j]=1;if(mR[j]<0||kuhn(mR[j],seen,dh)){mL[i]=j;mR[j]=i;return true;}}return false;};
+  for(let i=0;i<n;i++)kuhn(i,new Uint8Array(n),false);
+  for(let i=0;i<n;i++)if(mL[i]<0)kuhn(i,new Uint8Array(n),true);
+  const chains=[];for(let i=0;i<n;i++)if(mR[i]<0){const c=[];for(let x=i;x>=0;x=mL[x])c.push(T[x]);chains.push(c);}
+  return chains.sort((a,b)=>tripDep(a[0])-tripDep(b[0]));}
+function fitPlan(p){if(!p||p.preset==='icf'||!p.trips.length)return p;
+  const PL=planPlaces(),isWS=t=>t.cls==='CRD Commute';
+  // stations where trips start or finish get station tracks, so trains standing there do not block the line
+  for(const t of p.trips)for(const c of [t.stops[0].c,t.stops[t.stops.length-1].c]){const s=STATIONS[c];if(s&&PL[s.line])PL[s.line].push([s.k-.25,s.k+.25,1]);}
+  // two West Shore trips leaving the same end within 3 minutes (where the headway changes) are one train: keep the first
+  const dup=new Set();const ws=p.trips.filter(isWS).sort((a,b)=>tripDep(a)-tripDep(b));
+  for(let i=0;i<ws.length;i++)for(let j=i+1;j<ws.length&&tripDep(ws[j])-tripDep(ws[i])<3;j++)if(ws[j].stops[0].c===ws[i].stops[0].c&&!dup.has(ws[i].id))dup.add(ws[j].id);
+  if(dup.size)p.trips=p.trips.filter(t=>!dup.has(t.id));
+  const rank=t=>isWS(t)?0:t.cls==='Intercity'?1:2,lim=t=>isWS(t)?4:/commuter/i.test(t.tag||'')?15:30;// commuter trains keep close to their peak times; counter-peak, shuttle and intercity trains can move further
+  const order=[...p.trips].sort((a,b)=>rank(a)-rank(b)||tripDep(a)-tripDep(b));
+  const FIX=[],moved=[];let unresolved=0;
+  for(const t of order){let best=null;const L=lim(t)*2;
+    for(let s=0;s<=L;s++){const d=s===0?0:(s%2?1:-1)*Math.ceil(s/2)*.5;const c=d?shiftTrip(t,d):t,X=fitSamples(c);if(!X)continue;
+      const k=fitConflicts(X,FIX,PL);if(!best||k<best.k){best={d,k,X,c};if(k===0)break;}}
+    if(!best)continue;if(best.d)t.stops=best.c.stops;t._d=(t._d||0)+best.d;t._X=best.X;t._k=best.k;FIX.push(best.X);}
+  // second and third passes: move each train that still has a conflict again, now against every other train
+  for(let pass=0;pass<2;pass++)for(const t of order){if(!t._k||isWS(t)||!t._X)continue;const others=order.filter(o=>o!==t&&o._X).map(o=>o._X);let best=null;const L=lim(t)*2;
+    for(let s=0;s<=L;s++){const d=s===0?0:(s%2?1:-1)*Math.ceil(s/2)*.5;if(Math.abs((t._d||0)+d)>lim(t))continue;const c=d?shiftTrip(t,d):t,X=fitSamples(c);if(!X)continue;
+      const k=fitConflicts(X,others,PL);if(!best||k<best.k){best={d,k,X,c};if(k===0)break;}}
+    if(best&&best.k<t._k){if(best.d)t.stops=best.c.stops;t._d=(t._d||0)+best.d;t._X=best.X;t._k=best.k;}}
+  for(const t of order){if(t._k)unresolved++;if(t._d)moved.push(`${t.no} ${t._d>0?'+':''}${t._d} min`);delete t._d;delete t._X;delete t._k;}
+  // trainsets: keep the timetable's own set plan if it still works and uses no more sets; otherwise the fewest sets that can work the trips
+  const fst=t=>t.stops[0].c,lst=t=>t.stops[t.stops.length-1].c;
+  const dead=chains=>chains.reduce((s,c)=>s+c.slice(1).reduce((x,t,i)=>x+(lst(c[i])===fst(t)?0:routeFor([lst(c[i]),fst(t)]).len),0),0);
+  const own=p.fleet.filter(f=>!/Spare/.test(f.name)).map(f=>p.trips.filter(t=>t.set===f.id).sort((a,b)=>tripDep(a)-tripDep(b))).filter(c=>c.length);
+  const ownOK=p.trips.every(t=>t.set&&p.fleet.some(f=>f.id===t.set))&&own.every(c=>c.every((t,i)=>!i||tripArr(c[i-1])+3+(lst(c[i-1])===fst(t)?0:minDuration([lst(c[i-1]),fst(t)],'dmu','Empty')+3)<=tripDep(t)+.5));
+  const mm=chainMinSets(p.trips,'dmu',5);
+  const useOwn=ownOK&&(own.length<mm.length||(own.length===mm.length&&dead(own)<=dead(mm)));
+  const chains=useOwn?own:mm;
+  const peak=new Set(p.trips.filter(t=>/2 units/.test(t.tag||'')).map(t=>t.id));const fleet=[],cnt={};
+  chains.forEach((c,i)=>{const id='S'+(i+1),tg=c.filter(t=>!isWS(t)).map(t=>t.tag).join();
+    const nmz=/Courtenay/.test(tg)?'Island Regional':/Alberni/.test(tg)?'Alberni':/Nanaimo/.test(tg)?'Mid-Island':/Duncan/.test(tg)?'Cowichan':'West Shore';cnt[nmz]=(cnt[nmz]||0)+1;
+    const two=c.some(t=>peak.has(t.id));fleet.push({id,name:nmz+' '+cnt[nmz]+(two?' (2 units)':''),type:two?'dmu2':'dmu'});c.forEach(t=>t.set=id);});
+  if(p.fleet.some(f=>/Spare/.test(f.name)))fleet.push({id:'P1',name:'Spare set',type:'dmu',home:'WHL'});
+  p.fleet=fleet;p.fit={moved,unresolved,dropped:dup.size,sets:chains.length,own:useOwn,deadKm:Math.round(dead(chains)),v:2};return p;}
+const LS='island-rail-plan-v6';// v6: timetables fitted to sidings and double track, fewest trainsets (v97)
+// v5: timetable timed by the speed model with the corridor speed projects
 // v4: data-driven 8-trainset timetable is the default// v3: ICF business case timetable
 function validPlan(p){return p&&Array.isArray(p.fleet)&&Array.isArray(p.trips)&&p.fleet.every(f=>f&&f.id&&TYPES[f.type])&&
   p.trips.every(t=>t&&t.id&&Array.isArray(t.stops)&&t.stops.length>=2&&t.stops.every(x=>STATIONS[x.c]&&isFinite(x.t)));}
 function loadPlan(){try{const s=localStorage.getItem(LS);if(s){const p=JSON.parse(s);TRACKSPEC=normTrack(p&&p.track);applyStations(p&&p.stations);if(validPlan(p))return p;}}catch(_){}
   TRACKSPEC=normTrack(null);
   // keep station and track edits from the previous timetable version; the timetable itself starts fresh
-  let old=null;try{old=JSON.parse(localStorage.getItem('island-rail-plan-v4')||localStorage.getItem('island-rail-plan-v3')||localStorage.getItem('island-rail-plan-v2')||localStorage.getItem('island-rail-plan-v1')||'null');}catch(_){}
+  let old=null;try{old=JSON.parse(localStorage.getItem('island-rail-plan-v5')||localStorage.getItem('island-rail-plan-v4')||localStorage.getItem('island-rail-plan-v3')||localStorage.getItem('island-rail-plan-v2')||localStorage.getItem('island-rail-plan-v1')||'null');}catch(_){}
   if(old&&old.track)TRACKSPEC=normTrack(old.track);applyStations(old&&old.stations);return defaultPlan();}
 function savePlan(){PLAN.stations=STNSPEC;PLAN.track=TRACKSPEC;try{localStorage.setItem(LS,JSON.stringify(PLAN));}catch(_){}}
 let PLAN=loadPlan();if(SPEED_PROFS[PLAN.speedProf])SPEED_PROF=PLAN.speedProf;else PLAN.speedProf=SPEED_PROF;
@@ -1537,16 +1633,6 @@ function finishTrip(t){
    track geometry. Passing points with no siding in OpenStreetMap use an assumed 330 m (the typical E&N siding length there).
    Costs: MnDOT Midwest Regional Rail cost methodology (2010 US$: passenger siding about $1.45M a mile of track, No. 20 turnouts
    $0.18–0.28M, CTC $0.21M a mile; double track on new embankment $3.0M a mile), escalated to 2026 CAD (×2.2). Order of magnitude. */
-const EXIST_SIDINGS=[
- ['MAIN',0.56,509,'Victoria (Harbour Road)','osm','d'],['MAIN',5.46,129,'Esquimalt (Admirals Road)','osm'],['MAIN',12.53,363,'Langford','osm'],['MAIN',31.7,387,'Malahat','osm','d'],['MAIN',49.87,588,'Cobble Hill','osm','d'],
- ['MAIN',60.83,370,'Duncan (south)','osm'],['MAIN',68.05,224,'Duncan (north)','osm'],['MAIN',103.66,335,'Cassidy','osm'],['MAIN',111.98,204,'Nanaimo (south)','osm','d'],
- ['MAIN',123.99,296,'Wellington','osm'],['MAIN',129.7,330,'Lantzville','pp'],['MAIN',138.0,330,'Nanoose Bay','pp'],['MAIN',143.69,238,'Nanoose','osm'],['MAIN',152.79,333,'Parksville','osm'],
- ['MAIN',176.53,375,'Dashwood','osm','d'],['MAIN',184.6,330,'Bowser','pp'],['MAIN',198.9,330,'Fanny Bay','pp'],['MAIN',209.7,330,'Union Bay','pp'],['MAIN',217.8,330,'Royston','pp'],
- ['ALB',0.26,311,'Parksville junction','osm'],['ALB',7.5,330,'Coombs','pp'],['ALB',20.6,330,'Cameron Lake','pp'],['ALB',37.3,330,'Arrowsmith Summit','pp']];
-// terminals and yards that can hold several trains: [line, from km, to km, name]
-const TERMINALS=[['MAIN',-1,0.9,'Victoria'],['MAIN',13.8,14.7,'Westhills'],['MAIN',115.6,117.0,'Nanaimo (station and Wellcox)'],['MAIN',222.9,999,'Courtenay'],['ALB',61.5,999,'Port Alberni']];
-const TRAIN_LEN={dmu2:100,lrt:40,dmu:50,bemu:50,h2:50,pp:130,rdc:26,steam:140,frt:300};
-const trainLen=t=>TRAIN_LEN[t.type]||60;
 function track2Cost(type,line,a,b){try{const km=Math.max(.1,Math.abs(mpToK(line,b)-mpToK(line,a)));
   return type==='siding'?+(5.5+Math.max(0,km-1)*3.5).toFixed(1):type==='double'?+(2+km*5).toFixed(1):null;}catch(_){return null;}}
 let DISPATCH=true;
@@ -4342,7 +4428,14 @@ function step(dt){
     if(!t.trip&&!STATIONS[t.at])t.at=nearestLive(t.at);
     if(!t.trip){const nx=nextFor(t);if(!nx){t.v=0;continue;}
       if(nx.dep<sim-30){DONE.add(nx.id);S.cancel++;logEvt(`${nx.no} ${hhmm(nx.dep)} from ${nm(nx.from)} cancelled: ${t.name} not available`,true);continue;}
-      if(t.at!==nx.from){startTrip(t,makeEmptyRun(t,t.at,nx.from),0,true);logEvt(`${t.name} running empty ${nm(t.at)} → ${nm(nx.from)}`);}
+      if(t.at!==nx.from){// run empty so as to arrive about 5 minutes before the next trip, not straight away (fewer conflicts with service trains)
+        if(sim<nx.dep-emptyRun(t.at,nx.from,t.type)-8){t.v=0;continue;}
+        // and not straight behind or ahead of a service train leaving the same station the same way (it would catch it up or hold it)
+        {const er=emptyRun(t.at,nx.from,t.type),sk=s=>STATIONS[s]?STATIONS[s].k:0,dir=Math.sign(sk(nx.from)-sk(t.at));
+         const clash=trains.some(o=>{if(o===t)return false;const tr=o.trip&&o.trip.cls!=='Empty'?o.trip:(!o.trip?nextFor(o):null);if(!tr||tr.from!==t.at||tr.stops.length<2)return false;
+           return Math.sign(sk(tr.stops[1].c)-sk(tr.from))===dir&&tr.dep>sim-4&&tr.dep<sim+3;});
+         if(clash&&sim<nx.dep-er-4){t.v=0;continue;}}
+        startTrip(t,makeEmptyRun(t,t.at,nx.from),0,true);logEvt(`${t.name} running empty ${nm(t.at)} → ${nm(nx.from)}`);}
       else if(sim>=nx.dep)startTrip(t,nx,Math.max(0,sim-nx.dep));
       else{t.v=0;continue;}}
     const tr=t.trip,st=tr.stops,n=st.length,tc=sim-t.delay;
