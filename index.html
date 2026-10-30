@@ -26,7 +26,7 @@
 /* Layout: dispatcher's console — live corridor map fills the left, train status board docked right; stacks on phones. */
 :root{
   --bg:#e8ebe4; --panel:#f7f7f2; --panel-2:#eef0ea; --ink:#1b2421; --muted:#5a6863; --line:#cfd5cd; --bp:#0a66c2; --ctl-line:#7b8882; --ctl-bg:#ffffff; --ctl-hov:#e9eee9;
-  --sea:#b4ced2; --sea-ink:#46717a; --land:#ece6d3; --land-edge:#a99f83; --lake:#c3d9dc; --grid:rgba(40,70,80,.13);
+  --sea:#b3d3de; --sea-ink:#3d6b75; --land:#cbbd96; --land-edge:#7a6d4d; --lake:#c0dbe3; --grid:rgba(40,70,80,.13);
   --rail:#8c1d2c; --rail-tie:#f6efe4; --sleeper:#6b5a45; --rail-off:#8f8f8a; --sleeper-off:#b7b2a6; --bike-p:#1f8a3b; --bike-l:#3fae5a; --hwy:#d38a22; --hwy-case:#fff8ea; --hwy-flow:#fffdf5; --car:#6d4a10;
   --accent:#8c1d2c; --ok:#2c7a4b; --info:#2f5f9e; --warn:#a86a10; --bad:#b42318;
   --halo:#f7f4ea; --chip:#ffffff; --contour:rgba(122,92,48,.30); --contour-idx:rgba(110,78,36,.55); --elev:#5d4a2a; --hill-op:.85; --pop:#2563b8; --lu-res:#f0a53a; --lu-op:.34; --lu-com:#0f9f8a; --lu-ins:#2f8fd0; --lu-ind:#6e8794; --job:#0b7a6b; --t0:#5fa36a; --t1:#b6c544; --t2:#e8b030; --t3:#e0702b; --t4:#c42d2d; --road:#1b1d1c; --road-case:#f4efe2; --cg0:#3ad66b; --cg1:#f2c200; --cg2:#e0261b; --trail:#6a4bc4; --tct:#4b2fa3; --flow:#2f3f63; --bus:#0b6e4f; --d-air:#3a67d0; --d-ferry:#0f766e; --d-edu:#7b4cc9; --d-hosp:#c8324a; --d-def:#5c6870; --d-gov:#b5651d; --d-shop:#b0287f; --sp0:#7f0018;--sp1:#e0283a;--sp2:#c2348f;--sp3:#7b52c7;--sp4:#2b7bbf;--sp5:#0f9f8f; --crk0:#f0c27a;--crk1:#e58a3a;--crk2:#cf4b2a;--crk3:#9e1a1f; --heat-src:#e0601f; --heat-dst:#1f6fb8; --street:#fffdf6; --street-edge:#c9bea6; --hwy-edge:#b9781f;
@@ -768,6 +768,25 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
 .tdpt{fill:var(--halo);stroke:var(--ink);stroke-width:1.4}
 .tdbar{height:8px;border-radius:4px;margin:6px 0 2px;background:linear-gradient(90deg,rgba(150,200,235,.35),#4aa8e0 18%,#2fc4a0 36%,#e3cf3c 54%,#f08a32 72%,#d6336c)}
 .tdbarl{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
+
+/* colour themes (Settings → Colour theme); each builds on the light or dark base */
+:root[data-palette="chart"]{--bg:#eef2f3;--panel:#fbfcfc;--panel-2:#f0f4f5;--ink:#14202a;--muted:#536170;--line:#cdd7dd;--ctl-line:#7d8c97;--ctl-hov:#e6eef2;
+  --sea:#d6eaf5;--sea-ink:#1d5c88;--land:#efd68a;--land-edge:#6d5a26;--lake:#c9e2f0;--grid:rgba(20,60,95,.2);--halo:#fffbea;--chip:#ffffff;
+  --contour:rgba(110,82,24,.34);--contour-idx:rgba(96,68,16,.62);--elev:#5a4512;--hill-op:.5;--bathy:rgba(25,95,150,.38);--bathy-strong:rgba(25,95,150,.55)}
+:root[data-palette="forest"]{--bg:#e5ebe0;--panel:#f6f8f2;--panel-2:#ecf1e6;--ink:#18251b;--muted:#536352;--line:#c8d3c1;--ctl-line:#76866f;--ctl-hov:#e4ebdd;
+  --sea:#a9d0de;--sea-ink:#24586a;--land:#a7b886;--land-edge:#5f7044;--lake:#a6cad6;--grid:rgba(25,60,45,.15);--halo:#f2f6ea;--chip:#ffffff;
+  --contour:rgba(52,72,22,.32);--contour-idx:rgba(42,62,16,.58);--elev:#33421c;--hill-op:.95;--bathy:rgba(20,70,90,.24);--bathy-strong:rgba(20,70,90,.36)}
+:root[data-palette="night"]{--bg:#060c17;--panel:#0c1524;--panel-2:#111c30;--ink:#e1e8f5;--muted:#8b98b1;--line:#1e2b42;--ctl-line:#56698e;--ctl-bg:#152137;--ctl-hov:#20304d;
+  --sea:#030d19;--sea-ink:#7ea8d6;--land:#27324a;--land-edge:#45557a;--lake:#0a1c33;--grid:rgba(140,170,230,.10);--halo:#1d2638;--chip:#132036;
+  --contour:rgba(170,190,235,.15);--contour-idx:rgba(185,205,245,.32);--elev:#dde5f5;--hill-op:.55;--bathy:rgba(120,165,230,.13);--bathy-strong:rgba(120,165,230,.22)}
+:root[data-palette="contrast"]{--bg:#f3f3f1;--panel:#ffffff;--panel-2:#f1f1ee;--ink:#000;--muted:#333;--line:#8c8c8c;--ctl-line:#2b2b2b;--ctl-bg:#fff;--ctl-hov:#e8e8e8;
+  --sea:#5f9fd2;--sea-ink:#0a2f57;--land:#fbf8ee;--land-edge:#1f1f1f;--lake:#7fb4e0;--grid:rgba(0,25,55,.28);--halo:#ffffff;--chip:#ffffff;
+  --contour:rgba(60,40,10,.42);--contour-idx:rgba(40,25,0,.75);--elev:#2a1c00;--hill-op:.65;--bathy:rgba(5,40,85,.32);--bathy-strong:rgba(5,40,85,.5)}
+.setrow.palrow{align-items:flex-start}.palgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:5px;flex:1}
+.palbtn{display:flex;align-items:center;gap:6px;border:1px solid var(--ctl-line);border-radius:6px;background:var(--ctl-bg);color:var(--ink);font:inherit;font-size:11.5px;padding:4px 7px;cursor:pointer;text-align:left}
+.palbtn[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:-1px}
+.palbtn i{flex:none;width:18px;height:12px;border-radius:3px;border:1px solid rgba(0,0,0,.35);background:linear-gradient(135deg,var(--a) 50%,var(--b) 50%)}
+.seg.dim{opacity:.45}
 </style></head>
 <body>
 <noscript><p style="padding:2em;font-family:sans-serif">Island Rail Planner needs JavaScript enabled.</p></noscript>
@@ -793,6 +812,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <div class="setmenu" id="setmenu" role="dialog" aria-label="Settings" hidden>
           <h4>Settings</h4>
           <div class="setrow"><span>Appearance</span><div class="seg" role="group" aria-label="Appearance" id="set-theme"><button type="button" data-th="system">System</button><button type="button" data-th="light">Light</button><button type="button" data-th="dark">Dark</button></div></div>
+          <div class="setrow palrow"><span>Colour theme</span><div class="palgrid" role="group" aria-label="Colour theme" id="set-pal"><button type="button" class="palbtn" data-pal="standard" aria-pressed="false"><i style="--a:#cbbd96;--b:#b3d3de"></i>Standard</button><button type="button" class="palbtn" data-pal="chart" aria-pressed="false"><i style="--a:#efd68a;--b:#d6eaf5"></i>Chart</button><button type="button" class="palbtn" data-pal="forest" aria-pressed="false"><i style="--a:#a7b886;--b:#a9d0de"></i>Forest</button><button type="button" class="palbtn" data-pal="night" aria-pressed="false"><i style="--a:#27324a;--b:#030d19"></i>Night</button><button type="button" class="palbtn" data-pal="contrast" aria-pressed="false"><i style="--a:#fbf8ee;--b:#5f9fd2"></i>High contrast</button></div></div>
           <label class="setexp"><input type="checkbox" id="set-exp"><span><b>Experimental mode</b><span class="m">Shows the planning tools: Timetable, Fleet, Stations, Track, Works and Plan panels. These are early and still changing.</span></span></label>
           <p class="m">Settings are remembered in this browser.</p>
         </div></div>
@@ -3974,10 +3994,13 @@ $('btn-reset').onclick=e=>{const b=e.currentTarget;if(b.dataset.armed){TRACKSPEC
   else{b.dataset.armed='1';b.textContent='Confirm reset (discards your edits)';setTimeout(()=>{if(b.isConnected&&b.dataset.armed){delete b.dataset.armed;b.textContent='Reset to starting timetable';}},4000);}};
 /* ---------- settings: appearance and experimental mode (remembered in this browser) ---------- */
 const THEME0=document.documentElement.getAttribute('data-theme');
-let SETTINGS={theme:'system',exp:false};try{Object.assign(SETTINGS,JSON.parse(localStorage.getItem('island-rail-settings')||'{}'));}catch(_){}
+let SETTINGS={theme:'system',palette:'standard',exp:false};try{Object.assign(SETTINGS,JSON.parse(localStorage.getItem('island-rail-settings')||'{}'));}catch(_){}
 let EXP=!!SETTINGS.exp;
 function saveSettings(){try{localStorage.setItem('island-rail-settings',JSON.stringify(SETTINGS));}catch(_){}}
-function applyTheme(){const r=document.documentElement,t=SETTINGS.theme;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);else if(THEME0)r.setAttribute('data-theme',THEME0);else r.removeAttribute('data-theme');
+const PAL_BASE={chart:'light',forest:'light',contrast:'light',night:'dark'};
+function applyTheme(){const r=document.documentElement,t=SETTINGS.theme,pal=PAL_BASE[SETTINGS.palette]?SETTINGS.palette:'standard';
+  if(pal!=='standard'){r.setAttribute('data-palette',pal);r.setAttribute('data-theme',PAL_BASE[pal]);}else{r.removeAttribute('data-palette');if(t==='light'||t==='dark')r.setAttribute('data-theme',t);else if(THEME0)r.setAttribute('data-theme',THEME0);else r.removeAttribute('data-theme');}
+  document.querySelectorAll('#set-pal [data-pal]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pal===pal)));const sg=$('set-theme');if(sg){sg.classList.toggle('dim',pal!=='standard');sg.title=pal!=='standard'?'Choose the Standard colour theme to switch between light and dark':'';}
   document.querySelectorAll('#set-theme [data-th]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.th===t)));
   if(typeof drawFlows==='function'&&$('flowlegend')&&!$('flowlegend').hidden)setTimeout(drawFlows,0);}
 function applyExp(){EXP=!!SETTINGS.exp;document.querySelector('.app').classList.toggle('basic',!EXP);$('set-exp').checked=EXP;
@@ -3988,7 +4011,8 @@ function needExp(){return EXP;}
   b.onclick=e=>{e.stopPropagation();open(m.hidden);};
   document.addEventListener('pointerdown',e=>{if(!m.hidden&&!m.contains(e.target)&&!b.contains(e.target))open(false);});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden){open(false);b.focus();}});
-  document.querySelectorAll('#set-theme [data-th]').forEach(x=>x.onclick=()=>{SETTINGS.theme=x.dataset.th;saveSettings();applyTheme();});
+  document.querySelectorAll('#set-theme [data-th]').forEach(x=>x.onclick=()=>{SETTINGS.theme=x.dataset.th;SETTINGS.palette='standard';saveSettings();applyTheme();});
+  document.querySelectorAll('#set-pal [data-pal]').forEach(x=>x.onclick=()=>{SETTINGS.palette=x.dataset.pal;saveSettings();applyTheme();});
   $('set-exp').onchange=e=>{SETTINGS.exp=e.target.checked;saveSettings();applyExp();toast('Settings',SETTINGS.exp?'Experimental mode on: planning panels are shown':'Experimental mode off: planning panels are hidden');};
   applyTheme();applyExp();})();
 function setSubtitle(){$('subtitle').textContent=(PRESETS[PLAN.preset]||PRESETS.data8).sub;$('tt-preset').value=PRESETS[PLAN.preset]?PLAN.preset:'data8';}
@@ -4621,7 +4645,7 @@ function mount(root){
  const redraw=()=>panels.forEach(req);
  new ResizeObserver(redraw).observe(root);
  matchMedia('(prefers-color-scheme: dark)').addEventListener('change',redraw);
- new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+ new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','data-palette']});
  document.fonts&&document.fonts.ready.then(redraw);
  redraw();return{redraw};
 }
