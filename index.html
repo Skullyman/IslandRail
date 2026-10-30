@@ -1047,7 +1047,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
           <li>Single track: a 12-minute service in both directions needs trains to pass every few minutes. That would require double track or several long passing loops between Victoria and Westhills, which this simulation does not model.</li>
           <li>Run times for new or changed trips use the track speeds chosen in the Track tab. The default is the 2003 E&amp;N track charts with speeds raised where the curves allow, up to 60 mph; the 2003 posted speeds and the earlier simple bands are the alternatives. Each train type's top speed still caps the result. The ICF and data-driven timetables keep the ICF running times unless you retime them.</li>
           <li>Trainsets turn around in 3 minutes and run empty to reposition when needed. Trains running in the same direction stay at least one signal block (1 km) apart and never overtake: a train that catches up waits at a signal and picks up the delay. The line is single track: before a train enters a single-track section, the dispatcher checks no opposing train is in it. Otherwise it waits at the siding, passing point or station track it is on. Whoever reaches the siding first holds there; on a tie, intercity trains go before regional trains, which go before commuter trains. Waiting through a siding adds about a minute for the switches. A meet needs a siding at least as long as the shorter train. Waits add to the train's delay and appear as Single-track meets.</li>
-          <li>Sidings: existing sidings come from OpenStreetMap (read 30 Oct 2026), with lengths measured from the track. Passing points with no siding mapped use an assumed 330 m. Each starting timetable adds the passing sidings or double track it needs as proposed works, wherever its trains meet away from an existing siding. Costs are order of magnitude: about $5.5M for a 1 km passing siding with turnouts and signals, plus $3.5M a further km, and about $5M a km of double track plus $2M for turnouts and signals (MnDOT Midwest Regional Rail cost methodology, 2010 US$, escalated to 2026 CAD).</li>
+          <li>Sidings: existing sidings come from OpenStreetMap (read 30 Oct 2026), with lengths measured from the track. Passing points with no siding mapped use an assumed 330 m. Each starting timetable adds the track it needs as proposed works, following normal railway practice: a passing siding wherever its trains meet away from an existing siding; double track where trains run every 20 minutes or more often each way and sidings would be less than 3 km apart, or where meets are spread along the line; major bridges and the Malahat Tunnel stay single track. Costs are order of magnitude: about $5.5M for a 1 km passing siding with turnouts and signals, plus $3.5M a further km, and about $5M a km of double track plus $2M for turnouts and signals (MnDOT Midwest Regional Rail cost methodology, 2010 US$, escalated to 2026 CAD).</li>
           <li>Highway traffic: BC Ministry of Transportation Traffic Data Program annual hourly day-of-week summaries (Monday–Friday averaged). Lane counts from OpenStreetMap; lane capacity assumed at 1,900 veh/h on freeway sections, 1,700 on highways with intersections, 1,400–1,500 on two-lane or arterial sections.</li>
           <li>Road congestion dots: on highways the dot colour comes from the measured hourly counts above (green under 40% of estimated capacity, yellow 40–60%, red over 60%). Highway counts now include the 2025 Colwood interchange station (P-11-6NS) and twelve 2025 MoTI short counts on Highways 1, 14, 17, 19 and 19A, so segments between permanent stations use the nearest measured count. Roads with a public count are coloured from it: City of Victoria Open Data traffic counts (2019–2026, one-way daily volumes, spread over the day with the urban weekday profile; nearby sections of the same street share the count) and MoTI 2025 short counts on the Comox Valley Parkway and Brechin Road. Measured roads use about 800 veh/h per lane at signals (green under 45%, yellow 45–75%, red over). Every other local and connector road has no public count (Saanich, Langford, Colwood and Nanaimo publish none), so its colour is a modelled estimate: the weekday hourly shape of the urban count stations × how much population lives within a few kilometres (2021 Census) × road class. Hover a road to see whether it is measured or modelled. MoTI's segment AADT layer was not used because its values date from 2012.</li>
           <li>Jobs: Statistics Canada 2021 Census, employed people by usual place of work (tables 98-10-0496 by census tract and 98-10-0495 by municipality); people who worked at home are listed but not placed on the map. Each tract's jobs are spread over its OpenStreetMap commercial, institutional and industrial land (weighted 1 : 0.6 : 0.4 per hectare). "Jobs within 800 m" counts that spread, so it is approximate. The 2021 Census ran during the pandemic, and 2026 place-of-work results are due in 2027.</li>
@@ -4164,7 +4164,7 @@ function tripSamples(tr,dt=.25){let o;try{o=prep(tr);}catch(_){return null;}cons
     const q=routeAt(o.route,s);out.push([q.line,q.k]);}
   const dirs={};for(const l of new Set(out.map(x=>x[0]))){const ks=out.filter(x=>x[0]===l);dirs[l]=Math.sign(ks[ks.length-1][1]-ks[0][1])||1;}
   return{t0:Math.ceil(o.dep/dt)*dt===o.dep?o.dep:o.dep,dt,pts:out,dirs,no:tr.no,cls:tr.cls};}
-function planMeets(trips){const dt=.25,S=[];for(const tr of trips){const x=tripSamples(tr,dt);if(x)S.push(x);}const M=[];
+function planMeets(trips,S0){const dt=.25,S=S0||[];if(!S0)for(const tr of trips){const x=tripSamples(tr,dt);if(x)S.push(x);}const M=[];
   for(let i=0;i<S.length;i++)for(let j=i+1;j<S.length;j++){const A=S[i],B=S[j];const a0=A.t0,a1=A.t0+(A.pts.length-1)*dt,b0=B.t0,b1=B.t0+(B.pts.length-1)*dt;
     const t0=Math.max(a0,b0),t1=Math.min(a1,b1);if(t1<=t0)continue;let prev=null;
     for(let tm=t0;tm<=t1+1e-6;tm+=dt){const pa=A.pts[Math.round((tm-a0)/dt)],pb=B.pts[Math.round((tm-b0)/dt)];if(!pa||!pb||pa[0]!==pb[0]||A.dirs[pa[0]]===B.dirs[pa[0]]){prev=null;continue;}
@@ -4172,16 +4172,52 @@ function planMeets(trips){const dt=.25,S=[];for(const tr of trips){const x=tripS
   return M;}
 function meetCovered(m,tol=.8){const p=(getPlaces()[m.line]||[]).find(p=>p.a-tol<=m.k&&m.k<=p.b+tol);return !!p;}
 // removes the sidings this tool added before, then adds what the plan's meets need; returns the works added
+// rules of thumb for adding track (normal railway practice):
+//  - a meet away from any siding gets a passing siding (2 km, or longer to cover a cluster of meets)
+//  - where trains run every 20 min or more often in each direction, sections closer than 3 km are joined into double track,
+//    and a cluster of meets longer than 2.5 km becomes double track (running meets)
+//  - elsewhere a cluster of meets spanning more than 4.5 km becomes double track
+//  - major bridges and the tunnel stay single track (short pinch points), as railways usually leave them
+const SID_RULE={len:2,joinKm:3,freqPerHr:3,dblSpanFreq:2.5,dblSpan:4.5,structBuf:.15};
+function singleTrackStructures(line){return INFRA.filter(s=>s.l===line&&(s.k==='h'||s.k==='t')&&s.s!=='removed').map(s=>({k:mpToK(line,s.m),n:s.n}));}
+// trains an hour in the quieter direction past km k, in the busiest hour of the day
+function trainsPerHour(S,line,k){const T={1:[],[-1]:[]};
+  for(const x of S){const d=x.dirs[line];if(!d)continue;for(let i=1;i<x.pts.length;i++){const p=x.pts[i-1],q=x.pts[i];if(p[0]!==line||q[0]!==line)continue;
+      if((p[1]-k)*(q[1]-k)<=0&&p[1]!==q[1]){T[d].push(x.t0+i*x.dt);break;}}}
+  const peak=a=>{a.sort((x,y)=>x-y);let best=0;for(let i=0,j=0;i<a.length;i++){while(a[i]-a[j]>=60)j++;best=Math.max(best,i-j+1);}return best;};
+  return Math.min(peak(T[1]),peak(T[-1]));}
+// removes the sidings this tool added before, then adds what the plan's meets need; returns the works added
 function autoSidings(plan,quiet){plan=plan||PLAN;TRACKSPEC.works=(TRACKSPEC.works||[]).filter(w=>w.project!=='auto');PLACES=null;
-  const meets=planMeets(plan.trips||[]),need=meets.filter(m=>!meetCovered(m)),added=[];
+  const S=[];for(const tr of plan.trips||[]){const x=tripSamples(tr,.25);if(x)S.push(x);}
+  const meets=planMeets(plan.trips||[],S),need=meets.filter(m=>!meetCovered(m)),R=SID_RULE,secs=[];
+  const freq=(line,k)=>trainsPerHour(S,line,k)>=R.freqPerHr;
   for(const line of Object.keys(LINES)){const ks=need.filter(m=>m.line===line).sort((x,y)=>x.k-y.k);let cl=null;const C=[];
     for(const m of ks){if(cl&&m.k-cl.b<=2.5){cl.b=m.k;cl.n++;}else{cl={a:m.k,b:m.k,n:1};C.push(cl);}}
-    for(const c of C){let a=c.a-1,b=c.b+1;const dbl=b-a>4.5||c.n>=25;if(dbl&&b-a<4){a-=(4-(b-a))/2;b=a+4;}const max=lineMax(line);a=Math.max(0,a);b=Math.min(max,b);if(b-a<1)continue;
-      const near=s=>{let best=null,bd=1e9;for(const st of Object.values(STATIONS)){if(st.line!==line)continue;const d=Math.abs(st.k-(a+b)/2);if(d<bd){bd=d;best=st;}}return best?best.n:'the line';};
-      const type=dbl?'double':'siding',ma=+kToMP(line,a).toFixed(2),mb=+kToMP(line,b).toFixed(2);
-      const w={id:newWorkId(),type,line,a:ma,b:mb,name:(dbl?'Double track near ':'Passing siding near ')+near(),status:'proposed',cost:track2Cost(type,line,ma,mb),
-        notes:`Added for the ${(PRESETS[plan.preset]||{name:'current'}).name} timetable: ${c.n} scheduled meet${c.n>1?'s':''} between opposing trains fall here, away from any existing siding.`,project:'auto',on:true};
-      TRACKSPEC.works.push(w);added.push(w);}}
+    for(const c of C){const span=c.b-c.a,f=freq(line,(c.a+c.b)/2);let a=c.a-R.len/2,b=c.b+R.len/2;
+      const dbl=span>R.dblSpan||(f&&span>R.dblSpanFreq);secs.push({line,a,b,type:dbl?'double':'siding',n:c.n,why:dbl?(f?'running meets on a frequent service':'a long cluster of meets'):'meets away from any siding'});}}
+  // join sections (new or existing sidings, terminals) less than 3 km apart where service is frequent
+  for(const line of Object.keys(LINES)){let changed=true,guard=0;
+    while(changed&&guard++<50){changed=false;
+      const all=[...(getPlaces()[line]||[]).map(p=>({a:p.a,b:p.b,lbl:p.n,old:true,term:p.kind==='term'})),...secs.filter(s=>s.line===line).map(s=>({...s,lbl:s.type==='double'?'double track':'a new siding',ref:s}))].sort((x,y)=>x.a-y.a);
+      for(let i=1;i<all.length;i++)if(all[i].a<=all[i-1].b+.01){const p=all[i-1],q=all[i];all[i-1]={a:p.a,b:Math.max(p.b,q.b),lbl:q.b>p.b?(q.term?q.lbl:p.lbl):p.lbl,term:q.b>p.b?q.term:p.term,old:p.old&&q.old};all.splice(i,1);i--;}
+      for(let i=1;i<all.length;i++){const p=all[i-1],q=all[i];const gap=q.a-p.b;if(gap<=0||gap>=R.joinKm)continue;if(!freq(line,(p.b+q.a)/2))continue;
+        // only where trains actually meet on this stretch
+        if(!meets.some(m=>m.line===line&&m.k>=p.a-.5&&m.k<=q.b+.5))continue;
+        const s={line,a:p.term?p.b-.05:p.a,b:q.term?q.a+.05:q.b,type:'double',n:0,why:`joins ${p.lbl} and ${q.lbl}: trains every 20 min or more often, ${gap.toFixed(1)} km of single track between them`};
+        for(const x of secs)if(x.line===line&&x.a<=s.b+.01&&x.b>=s.a-.01){s.a=Math.min(s.a,x.a);s.b=Math.max(s.b,x.b);s.n+=x.n;x.dead=true;if(x.type==='double'&&/^joins|^double track/.test(x.why))s.why='double track: trains every 20 min or more often each way, with sidings less than 3 km apart';}
+        for(let k=secs.length-1;k>=0;k--)if(secs[k].dead)secs.splice(k,1);secs.push(s);changed=true;break;}}}
+  // keep major bridges and the tunnel single track
+  const out=[];for(const s of secs){let parts=[[s.a,s.b]];
+    for(const st of singleTrackStructures(s.line)){const lo=st.k-R.structBuf,hi=st.k+R.structBuf;parts=parts.flatMap(([a,b])=>hi<=a||lo>=b?[[a,b]]:[[a,lo],[hi,b]].filter(([x,y])=>y-x>.3));
+      if(st.k>s.a&&st.k<s.b)s.pinch=(s.pinch||[]).concat(st.n);}
+    for(const [a,b] of parts)out.push({...s,a,b});}
+  const added=[];
+  for(const s of out){const max=lineMax(s.line);const a=Math.max(0,s.a),b=Math.min(max,s.b);if(b-a<.3)continue;const line=s.line;
+    const near=(k=(a+b)/2)=>{let best=null,bd=1e9;for(const st of Object.values(STATIONS)){if(st.line!==line)continue;const d=Math.abs(st.k-k);if(d<bd){bd=d;best=st;}}return best?best.n:'the line';};
+    const type=s.type==='double'||b-a>R.dblSpan?'double':'siding',ma=+kToMP(line,a).toFixed(2),mb=+kToMP(line,b).toFixed(2);
+    const w={id:newWorkId(),type,line,a:ma,b:mb,name:type==='double'&&b-a>5&&near(a)!==near(b)?`Double track, ${near(a)}–${near(b)}`:(type==='double'?'Double track near ':'Passing siding near ')+near(),status:'proposed',cost:track2Cost(type,line,ma,mb),
+      notes:`Added for the ${(PRESETS[plan.preset]||{name:'current'}).name} timetable: ${s.why}${s.n?` (${s.n} scheduled meet${s.n>1?'s':''} a day)`:''}.`+(s.pinch?` ${s.pinch.join(' and ')} stay${s.pinch.length>1?'':'s'} single track.`:''),project:'auto',on:true};
+    TRACKSPEC.works.push(w);added.push(w);}
   PLACES=null;plan.autoSid=true;if(!quiet&&typeof drawSidings==='function')drawSidings();return{added,meets:meets.length,uncovered:need.length};}
 
 /* ---------- sidings and double track on the map: a thin second line beside the main line ---------- */
