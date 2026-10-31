@@ -840,7 +840,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <div class="setmenu" id="setmenu" role="dialog" aria-label="Settings" hidden>
           <h4>Settings</h4>
           <button type="button" class="hcbtn" id="set-hc" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg><span><b>High contrast</b><span class="m" id="set-hc-m">Off: tap to turn on</span></span></button>
-          <div class="setrow palrow"><span>Colour theme</span><div class="palsel"><i aria-hidden="true"></i><select id="set-pal" aria-label="Colour theme"><option value="standard">Standard</option><option value="chart">Chart</option><option value="forest">Forest</option><option value="night">Night (dark)</option><option value="contrast">High contrast</option><option value="vibrant">Vibrant</option><option value="sunset">Sunset (dark)</option><option value="arctic">Arctic</option><option value="graphite">Graphite (dark)</option></select></div></div>
+          <div class="setrow palrow"><span>Colour theme</span><div class="palsel"><i aria-hidden="true"></i><select id="set-pal" aria-label="Colour theme"><option value="standard">Standard</option><option value="chart">Chart (default)</option><option value="forest">Forest</option><option value="night">Night (dark)</option><option value="contrast">High contrast</option><option value="vibrant">Vibrant</option><option value="sunset">Sunset (dark)</option><option value="arctic">Arctic</option><option value="graphite">Graphite (dark)</option></select></div></div>
           <label class="setexp"><input type="checkbox" id="set-exp"><span><b>Experimental mode</b><span class="m">Shows the planning tools: Timetable, Fleet, Stations, Track, Works and Plan panels. These are early and still changing.</span></span></label>
           <div class="sharebox"><div><b>Share this view</b><span class="m">Saves the layers, colour theme, map position and clock, plus the timetable, fleet, stations, track changes and works, as a short link. Nothing is saved until you create a link, and no personal information is stored.</span></div><button type="button" class="btn" id="share-make">Create share link</button><div class="shareout" id="share-out" hidden><input id="share-url" readonly aria-label="Share link"><button type="button" class="btn" id="share-copy">Copy</button></div><div class="m" id="share-msg" role="status"></div></div>
           <p class="m">Settings are remembered in this browser.</p>
@@ -4183,7 +4183,9 @@ $('btn-reset').onclick=e=>{const b=e.currentTarget;if(b.dataset.armed){TRACKSPEC
   else{b.dataset.armed='1';b.textContent='Confirm reset (discards your edits)';setTimeout(()=>{if(b.isConnected&&b.dataset.armed){delete b.dataset.armed;b.textContent='Reset to starting timetable';}},4000);}};
 /* ---------- settings: appearance and experimental mode (remembered in this browser) ---------- */
 const THEME0=document.documentElement.getAttribute('data-theme');
-let SETTINGS={theme:'system',palette:'standard',prevPalette:'standard',exp:false};try{Object.assign(SETTINGS,JSON.parse(localStorage.getItem('island-rail-settings')||'{}'));}catch(_){}
+let SETTINGS={theme:'system',palette:'chart',prevPalette:'chart',exp:false};try{Object.assign(SETTINGS,JSON.parse(localStorage.getItem('island-rail-settings')||'{}'));}catch(_){}
+// v101: Chart is the default colour theme; move anyone still on the old default to it once (high contrast is kept)
+if(SETTINGS.palV!==2){if(SETTINGS.palette==='standard')SETTINGS.palette='chart';if(!SETTINGS.prevPalette||SETTINGS.prevPalette==='standard')SETTINGS.prevPalette='chart';SETTINGS.palV=2;try{localStorage.setItem('island-rail-settings',JSON.stringify(SETTINGS));}catch(_){}}
 let EXP=!!SETTINGS.exp;
 function saveSettings(){try{localStorage.setItem('island-rail-settings',JSON.stringify(SETTINGS));}catch(_){}}
 const PAL_BASE={chart:'light',forest:'light',contrast:'light',night:'dark',vibrant:'light',arctic:'light',sunset:'dark',graphite:'dark'};
@@ -4199,7 +4201,7 @@ function needExp(){return EXP;}
   b.onclick=e=>{e.stopPropagation();open(m.hidden);};
   document.addEventListener('pointerdown',e=>{if(!m.hidden&&!m.contains(e.target)&&!b.contains(e.target))open(false);});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden){open(false);b.focus();}});
-  $('set-hc').onclick=()=>{if(SETTINGS.palette==='contrast')SETTINGS.palette=SETTINGS.prevPalette&&SETTINGS.prevPalette!=='contrast'?SETTINGS.prevPalette:'standard';else{SETTINGS.prevPalette=SETTINGS.palette||'standard';SETTINGS.palette='contrast';}saveSettings();applyTheme();};
+  $('set-hc').onclick=()=>{if(SETTINGS.palette==='contrast')SETTINGS.palette=SETTINGS.prevPalette&&SETTINGS.prevPalette!=='contrast'?SETTINGS.prevPalette:'chart';else{SETTINGS.prevPalette=SETTINGS.palette||'standard';SETTINGS.palette='contrast';}saveSettings();applyTheme();};
   $('set-pal').onchange=e=>{SETTINGS.palette=e.target.value;if(e.target.value!=='contrast')SETTINGS.prevPalette=e.target.value;saveSettings();applyTheme();};
   $('set-exp').onchange=e=>{SETTINGS.exp=e.target.checked;saveSettings();applyExp();toast('Settings',SETTINGS.exp?'Experimental mode on: planning panels are shown':'Experimental mode off: planning panels are hidden');};
   applyTheme();applyExp();})();
