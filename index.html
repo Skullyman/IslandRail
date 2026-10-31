@@ -494,7 +494,7 @@ svg.picking{cursor:crosshair}
  .train.late .th-ghost{animation:thBob 2.2s ease-in-out infinite}}
 @keyframes thTwinkle{0%,100%{opacity:1}50%{opacity:.25}}
 @keyframes thBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-.busdot{fill:none;stroke:var(--bus);stroke-width:var(--busdot,6px);stroke-linecap:round;pointer-events:none;paint-order:stroke}
+.busdot{fill:none;stroke:#004B8D;stroke-width:var(--busdot,6px);stroke-linecap:round;pointer-events:none;paint-order:stroke}
 .buslegend{max-width:262px}.buslbl text{font-family:var(--body);font-weight:700;fill:var(--ink);text-anchor:middle;paint-order:stroke;stroke:var(--halo);stroke-linejoin:round;pointer-events:none}
 .busno{display:inline-block;min-width:22px;padding:1px 6px;border-radius:4px;color:#fff;font-weight:700;text-align:center;text-shadow:0 0 2px rgba(0,0,0,.5)}.bsys{display:flex;flex-wrap:wrap;gap:2px 10px;font-size:11px;color:var(--muted)}.bsys b{color:var(--ink)}#bstats,#bconn{display:grid;gap:4px}
 .fgenbg{fill:var(--chip);stroke:var(--job);stroke-width:1.5;cursor:help}.fgenic{fill:none;stroke:var(--job);stroke-width:1.2;stroke-linejoin:round;pointer-events:none}
@@ -813,7 +813,10 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
 .palbtn[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:-1px}
 .palbtn i{flex:none;width:18px;height:12px;border-radius:3px;border:1px solid rgba(0,0,0,.35);background:linear-gradient(135deg,var(--a) 50%,var(--b) 50%)}
 .seg.dim{opacity:.45}
-.sidings .sidp.assumed .rail,.sidings .sidp.disused .rail{opacity:.45}.sidings .sid.assumed .sleepers,.sidings .sid.disused .sleepers{opacity:.5}.svctracks .rail{opacity:.9}.svctracks .spur .rail{opacity:.75}.svctracks .dis .rail{opacity:.4}.svctracks .svc{cursor:help}.svctracks .sidhit{fill:none;stroke:transparent;pointer-events:stroke}svg.zo .svctracks{display:none}.sidings .sidhit{fill:none;stroke:transparent;pointer-events:stroke}.sidings .sid{cursor:help}.sidings .sidp:hover .rail{stroke-width:3.6px}.sidings .sidp{cursor:help}svg.tsmall .train:not(.sel) .tnum{display:none}</style></head>
+.sidings .sidp.assumed .rail,.sidings .sidp.disused .rail{opacity:.45}.sidings .sid.assumed .sleepers,.sidings .sid.disused .sleepers{opacity:.5}.svctracks .rail{opacity:.9}.svctracks .spur .rail{opacity:.75}.svctracks .dis .rail{opacity:.4}.svctracks .svc{cursor:help}.svctracks .sidhit{fill:none;stroke:transparent;pointer-events:stroke}svg.zo .svctracks{display:none}.sidings .sidhit{fill:none;stroke:transparent;pointer-events:stroke}.sidings .sid{cursor:help}.sidings .sidp:hover .rail{stroke-width:3.6px}.sidings .sidp{cursor:help}svg.tsmall .train:not(.sel) .tnum{display:none}.zoomsl{position:absolute;left:10px;bottom:40px;display:flex;align-items:center;gap:6px;background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:4px 6px;box-shadow:0 1px 3px rgba(0,0,0,.12);z-index:3}
+.zoomsl input{width:140px;accent-color:var(--rail);margin:0}.zoomsl button{width:22px;height:22px;border-radius:5px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:600 15px/1 var(--body);cursor:pointer;padding:0}
+.zoomsl button:hover{background:var(--ctl-hov,var(--line))}@media (max-width:560px){.zoomsl input{width:96px}}
+</style></head>
 <body>
 <noscript><p style="padding:2em;font-family:sans-serif">Island Rail Planner needs JavaScript enabled.</p></noscript>
 
@@ -987,7 +990,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <div>Showing <b id="t-hour">—</b>. Sparser, faster dots mean freer-flowing traffic.</div>
         <div class="m">Hover a ◆ station for both directions and its daily profile.</div>
         <div class="m" id="t-enn" hidden>Includes the drivers the Travel flows layer moves to the train (With E&amp;N).</div></div>
-      <div class="lchips" id="lchips" hidden aria-label="Layers on the map"></div><div class="scale" id="scale"><span id="scale-t">20 km</span><i id="scale-b" style="width:100px"></i></div>
+      <div class="lchips" id="lchips" hidden aria-label="Layers on the map"></div><div class="zoomsl"><button type="button" id="zs-out" aria-label="Zoom out">−</button><input type="range" id="zoomsl" min="0" max="100" step="0.5" value="0" aria-label="Zoom"><button type="button" id="zs-in" aria-label="Zoom in">+</button></div><div class="scale" id="scale"><span id="scale-t">20 km</span><i id="scale-b" style="width:100px"></i></div>
       <div class="credit">Map data © OpenStreetMap contributors (ODbL). Elevation and hillshade: AWS Terrain Tiles (Mapzen terrarium). Population: Statistics Canada 2021 Census, grown to 2024 with BC Stats estimates. Jobs: Statistics Canada 2021 Census. Traffic counts: BC MoTI, City of Victoria. Commuting: Statistics Canada 2021 Census. Travel survey: CRD 2022 Origin-Destination Household Travel Survey. Bus schedules: BC Transit GTFS. Sailings and ferry traffic: BC Ferries. UVic and airport traffic figures. Riders and buses are simulated.</div>
       <div class="toasts" id="toasts" aria-live="polite"></div>
       <div class="tip" id="tip" hidden></div>
@@ -4502,10 +4505,10 @@ let hbPaths=null,hbTick=0;const thBus={key:''};
 /* Buses are drawn as fixed, pre-drawn symbols placed at each bus and scaled to the zoom, so they stay sharp at any zoom.
    One symbol per look; a pool of <use> elements is reused frame to frame and only buses in view are drawn. */
 const BSYM_SRC={
- bus:`<rect x="-7" y="-7" width="14" height="14" rx="3.5" fill="var(--bus)" stroke="#fff" stroke-width="1.1"/>
-  <path d="M-3.9 -2.9Q-3.9 -5.1 -1.7 -5.1H1.7Q3.9 -5.1 3.9 -2.9V3Q3.9 3.9 3 3.9H-3Q-3.9 3.9 -3.9 3Z" fill="#fff"/>
-  <path d="M-2.9 -3.6H2.9V-.5H-2.9Z" fill="var(--bus)"/><circle cx="-2.1" cy="1.9" r=".75" fill="var(--bus)"/><circle cx="2.1" cy="1.9" r=".75" fill="var(--bus)"/>
-  <path d="M-3.3 3.9V5.4H-1.7V3.9ZM1.7 3.9V5.4H3.3V3.9Z" fill="#fff"/>`,
+ bus:`<rect x="-6" y="-6" width="12" height="12" rx="3" fill="#004B8D" stroke="#fff" stroke-width="1"/>
+  <path d="M-5.5 2.6H5.5V3Q5.5 5.5 3 5.5H-3Q-5.5 5.5 -5.5 3Z" fill="#54B848"/>
+  <path d="M-3.3 -2.6Q-3.3 -4.4 -1.5 -4.4H1.5Q3.3 -4.4 3.3 -2.6V2.4Q3.3 3.1 2.6 3.1H-2.6Q-3.3 3.1 -3.3 2.4Z" fill="#fff"/>
+  <path d="M-2.45 -3.1H2.45V-.5H-2.45Z" fill="#004B8D"/><circle cx="-1.8" cy="1.5" r=".62" fill="#54B848"/><circle cx="1.8" cy="1.5" r=".62" fill="#54B848"/>`,
  witch:`<path d="M-9 3.2L7.5 .6" stroke="#7c4a21" stroke-width="1.3" stroke-linecap="round"/><path d="M-8.6 3.1L-12.6 .8-12 3.4-12.8 5.6Z" fill="#d6a85a" stroke="#8a5a1f" stroke-width=".5"/>
   <path d="M-4.6 2.6Q-6.6 -.6 -4.4 -2.6L-1.4 -3.6Q.4 -.6 2.6 2.2Z" fill="#6d28d9" stroke="#2e1065" stroke-width=".5"/><path d="M-2.4 -3.2Q-6.4 -3.6 -7.6 -1Q-5 -1.6 -3.6 -1Z" fill="#4c1d95"/>
   <circle cx="0" cy="-5.2" r="1.9" fill="#86efac" stroke="#166534" stroke-width=".4"/><path d="M1.8 -5.3L3.2 -4.6 1.7 -4.4Z" fill="#86efac"/>
@@ -4528,9 +4531,9 @@ const BSYM_FOR={halloween:'witch',winter:'elf',valentine:'heart',stpatrick:'clov
 const busUse=[];
 function thBusHide(from=0){for(let i=from;i<busUse.length;i++)if(busUse[i].style.display!=='none')busUse[i].style.display='none';}
 function thBusDraw(pos){if(hbPaths)for(const p of hbPaths)p.setAttribute('d','');
-  const zoomed=PX_PER_KM*ppu>=18;const sym=BSYM_FOR[HOL]||(zoomed?'bus':null);
+  const zoomed=PX_PER_KM*ppu>=32;/* bus badges from about the Greater Victoria view inward; dots further out */const sym=BSYM_FOR[HOL]||(zoomed?'bus':null);
   if(!sym){thBusHide();thBus.key='';return false;}
-  const pxkm=PX_PER_KM*ppu,now=performance.now(),moving=speed&&!holReduce(),s=(sym==='bus'?Math.max(.7,Math.min(1.15,Math.sqrt(pxkm/60))):1)/ppu;// bus badges grow as you zoom in
+  const pxkm=PX_PER_KM*ppu,now=performance.now(),moving=speed&&!holReduce(),s=(sym==='bus'?Math.max(.7,Math.min(1.1,Math.sqrt(pxkm/80))):1)/ppu;// bus badges grow as you zoom in
   // redraw at most ~25 times a second, or at once after a zoom, pan or theme change
   const key=sym+'|'+ppu.toFixed(4)+'|'+pos.length+'|'+vb.x.toFixed(0)+'|'+vb.y.toFixed(0);if(now-hbTick<40&&key===thBus.key)return true;hbTick=now;thBus.key=key;
   const mx=vb.w*.05,x0=vb.x-mx,x1=vb.x+vb.w+mx,y0=vb.y-mx,y1=vb.y+vb.h+mx;let n=0;
@@ -4909,7 +4912,15 @@ function idleLanes(){const by={};for(const t of trains)if(!t.trip&&t.at)(by[t.at
 // train markers shrink as you zoom out so they overlap less: full size when zoomed in, 45% when the whole corridor or Island is shown;
 // trip numbers show only once the markers are at least 60% size (the selected train stays large enough to read)
 var TRAIN_SC=1;function trainScale(){const z=800/vb.w;TRAIN_SC=Math.max(.45,Math.min(1,Math.sqrt(z/3.5)));svg.classList.toggle('tsmall',TRAIN_SC<.6);
-  svg.style.setProperty('--busdot',Math.max(2.5,Math.min(6,PX_PER_KM*ppu/3)).toFixed(1)+'px');}// bus dots: 2.5 px zoomed right out, 6 px when close
+  svg.style.setProperty('--busdot',Math.max(2.5,Math.min(5,PX_PER_KM*ppu/5)).toFixed(1)+'px');if(typeof zsSync==='function')zsSync();}// bus dots: 2.5 px zoomed right out, 6 px when close
+
+/* zoom slider (lower left): log scale from the whole Island out to street level; zooms about the map centre */
+var ZS_MIN=8,ZS_MAX=3300;
+function zsFromW(w){return 100*Math.log(ZS_MAX/w)/Math.log(ZS_MAX/ZS_MIN);}
+function zsSync(){const s=$('zoomsl');if(s&&ZS_MIN&&document.activeElement!==s)s.value=Math.max(0,Math.min(100,zsFromW(vb.w))).toFixed(1);}
+{const s=$('zoomsl');const go=w=>{const r=wrap.getBoundingClientRect();zoomAt(vb.w/w,r.left+r.width/2,r.top+r.height/2);};
+ s.addEventListener('input',()=>go(ZS_MAX*Math.pow(ZS_MIN/ZS_MAX,+s.value/100)));
+ $('zs-in').onclick=()=>go(vb.w/1.6);$('zs-out').onclick=()=>go(vb.w*1.6);zsSync();}
 function frame(now){
   const dt=Math.min(.1,(now-lastT)/1000);lastT=now;
   if(speed){let m=dt*speed;while(m>0){const d=Math.min(m,.25);step(d);m-=d;}}
