@@ -494,7 +494,7 @@ svg.picking{cursor:crosshair}
  .train.late .th-ghost{animation:thBob 2.2s ease-in-out infinite}}
 @keyframes thTwinkle{0%,100%{opacity:1}50%{opacity:.25}}
 @keyframes thBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-.busdot{fill:none;stroke:var(--bus);stroke-width:6px;stroke-linecap:round;pointer-events:none;paint-order:stroke}
+.busdot{fill:none;stroke:var(--bus);stroke-width:var(--busdot,6px);stroke-linecap:round;pointer-events:none;paint-order:stroke}
 .buslegend{max-width:262px}.buslbl text{font-family:var(--body);font-weight:700;fill:var(--ink);text-anchor:middle;paint-order:stroke;stroke:var(--halo);stroke-linejoin:round;pointer-events:none}
 .busno{display:inline-block;min-width:22px;padding:1px 6px;border-radius:4px;color:#fff;font-weight:700;text-align:center;text-shadow:0 0 2px rgba(0,0,0,.5)}.bsys{display:flex;flex-wrap:wrap;gap:2px 10px;font-size:11px;color:var(--muted)}.bsys b{color:var(--ink)}#bstats,#bconn{display:grid;gap:4px}
 .fgenbg{fill:var(--chip);stroke:var(--job);stroke-width:1.5;cursor:help}.fgenic{fill:none;stroke:var(--job);stroke-width:1.2;stroke-linejoin:round;pointer-events:none}
@@ -4502,8 +4502,10 @@ let hbPaths=null,hbTick=0;const thBus={key:''};
 /* Buses are drawn as fixed, pre-drawn symbols placed at each bus and scaled to the zoom, so they stay sharp at any zoom.
    One symbol per look; a pool of <use> elements is reused frame to frame and only buses in view are drawn. */
 const BSYM_SRC={
- bus:`<path d="M-5.2 -5Q-5.2 -6.7 -3.5 -6.7H3.5Q5.2 -6.7 5.2 -5V4.2H-5.2Z" fill="var(--bus)" stroke="#fff" stroke-width=".9"/><path d="M-4 -5.3H4V-1H-4Z" fill="#fff"/>
-  <circle cx="-3" cy="1.8" r=".85" fill="#fff"/><circle cx="3" cy="1.8" r=".85" fill="#fff"/><path d="M-4.4 4.2h2.4v2h-2.4zM2 4.2h2.4v2h-2.4z" fill="#1f2937"/>`,
+ bus:`<rect x="-7" y="-7" width="14" height="14" rx="3.5" fill="var(--bus)" stroke="#fff" stroke-width="1.1"/>
+  <path d="M-3.9 -2.9Q-3.9 -5.1 -1.7 -5.1H1.7Q3.9 -5.1 3.9 -2.9V3Q3.9 3.9 3 3.9H-3Q-3.9 3.9 -3.9 3Z" fill="#fff"/>
+  <path d="M-2.9 -3.6H2.9V-.5H-2.9Z" fill="var(--bus)"/><circle cx="-2.1" cy="1.9" r=".75" fill="var(--bus)"/><circle cx="2.1" cy="1.9" r=".75" fill="var(--bus)"/>
+  <path d="M-3.3 3.9V5.4H-1.7V3.9ZM1.7 3.9V5.4H3.3V3.9Z" fill="#fff"/>`,
  witch:`<path d="M-9 3.2L7.5 .6" stroke="#7c4a21" stroke-width="1.3" stroke-linecap="round"/><path d="M-8.6 3.1L-12.6 .8-12 3.4-12.8 5.6Z" fill="#d6a85a" stroke="#8a5a1f" stroke-width=".5"/>
   <path d="M-4.6 2.6Q-6.6 -.6 -4.4 -2.6L-1.4 -3.6Q.4 -.6 2.6 2.2Z" fill="#6d28d9" stroke="#2e1065" stroke-width=".5"/><path d="M-2.4 -3.2Q-6.4 -3.6 -7.6 -1Q-5 -1.6 -3.6 -1Z" fill="#4c1d95"/>
   <circle cx="0" cy="-5.2" r="1.9" fill="#86efac" stroke="#166534" stroke-width=".4"/><path d="M1.8 -5.3L3.2 -4.6 1.7 -4.4Z" fill="#86efac"/>
@@ -4528,7 +4530,7 @@ function thBusHide(from=0){for(let i=from;i<busUse.length;i++)if(busUse[i].style
 function thBusDraw(pos){if(hbPaths)for(const p of hbPaths)p.setAttribute('d','');
   const zoomed=PX_PER_KM*ppu>=18;const sym=BSYM_FOR[HOL]||(zoomed?'bus':null);
   if(!sym){thBusHide();thBus.key='';return false;}
-  const now=performance.now(),moving=speed&&!holReduce(),s=1/ppu;
+  const pxkm=PX_PER_KM*ppu,now=performance.now(),moving=speed&&!holReduce(),s=(sym==='bus'?Math.max(.7,Math.min(1.15,Math.sqrt(pxkm/60))):1)/ppu;// bus badges grow as you zoom in
   // redraw at most ~25 times a second, or at once after a zoom, pan or theme change
   const key=sym+'|'+ppu.toFixed(4)+'|'+pos.length+'|'+vb.x.toFixed(0)+'|'+vb.y.toFixed(0);if(now-hbTick<40&&key===thBus.key)return true;hbTick=now;thBus.key=key;
   const mx=vb.w*.05,x0=vb.x-mx,x1=vb.x+vb.w+mx,y0=vb.y-mx,y1=vb.y+vb.h+mx;let n=0;
@@ -4906,7 +4908,8 @@ function idleLanes(){const by={};for(const t of trains)if(!t.trip&&t.at)(by[t.at
   return out;}
 // train markers shrink as you zoom out so they overlap less: full size when zoomed in, 45% when the whole corridor or Island is shown;
 // trip numbers show only once the markers are at least 60% size (the selected train stays large enough to read)
-var TRAIN_SC=1;function trainScale(){const z=800/vb.w;TRAIN_SC=Math.max(.45,Math.min(1,Math.sqrt(z/3.5)));svg.classList.toggle('tsmall',TRAIN_SC<.6);}
+var TRAIN_SC=1;function trainScale(){const z=800/vb.w;TRAIN_SC=Math.max(.45,Math.min(1,Math.sqrt(z/3.5)));svg.classList.toggle('tsmall',TRAIN_SC<.6);
+  svg.style.setProperty('--busdot',Math.max(2.5,Math.min(6,PX_PER_KM*ppu/3)).toFixed(1)+'px');}// bus dots: 2.5 px zoomed right out, 6 px when close
 function frame(now){
   const dt=Math.min(.1,(now-lastT)/1000);lastT=now;
   if(speed){let m=dt*speed;while(m>0){const d=Math.min(m,.25);step(d);m-=d;}}
