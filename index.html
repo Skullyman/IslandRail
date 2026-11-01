@@ -253,7 +253,7 @@ svg.picking{cursor:crosshair}
 .infra{cursor:pointer}.infrabg{fill:var(--chip);stroke:var(--ink);stroke-width:1.2}.infra.kh .infrabg{fill:var(--ink)}.infra.kh .infraico{fill:var(--chip)}.infra.kt .infrabg{fill:#5b4a8a;stroke:#fff}.infra.kt .infraico{fill:#fff}.infra.kr .infrabg{stroke:var(--muted)}
 .infraico{font-size:9px;font-weight:700;fill:var(--ink);pointer-events:none}.infra.bad .infrabg{fill:#c62828;stroke:#fff;stroke-width:1.6}.infra.bad .infraico{fill:#fff;font-size:11px}.infra.fixed .infrabg{fill:var(--ok)}
 .infralbl{font-family:var(--body);font-size:10px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px;pointer-events:none}.infralbl.bad{fill:#c62828;font-weight:700}
-.gapseg{fill:none;stroke:#c62828;stroke-width:9;stroke-dasharray:3 4}.gapseg.fixed{stroke:var(--ok)}
+.gapseg{fill:none;stroke:#c62828;stroke-width:9;stroke-dasharray:3 4}.gapseg.consent{stroke-opacity:.75}.gapseg.fixed{stroke:var(--ok)}
 .infrasum{display:grid;gap:4px;margin-top:6px;border-top:1px solid var(--line);padding-top:8px}.probrow{display:grid;grid-template-columns:16px 1fr auto;gap:6px;align-items:center;font-size:12px}.badt{color:#c62828;font-weight:700}.okt{color:var(--ok);font-weight:700}
 .spdwarn{color:var(--warn);font-size:12px;margin:0}.spdbox p{margin:0}
 .route-hi{fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:.2}
@@ -2095,7 +2095,7 @@ const HSEG=[];
 function hwModelBand(){return 0;}// rural stretches with no count: free-flowing
 for(const seg of TSEG){if(!seg.s||seg.pts.length<2)continue;seg.el=el('polyline',{points:seg.pts.map(P).map(q=>q.map(v=>v.toFixed(1)).join(',')).join(' '),class:'tseg','vector-effect':'non-scaling-stroke'},tLayer);}
 for(const s of TST){const g=scg(s.xy[0],s.xy[1],tLayer,0);s.mk=el('rect',s.short?{x:-3.6,y:-3.6,width:7.2,height:7.2,rx:1.5,transform:'rotate(45)',class:'tstn short'}:{x:-5,y:-5,width:10,height:10,rx:2,transform:'rotate(45)',class:'tstn'},g);
-  s.mk.addEventListener('pointerenter',e=>showTrafficTip(s,e));s.mk.addEventListener('pointerleave',()=>{if(!tipPinned)$('tip').hidden=true;});
+  s.mk.addEventListener('pointerenter',e=>{if(!tipPinned)showTrafficTip(s,e);});s.mk.addEventListener('pointerleave',()=>{if(!tipPinned)$('tip').hidden=true;});
   s.mk.addEventListener('click',e=>{e.stopPropagation();tipPinned=s;showTrafficTip(s,e);});}
 const hourVal=(arr,m)=>{const h=((m/60)%24+24)%24,i=Math.floor(h),f=h-i;return arr[i]*(1-f)+arr[(i+1)%24]*f;};
 function tIndex(s,m){return Math.max(hourVal(s.P,m),hourVal(s.N,m))/s.cap*(s.relief??1);}
@@ -2853,13 +2853,14 @@ const resLineNm={MAIN:'Victoria–Courtenay line',ALB:'Port Alberni line'};
 function resTip(r){const km=resKm(r);let h=`<h4>${r.nat.length?esc(r.nat.join(' · ')):'First Nation reserve'}</h4><div>First Nation reserve <b>${esc(r.n)}</b> · ${resArea(r.a)}</div>${r.nat.length>1?`<div>Shared by ${r.nat.length} Nations.</div>`:''}`;
   if(km)h+=`<div>The rail corridor runs through it for about ${km<1?Math.round(km*1000/10)*10+' m':km.toFixed(1)+' km'} (${[...new Set(r.x.map(q=>resLineNm[q.line]))].join(', ')}, km ${r.x.map(q=>q.k0.toFixed(1)+'–'+q.k1.toFixed(1)).join(', ')}). Restoring service here is part of the agreements needed with ${r.nat.length?esc(r.nat.map(resShort).join(' and ')):'the Nation'}.</div>`;
   return h+`<div class="m">Boundary: Natural Resources Canada. Nation: Province of BC reserve dataset.</div>`;}
-let resBuilt=false;
-function resBuild(){if(resBuilt)return;resBuilt=true;resCross();
+let resBuilt=false,resXDone=false;
+function resEnsureX(){if(!resXDone){resXDone=true;resCross();}}
+function resBuild(){if(resBuilt)return;resBuilt=true;resEnsureX();
   const f=v=>v.toFixed(2);
   for(const r of RES){const d=r.rings.map(q=>'M'+q.map(p=>f(p[0])+' '+f(p[1])).join('L')+'Z').join('');
     const p=el('path',{d,'fill-rule':'evenodd','vector-effect':'non-scaling-stroke',class:r.x.length?'rx':''},resG);
-    p.addEventListener('pointerenter',e=>placeTip(e,resTip(r)));p.addEventListener('pointermove',e=>{if(!tipPinned)placeTip(e,resTip(r));});p.addEventListener('pointerleave',()=>hideTip());
-    p.addEventListener('click',e=>{e.stopPropagation();placeTip(e,resTip(r));});
+    p.addEventListener('pointerenter',e=>{if(!tipPinned)placeTip(e,resTip(r));});p.addEventListener('pointermove',e=>{if(!tipPinned)placeTip(e,resTip(r));});p.addEventListener('pointerleave',()=>hideTip());
+    p.addEventListener('click',e=>{e.stopPropagation();tipPinned={res:r.n};placeTip(e,resTip(r));});
     let big=r.rings[0],ba=0;for(const q of r.rings){let a=0;for(let i=0,j=q.length-1;i<q.length;j=i++)a+=q[j][0]*q[i][1]-q[i][0]*q[j][1];if(Math.abs(a)>ba){ba=Math.abs(a);big=q;}}
     const [cx,cy]=mctr(big);const lg=scg(cx,cy,resG,r.a>=3000?2.2:r.a>=500?3.5:6);const t1=el('text',{class:'reslbl','text-anchor':'middle',y:-2},lg);t1.textContent=r.nat.length?r.nat.map(resShort).join(' / '):r.n;if(r.nat.length){const t2=el('text',{class:'reslbl rs','text-anchor':'middle',y:9},lg);t2.textContent='Reserve '+r.n;}}
   const X=RES.filter(r=>r.x.length).sort((a,b)=>a.x[0].line.localeCompare(b.x[0].line)*-1||a.x[0].k0-b.x[0].k0);
@@ -3774,7 +3775,20 @@ function drawInfra(){infraGroup.innerHTML='';if(L.speed.style.display==='none')r
     g.addEventListener('pointerenter',e=>{if(!tipPinned)showInfraTip(x,e);});g.addEventListener('pointerleave',()=>{if(!tipPinned)$('tip').hidden=true;});
     g.addEventListener('click',e=>{e.stopPropagation();tipPinned={infra:x};showInfraTip(x,e,true);});};
   for(const x of INFRA){if(!LINES[x.l])continue;const nt=noticeOf(x);if(x.k==='g'&&!nt)continue;mark(x,INFRA_KIND[x.k],nt);}
-  for(const nt of NOTICES())if(nt.ref==null&&LINES[nt.l])mark({l:nt.l,m:nt.m,m2:nt.m2,k:'n',n:nt.n,d:nt.d,__nt:nt},{n:'Notice',i:'!',z:0,lz:1.6},nt);}
+  for(const nt of NOTICES())if(nt.ref==null&&LINES[nt.l])mark({l:nt.l,m:nt.m,m2:nt.m2,k:'n',n:nt.n,d:nt.d,__nt:nt},{n:'Notice',i:'!',z:0,lz:1.6},nt);
+  drawResPermits();}
+/* wherever the railway runs through a First Nation reserve, mark it like the Snaw-Naw-As gap: the Nation's permission is needed to run trains */
+function drawResPermits(){if(typeof RES==='undefined')return;resEnsureX();
+  const covered=(line,m0,m1)=>NOTICES().some(nt=>nt.l===line&&nt.m2!=null&&Math.min(m1,nt.m2)-Math.max(m0,nt.m)>.05);
+  for(const r of RES)for(const q of r.x){if(!LINES[q.line]||!TRKSPD[q.line])continue;const m0=kToMP(q.line,q.k0),m1=kToMP(q.line,q.k1);if(covered(q.line,m0,m1))continue;
+    const pts=[];for(let k=q.k0;k<q.k1;k+=.03)pts.push(lineAt(q.line,k));pts.push(lineAt(q.line,q.k1));
+    el('polyline',{points:pts.map(p=>p[0].toFixed(2)+','+p[1].toFixed(2)).join(' '),class:'gapseg consent','vector-effect':'non-scaling-stroke'},infraGroup);
+    const xy=lineAt(q.line,(q.k0+q.k1)/2),nat=r.nat.length?r.nat.map(resShort).join(' and '):'the Nation';
+    const g=scg(xy[0],xy[1],infraGroup,0);g.setAttribute('class','infra kn bad');el('circle',{r:7.5,class:'infrabg'},g);el('text',{y:3.6,'text-anchor':'middle',class:'infraico'},g).textContent='!';
+    const lg=scg(xy[0],xy[1],infraGroup,1.6);el('text',{x:10,y:-6,class:'infralbl bad'},lg).textContent=`${r.n} reserve · ${nat} permission needed`;
+    const tip=pin=>`<h4>${esc(r.n)} reserve</h4><div class="m">First Nation reserve · ${TRKSPD[q.line].sub} MP ${m0.toFixed(1)}–${m1.toFixed(1)} · about ${q.k1-q.k0<1?Math.round((q.k1-q.k0)*100)*10+' m':(q.k1-q.k0).toFixed(1)+' km'}</div><div>The railway runs through the reserve of ${esc(nat)}. Running trains here needs the Nation's permission, as on the Snaw-Naw-As section.</div><div style="margin-top:4px"><b class="badt">Nation's permission needed</b></div>${pin?'<div class="pbtns"><button class="btn sm" id="tip-close" type="button">Close</button></div>':'<div class="m">Click to keep this open.</div>'}`;
+    g.addEventListener('pointerenter',e=>{if(!tipPinned)placeTip(e,tip(false));});g.addEventListener('pointerleave',()=>{if(!tipPinned)$('tip').hidden=true;});
+    g.addEventListener('click',e=>{e.stopPropagation();tipPinned={resx:r.n};placeTip(e,tip(true));$('tip').classList.add('act');$('tip-close').onclick=()=>hideTip(true);});}}
 function showInfraTip(x,e,pin){const nt=noticeOf(x),K=x.k==='n'?{n:'Notice'}:INFRA_KIND[x.k],fix=nt&&infraFixedBy(x);
   placeTip(e,`<h4>${esc(nt?nt.n:x.n)}</h4><div class="m">${K.n} · ${TRKSPD[x.l].sub} MP ${x.a?'≈':''}${x.m.toFixed(1)}${x.m2?`–${x.m2.toFixed(1)}`:''}</div><div>${esc(nt&&nt.d?nt.d:x.d||'')}</div>${nt?`<div style="margin-top:4px"><b class="${fix?'okt':'badt'}">${fix?`Addressed by “${esc(fix.name)}”`:`${NOTICE_ST[nt.s]} today`}</b>${nt.cond?` <span class="ntcond">${esc(nt.cond)}</span>`:''}</div>`:''}${pin?`<div class="pbtns"><button class="btn sm primary" id="tip-plan" type="button">Plan a work here</button><button class="btn sm" id="tip-close" type="button">Close</button></div>`:'<div class="m">Click for options.</div>'}`);
   if(!pin)return;$('tip').classList.add('act');$('tip-plan').onclick=()=>{hideTip(true);planWorkAt(x);};$('tip-close').onclick=()=>hideTip(true);}
@@ -4863,7 +4877,7 @@ let tkAcc=0;
 function stepTankers(force){if(tkG.style.display==='none')return;if(!force&&(++tkAcc%6))return;const inv=1/ppu;
   TK.ships.forEach((s,i)=>{let g=tkPool[i];if(!g){g=tkPool[i]=el('g',{class:'tkship'},tkG);const r=el('g',{},g);
       el('path',{d:'M0 -9L3.2 -4.6V6.6L2 9H-2L-3.2 6.6V-4.6Z',class:'tkhull'},r);el('path',{d:'M0 -6V6M-1.6 -1.5H1.6M-1.6 2.5H1.6',class:'tkdeck'},r);
-      el('text',{x:7,y:3.6,class:'tklbl'},g);g.addEventListener('pointerenter',e=>showTankerTip(+g.dataset.i,e));g.addEventListener('pointerleave',()=>hideTip());
+      el('text',{x:7,y:3.6,class:'tklbl'},g);g.addEventListener('pointerenter',e=>{if(!tipPinned)showTankerTip(+g.dataset.i,e);});g.addEventListener('pointerleave',()=>hideTip());
       g.addEventListener('click',e=>{e.stopPropagation();showTankerTip(+g.dataset.i,e,true);});}
     g.dataset.i=i;g.style.display='';const p=P(tkNow(s));const h=s.hdg!=null&&s.hdg<360?s.hdg:(s.cog!=null&&s.cog<360?s.cog:0);const still=(s.sog||0)<1;
     g.setAttribute('transform',`translate(${p[0].toFixed(2)} ${p[1].toFixed(2)}) scale(${inv.toFixed(4)})`);g.firstChild.setAttribute('transform',`rotate(${h.toFixed(0)})`);
@@ -4889,7 +4903,7 @@ const mpd=p=>'M'+p.map(q=>q[0]+' '+q[1]).join('L');
 const mctr=p=>{let a=0,cx=0,cy=0;for(let i=0;i<p.length;i++){const s=p[i],t=p[(i+1)%p.length],c=s[0]*t[1]-t[0]*s[1];a+=c;cx+=(s[0]+t[0])*c;cy+=(s[1]+t[1])*c;}return a?[cx/(3*a),cy/(3*a)]:p[0];};
 const MSRC_TSS='US Code of Federal Regulations, 33 CFR 167 (joint Canada–US scheme). Not for navigation.';
 function marTip(e,h){placeTip(e,`<div class="xptip">${h}</div>`);}
-function marHover(node,html){node.addEventListener('pointerenter',e=>marTip(e,html()));node.addEventListener('pointermove',e=>{if(!tipPinned)marTip(e,html());});node.addEventListener('pointerleave',()=>hideTip());
+function marHover(node,html){node.addEventListener('pointerenter',e=>{if(!tipPinned)marTip(e,html());});node.addEventListener('pointermove',e=>{if(!tipPinned)marTip(e,html());});node.addEventListener('pointerleave',()=>hideTip());
   node.addEventListener('click',e=>{e.stopPropagation();marTip(e,html());});}
 const TSS_TIP=()=>`<h4>Traffic separation scheme</h4><div>Large ships keep to the lane on their side of the magenta separation zone and travel in the direction of the arrows.</div><div class="m">${MSRC_TSS}</div>`;
 for(const t of MAR.tw)marHover(el('path',{d:mpd(t.p)+'Z',class:'mtw','vector-effect':'non-scaling-stroke'},mlaneG),()=>`<h4>${esc(t.n)}</h4><div>A route where ships travel in both directions, with care.</div><div class="m">${MSRC_TSS}</div>`);
@@ -4935,7 +4949,7 @@ function tdAt(c,t){const E=TD.ev[c];if(!E||E.length<2)return null;let i=0;while(
 function tdNext(c,t,kind){const E=TD.ev[c]||[];const e=E.find(x=>x[0]>t&&(kind==null||x[1]===kind));return e||null;}
 const tdClockTxt=t=>{const d=new Date(TD.base+t*60000);return d.toLocaleDateString('en-CA',{timeZone:'America/Vancouver',weekday:'short',month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-CA',{timeZone:'America/Vancouver',hour:'numeric',minute:'2-digit'});};
 const TDE=TD_ST.map(s=>{const g=el('g',{class:'tdst'},tdG);const [x,y]=P([s.lon,s.lat]);el('circle',{class:'tdpt',r:3.2},g);el('circle',{r:10,fill:'transparent'},g);const lb=el('text',{class:'tdlbl',x:7,y:-6},g);
-  g.addEventListener('pointerenter',e=>placeTip(e,tdTip(s)));g.addEventListener('pointermove',e=>{if(!tipPinned)placeTip(e,tdTip(s));});g.addEventListener('pointerleave',()=>hideTip());g.addEventListener('click',e=>{e.stopPropagation();placeTip(e,tdTip(s));});
+  g.addEventListener('pointerenter',e=>{if(!tipPinned)placeTip(e,tdTip(s));});g.addEventListener('pointermove',e=>{if(!tipPinned)placeTip(e,tdTip(s));});g.addEventListener('pointerleave',()=>hideTip());g.addEventListener('click',e=>{e.stopPropagation();placeTip(e,tdTip(s));});
   return{s,g,lb,x,y};});
 const tdCompass=d=>['north','northeast','east','southeast','south','southwest','west','northwest'][Math.round(((d%360)+360)%360/45)%8];
 const tdWhen=t=>{const d=new Date(TD.base+t*60000),tm=d.toLocaleTimeString('en-CA',{timeZone:'America/Vancouver',hour:'numeric',minute:'2-digit'});return Math.floor(t/1440)===Math.floor(TD.t/1440)?tm:d.toLocaleDateString('en-CA',{timeZone:'America/Vancouver',weekday:'short'})+' '+tm;};
