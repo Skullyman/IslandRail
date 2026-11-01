@@ -4987,16 +4987,26 @@ const TOURS={main:[
  {sel:'#btn-sources',t:'Sources and train types',p:'Sources lists every dataset and what it can and can’t show. Trains describes the train types. Ridership and costs are estimates, shown as ranges.'},
  {sel:'#btn-settings',t:'Settings',p:'Change the colour theme or turn on high contrast, switch on the planning tools, and share a view as a short link. You can take this tour again from here.',more:{label:'Continue: tour the planning tools →',tour:'plan'}}],
  plan:[
- {t:'The planning tools',p:'These tools let you change the service and see what it does: timetables, trains, stations, track and costs. They are early and still changing, so they sit behind Experimental mode, which this tour turns on. You can turn it off again at the end.',start:()=>{TOUR_EXP0=EXP;if(!EXP){SETTINGS.exp=true;saveSettings();applyExp();}}},
+ {t:'The planning tools',p:'These tools let you change the service and see what it does: timetables, trains, stations, track and costs. They are early and still changing, so they sit behind Experimental mode, which this tour turns on for now. When the tour ends, everything goes back to how it was.',start:()=>{if(!EXP){SETTINGS.exp=true;saveSettings();applyExp();}}},
  {sel:'.panel',tab:'tt',t:'Timetable',p:'Every trip in the plan, by line and time. Change departure times, add or remove trips, and see warnings where a trip is scheduled faster than the track allows or a trainset can’t get there in time.'},
  {sel:'.panel',tab:'fleet',t:'Fleet',p:'The trainsets that work the timetable and their types: diesel and battery units, hydrogen, coupled two-unit trains and more. Auto-assign shares the trips over the fewest sets.'},
  {sel:'.panel',tab:'stn',t:'Stations',p:'Add, move or remove stations and set how much demand each draws. Stations a timetable doesn’t serve stay on the map, faded.'},
  {sel:'.panel',tab:'trk',t:'Track',p:'Choose the track speeds (the 2003 track charts, or restored to the curve limits), drag the alignment, draw new track, and record sections that are out of service.'},
  {sel:'.panel',tab:'works',t:'Works',p:'Track projects with their costs: superelevation, crossings, curve easing, bridges, passing sidings and double track. Switch each on or off and see the minutes it saves. “Add the sidings this timetable needs” finds where trains meet away from a siding.'},
  {sel:'.panel',tab:'plan',t:'Plan',p:'Load a starting timetable (the ICF business case is the baseline), compare plans, see ridership as ranges by method and the capital cost, or start from a blank slate.'},
- {sel:'#btn-settings',t:'Share or turn off',p:'Settings → Share this view saves your plan as a short link anyone can open. Experimental mode is on now; keep it on to carry on planning, or turn it off to go back to the simple map.',end:true}]};
-let tourI=-1,TOUR=TOURS.main,TOUR_EXP0=null;
-function tourEnd(){const o=$('tour');if(o)o.remove();tourI=-1;try{localStorage.setItem('island-rail-tour','done');}catch(_){}document.removeEventListener('keydown',tourKey,true);window.removeEventListener('resize',tourDraw);}
+ {sel:'#btn-settings',t:'Sharing, and turning the tools on',p:'Settings → Share this view saves your plan as a short link anyone can open. To use the planning tools yourself, turn on Experimental mode in Settings. When you finish this tour, the map and settings go back to how they were before it started.'}]};
+let tourI=-1,TOUR=TOURS.main,TOUR_SNAP=null;
+// the tour may switch on Experimental mode, open panels and turn on layers; this puts everything back as it was when it started
+function tourSnap(){return{exp:!!SETTINGS.exp,tab:typeof tab!=='undefined'?tab:null,lsw:[...document.querySelectorAll('.lsw[id]')].map(b=>[b.id,b.getAttribute('aria-pressed')]),
+  vb:{...vb},scroll:[scrollX,scrollY],panelScroll:[...document.querySelectorAll('.panel .pane')].map(p=>p.scrollTop)};}
+function tourRestore(s){if(!s)return;try{
+  if(!!SETTINGS.exp!==s.exp){SETTINGS.exp=s.exp;saveSettings();applyExp();}
+  if(s.tab&&typeof switchTab==='function'&&tab!==s.tab)switchTab(s.tab);
+  for(const [id,p] of s.lsw){const b=$(id);if(b&&b.getAttribute('aria-pressed')!==p)b.click();}
+  Object.assign(vb,s.vb);applyVB();
+  document.querySelectorAll('.panel .pane').forEach((p,i)=>{if(s.panelScroll[i]!=null)p.scrollTop=s.panelScroll[i];});
+  scrollTo(s.scroll[0],s.scroll[1]);}catch(e){console.warn('tour restore',e);}}
+function tourEnd(){const o=$('tour');if(o)o.remove();tourI=-1;tourRestore(TOUR_SNAP);TOUR_SNAP=null;try{localStorage.setItem('island-rail-tour','done');}catch(_){}document.removeEventListener('keydown',tourKey,true);window.removeEventListener('resize',tourDraw);}
 function tourKey(e){if(tourI<0)return;if(e.key==='Escape'){e.preventDefault();e.stopPropagation();tourEnd();}else if(e.key==='ArrowRight'){tourGo(1);}else if(e.key==='ArrowLeft'){tourGo(-1);}}
 function tourGo(d){const n=tourI+d;if(n<0)return;if(n>=TOUR.length){tourEnd();return;}tourI=n;tourDraw();}
 function tourDraw(){const o=$('tour');if(!o||tourI<0)return;const s=TOUR[tourI],spot=o.querySelector('.spot'),card=o.querySelector('.tcard');
@@ -5004,8 +5014,7 @@ function tourDraw(){const o=$('tour');if(!o||tourI<0)return;const s=TOUR[tourI],
   let tg=s.sel&&document.querySelector(s.sel);if(tg&&(tg.offsetParent===null||!tg.getClientRects().length))tg=s.alt&&document.querySelector(s.alt);
   card.querySelector('h3').textContent=s.t;card.querySelector('p').textContent=s.p;card.querySelector('.tdots').textContent=`${tourI+1} of ${TOUR.length}`;
   const more=card.querySelector('.tmore');more.hidden=!s.more;if(s.more){more.textContent=s.more.label;more.onclick=()=>{tourSwitch(s.more.tour);};}
-  const off=card.querySelector('.toff');off.hidden=!(s.end&&EXP);card.querySelector('.tskip').hidden=!!s.end;
-  card.querySelector('.tback').hidden=tourI===0;card.querySelector('.tnext').textContent=s.end?'Keep them on':tourI===TOUR.length-1?'Done':tourI===0?(TOUR===TOURS.main?'Show me around':'Start'):'Next';
+  card.querySelector('.tback').hidden=tourI===0;card.querySelector('.tnext').textContent=tourI===TOUR.length-1?'Done':tourI===0?(TOUR===TOURS.main?'Show me around':'Start'):'Next';
   const vw=innerWidth,vh=innerHeight,cw=card.offsetWidth,ch=card.offsetHeight;
   if(tg){const r0=tg.getBoundingClientRect();if(s.sel!=='#mapwrap'&&(r0.top<0||r0.bottom>vh)&&r0.height<vh*.8)tg.scrollIntoView({block:'center'});else if(r0.top<0||r0.top>vh*.6)tg.scrollIntoView({block:'start'});
     const r=tg.getBoundingClientRect(),pad=6;spot.className='spot';Object.assign(spot.style,{left:r.left-pad+'px',top:r.top-pad+'px',width:r.width+2*pad+'px',height:r.height+2*pad+'px'});
@@ -5018,12 +5027,11 @@ function tourDraw(){const o=$('tour');if(!o||tourI<0)return;const s=TOUR[tourI],
   else{spot.className='spot none';spot.removeAttribute('style');card.style.left=(vw-cw)/2+'px';card.style.top=Math.max(12,(vh-ch)/2)+'px';}
   card.querySelector('.tnext').focus({preventScroll:true});}
 function tourSwitch(name){TOUR=TOURS[name]||TOURS.main;TOUR.forEach(s=>delete s._ran);tourI=0;tourDraw();}
-function tourStart(name='main'){if($('tour')){tourSwitch(name);return;}const o=document.createElement('div');o.id='tour';o.className='tour';
+function tourStart(name='main'){if($('tour')){tourSwitch(name);return;}TOUR_SNAP=tourSnap();const o=document.createElement('div');o.id='tour';o.className='tour';
   o.innerHTML=`<div class="spot none"></div><div class="tcard" role="dialog" aria-modal="true" aria-labelledby="tour-h"><h3 id="tour-h"></h3><p></p>
     <button type="button" class="tmore" hidden></button>
-    <div class="tnav"><span class="tdots"></span><span class="grow"></span><button type="button" class="btn sm tskip">Skip</button><button type="button" class="btn sm tback">Back</button><button type="button" class="btn sm toff" hidden>Turn them off</button><button type="button" class="btn sm primary tnext">Next</button></div></div>`;
+    <div class="tnav"><span class="tdots"></span><span class="grow"></span><button type="button" class="btn sm tskip">Skip</button><button type="button" class="btn sm tback">Back</button><button type="button" class="btn sm primary tnext">Next</button></div></div>`;
   document.body.appendChild(o);o.querySelector('.tskip').onclick=tourEnd;o.querySelector('.tback').onclick=()=>tourGo(-1);o.querySelector('.tnext').onclick=()=>tourGo(1);
-  o.querySelector('.toff').onclick=()=>{SETTINGS.exp=false;saveSettings();applyExp();tourEnd();};
   document.addEventListener('keydown',tourKey,true);window.addEventListener('resize',tourDraw);tourSwitch(name);}
 $('set-tour').onclick=()=>{$('setmenu').hidden=true;$('btn-settings').setAttribute('aria-expanded','false');tourStart();};
 $('set-tour2').onclick=()=>{$('setmenu').hidden=true;$('btn-settings').setAttribute('aria-expanded','false');tourStart('plan');};
