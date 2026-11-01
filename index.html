@@ -724,6 +724,16 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
 .reslbl{font-family:var(--body);font-size:10px;font-weight:700;font-style:italic;fill:var(--res);paint-order:stroke;stroke:var(--halo);stroke-width:3px;stroke-linejoin:round;pointer-events:none}
 .ressw{display:inline-block;width:14px;height:10px;vertical-align:-1px;margin-right:5px;border:1.5px solid var(--res);background:color-mix(in srgb,var(--res) 15%,transparent)}
 .ressw.x{border-width:2.5px;background:color-mix(in srgb,var(--res) 28%,transparent)}
+.measbar{position:absolute;left:50%;transform:translateX(-50%);top:44px;z-index:6;background:color-mix(in srgb,var(--panel) 95%,transparent);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12.5px;display:grid;gap:6px;max-width:calc(100% - 100px);box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.measbar .mb-t{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}.measbar .mb-t b{font-size:15px;font-variant-numeric:tabular-nums}.measbar .mb-t span{color:var(--muted);font-variant-numeric:tabular-nums}
+.measbar .mb-c{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.measbar .mb-c label{display:flex;gap:4px;align-items:center;white-space:nowrap}.measbar .btn{padding:3px 9px;font-size:12px}
+svg.measuring{cursor:crosshair}
+.measg .ml{fill:none;stroke:#111;stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;opacity:.35}
+.measg .mlc{fill:none;stroke:#f59e0b;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.measg .mrub{fill:none;stroke:#f59e0b;stroke-width:1.5;stroke-dasharray:4 4}
+.measg .mh{fill:#fff;stroke:#b45309;stroke-width:2;cursor:grab}.measg .mh:active{cursor:grabbing}.measg .mhit{fill:transparent;cursor:grab}
+.measg .mtag{font-family:var(--mono,monospace);font-weight:600;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-linejoin:round;pointer-events:none}
+@media (max-width:600px){.measbar{top:auto;bottom:52px;width:calc(100% - 20px);max-width:none;box-sizing:border-box}}
 .mlane path:not(.marr),.mres path{cursor:help}
 .mres .r-mil{fill:url(#milhatch);stroke:#b91c1c;stroke-width:1.2}
 .mres .r-nogo{fill:rgba(220,38,38,.30);stroke:#dc2626;stroke-width:1.2}
@@ -970,6 +980,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <button id="zfit" title="Show whole corridor" aria-label="Show whole corridor">⤢</button>
         <button id="zisl" title="Show whole island" aria-label="Show whole island" class="zisl">▢</button>
         <button id="layersbtn" title="Layers" aria-label="Layers and info panels" aria-pressed="false" aria-expanded="false" aria-controls="layerpanel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/><path d="M3 17.5l9 5 9-5" opacity=".55"/></svg></button>
+        <button id="measbtn" title="Measure distance (M)" aria-label="Measure distance" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17L17 3l4 4L7 21z"/><path d="M7 13l2 2M10 10l2 2M13 7l2 2" stroke-width="1.6"/></svg></button>
         <button id="follow" title="Follow selected train" aria-label="Follow selected train" aria-pressed="false">◎</button>
         <button id="fsbtn" title="Full screen" aria-label="Full screen map" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="fs-in" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><path class="fs-out" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button>
       </div>
@@ -1001,7 +1012,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <div class="m">Circles sit at the centre of each area's employment land. 2021 counts were taken during the pandemic; the 2026 Census place-of-work data is due in 2027.</div></div>
       <div class="poplegend speedlegend" id="speedlegend" hidden><h4>Track speed</h4><div class="m">Passenger speed limit along the line, from the 2003 E&amp;N track charts, the speed setting in the Track tab and any track works (outlined bands; dashed if not applied, click one to apply it or not). Bridges, tunnels and road crossings appear as you zoom in; red marks are out of service today.</div><div id="spdstats"></div></div>
       <div class="poplegend crashlegend" id="crashlegend" hidden><h4>Reported crashes</h4><div class="m">ICBC reported crashes, 2021–2025 (data as of 31 March 2026). Excludes parking lots and parked vehicles; mid-block crashes are placed between the nearest intersections.</div><div class="crkey"><span><i class="k0"></i>1–4</span><span><i class="k1"></i>5–19</span><span><i class="k2"></i>20–49</span><span><i class="k3"></i>50+</span></div><div class="m">Crashes per location over five years. Zoomed out, locations are grouped into 2 km squares.</div><div id="crstats"></div></div>
-      <div class="poplegend buslegend" id="reslegend" hidden><h4>First Nation reserves</h4><div class="m">Reserves set apart under the <i>Indian Act</i> for the use of each First Nation, labelled with the Nation and the official reserve name. Boundaries from Natural Resources Canada's Aboriginal Lands of Canada Legislative Boundaries; the Nation for each reserve from the Province of BC's Indian Reserves – Administrative Boundaries, shown with the Nation's current name. Reserves are small parcels within much larger traditional territories, which this layer does not show; modern treaty lands are also not shown.</div><div><span class="ressw"></span>First Nation reserve <span class="m" id="rescount"></span></div><div><span class="ressw x"></span>Crossed by the rail corridor</div><div class="m" id="resx"></div></div>
+      <div class="poplegend buslegend" id="reslegend" hidden><h4>First Nation reserves</h4><div class="m">Reserves set apart under the <i>Indian Act</i> for the use of each First Nation, labelled with the Nation and the official reserve name. Boundaries from Natural Resources Canada's Aboriginal Lands of Canada Legislative Boundaries; the Nation for each reserve from the Province of BC's Indian Reserves – Administrative Boundaries, shown with the Nation's current name. Modern treaty lands are not shown.</div><div><span class="ressw"></span>First Nation reserve <span class="m" id="rescount"></span></div><div><span class="ressw x"></span>Crossed by the rail corridor</div><div class="m" id="resx"></div></div>
       <div class="poplegend buslegend" id="destlegend" hidden><h4>Key destinations</h4><div class="m">Airports, ferry terminals, universities and colleges, hospitals, defence bases, government and major shopping centres: places many people must reach. Turn names on or off in the Layers panel. Locations from OpenStreetMap.</div>
         <div class="destkey"><span><i style="background:var(--d-air)"></i>Air</span><span><i style="background:var(--d-ferry)"></i>Ferry</span><span><i style="background:var(--d-edu)"></i>Campus</span><span><i style="background:var(--d-hosp)"></i>Hospital</span><span><i style="background:var(--d-def)"></i>Defence</span><span><i style="background:var(--d-gov)"></i>Government</span><span><i style="background:var(--d-shop)"></i>Shopping</span></div>
         <div id="dstats"></div><div class="m">Faded icons are more than 3 km from any station the timetable serves. Hover an icon for its distance to the nearest station and the bus routes nearby.</div></div>
@@ -1021,7 +1032,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
         <div>Showing <b id="t-hour">—</b>. Sparser, faster dots mean freer-flowing traffic.</div>
         <div class="m">Hover a ◆ station for both directions and its daily profile.</div>
         <div class="m" id="t-enn" hidden>Includes the drivers the Travel flows layer moves to the train (With E&amp;N).</div></div>
-      <div class="lchips" id="lchips" hidden aria-label="Layers on the map"></div><div class="zoomsl"><button type="button" id="zs-out" aria-label="Zoom out">−</button><input type="range" id="zoomsl" min="0" max="100" step="0.5" value="0" aria-label="Zoom"><button type="button" id="zs-in" aria-label="Zoom in">+</button></div><div class="scale" id="scale"><span id="scale-t">20 km</span><i id="scale-b" style="width:100px"></i></div>
+      <div class="measbar" id="measbar" hidden role="status" aria-live="polite"><div class="mb-t"><b id="mb-len">Click the map to start measuring</b><span id="mb-sub"></span></div><div class="mb-c"><label><input type="checkbox" id="mb-smooth" checked> Smooth curve</label><label><input type="checkbox" id="mb-snap" checked> Snap to track</label><button type="button" class="btn" id="mb-undo">Undo</button><button type="button" class="btn" id="mb-clear">Clear</button><button type="button" class="btn" id="mb-done">Done</button></div></div><div class="lchips" id="lchips" hidden aria-label="Layers on the map"></div><div class="zoomsl"><button type="button" id="zs-out" aria-label="Zoom out">−</button><input type="range" id="zoomsl" min="0" max="100" step="0.5" value="0" aria-label="Zoom"><button type="button" id="zs-in" aria-label="Zoom in">+</button></div><div class="scale" id="scale"><span id="scale-t">20 km</span><i id="scale-b" style="width:100px"></i></div>
       <button type="button" class="creditbtn" id="creditbtn" aria-label="Map data sources" aria-expanded="false">i</button><div class="credit" id="credit">Map data © OpenStreetMap contributors (ODbL). Elevation and hillshade: AWS Terrain Tiles (Mapzen terrarium). Population: Statistics Canada 2021 Census, grown to 2024 with BC Stats estimates. Jobs: Statistics Canada 2021 Census. Traffic counts: BC MoTI, City of Victoria. Commuting: Statistics Canada 2021 Census. Travel survey: CRD 2022 Origin-Destination Household Travel Survey. Bus schedules: BC Transit GTFS. Sailings and ferry traffic: BC Ferries. UVic and airport traffic figures. First Nation reserves: Natural Resources Canada (Open Government Licence – Canada) and Province of BC (Open Government Licence – British Columbia). Riders and buses are simulated.</div>
       <div class="toasts" id="toasts" aria-live="polite"></div>
       <div class="tip" id="tip" hidden></div>
@@ -2126,7 +2137,7 @@ $('popbtn').onclick=()=>{const on=popG.style.display==='none';popG.style.display
 const wrap=$('mapwrap');let vb={x:0,y:0,w:1000,h:H},ppu=1;
 const FIT={x:150,y:30,w:800,h:950},FIT_ISL={x:-1450,y:-1220,w:2700,h:2280};
 function fit(F=FIT){const r=wrap.getBoundingClientRect();const ar=r.width/r.height;let w=F.w,h=F.h;if(w/h<ar)w=h*ar;else h=w/ar;vb={x:F.x+F.w/2-w/2,y:F.y+F.h/2-h/2,w,h};applyVB();}
-function applyVB(){if(!dotsQueued&&typeof rebuildDots==='function'){dotsQueued=true;requestAnimationFrame(rebuildDots);}if(typeof trkEdit!=='undefined'&&trkEdit)queueHandles();if(typeof drawing!=='undefined'&&drawing&&drawing.pts.length)requestAnimationFrame(()=>drawDraft());const r=wrap.getBoundingClientRect();const ar=r.width/r.height||1;vb.h=vb.w/ar;ppu=r.width/vb.w;svg.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);svgfx.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);svgTop.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);updateSC();updateScale();if(typeof cullBikes==='function')cullBikes();if(typeof cullCrash==='function')cullCrash();if(window.__marReady)marineZoom();if(window.__lnotesQ)window.__lnotesQ();if(window.__sidQ)window.__sidQ();if(typeof trainScale==='function')trainScale();}
+function applyVB(){if(typeof MEAS!=='undefined'&&MEAS.pts.length)requestAnimationFrame(()=>measDraw());if(!dotsQueued&&typeof rebuildDots==='function'){dotsQueued=true;requestAnimationFrame(rebuildDots);}if(typeof trkEdit!=='undefined'&&trkEdit)queueHandles();if(typeof drawing!=='undefined'&&drawing&&drawing.pts.length)requestAnimationFrame(()=>drawDraft());const r=wrap.getBoundingClientRect();const ar=r.width/r.height||1;vb.h=vb.w/ar;ppu=r.width/vb.w;svg.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);svgfx.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);svgTop.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);updateSC();updateScale();if(typeof cullBikes==='function')cullBikes();if(typeof cullCrash==='function')cullCrash();if(window.__marReady)marineZoom();if(window.__lnotesQ)window.__lnotesQ();if(window.__sidQ)window.__sidQ();if(typeof trainScale==='function')trainScale();}
 function zoomAt(f,cx,cy){const r=wrap.getBoundingClientRect();const sx=vb.x+(cx-r.left)/ppu,sy=vb.y+(cy-r.top)/ppu;const nw=Math.max(8,Math.min(3300,vb.w/f));const nf=vb.w/nw;vb.w=nw;vb.h=vb.h/nf;vb.x=sx-(cx-r.left)/(r.width/vb.w);vb.y=sy-(cy-r.top)/(r.width/vb.w);applyVB();}
 function zoomFactor(){return 1000/vb.w*(FIT.w/1000)/(FIT.w/1000);} // relative to full width
 function updateSC(){const inv=1/ppu;const z=800/vb.w;svg.classList.toggle('z2',z>=1.8);svg.classList.toggle('zr',z>=1.4);svg.classList.toggle('zt',z>=2.4);svg.classList.toggle('zo',z<.9);for(const s of SC){const show=z>=s.minZoom&&z<s.maxZoom;s.g.style.display=show?'':'none';if(show)s.g.setAttribute('transform',`translate(${s.x.toFixed(2)} ${s.y.toFixed(2)}) scale(${inv.toFixed(4)})${s.rot?` rotate(${s.rot})`:''}`);}
@@ -2142,6 +2153,56 @@ svg.addEventListener('pointermove',e=>{const p=ptrs.get(e.pointerId);if(!p)retur
 const endPtr=e=>{ptrs.delete(e.pointerId);if(ptrs.size<2)pinch0=null;if(!ptrs.size)svg.classList.remove('drag');};
 svg.addEventListener('pointerup',endPtr);svg.addEventListener('pointerleave',e=>{if(!svg.hasPointerCapture(e.pointerId))endPtr(e);});svg.addEventListener('pointercancel',endPtr);
 svg.addEventListener('click',()=>{if(dragMoved<5)hideTip(true);});
+/* ---------- measuring tool: click points, drag them to adjust; a smooth (centripetal Catmull-Rom) curve or straight legs, in metric and imperial ---------- */
+var MEAS={on:false,pts:[],cur:null,drag:null};
+const measG=el('g',{class:'measg'},svg);
+const R_EARTH=6371008.8;
+function hav(a,b){const r=Math.PI/180,dl=(b[1]-a[1])*r,dn=(b[0]-a[0])*r,s1=Math.sin(dl/2),s2=Math.sin(dn/2);const h=s1*s1+Math.cos(a[1]*r)*Math.cos(b[1]*r)*s2*s2;return 2*R_EARTH*Math.asin(Math.min(1,Math.sqrt(h)));}
+/* centripetal Catmull-Rom through the points (projected map units), 24 samples a span */
+function measCurve(xy){if(xy.length<3||!$('mb-smooth').checked)return xy.slice();const out=[xy[0]],N=24;
+  for(let i=0;i<xy.length-1;i++){const p1=xy[i],p2=xy[i+1],p0=i?xy[i-1]:[2*p1[0]-p2[0],2*p1[1]-p2[1]],p3=i+2<xy.length?xy[i+2]:[2*p2[0]-p1[0],2*p2[1]-p1[1]];
+    const tj=(a,b)=>Math.max(1e-6,Math.sqrt(Math.hypot(b[0]-a[0],b[1]-a[1])));const t0=0,t1=t0+tj(p0,p1),t2=t1+tj(p1,p2),t3=t2+tj(p2,p3);
+    for(let j=1;j<=N;j++){const t=t1+(t2-t1)*j/N;const L=(a,b,ta,tb)=>{const u=(tb-t)/(tb-ta),v=(t-ta)/(tb-ta);return[a[0]*u+b[0]*v,a[1]*u+b[1]*v];};
+      const A1=L(p0,p1,t0,t1),A2=L(p1,p2,t1,t2),A3=L(p2,p3,t2,t3),B1=L(A1,A2,t0,t2),B2=L(A2,A3,t1,t3);out.push(L(B1,B2,t1,t2));}}
+  return out;}
+function measLen(xy){let d=0;for(let i=1;i<xy.length;i++)d+=hav(invP(xy[i-1]),invP(xy[i]));return d;}
+function fmtMet(m){return m<1000?Math.round(m)+' m':(m/1000).toFixed(m<10000?2:1)+' km';}
+function fmtImp(m){const ft=m/0.3048,mi=m/1609.344;return mi<0.25?Math.round(ft).toLocaleString()+' ft':mi.toFixed(mi<10?2:1)+' mi';}
+function fmtBoth(m){return fmtMet(m)+' · '+fmtImp(m);}
+function measSnap(q){if(!$('mb-snap').checked)return q;const sn=snapToRail(q[0],q[1]);return sn&&sn.d*ppu<12?sn.xy:q;}
+function measDraw(){measG.innerHTML='';if(!MEAS.on&&!MEAS.pts.length)return;const xy=MEAS.pts,f=v=>v.toFixed(3),pl=a=>a.map(q=>f(q[0])+','+f(q[1])).join(' ');
+  const cv=measCurve(xy);
+  if(cv.length>1){el('polyline',{points:pl(cv),class:'ml','vector-effect':'non-scaling-stroke'},measG);el('polyline',{points:pl(cv),class:'mlc','vector-effect':'non-scaling-stroke'},measG);}
+  if(MEAS.on&&MEAS.cur&&xy.length&&!MEAS.drag)el('polyline',{points:pl([xy[xy.length-1],MEAS.cur]),class:'mrub','vector-effect':'non-scaling-stroke'},measG);
+  const rr=(6/ppu).toFixed(3),rh=(13/ppu).toFixed(3);
+  /* running totals at each point along the curve */
+  let acc=0,ci=0;const N=xy.length>2&&$('mb-smooth').checked?24:1;
+  xy.forEach((q,i)=>{if(i){const seg=cv.slice((i-1)*N,i*N+1);acc+=measLen(seg);}
+    const g=el('g',{},measG);const hit=el('circle',{cx:f(q[0]),cy:f(q[1]),r:rh,class:'mhit'},g);el('circle',{cx:f(q[0]),cy:f(q[1]),r:rr,class:'mh','vector-effect':'non-scaling-stroke'},g);
+    if(i&&(i===xy.length-1||xy.length<=8)){const t=el('text',{x:f(q[0]+9/ppu),y:f(q[1]-8/ppu),class:'mtag','font-size':(11/ppu).toFixed(3),'stroke-width':(3.5/ppu).toFixed(3)},g);t.textContent=fmtBoth(acc);}
+    const start=e=>{e.stopPropagation();e.preventDefault();MEAS.drag={i,id:e.pointerId};try{svg.setPointerCapture(e.pointerId);}catch(_){}};
+    g.addEventListener('pointerdown',start);
+    g.addEventListener('dblclick',e=>{e.stopPropagation();e.preventDefault();MEAS.pts.splice(i,1);measDraw();});});
+  const total=measLen(cv);
+  $('mb-len').textContent=xy.length>1?fmtBoth(total):xy.length?'Click to add the next point':'Click the map to start measuring';
+  $('mb-sub').textContent=xy.length>1?`${xy.length} points${xy.length>2&&$('mb-smooth').checked?` · straight legs ${fmtBoth(measLen(xy))}`:''} · drag a point to adjust, double-click it to remove`:'';
+  $('mb-undo').disabled=!xy.length;$('mb-clear').disabled=!xy.length;}
+function measSet(on){MEAS.on=on;$('measbtn').setAttribute('aria-pressed',String(on));$('measbar').hidden=!on;svg.classList.toggle('measuring',on);if(!on){MEAS.pts=[];MEAS.cur=null;}measDraw();if(on)hideTip(true);}
+$('measbtn').onclick=()=>{if(!MEAS.on&&typeof drawing!=='undefined'&&drawing)cancelDrawing();measSet(!MEAS.on);};
+$('mb-done').onclick=()=>measSet(false);
+$('mb-clear').onclick=()=>{MEAS.pts=[];measDraw();};
+$('mb-undo').onclick=()=>{MEAS.pts.pop();measDraw();};
+$('mb-smooth').onchange=$('mb-snap').onchange=()=>measDraw();
+svg.addEventListener('click',e=>{if(!MEAS.on||dragMoved>=5)return;e.stopPropagation();const q=measSnap(toSvg(e));const l=MEAS.pts[MEAS.pts.length-1];
+  if(l&&Math.hypot(q[0]-l[0],q[1]-l[1])*ppu<4)return;MEAS.pts.push(q);measDraw();},true);
+svg.addEventListener('pointermove',e=>{if(!MEAS.on)return;if(MEAS.drag&&MEAS.drag.id===e.pointerId){e.stopPropagation();MEAS.pts[MEAS.drag.i]=measSnap(toSvg(e));measDraw();return;}
+  if(!ptrs.size&&MEAS.pts.length){MEAS.cur=toSvg(e);measDraw();}},true);
+const measEnd=e=>{if(MEAS.drag&&MEAS.drag.id===e.pointerId){MEAS.drag=null;dragMoved=99;measDraw();}};
+svg.addEventListener('pointerup',measEnd,true);svg.addEventListener('pointercancel',measEnd,true);
+svg.addEventListener('pointerleave',()=>{if(MEAS.on&&MEAS.cur){MEAS.cur=null;measDraw();}});
+document.addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('textarea,select,input:not([type=checkbox])'))return;
+  if(!MEAS.on){if((e.key==='m'||e.key==='M')&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&$('trainpage').hidden&&$('srcpage').hidden&&$('rdpage').hidden)$('measbtn').click();return;}
+  if(e.key==='Escape'){e.stopPropagation();measSet(false);}else if(e.key==='Backspace'||e.key==='Delete'){e.preventDefault();$('mb-undo').click();}});
 const centerOf=()=>{const r=wrap.getBoundingClientRect();return[r.left+r.width/2,r.top+r.height/2];};
 $('zin').onclick=()=>zoomAt(1.6,...centerOf());$('zout').onclick=()=>zoomAt(1/1.6,...centerOf());
 $('zfit').onclick=()=>{follow=false;$('follow').setAttribute('aria-pressed','false');fit();};
@@ -2776,22 +2837,22 @@ const RES=RES_ENC.split('|').map(f=>{const [n,a,g]=f.split('~');let x=0,y=0;
 const resArea=a=>a>=1000?(a/1000).toFixed(a>=10000?0:1)+' km²':a>=10?Math.round(a/10)+' ha':(a/10).toFixed(1)+' ha';
 function resIn(r,px,py){let c=false;for(const q of r.rings)for(let i=0,j=q.length-1;i<q.length;j=i++){const [xi,yi]=q[i],[xj,yj]=q[j];if((yi>py)!==(yj>py)&&px<(xj-xi)*(py-yi)/(yj-yi)+xi)c=!c;}return c;}
 /* where the rail corridor runs through each reserve: sample the line every ~20 m. The railway right-of-way was cut out of most reserves,
-   so a point also counts when reserve land lies on both sides of the track within 40 m */
-function resCross(){const step=PX_PER_KM*.02,off=PX_PER_KM*.04;for(const r of RES)r.x=[];
+   so a point also counts when the same reserve lies on both sides of the track within 200 m (at Nanoose the cut-out holds the highway too) */
+function resCross(){const step=PX_PER_KM*.02,off=PX_PER_KM*.025,OFS=[1,2,3,4,6,8];for(const r of RES)r.x=[];
   for(const line of Object.keys(LINES)){const v=LINES[line];
     for(const r of RES){const [x0,y0,x1,y1]=r.bb;let run=null;
       for(let i=1;i<v.length;i++){const a=v[i-1],b=v[i];if(Math.max(a.xy[0],b.xy[0])<x0||Math.min(a.xy[0],b.xy[0])>x1||Math.max(a.xy[1],b.xy[1])<y0||Math.min(a.xy[1],b.xy[1])>y1){if(run){r.x.push(run);run=null;}continue;}
         const d=Math.hypot(b.xy[0]-a.xy[0],b.xy[1]-a.xy[1]),n=Math.max(1,Math.ceil(d/step));
         const nx=d?-(b.xy[1]-a.xy[1])/d*off:0,ny=d?(b.xy[0]-a.xy[0])/d*off:0;
         for(let j=0;j<n;j++){const t=(j+.5)/n,px=a.xy[0]+(b.xy[0]-a.xy[0])*t,py=a.xy[1]+(b.xy[1]-a.xy[1])*t,k=a.k+(b.k-a.k)*t,dk=(b.k-a.k)/n;
-          if(resIn(r,px,py)||(resIn(r,px+nx,py+ny)&&resIn(r,px-nx,py-ny))){if(!run)run={line,k0:k-dk/2,k1:k+dk/2};else run.k1=k+dk/2;}else if(run){r.x.push(run);run=null;}}}
+          if(resIn(r,px,py)||(OFS.some(m=>resIn(r,px+nx*m,py+ny*m))&&OFS.some(m=>resIn(r,px-nx*m,py-ny*m)))){if(!run)run={line,k0:k-dk/2,k1:k+dk/2};else run.k1=k+dk/2;}else if(run){r.x.push(run);run=null;}}}
       if(run)r.x.push(run);
       r.x=r.x.filter(q=>q.k1-q.k0>.03);}}}
 const resKm=r=>r.x.reduce((s,q)=>s+q.k1-q.k0,0);
 const resLineNm={MAIN:'Victoria–Courtenay line',ALB:'Port Alberni line'};
 function resTip(r){const km=resKm(r);let h=`<h4>${r.nat.length?esc(r.nat.join(' · ')):'First Nation reserve'}</h4><div>First Nation reserve <b>${esc(r.n)}</b> · ${resArea(r.a)}</div>${r.nat.length>1?`<div>Shared by ${r.nat.length} Nations.</div>`:''}`;
   if(km)h+=`<div>The rail corridor runs through it for about ${km<1?Math.round(km*1000/10)*10+' m':km.toFixed(1)+' km'} (${[...new Set(r.x.map(q=>resLineNm[q.line]))].join(', ')}, km ${r.x.map(q=>q.k0.toFixed(1)+'–'+q.k1.toFixed(1)).join(', ')}). Restoring service here is part of the agreements needed with ${r.nat.length?esc(r.nat.map(resShort).join(' and ')):'the Nation'}.</div>`;
-  return h+`<div class="m">Boundary: Natural Resources Canada. Nation: Province of BC reserve dataset. A reserve, not the Nation's traditional territory.</div>`;}
+  return h+`<div class="m">Boundary: Natural Resources Canada. Nation: Province of BC reserve dataset.</div>`;}
 let resBuilt=false;
 function resBuild(){if(resBuilt)return;resBuilt=true;resCross();
   const f=v=>v.toFixed(2);
@@ -3994,7 +4055,7 @@ const SRC=[
   {n:'Statistics Canada, 2021 Census: population by dissemination area',u:'https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/index.cfm?Lang=E',use:'Population layer: people per km² of land, homes, and how many people live within 800 m and 3 km of a served station.',d:'1,374 dissemination areas in the seven Island census divisions (839,786 people). Boundaries from the 2021 cartographic boundary file; counts from the Census Profile. Pulled 21 October 2026.',lim:'Two areas are suppressed by Statistics Canada. Station distances are straight lines to each area\'s centre.'},
   {n:'BC Stats: municipal and regional district population estimates, 2011–2024',u:'https://www2.gov.bc.ca/gov/content/data/statistics/people-population-community/population/population-estimates',use:'Grows every dissemination area from 2021 to 2024, municipality labels, and the growth applied to commuting and travel-survey trips.',d:'Each dissemination area takes its municipality\'s 2021→2024 change (Langford +18.5%, Colwood +11.9%, Victoria +6.8%, Nanaimo +6.4%, Courtenay +8.6%, Port Alberni +3.9%); areas outside municipalities take the rest of their regional district. Areas were matched to municipalities with OpenStreetMap municipal boundaries. Island total 839,786 (2021 Census) → about 884,700 (2024).',lim:'Growth is assumed even across each municipality. Jobs stay at the 2021 Census.'},
   {n:'Statistics Canada, 2021 Census: place of work',use:'Jobs layer, by census tract in Victoria and Nanaimo and by municipality elsewhere.'},
-  {n:'Natural Resources Canada: Aboriginal Lands of Canada Legislative Boundaries',u:'https://proxyinternet.nrcan.gc.ca/arcgis/rest/services/CLSS-SATC/CLSS_Administrative_Boundaries/MapServer',use:'First Nation reserves layer: the boundaries of the 254 reserves on Vancouver Island and the nearby islands, and where the rail corridor crosses them.',d:'Canada Lands Survey System administrative boundaries service, read 31 October 2026 and simplified to about 15 m. Open Government Licence – Canada.',lim:'Reserves only: traditional territories, modern treaty lands (such as Maa-nulth First Nations lands) and lands under land codes are not shown, and Not a legal survey; crossing lengths are approximate.'},
+  {n:'Natural Resources Canada: Aboriginal Lands of Canada Legislative Boundaries',u:'https://proxyinternet.nrcan.gc.ca/arcgis/rest/services/CLSS-SATC/CLSS_Administrative_Boundaries/MapServer',use:'First Nation reserves layer: the boundaries of the 254 reserves on Vancouver Island and the nearby islands, and where the rail corridor crosses them.',d:'Canada Lands Survey System administrative boundaries service, read 31 October 2026 and simplified to about 15 m. Open Government Licence – Canada.',lim:'Reserves only: modern treaty lands (such as Maa-nulth First Nations lands) are not shown. Not a legal survey; crossing lengths are approximate.'},
   {n:'Province of BC: Indian Reserves – Administrative Boundaries',u:'https://catalogue.data.gov.bc.ca/dataset?q=ADM_INDIAN_RESERVES_BANDS_SP',use:'First Nation reserves layer: the First Nation each reserve is set apart for (238 matched by name, 16 by the reserve\'s longer official name; 4 reserves are shared).',d:'BC Geographic Warehouse layer WHSE_ADMIN_BOUNDARIES.ADM_INDIAN_RESERVES_BANDS_SP, read 31 October 2026. Band names are shown with the Nation\'s current name where it differs (for example Cowichan → Cowichan Tribes, Nanoose → Snaw-Naw-As, Campbell River → Wei Wai Kum, Beecher Bay → Sc\'ianew). Open Government Licence – British Columbia.'},
   {n:'Key destinations',use:'69 airports, ferry and cruise terminals, campuses, hospitals, defence sites, the Legislature and major shopping centres.',d:'Locations from OpenStreetMap; passenger and enrolment notes from the airport authorities, BC Ferries, the UVic 2023 Transportation Survey and the CRD 2022 travel survey.'}]},
  {g:'Travel',items:[
