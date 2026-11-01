@@ -835,7 +835,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
 .tour .spot.none{width:0;height:0;left:50%;top:50%}
 .tour .tcard{position:fixed;width:min(340px,calc(100vw - 32px));background:var(--panel,#fff);color:var(--ink);border-radius:12px;padding:16px 16px 12px;box-shadow:0 8px 30px rgba(0,0,0,.3);pointer-events:auto;display:grid;gap:8px}
 .tour .tcard h3{margin:0;font-size:17px}.tour .tcard p{margin:0;font-size:14px;line-height:1.45}
-.tour .tnav{display:flex;align-items:center;gap:8px;margin-top:4px}.tour .tnav .grow{flex:1}.tour .tdots{font-size:12px;color:var(--muted)}
+.tour .tnav{display:flex;align-items:center;gap:8px;margin-top:4px}.tour .tmore{justify-self:start;background:none;border:0;padding:2px 0;color:var(--accent,#8c1d2c);font:600 14px/1.3 var(--body);text-decoration:underline;text-underline-offset:3px;cursor:pointer}.tour .tnav{flex-wrap:wrap}.tour .tnav .grow{flex:1}.tour .tdots{font-size:12px;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){.tour .spot{transition:none}}
 </style></head>
 <body>
@@ -864,7 +864,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
           <div class="setrow palrow"><span>Colour theme</span><div class="palsel"><i aria-hidden="true"></i><select id="set-pal" aria-label="Colour theme"><option value="standard">Standard</option><option value="chart">Chart (default)</option><option value="forest">Forest</option><option value="night">Night (dark)</option><option value="contrast">High contrast</option><option value="vibrant">Vibrant</option><option value="sunset">Sunset (dark)</option><option value="arctic">Arctic</option><option value="graphite">Graphite (dark)</option></select></div></div>
           <label class="setexp"><input type="checkbox" id="set-exp"><span><b>Experimental mode</b><span class="m">Shows the planning tools: Timetable, Fleet, Stations, Track, Works and Plan panels. These are early and still changing.</span></span></label>
           <div class="sharebox"><div><b>Share this view</b><span class="m">Saves the layers, colour theme, map position and clock, plus the timetable, fleet, stations, track changes and works, as a short link. Nothing is saved until you create a link, and no personal information is stored.</span></div><button type="button" class="btn" id="share-make">Create share link</button><div class="shareout" id="share-out" hidden><input id="share-url" readonly aria-label="Share link"><button type="button" class="btn" id="share-copy">Copy</button></div><div class="m" id="share-msg" role="status"></div></div>
-          <button type="button" class="btn sm" id="set-tour">Take the tour</button>
+          <div class="pbtns"><button type="button" class="btn sm" id="set-tour">Take the tour</button><button type="button" class="btn sm" id="set-tour2">Tour the planning tools</button></div>
           <p class="m">Settings are remembered in this browser.</p>
         </div></div>
     </div>
@@ -4977,36 +4977,56 @@ function zsSync(){const s=$('zoomsl');if(s&&ZS_MIN&&document.activeElement!==s)s
  const cb=$('creditbtn'),cr=$('credit');cb.onclick=e=>{e.stopPropagation();const o=cr.classList.toggle('open');cb.setAttribute('aria-expanded',String(o));};
  document.addEventListener('pointerdown',e=>{if(cr.classList.contains('open')&&!cr.contains(e.target)&&e.target!==cb){cr.classList.remove('open');cb.setAttribute('aria-expanded','false');}});}
 
-/* ---------- intro tour: shown once to new visitors, and from Settings → Take the tour ---------- */
-const TOUR=[
+/* ---------- intro tour: shown once to new visitors, and from Settings → Take the tour ----------
+   The main tour ends with a link to an extended tour of the planning tools (Experimental mode). */
+const TOURS={main:[
  {t:'Welcome to the Island Rail Planner',p:'This map shows what restored passenger rail on Vancouver Island’s E&N corridor could look like: trains running a full weekday between Victoria, Nanaimo, Courtenay and Port Alberni, with the people, jobs and travel around them.'},
  {sel:'#mapwrap',t:'Trains on the map',p:'Each badge is a trainset running the timetable. Click one to follow it and see its trips. Drag to move the map, and scroll, pinch or use + and − to zoom; second tracks and sidings appear as you zoom in.'},
  {sel:'#speeds',t:'The map clock',p:'The simulation runs a weekday on its own clock. Pause it, or speed it up to 12 times. The stats beside the clock count trains running, riders, car trips avoided and single-track meets as the day goes on.',alt:'.stats'},
  {sel:'#layersbtn',t:'Layers',p:'Turn on population, jobs, travel flows, highway traffic, BC Transit buses, ferries, flights and more, to see where rail fits in how people move around the Island.'},
  {sel:'#btn-sources',t:'Sources and train types',p:'Sources lists every dataset and what it can and can’t show. Trains describes the train types. Ridership and costs are estimates, shown as ranges.'},
- {sel:'#btn-settings',t:'Settings',p:'Change the colour theme or turn on high contrast, switch on the planning tools (timetables, fleet, stations, track works and costs), and share a view as a short link. You can take this tour again from here.'}];
-let tourI=-1;
+ {sel:'#btn-settings',t:'Settings',p:'Change the colour theme or turn on high contrast, switch on the planning tools, and share a view as a short link. You can take this tour again from here.',more:{label:'Continue: tour the planning tools →',tour:'plan'}}],
+ plan:[
+ {t:'The planning tools',p:'These tools let you change the service and see what it does: timetables, trains, stations, track and costs. They are early and still changing, so they sit behind Experimental mode, which this tour turns on. You can turn it off again at the end.',start:()=>{TOUR_EXP0=EXP;if(!EXP){SETTINGS.exp=true;saveSettings();applyExp();}}},
+ {sel:'.panel',tab:'tt',t:'Timetable',p:'Every trip in the plan, by line and time. Change departure times, add or remove trips, and see warnings where a trip is scheduled faster than the track allows or a trainset can’t get there in time.'},
+ {sel:'.panel',tab:'fleet',t:'Fleet',p:'The trainsets that work the timetable and their types: diesel and battery units, hydrogen, coupled two-unit trains and more. Auto-assign shares the trips over the fewest sets.'},
+ {sel:'.panel',tab:'stn',t:'Stations',p:'Add, move or remove stations and set how much demand each draws. Stations a timetable doesn’t serve stay on the map, faded.'},
+ {sel:'.panel',tab:'trk',t:'Track',p:'Choose the track speeds (the 2003 track charts, or restored to the curve limits), drag the alignment, draw new track, and record sections that are out of service.'},
+ {sel:'.panel',tab:'works',t:'Works',p:'Track projects with their costs: superelevation, crossings, curve easing, bridges, passing sidings and double track. Switch each on or off and see the minutes it saves. “Add the sidings this timetable needs” finds where trains meet away from a siding.'},
+ {sel:'.panel',tab:'plan',t:'Plan',p:'Load a starting timetable (the ICF business case is the baseline), compare plans, see ridership as ranges by method and the capital cost, or start from a blank slate.'},
+ {sel:'#btn-settings',t:'Share or turn off',p:'Settings → Share this view saves your plan as a short link anyone can open. Experimental mode is on now; keep it on to carry on planning, or turn it off to go back to the simple map.',end:true}]};
+let tourI=-1,TOUR=TOURS.main,TOUR_EXP0=null;
 function tourEnd(){const o=$('tour');if(o)o.remove();tourI=-1;try{localStorage.setItem('island-rail-tour','done');}catch(_){}document.removeEventListener('keydown',tourKey,true);window.removeEventListener('resize',tourDraw);}
 function tourKey(e){if(tourI<0)return;if(e.key==='Escape'){e.preventDefault();e.stopPropagation();tourEnd();}else if(e.key==='ArrowRight'){tourGo(1);}else if(e.key==='ArrowLeft'){tourGo(-1);}}
 function tourGo(d){const n=tourI+d;if(n<0)return;if(n>=TOUR.length){tourEnd();return;}tourI=n;tourDraw();}
 function tourDraw(){const o=$('tour');if(!o||tourI<0)return;const s=TOUR[tourI],spot=o.querySelector('.spot'),card=o.querySelector('.tcard');
+  if(s.start&&!s._ran){s._ran=1;s.start();}if(s.tab&&typeof switchTab==='function'&&tab!==s.tab)switchTab(s.tab);
   let tg=s.sel&&document.querySelector(s.sel);if(tg&&(tg.offsetParent===null||!tg.getClientRects().length))tg=s.alt&&document.querySelector(s.alt);
   card.querySelector('h3').textContent=s.t;card.querySelector('p').textContent=s.p;card.querySelector('.tdots').textContent=`${tourI+1} of ${TOUR.length}`;
-  card.querySelector('.tback').hidden=tourI===0;card.querySelector('.tnext').textContent=tourI===TOUR.length-1?'Done':tourI===0?'Show me around':'Next';
+  const more=card.querySelector('.tmore');more.hidden=!s.more;if(s.more){more.textContent=s.more.label;more.onclick=()=>{tourSwitch(s.more.tour);};}
+  const off=card.querySelector('.toff');off.hidden=!(s.end&&EXP);card.querySelector('.tskip').hidden=!!s.end;
+  card.querySelector('.tback').hidden=tourI===0;card.querySelector('.tnext').textContent=s.end?'Keep them on':tourI===TOUR.length-1?'Done':tourI===0?(TOUR===TOURS.main?'Show me around':'Start'):'Next';
   const vw=innerWidth,vh=innerHeight,cw=card.offsetWidth,ch=card.offsetHeight;
-  if(tg){if(tg.scrollIntoView&&s.sel!=='#mapwrap'){const r0=tg.getBoundingClientRect();if(r0.top<0||r0.bottom>vh)tg.scrollIntoView({block:'center'});}
+  if(tg){const r0=tg.getBoundingClientRect();if(s.sel!=='#mapwrap'&&(r0.top<0||r0.bottom>vh)&&r0.height<vh*.8)tg.scrollIntoView({block:'center'});else if(r0.top<0||r0.top>vh*.6)tg.scrollIntoView({block:'start'});
     const r=tg.getBoundingClientRect(),pad=6;spot.className='spot';Object.assign(spot.style,{left:r.left-pad+'px',top:r.top-pad+'px',width:r.width+2*pad+'px',height:r.height+2*pad+'px'});
-    // the card goes below the target if it fits, otherwise above, otherwise inside the target near its top
-    let top=r.bottom+14;if(top+ch>vh-8)top=r.top-ch-14;if(top<8)top=Math.min(vh-ch-8,Math.max(8,r.top+16));
-    let left=Math.min(vw-cw-12,Math.max(12,r.left+r.width/2-cw/2));card.style.left=left+'px';card.style.top=top+'px';}
+    // place the card beside the target if there is room (tall panels), otherwise below, above, or inside near its top
+    let left,top;
+    if(r.height>vh*.45&&r.left>cw+40){left=r.left-cw-20;top=Math.min(vh-ch-12,Math.max(12,r.top+20));}
+    else if(r.height>vh*.45&&vw-r.right>cw+40){left=r.right+20;top=Math.min(vh-ch-12,Math.max(12,r.top+20));}
+    else{top=r.bottom+14;if(top+ch>vh-8)top=r.top-ch-14;if(top<8)top=Math.min(vh-ch-8,Math.max(8,r.top+16));left=Math.min(vw-cw-12,Math.max(12,r.left+r.width/2-cw/2));}
+    card.style.left=left+'px';card.style.top=top+'px';}
   else{spot.className='spot none';spot.removeAttribute('style');card.style.left=(vw-cw)/2+'px';card.style.top=Math.max(12,(vh-ch)/2)+'px';}
   card.querySelector('.tnext').focus({preventScroll:true});}
-function tourStart(){if($('tour'))return;const o=document.createElement('div');o.id='tour';o.className='tour';
+function tourSwitch(name){TOUR=TOURS[name]||TOURS.main;TOUR.forEach(s=>delete s._ran);tourI=0;tourDraw();}
+function tourStart(name='main'){if($('tour')){tourSwitch(name);return;}const o=document.createElement('div');o.id='tour';o.className='tour';
   o.innerHTML=`<div class="spot none"></div><div class="tcard" role="dialog" aria-modal="true" aria-labelledby="tour-h"><h3 id="tour-h"></h3><p></p>
-    <div class="tnav"><span class="tdots"></span><span class="grow"></span><button type="button" class="btn sm tskip">Skip</button><button type="button" class="btn sm tback">Back</button><button type="button" class="btn sm primary tnext">Next</button></div></div>`;
+    <button type="button" class="tmore" hidden></button>
+    <div class="tnav"><span class="tdots"></span><span class="grow"></span><button type="button" class="btn sm tskip">Skip</button><button type="button" class="btn sm tback">Back</button><button type="button" class="btn sm toff" hidden>Turn them off</button><button type="button" class="btn sm primary tnext">Next</button></div></div>`;
   document.body.appendChild(o);o.querySelector('.tskip').onclick=tourEnd;o.querySelector('.tback').onclick=()=>tourGo(-1);o.querySelector('.tnext').onclick=()=>tourGo(1);
-  document.addEventListener('keydown',tourKey,true);window.addEventListener('resize',tourDraw);tourI=0;tourDraw();}
+  o.querySelector('.toff').onclick=()=>{SETTINGS.exp=false;saveSettings();applyExp();tourEnd();};
+  document.addEventListener('keydown',tourKey,true);window.addEventListener('resize',tourDraw);tourSwitch(name);}
 $('set-tour').onclick=()=>{$('setmenu').hidden=true;$('btn-settings').setAttribute('aria-expanded','false');tourStart();};
+$('set-tour2').onclick=()=>{$('setmenu').hidden=true;$('btn-settings').setAttribute('aria-expanded','false');tourStart('plan');};
 // first visit only (not when opening a shared link, which has its own view to show)
 {let seen=null;try{seen=localStorage.getItem('island-rail-tour');}catch(_){seen='done';}
  if(!seen&&!/[#&?]c=/.test(location.hash+location.search))setTimeout(tourStart,1200);}
