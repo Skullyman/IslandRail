@@ -740,6 +740,15 @@ svg.measuring{cursor:crosshair}
 .ctr{cursor:pointer}.ctr .ctrdot{fill:var(--bike-p);stroke:var(--halo);stroke-width:1.5;fill-opacity:.85}.ctr .ctrring{fill:var(--bike-p);stroke:none}
 .ctr.en .ctrdot{stroke:var(--rail);stroke-width:2.2}.ctrlbl{font-family:var(--mono);font-size:10px;font-weight:600;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px;pointer-events:none;display:none}
 svg.zt .ctrlbl{display:block}.nolbl-trail .ctrlbl{display:none!important}
+.ctrtip h4{margin-bottom:1px}.ctren{color:var(--rail);font-weight:700;margin-top:3px}
+.ctrh{margin-top:8px;font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 6px;align-items:baseline}.ctrh b{color:var(--ink);font-size:12.5px}
+.ctrkey{margin-left:auto;display:flex;gap:4px;align-items:center}.ctrkey i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-left:6px}.ctrkey .kb{background:var(--bike-p)}.ctrkey .kw{height:0;border-top:2px dashed var(--ink);border-radius:0}
+.ctrchart{display:block;margin-top:4px}.ctrchart .cg{stroke:var(--line);stroke-width:1}.ctrchart .ca{font:10px var(--mono);fill:var(--muted)}
+.ctrchart .cb{fill:var(--bike-p);opacity:.8}.ctrchart .cbn{fill:var(--accent)}.ctrchart .cw{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-dasharray:4 3;stroke-linejoin:round}
+.ctrnow{font-size:12px;margin-top:2px;color:var(--muted)}.ctrnow b{color:var(--ink)}
+.ctrst{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px}.ctrst div{display:grid}.ctrst b{font-family:var(--display);font-size:20px;line-height:1;font-variant-numeric:tabular-nums}.ctrst span{font-size:11px;color:var(--muted)}
+.ctryrs{display:flex;gap:4px;align-items:flex-end;margin-top:4px}.ctryrs em{font:600 9.5px var(--mono);font-style:normal;color:var(--ink);white-space:nowrap}.ctryrs div{display:grid;justify-items:center;gap:2px;flex:1;max-width:44px}.ctryrs i{display:block;width:100%;background:var(--bike-p);opacity:.55;border-radius:3px 3px 0 0}.ctryrs div:last-child i{opacity:.9}.ctryrs span{font:10px var(--mono);color:var(--muted)}
+.ctrsrc{margin-top:6px}
 .mlane path:not(.marr),.mres path{cursor:help}
 .mres .r-mil{fill:url(#milhatch);stroke:#b91c1c;stroke-width:1.2}
 .mres .r-nogo{fill:rgba(220,38,38,.30);stroke:#dc2626;stroke-width:1.2}
@@ -5244,16 +5253,28 @@ const CTR=CTR_ENC?CTR_ENC.split('|').map(line=>{const [n,op,ll,mo,y0,en,tr,ss,we
 const ctrG=el('g',{class:'ctrl'},L.trails);
 const ctrMax=()=>Math.max(1,...CTR.map(c=>(c.S[SEASON]||{}).wd||0));
 function ctrNow(c){const s=c.S[SEASON];if(!s)return 0;const hr=Math.floor(sim/60)%24;return s.wd*(s.h[hr]||0)/1000;}
-function ctrTip(c,e,pin){const s=c.S[SEASON],hr=Math.floor(sim/60)%24;
-  let bars='';if(s){const mx=Math.max(1,...s.h,...(c.we||[]));const W=216,H=46;bars=`<svg width="${W}" height="${H+12}" viewBox="0 0 ${W} ${H+12}" style="display:block;margin-top:6px" aria-hidden="true">`;
-    s.h.forEach((v,i)=>{const bh=Math.max(1,v/mx*H);bars+=`<rect x="${i*9+1}" y="${H-bh}" width="7" height="${bh}" rx="1.5" fill="${i===hr?'var(--accent)':'var(--bike-p)'}" opacity="${i===hr?1:.75}"/>`;});
-    if(c.we){bars+=`<polyline fill="none" stroke="var(--ink)" stroke-width="1.3" stroke-dasharray="3 2" points="${c.we.map((v,i)=>`${i*9+4.5},${(H-v/mx*H).toFixed(1)}`).join(' ')}"/>`;}
-    bars+=[0,6,12,18].map(h=>`<text x="${h*9+1}" y="${H+10}" font-size="9" fill="var(--muted)">${h}:00</text>`).join('')+'</svg>';}
-  const trend=c.tr.length>1?`<div class="m" style="margin-top:4px">Average a day, all year: ${c.tr.map(([y,a])=>`${y} <b>${a.toLocaleString()}</b>`).join(' · ')}</div>`:'';
-  placeTip(e,`<h4>${esc(c.n)}</h4><div class="m">${esc(c.op)} · counting since ${c.y0} · ${c.modes.join(', ').toLowerCase()}</div>${c.en?'<div><b class="badt" style="color:var(--rail)">On the E&amp;N Rail Trail, beside the rail corridor</b></div>':''}
-    ${s?`<div style="margin-top:4px">${SEASON_NM[SEASON]} (${SEASON_MO[SEASON]}): <b>${s.wd.toLocaleString()}</b> trips a weekday, <b>${s.we.toLocaleString()}</b> a weekend day${s.ped>0&&s.ped<100?` · ${s.ped}% on foot`:''}</div>
-    <div>Now (${hhmm(hr*60)}–${hhmm(hr*60+60)}, weekday): about <b>${Math.round(ctrNow(c)).toLocaleString()}</b> an hour</div>${bars}<div class="m">Bars: weekdays this season, by hour · dashed: weekends, all year</div>`:'<div class="m">No data for this season.</div>'}
-    ${trend}<div class="m">Automated counter, both directions. Source: Capital Regional District and partners (Eco-Counter).</div>${pin?'<div class="pbtns"><button class="btn sm" id="tip-close" type="button">Close</button></div>':''}`);
+function ctrTip(c,e,pin){const s=c.S[SEASON],hr=Math.floor(sim/60)%24,f=n=>Math.round(n).toLocaleString(),yr=a=>{const n=a*365;return n>=1e6?(n/1e6).toFixed(2)+' M':Math.round(n/1000)+'k';};
+  const W=Math.min(340,(wrap.clientWidth||400)-36),H=150,L=34,R=6,T=8,B=20,iw=W-L-R,ih=H-T-B;
+  let chart='';
+  if(s){const wd=s.h.map(v=>s.wd*v/1000),we=c.we?c.we.map(v=>s.we*v/1000):null;const mx=Math.max(1,...wd,...(we||[]));
+    const step=mx<=20?5:mx<=60?20:mx<=150?50:mx<=300?100:mx<=600?200:500,top=Math.ceil(mx/step)*step,y=v=>T+ih-ih*v/top,bw=iw/24;
+    chart=`<svg class="ctrchart" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Trips by hour, ${SEASON_NM[SEASON].toLowerCase()} weekdays and weekends">`;
+    for(let g=0;g<=top;g+=step)chart+=`<line x1="${L}" x2="${W-R}" y1="${y(g).toFixed(1)}" y2="${y(g).toFixed(1)}" class="cg"/><text x="${L-5}" y="${(y(g)+3.5).toFixed(1)}" text-anchor="end" class="ca">${g.toLocaleString()}</text>`;
+    wd.forEach((v,i)=>{const h=Math.max(1,ih*v/top),x=L+i*bw+1;chart+=`<rect x="${x.toFixed(1)}" y="${(T+ih-h).toFixed(1)}" width="${(bw-2).toFixed(1)}" height="${h.toFixed(1)}" rx="2" class="${i===hr?'cbn':'cb'}"><title>${hhmm(i*60)}–${hhmm(i*60+60)}: ${f(v)} on a weekday${we?`, ${f(we[i])} on a weekend day`:''}</title></rect>`;});
+    if(we)chart+=`<polyline class="cw" points="${we.map((v,i)=>`${(L+i*bw+bw/2).toFixed(1)},${y(v).toFixed(1)}`).join(' ')}"/>`;
+    [[0,'12 am'],[6,'6 am'],[12,'noon'],[18,'6 pm']].forEach(([h,t])=>{chart+=`<text x="${(L+h*bw).toFixed(1)}" y="${H-5}" class="ca">${t}</text>`;});
+    chart+='</svg>';}
+  const last=c.tr.length?c.tr[c.tr.length-1]:null;
+  const yrs=c.tr.length>1?(()=>{const mx=Math.max(...c.tr.map(t=>t[1]));return`<div class="ctryrs" aria-label="Trips a year">${c.tr.map(([y,a])=>`<div title="${y}: about ${f(Math.round(a*365/1000)*1000)} trips (${f(a)} a day)"><em>${yr(a)}</em><i style="height:${Math.max(3,a/mx*34).toFixed(0)}px"></i><span>${y}</span></div>`).join('')}</div>`;})():'';
+  placeTip(e,`<div class="ctrtip" style="width:${W}px"><h4>${esc(c.n)}</h4><div class="m">${esc(c.op)} · since ${c.y0} · ${c.modes.join(' and ').toLowerCase()}</div>
+    ${c.en?'<div class="ctren">On the E&amp;N Rail Trail, beside the rail corridor</div>':''}
+    ${s?`<div class="ctrh"><b>Trips by hour</b> · ${SEASON_NM[SEASON].toLowerCase()} (${SEASON_MO[SEASON]})<span class="ctrkey"><i class="kb"></i>Weekday${c.we?'<i class="kw"></i>Weekend':''}</span></div>${chart}
+    <div class="ctrnow">Now, ${hhmm(hr*60)}–${hhmm(hr*60+60)} on a weekday: about <b>${f(ctrNow(c))}</b> an hour</div>
+    <div class="ctrst"><div><b>${f(s.wd)}</b><span>a weekday</span></div><div><b>${f(s.we)}</b><span>a weekend day</span></div>${last?`<div><b>${f(Math.round(last[1]*365/1000)*1000)}</b><span>trips in ${last[0]}</span></div>`:''}${s.ped>0&&s.ped<100?`<div><b>${s.ped}%</b><span>on foot</span></div>`:''}</div>`:'<div class="m">No data for this season.</div>'}
+    ${yrs?`<div class="ctrh" style="margin-top:6px"><b>Trips a year</b> · average day × 365</div>${yrs}`:''}
+    <div class="m ctrsrc">Both directions. Capital Regional District and partners (Eco-Counter).</div>${pin?'<div class="pbtns"><button class="btn sm" id="tip-close" type="button">Close</button></div>':''}</div>`);
+  const tp=$('tip'),wr=wrap.getBoundingClientRect(),tw=tp.offsetWidth,th=tp.offsetHeight;let x=parseFloat(tp.style.left),yy=parseFloat(tp.style.top);
+  if(x+tw>wr.width-6)x=Math.max(6,wr.width-tw-6);if(yy+th>wr.height-6)yy=Math.max(6,wr.height-th-6);tp.style.left=x+'px';tp.style.top=yy+'px';
   if(pin){$('tip').classList.add('act');$('tip-close').onclick=()=>hideTip(true);}}
 let ctrMk=[];
 function drawCtr(){ctrG.innerHTML='';ctrMk=[];const mx=ctrMax();
