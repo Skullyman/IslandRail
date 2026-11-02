@@ -1033,7 +1033,7 @@ svg.measuring{cursor:crosshair}
         <div class="m">Hover a ◆ station for both directions and its daily profile.</div>
         <div class="m" id="t-enn" hidden>Includes the drivers the Travel flows layer moves to the train (With E&amp;N).</div></div>
       <div class="measbar" id="measbar" hidden role="status" aria-live="polite"><div class="mb-t"><b id="mb-len">Click the map to start measuring</b><span id="mb-sub"></span></div><div class="mb-c"><label><input type="checkbox" id="mb-smooth" checked> Smooth curve</label><label><input type="checkbox" id="mb-snap" checked> Snap to track</label><button type="button" class="btn" id="mb-undo">Undo</button><button type="button" class="btn" id="mb-clear">Clear</button><button type="button" class="btn" id="mb-done">Done</button></div></div><div class="lchips" id="lchips" hidden aria-label="Layers on the map"></div><div class="zoomsl"><button type="button" id="zs-out" aria-label="Zoom out">−</button><input type="range" id="zoomsl" min="0" max="100" step="0.5" value="0" aria-label="Zoom"><button type="button" id="zs-in" aria-label="Zoom in">+</button></div><div class="scale" id="scale"><span id="scale-t">20 km</span><i id="scale-b" style="width:100px"></i></div>
-      <button type="button" class="creditbtn" id="creditbtn" aria-label="Map data sources" aria-expanded="false">i</button><div class="credit" id="credit">Map data © OpenStreetMap contributors (ODbL). Elevation and hillshade: AWS Terrain Tiles (Mapzen terrarium). Population: Statistics Canada 2021 Census, grown to 2024 with BC Stats estimates. Jobs: Statistics Canada 2021 Census. Traffic counts: BC MoTI, City of Victoria. Commuting: Statistics Canada 2021 Census. Travel survey: CRD 2022 Origin-Destination Household Travel Survey. Bus schedules: BC Transit GTFS. Sailings and ferry traffic: BC Ferries. UVic and airport traffic figures. First Nation reserves: Natural Resources Canada (Open Government Licence – Canada) and Province of BC (Open Government Licence – British Columbia). Riders and buses are simulated.</div>
+      <button type="button" class="creditbtn" id="creditbtn" aria-label="Map data sources" aria-expanded="false">i</button><div class="credit" id="credit">Map data © OpenStreetMap contributors (ODbL). Elevation and hillshade: AWS Terrain Tiles (Mapzen terrarium). Population: Statistics Canada 2021 Census, grown to 2024 with BC Stats estimates. Jobs: Statistics Canada 2021 Census. Traffic counts: BC MoTI, City of Victoria. Commuting: Statistics Canada 2021 Census. Travel survey: CRD 2022 Origin-Destination Household Travel Survey. Bus schedules: BC Transit GTFS. Sailings and ferry traffic: BC Ferries. UVic and airport traffic figures. First Nation reserves: Natural Resources Canada (Open Government Licence – Canada) and Province of BC (Open Government Licence – British Columbia). Riders and buses are simulated. Anonymous usage counts, no cookies: <a href="https://map.restoreislandrail.com/stats/">usage statistics</a>.</div>
       <div class="toasts" id="toasts" aria-live="polite"></div>
       <div class="tip" id="tip" hidden></div>
       <div class="fsclock" id="fsclock" aria-hidden="true"></div>
@@ -5060,13 +5060,13 @@ function cfgApply(c){
   if(typeof renderHeader==='function')renderHeader();}
 async function shareMake(){const b=$('share-make'),msg=$('share-msg');b.disabled=true;msg.textContent='Saving…';
   try{const r=await fetch(RELAY_BASE+'/config',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(cfgCollect())});const j=await r.json().catch(()=>({}));
-    if(!r.ok||!j.id)throw new Error(j.error||('HTTP '+r.status));const url=SHARE_BASE+'#c='+j.id;$('share-url').value=url;$('share-out').hidden=false;msg.textContent='Anyone with this link sees this view.';
+    if(!r.ok||!j.id)throw new Error(j.error||('HTTP '+r.status));if(window.__track)__track('share:save',false);const url=SHARE_BASE+'#c='+j.id;$('share-url').value=url;$('share-out').hidden=false;msg.textContent='Anyone with this link sees this view.';
     try{await navigator.clipboard.writeText(url);msg.textContent='Link copied. Anyone with it sees this view.';}catch(_){}}
   catch(e){msg.textContent='Could not save the view ('+(e.message||e)+').';}finally{b.disabled=false;b.textContent='Create a new link';}}
 $('share-make').onclick=shareMake;
 $('share-copy').onclick=async()=>{const i=$('share-url');try{await navigator.clipboard.writeText(i.value);}catch(_){i.select();try{document.execCommand('copy');}catch(__){}}$('share-msg').textContent='Link copied.';};
 async function shareOpen(){const m=/[#&?]c=([2-9A-Za-z]{7})\b/.exec(location.hash+location.search);if(!m)return;
-  try{const r=await fetch(RELAY_BASE+'/config?id='+m[1].toUpperCase());const c=await r.json();if(!r.ok)throw new Error(c.error||('HTTP '+r.status));
+  try{const r=await fetch(RELAY_BASE+'/config?open=1&id='+m[1].toUpperCase());const c=await r.json();if(!r.ok)throw new Error(c.error||('HTTP '+r.status));if(window.__track)__track('share:open',false);
     cfgApply(c);toast('Shared view',`Opened a map view shared on ${new Date(c.made||Date.now()).toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'})}`);}
   catch(e){toast('Shared view',String(e.message||e));}}
 setTimeout(shareOpen,600);window.addEventListener('hashchange',shareOpen);
@@ -5217,6 +5217,44 @@ logEvt(`${DAYS[day%5]} · ${PLAN.trips.length} trips planned on ${PLAN.fleet.len
 renderEditor();renderHeader();
 requestAnimationFrame(frame);
 
+/* ---------- anonymous usage counts, shown publicly at map.restoreislandrail.com/stats ----------
+   No cookies, nothing stored in the browser, no personal information. Sends only on the live site, and not at all when the
+   browser asks not to be tracked (Do Not Track or Global Privacy Control). Each feature is counted at most once a visit. */
+(function(){
+  const ON=location.hostname==='map.restoreislandrail.com'&&navigator.doNotTrack!=='1'&&window.doNotTrack!=='1'&&navigator.globalPrivacyControl!==true&&!navigator.webdriver;
+  const HIT=RELAY_BASE+'/hit',seen=new Set();let q=[],tm=null,active=0,visT=document.visibilityState==='visible'?performance.now():null,gesture=0,ended=false;
+  const post=o=>{if(!ON)return;const b=JSON.stringify(o);try{if(!(navigator.sendBeacon&&navigator.sendBeacon(HIT,new Blob([b],{type:'text/plain'}))))fetch(HIT,{method:'POST',body:b,keepalive:true,headers:{'Content-Type':'text/plain'}}).catch(()=>{});}catch(_){}};
+  const flush=(extra={})=>{clearTimeout(tm);tm=null;const ev=q.splice(0,40);if(ev.length||Object.keys(extra).length)post({ev,...extra});};
+  function track(name,once=true){if(once){if(seen.has(name))return;seen.add(name);}q.push(name);if(!tm)tm=setTimeout(()=>flush(),15000);}
+  window.__track=track;
+  const inTour=()=>!!document.getElementById('tour');
+  document.addEventListener('pointerdown',e=>{if(e.isTrusted)gesture=Date.now();},true);document.addEventListener('keydown',e=>{if(e.isTrusted)gesture=Date.now();},true);
+  // the visit: where it came from and what kind of screen (no screen size or browser details are sent)
+  const ref=(()=>{try{const h=document.referrer?new URL(document.referrer).hostname.replace(/^www\./,''):'';return h&&h!==location.hostname?h:'';}catch(_){return'';}})();
+  const short=Math.min(screen.width,screen.height),coarse=matchMedia('(pointer:coarse)').matches;
+  setTimeout(()=>post({v:1,ref,dev:coarse?(short<600?'phone':'tablet'):'desktop',ev:q.splice(0,40)}),1200);
+  // time with the map in view: added up while the page is visible, sent when it is hidden or closed
+  const away=fin=>{if(visT!=null){active+=performance.now()-visT;visT=null;}const dt=Math.round(active/1000);active=0;tot+=dt;flush(fin&&!ended?(ended=true,{dt,fin:tot}):{dt});};let tot=0;
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')away(false);else visT=performance.now();});
+  window.addEventListener('pagehide',()=>away(true));
+  // layers turned on, pages and panel tabs opened, tools used (clicks by people only, not the tour)
+  document.addEventListener('click',e=>{if(!e.isTrusted||inTour())return;const b=e.target.closest&&e.target.closest('button,[data-tab],.srrow');if(!b)return;
+    if(b.classList.contains('lsw')&&b.id){setTimeout(()=>{if(b.getAttribute('aria-pressed')==='true')track('layer:'+b.id.replace(/btn$/,''));},0);return;}
+    if(b.dataset&&b.dataset.tab){track('tab:'+b.dataset.tab);return;}
+    if(b.classList.contains('srrow')){track('tool:search');return;}
+    const P={'btn-trains':'page:trains','btn-sources':'page:sources','btn-profiles':'page:profiles','btn-settings':'page:settings','btn-export':'plan:export','btn-import':'plan:import','srbtn':'tool:search-open'};
+    if(P[b.id])track(P[b.id]);if(b.id==='measbtn')setTimeout(()=>{if(MEAS.on)track('tool:measure');},0);},true);
+  document.addEventListener('keydown',e=>{if(e.isTrusted&&e.key==='Enter'&&e.target&&e.target.id==='sr-q')track('tool:search');},true);
+  document.addEventListener('change',e=>{if(e.isTrusted&&e.target&&e.target.id==='set-exp'&&e.target.checked)track('exp:on');},true);
+  const wrap=(name,f)=>{const o=window[name];if(typeof o==='function')window[name]=function(...a){try{f.apply(this,a);}catch(_){}return o.apply(this,a);};};
+  wrap('openRidership',on=>{if(on&&!inTour()&&Date.now()-gesture<1500)track('page:ridership');});
+  wrap('applyPlan',()=>{if(!inTour()&&Date.now()-gesture<2500)track('plan:edit');});
+  const tn=()=>TOUR===TOURS.main?'main':'planning';
+  wrap('tourStart',name=>track('tour:start:'+(name==='plan'?'planning':'main')));
+  wrap('tourSwitch',name=>track('tour:start:'+(name==='plan'?'planning':'main')));
+  wrap('tourGo',d=>{if(d===1&&tourI===TOUR.length-1)track('tour:done:'+tn());});
+  wrap('tourEnd',()=>{if(tourI>=0&&tourI<TOUR.length-1)track('tour:skip:'+tn());});
+})();
 </script>
 
 <script>

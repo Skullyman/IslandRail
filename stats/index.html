@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Island Rail Planner usage</title>
+<meta name="description" content="Public, anonymous usage statistics for the Island Rail Planner map: visits, saved and shared views, and the features people use.">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style>
+:root{--bg:#f4f3ee;--panel:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#6d6c67;--line:#e2e0d8;--grid:#ecebe5;--accent:#9b1c31;
+  --s1:#2a78d6;--s2:#eb6834;--track:#ecebe5;--display:'Big Shoulders Display',Impact,sans-serif;--body:'Atkinson Hyperlegible',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121211;--panel:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#9c9b93;--line:#2e2e2b;--grid:#262624;--accent:#ee7586;--s1:#3987e5;--s2:#d95926;--track:#2a2a27}}
+:root[data-theme="dark"]{--bg:#121211;--panel:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#9c9b93;--line:#2e2e2b;--grid:#262624;--accent:#ee7586;--s1:#3987e5;--s2:#d95926;--track:#2a2a27}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:22px 16px 48px}
+header{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:end;justify-content:space-between;margin-bottom:16px}
+h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margin:0;text-transform:uppercase;letter-spacing:.01em}
+h1 span{color:var(--accent)}
+.sub{color:var(--ink2);margin:4px 0 0;font-size:14px}
+.back{color:var(--ink);font-weight:700}
+.range{display:flex;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel)}
+.range button{font:600 13px var(--body);border:0;background:none;color:var(--ink);padding:7px 12px;cursor:pointer}
+.range button+button{border-left:1px solid var(--line)}
+.range button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:12px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.tile .k{font-size:12.5px;color:var(--ink2);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.tile .v{font-family:var(--display);font-weight:800;font-size:40px;line-height:1.05;font-variant-numeric:tabular-nums}
+.tile .n{font-size:12.5px;color:var(--muted)}
+.tile.hero{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.card.wide{grid-column:1/-1}
+.card h2{font-family:var(--display);font-weight:600;font-size:21px;margin:0;text-transform:uppercase;letter-spacing:.02em}
+.card .cap{color:var(--muted);font-size:12.5px;margin:2px 0 10px}
+.legend{display:flex;gap:14px;font-size:12.5px;color:var(--ink2);margin-bottom:4px}
+.legend i{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-right:5px;border-radius:2px}
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.ax{font:11px var(--mono);fill:var(--muted)}
+.gl{stroke:var(--grid);stroke-width:1}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:6px 9px;font-size:12.5px;box-shadow:0 6px 18px rgba(0,0,0,.14);white-space:nowrap;z-index:2}
+.tip b{font-variant-numeric:tabular-nums}
+.bars{display:grid;gap:7px}
+.bar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;font-size:13.5px;align-items:baseline}
+.bar .lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .num{font-variant-numeric:tabular-nums;color:var(--ink2);font-size:13px}
+.bar .tr{grid-column:1/-1;height:8px;background:var(--track);border-radius:4px;overflow:hidden}
+.bar .fill{height:100%;background:var(--s1);border-radius:4px;min-width:2px}
+.empty{color:var(--muted);font-size:13.5px;padding:8px 0}
+.funnel{display:grid;gap:10px}
+.funnel .row{display:grid;grid-template-columns:110px repeat(3,minmax(0,1fr));gap:8px;font-size:13.5px;align-items:center}
+.funnel .row.h{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.funnel b{font-variant-numeric:tabular-nums;font-size:18px}
+details.tbl{margin-top:8px;font-size:13px}details.tbl summary{cursor:pointer;color:var(--ink2)}
+details.tbl table{border-collapse:collapse;margin-top:6px;font-variant-numeric:tabular-nums}
+details.tbl td,details.tbl th{padding:2px 12px 2px 0;text-align:right}details.tbl td:first-child,details.tbl th:first-child{text-align:left}
+.about{margin-top:14px;color:var(--ink2);font-size:13.5px}
+.about h2{font-family:var(--display);font-size:19px;text-transform:uppercase;margin:0 0 4px;color:var(--ink)}
+.status{color:var(--muted);font-size:13px;margin:8px 0}
+@media (max-width:600px){h1{font-size:28px}.tile .v{font-size:34px}.funnel .row{grid-template-columns:86px repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><h1>Island Rail <span>Planner</span> usage</h1><p class="sub">Anonymous, public counts from <a class="back" href="../">map.restoreislandrail.com</a>. Days run on Pacific time.</p></div>
+  <div class="range" role="group" aria-label="Period"><button type="button" data-d="7">7 days</button><button type="button" data-d="30" aria-pressed="true">30 days</button><button type="button" data-d="90">90 days</button><button type="button" data-d="365">1 year</button></div>
+</header>
+<div class="status" id="status" role="status">Loading…</div>
+<section class="tiles" id="tiles" aria-label="Summary"></section>
+<div class="grid">
+  <section class="card wide"><h2>Visits by day</h2><p class="cap">Each time the map is opened. Visitors are counted once a day without cookies, so the same person on two days counts twice.</p>
+    <div class="legend"><span><i style="background:var(--s1)"></i>Visits</span><span><i style="background:var(--s2)"></i>Visitors</span></div><div class="chart" id="c-visits"></div>
+    <details class="tbl"><summary>Show as a table</summary><div id="t-visits"></div></details></section>
+  <section class="card wide"><h2>Saved views</h2><p class="cap">Map views saved as share links (layers, map position, timetable, stations, track and works), and how often shared links were opened.</p><div class="chart" id="c-saves"></div>
+    <details class="tbl"><summary>Show as a table</summary><div id="t-saves"></div></details></section>
+  <section class="card"><h2>Layers turned on</h2><p class="cap">Share of visits that switched each layer on. Railway, population and jobs start on, so they count only when turned back on.</p><div class="bars" id="b-layers"></div></section>
+  <section class="card"><h2>Pages and tools</h2><p class="cap">Share of visits that used each part of the planner.</p><div class="bars" id="b-tools"></div></section>
+  <section class="card"><h2>Guided tours</h2><p class="cap">Tours started, finished to the last step, or closed early.</p><div class="funnel" id="f-tour"></div></section>
+  <section class="card"><h2>Time with the map</h2><p class="cap">How long visits lasted.</p><div class="bars" id="b-dur"></div></section>
+  <section class="card"><h2>Devices</h2><p class="cap">From the kind of screen, not the device model.</p><div class="bars" id="b-dev"></div></section>
+  <section class="card"><h2>Where visits came from</h2><p class="cap">The site that linked to the map; "Direct" includes typed addresses, bookmarks and most apps.</p><div class="bars" id="b-ref"></div></section>
+  <section class="card"><h2>Where visitors are</h2><p class="cap">Province or state in Canada and the US, country elsewhere.</p><div class="bars" id="b-geo"></div></section>
+</div>
+<section class="about"><h2>How this is counted</h2>
+<p>The planner sends a small, anonymous note when it opens and when someone uses a feature, at most once per feature a visit. There are no cookies and nothing is stored in your browser. Your address is never saved: visitors are counted with a one-way scrambled code that changes every day and is deleted after two days, so visits can't be linked from one day to the next. Nothing is sent if your browser asks sites not to track you (Do Not Track or Global Privacy Control). Saved views are counted from the share links themselves, including those made before these counts began.</p></section>
+</div>
+<div class="tip" id="tip" hidden></div>
+<script>
+const API='https://island-rail-tankers.give2islandrail.workers.dev/stats';
+const $=id=>document.getElementById(id);
+const NS='http://www.w3.org/2000/svg';
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;};
+const fmt=n=>Math.round(n).toLocaleString('en-CA');
+const pct=(n,d)=>d?(n/d*100<1&&n>0?'<1':Math.round(n/d*100))+'%':'–';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const LAYERS={rail:'Railway and stations',speed:'Track speed and works',freight:'Rail freight',pop:'Population',job:'Jobs and land use',dest:'Key destinations',res:'First Nation reserves',flow:'Travel flows',
+  traf:'Traffic congestion',crash:'Reported crashes',bus:'BC Transit buses',bp:'Bus priority lanes',trail:'Trails and bike lanes',ferry:'Ferries',mlane:'Shipping lanes',mres:'Marine hazards and restricted areas',tide:'Tidal currents',tanker:'Tankers (live)',air:'Flights'};
+const TOOLS={'page:trains':'Trains page','page:sources':'Sources page','page:profiles':'Profiles page','page:ridership':'Ridership page','page:settings':'Settings menu','tab:plan':'Plan tab','tab:tt':'Timetable tab','tab:fleet':'Fleet tab','tab:stn':'Stations tab','tab:trk':'Track tab','tab:works':'Works tab',
+  'plan:edit':'Changed the plan','plan:export':'Exported a plan','plan:import':'Imported a plan','exp:on':'Turned on experimental tools','tool:measure':'Measuring tool','tool:search':'Searched the map','tool:search-open':'Opened map search'};
+const DUR={'a<30s':'Under 30 seconds','b30s-2m':'30 seconds to 2 minutes','c2-10m':'2 to 10 minutes','d10-30m':'10 to 30 minutes','e30m+':'More than 30 minutes'};
+const CC={CA:'Canada',US:'United States',GB:'United Kingdom',AU:'Australia',NZ:'New Zealand',DE:'Germany',FR:'France',NL:'Netherlands',JP:'Japan',IN:'India',IE:'Ireland',CH:'Switzerland',SE:'Sweden',NO:'Norway',MX:'Mexico'};
+let DAYS=30,DATA=null;
+const tip=$('tip');
+function showTip(e,html){tip.innerHTML=html;tip.hidden=false;const w=tip.offsetWidth,h=tip.offsetHeight;let x=e.pageX+14,y=e.pageY-h-10;if(x+w>document.documentElement.clientWidth-8)x=e.pageX-w-14;if(y<window.scrollY+4)y=e.pageY+16;tip.style.left=x+'px';tip.style.top=y+'px';}
+const hideTip=()=>{tip.hidden=true;};
+function daysList(from,to){const out=[];let d=new Date(from+'T12:00:00Z');const e=new Date(to+'T12:00:00Z');while(d<=e){out.push(d.toISOString().slice(0,10));d=new Date(d.getTime()+864e5);}return out;}
+const dlabel=d=>new Date(d+'T12:00:00Z').toLocaleDateString('en-CA',{month:'short',day:'numeric',timeZone:'UTC'});
+const dlong=d=>new Date(d+'T12:00:00Z').toLocaleDateString('en-CA',{weekday:'short',month:'long',day:'numeric',year:'numeric',timeZone:'UTC'});
+function niceMax(v){if(v<=4)return 4;const p=Math.pow(10,Math.floor(Math.log10(v))),m=v/p;return (m<=2?2:m<=5?5:10)*p;}
+/* one-axis time chart: lines (visits, visitors) or bars (saves, opens) */
+function timeChart(box,days,series,kind){box.innerHTML='';const W=Math.max(320,box.clientWidth||900),H=220,L=40,R=10,T=10,B=26,iw=W-L-R,ih=H-T-B;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':series.map(s=>s.name).join(' and ')+' by day'},box);
+  const max=niceMax(Math.max(1,...series.flatMap(s=>days.map(d=>s.v[d]||0))));
+  for(let i=0;i<=4;i++){const y=T+ih-ih*i/4;el('line',{x1:L,x2:W-R,y1:y,y2:y,class:'gl'},svg);const t=el('text',{x:L-6,y:y+3.5,'text-anchor':'end',class:'ax'},svg);t.textContent=fmt(max*i/4);}
+  const n=days.length,step=iw/n,xc=i=>L+step*(i+.5);
+  const every=Math.ceil(n/(W<500?4:8));days.forEach((d,i)=>{if(i%every)return;const t=el('text',{x:xc(i),y:H-8,'text-anchor':'middle',class:'ax'},svg);t.textContent=dlabel(d);});
+  if(kind==='bar'){const bw=Math.max(1.5,Math.min(18,step/series.length-2));
+    series.forEach((s,si)=>days.forEach((d,i)=>{const v=s.v[d]||0;if(!v)return;const h=Math.max(2,ih*v/max),x=xc(i)-(bw*series.length+2*(series.length-1))/2+si*(bw+2);
+      el('path',{d:`M${x},${T+ih}V${T+ih-h+Math.min(4,h/2)}q0,-${Math.min(4,h/2)} ${Math.min(4,bw/2)},-${Math.min(4,h/2)}H${x+bw-Math.min(4,bw/2)}q${Math.min(4,bw/2)},0 ${Math.min(4,bw/2)},${Math.min(4,h/2)}V${T+ih}Z`,fill:s.c},svg);}));}
+  else series.forEach(s=>{const pts=days.map((d,i)=>[xc(i),T+ih-ih*(s.v[d]||0)/max]);el('polyline',{points:pts.map(p=>p.join(',')).join(' '),fill:'none',stroke:s.c,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'},svg);
+    if(n<=40)pts.forEach(p=>el('circle',{cx:p[0],cy:p[1],r:2.5,fill:s.c},svg));});
+  const cross=el('line',{y1:T,y2:T+ih,stroke:'var(--muted)','stroke-width':1,'stroke-dasharray':'3 3',visibility:'hidden'},svg);
+  const hit=el('rect',{x:L,y:T,width:iw,height:ih,fill:'transparent'},svg);
+  const at=e=>{const r=svg.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width;return Math.max(0,Math.min(n-1,Math.floor((x-L)/step)));};
+  hit.addEventListener('pointermove',e=>{const i=at(e),d=days[i];cross.setAttribute('x1',xc(i));cross.setAttribute('x2',xc(i));cross.setAttribute('visibility','visible');
+    showTip(e,`<div>${dlong(d)}</div>`+series.map(s=>`<div><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${s.c};margin-right:5px"></span>${s.name}: <b>${fmt(s.v[d]||0)}</b></div>`).join(''));});
+  hit.addEventListener('pointerleave',()=>{cross.setAttribute('visibility','hidden');hideTip();});}
+function table(box,days,series){const rows=days.filter(d=>series.some(s=>s.v[d])).reverse();
+  box.innerHTML=rows.length?`<table><tr><th>Day</th>${series.map(s=>`<th>${s.name}</th>`).join('')}</tr>${rows.map(d=>`<tr><td>${dlong(d)}</td>${series.map(s=>`<td>${fmt(s.v[d]||0)}</td>`).join('')}</tr>`).join('')}</table>`:'<p class="empty">Nothing yet in this period.</p>';}
+function bars(box,items,denom,opts={}){box.innerHTML='';items=items.filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]);if(opts.order)items.sort((a,b)=>a[2]-b[2]);
+  if(!items.length){box.innerHTML='<p class="empty">Nothing yet in this period.</p>';return;}
+  const max=Math.max(...items.map(x=>x[1])),shown=items.slice(0,opts.max||12);
+  for(const [name,v] of shown){const r=document.createElement('div');r.className='bar';
+    r.innerHTML=`<span class="lbl" title="${esc(name)}">${esc(name)}</span><span class="num">${opts.raw?fmt(v):`${pct(v,denom)} · ${fmt(v)}`}</span><div class="tr"><div class="fill" style="width:${Math.max(1,v/max*100)}%"></div></div>`;box.appendChild(r);}
+  if(items.length>shown.length){const m=document.createElement('p');m.className='empty';m.textContent=`and ${items.length-shown.length} more`;box.appendChild(m);}}
+function tile(k,v,n,hero){return`<div class="tile${hero?' hero':''}"><div class="k">${k}</div><div class="v">${v}</div><div class="n">${n}</div></div>`;}
+function render(){const a=DATA,days=daysList(a.from,a.to);const S=a.series||{},T=a.totals||{},ev=T.ev||{};
+  const sum=k=>days.reduce((x,d)=>x+((S[d]||{})[k]||0),0);const visits=sum('visit'),uniq=sum('uniq'),time=sum('time');
+  const start=a.allTime&&a.allTime.visit?a.allTime.visit.first:null;
+  $('status').textContent=start?`Counting since ${dlong(start)}. Updated ${new Date(a.updated).toLocaleString('en-CA',{timeZone:'America/Vancouver',dateStyle:'medium',timeStyle:'short'})} Pacific.`:'Counting has just started; numbers will appear as people use the map.';
+  $('tiles').innerHTML=tile('Saved views',fmt(a.saves.total),`${fmt(a.saves.inRange)} in the last ${DAYS} days`,true)
+    +tile('Shared views opened',fmt(a.opens.inRange),`in the last ${DAYS} days · ${fmt(a.opens.total)} in all`)
+    +tile('Visits',fmt(visits),`in the last ${DAYS} days · ${fmt((a.allTime.visit||{}).n||0)} in all`)
+    +tile('Visitors',fmt(uniq),`daily visitors added up over ${DAYS} days`)
+    +tile('Average time',visits?(time/visits<60?Math.round(time/visits)+' s':(time/visits/60).toFixed(1)+' min'):'–','with the map in view, per visit');
+  const vs=[{name:'Visits',c:'var(--s1)',v:Object.fromEntries(days.map(d=>[d,(S[d]||{}).visit||0]))},{name:'Visitors',c:'var(--s2)',v:Object.fromEntries(days.map(d=>[d,(S[d]||{}).uniq||0]))}];
+  let vd=start?days.filter(d=>d>=start):days;if(vd.length<7)vd=days.slice(-7);// the visits chart starts when counting began
+  timeChart($('c-visits'),vd,vs,'line');table($('t-visits'),vd,vs);
+  const ss=[{name:'Views saved',c:'var(--s1)',v:a.saves.byDay},{name:'Shared views opened',c:'var(--s2)',v:a.opens.byDay}];
+  timeChart($('c-saves'),days,ss,'bar');table($('t-saves'),days,ss);
+  const box=$('c-saves');if(!box.previousElementSibling.classList.contains('legend')){const lg=document.createElement('div');lg.className='legend';lg.innerHTML='<span><i style="background:var(--s1);height:8px"></i>Views saved</span><span><i style="background:var(--s2);height:8px"></i>Shared views opened</span>';box.before(lg);}
+  bars($('b-layers'),Object.entries(ev).filter(([k])=>k.startsWith('layer:')).map(([k,v])=>[LAYERS[k.slice(6)]||k.slice(6),v]),visits);
+  bars($('b-tools'),Object.entries(ev).filter(([k])=>TOOLS[k]).map(([k,v])=>[TOOLS[k],v]),visits);
+  const tg=(t,n)=>ev[`tour:${t}:${n}`]||0;
+  $('f-tour').innerHTML='<div class="row h"><span></span><span>Started</span><span>Finished</span><span>Closed early</span></div>'+[['main','Intro tour'],['planning','Planning tour']].map(([n,l])=>`<div class="row"><span>${l}</span><span><b>${fmt(tg('start',n))}</b></span><span><b>${fmt(tg('done',n))}</b> ${tg('start',n)?`<small>${pct(tg('done',n),tg('start',n))}</small>`:''}</span><span><b>${fmt(tg('skip',n))}</b></span></div>`).join('');
+  bars($('b-dur'),Object.entries(T.dur||{}).map(([k,v])=>[DUR[k]||k,v,k]),Object.values(T.dur||{}).reduce((a,b)=>a+b,0),{order:1});
+  bars($('b-dev'),Object.entries(T.dev||{}).map(([k,v])=>[k[0].toUpperCase()+k.slice(1),v]),visits);
+  bars($('b-ref'),Object.entries(T.ref||{}).map(([k,v])=>[k==='(direct)'?'Direct':k,v]),visits);
+  const geo={};for(const [k,v] of Object.entries(T.region||{})){const [c,r]=k.split(':');geo[r+(c==='US'?' (US)':'')]=(geo[r+(c==='US'?' (US)':'')]||0)+v;}
+  for(const [c,v] of Object.entries(T.country||{}))if(c!=='CA'&&c!=='US')geo[CC[c]||c]=(geo[CC[c]||c]||0)+v;
+  bars($('b-geo'),Object.entries(geo),visits);}
+async function load(){$('status').textContent='Loading…';
+  try{const r=await fetch(API+'?days='+DAYS);if(!r.ok)throw new Error('HTTP '+r.status);DATA=await r.json();render();}
+  catch(e){$('status').textContent='The statistics could not be loaded right now ('+e.message+'). Please try again later.';}}
+document.querySelectorAll('.range button').forEach(b=>b.onclick=()=>{DAYS=+b.dataset.d;document.querySelectorAll('.range button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));load();});
+let rz;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>DATA&&render(),200);});
+load();
+</script>
+</body>
+</html>
