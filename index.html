@@ -2188,7 +2188,15 @@ const measG=el('g',{class:'measg'},svg);
 const R_EARTH=6371008.8;
 function hav(a,b){const r=Math.PI/180,dl=(b[1]-a[1])*r,dn=(b[0]-a[0])*r,s1=Math.sin(dl/2),s2=Math.sin(dn/2);const h=s1*s1+Math.cos(a[1]*r)*Math.cos(b[1]*r)*s2*s2;return 2*R_EARTH*Math.asin(Math.min(1,Math.sqrt(h)));}
 /* centripetal Catmull-Rom through the points (projected map units), 24 samples a span */
-function measCurve(xy){if(xy.length<3||!$('mb-smooth').checked)return xy.slice();const out=[xy[0]],N=24;
+/* spans between measured points: along the track itself when both ends are snapped onto the same line, otherwise the curve (or straight legs) */
+function measOnTrack(p){if(!$('mb-snap').checked)return null;const sn=snapToRail(p[0],p[1]);return sn&&sn.d/PX_PER_KM*1000<3?sn:null;}
+function trackPath(line,k1,k2){const v=LINES[line],lo=Math.min(k1,k2),hi=Math.max(k1,k2),mid=v.filter(o=>o.k>lo&&o.k<hi).map(o=>o.xy);if(k1>k2)mid.reverse();return[lineAt(line,k1),...mid,lineAt(line,k2)];}
+function measSpans(xy){const cv=measCurveRaw(xy),N=xy.length>2&&$('mb-smooth').checked?24:1,out=[];
+  for(let i=1;i<xy.length;i++){const a=measOnTrack(xy[i-1]),b=a&&measOnTrack(xy[i]);
+    out.push(a&&b&&a.line===b.line?trackPath(a.line,a.k,b.k):cv.slice((i-1)*N,i*N+1));}
+  return out;}
+function measCurve(xy){if(xy.length<2)return xy.slice();const sp=measSpans(xy),out=[xy[0]];for(const s of sp)for(let i=1;i<s.length;i++)out.push(s[i]);return out;}
+function measCurveRaw(xy){if(xy.length<3||!$('mb-smooth').checked)return xy.slice();const out=[xy[0]],N=24;
   for(let i=0;i<xy.length-1;i++){const p1=xy[i],p2=xy[i+1],p0=i?xy[i-1]:[2*p1[0]-p2[0],2*p1[1]-p2[1]],p3=i+2<xy.length?xy[i+2]:[2*p2[0]-p1[0],2*p2[1]-p1[1]];
     const tj=(a,b)=>Math.max(1e-6,Math.sqrt(Math.hypot(b[0]-a[0],b[1]-a[1])));const t0=0,t1=t0+tj(p0,p1),t2=t1+tj(p1,p2),t3=t2+tj(p2,p3);
     for(let j=1;j<=N;j++){const t=t1+(t2-t1)*j/N;const L=(a,b,ta,tb)=>{const u=(tb-t)/(tb-ta),v=(t-ta)/(tb-ta);return[a[0]*u+b[0]*v,a[1]*u+b[1]*v];};
@@ -2200,13 +2208,13 @@ function fmtImp(m){const ft=m/0.3048,mi=m/1609.344;return mi<0.25?Math.round(ft)
 function fmtBoth(m){return fmtMet(m)+' · '+fmtImp(m);}
 function measSnap(q){if(!$('mb-snap').checked)return q;const sn=snapToRail(q[0],q[1]);return sn&&sn.d*ppu<12?sn.xy:q;}
 function measDraw(){measG.innerHTML='';if(!MEAS.on&&!MEAS.pts.length)return;const xy=MEAS.pts,f=v=>v.toFixed(3),pl=a=>a.map(q=>f(q[0])+','+f(q[1])).join(' ');
-  const cv=measCurve(xy);
+  const spans=xy.length>1?measSpans(xy):[],cv=measCurve(xy);
   if(cv.length>1){el('polyline',{points:pl(cv),class:'ml','vector-effect':'non-scaling-stroke'},measG);el('polyline',{points:pl(cv),class:'mlc','vector-effect':'non-scaling-stroke'},measG);}
   if(MEAS.on&&MEAS.cur&&xy.length&&!MEAS.drag)el('polyline',{points:pl([xy[xy.length-1],MEAS.cur]),class:'mrub','vector-effect':'non-scaling-stroke'},measG);
   const rr=(6/ppu).toFixed(3),rh=(13/ppu).toFixed(3);
   /* running totals at each point along the curve */
-  let acc=0,ci=0;const N=xy.length>2&&$('mb-smooth').checked?24:1;
-  xy.forEach((q,i)=>{if(i){const seg=cv.slice((i-1)*N,i*N+1);acc+=measLen(seg);}
+  let acc=0;
+  xy.forEach((q,i)=>{if(i)acc+=measLen(spans[i-1]);
     const g=el('g',{},measG);const hit=el('circle',{cx:f(q[0]),cy:f(q[1]),r:rh,class:'mhit'},g);el('circle',{cx:f(q[0]),cy:f(q[1]),r:rr,class:'mh','vector-effect':'non-scaling-stroke'},g);
     if(i&&(i===xy.length-1||xy.length<=8)){const t=el('text',{x:f(q[0]+9/ppu),y:f(q[1]-8/ppu),class:'mtag','font-size':(11/ppu).toFixed(3),'stroke-width':(3.5/ppu).toFixed(3)},g);t.textContent=fmtBoth(acc);}
     const start=e=>{e.stopPropagation();e.preventDefault();MEAS.drag={i,id:e.pointerId};try{svg.setPointerCapture(e.pointerId);}catch(_){}};
@@ -2214,7 +2222,7 @@ function measDraw(){measG.innerHTML='';if(!MEAS.on&&!MEAS.pts.length)return;cons
     g.addEventListener('dblclick',e=>{e.stopPropagation();e.preventDefault();MEAS.pts.splice(i,1);measDraw();});});
   const total=measLen(cv);
   $('mb-len').textContent=xy.length>1?fmtBoth(total):xy.length?'Click to add the next point':'Click the map to start measuring';
-  $('mb-sub').textContent=xy.length>1?`${xy.length} points${xy.length>2&&$('mb-smooth').checked?` · straight legs ${fmtBoth(measLen(xy))}`:''} · drag a point to adjust, double-click it to remove`:'';
+  $('mb-sub').textContent=xy.length>1?`${xy.length} points${xy.length>2&&$('mb-smooth').checked&&!spans.every((s,i)=>{const a=measOnTrack(xy[i]),b=measOnTrack(xy[i+1]);return a&&b&&a.line===b.line;})?` · straight legs ${fmtBoth(measLen(xy))}`:''} · drag a point to adjust, double-click it to remove`:'';
   $('mb-undo').disabled=!xy.length;$('mb-clear').disabled=!xy.length;if(typeof profQueue==='function')profQueue();}
 function measSet(on){MEAS.on=on;$('measbtn').setAttribute('aria-pressed',String(on));$('measbar').hidden=!on;svg.classList.toggle('measuring',on);if(!on){MEAS.pts=[];MEAS.cur=null;}measDraw();if(!on&&typeof profQueue==='function')profQueue();if(on)hideTip(true);}
 $('measbtn').onclick=()=>{if(!MEAS.on&&typeof drawing!=='undefined'&&drawing)cancelDrawing();measSet(!MEAS.on);};
@@ -2267,7 +2275,7 @@ async function profBuild(){const seq=++PROF.seq;const cv=measCurve(MEAS.pts);
   for(const s of S){s.e=demAt(tiles,z,s.ll[0],s.ll[1]);s.xy=P(s.ll);}
   // light smoothing of tile noise, then grade over about 100 m
   const raw=S.map(s=>s.e),w=Math.max(1,Math.round(30/step));for(let i=0;i<S.length;i++){let a=0,c=0;for(let k=-w;k<=w;k++){const v=raw[i+k];if(v!=null){a+=v;c++;}}S[i].e=c?a/c:raw[i];}
-  const gw=Math.max(1,Math.round(50/step));for(let i=0;i<S.length;i++){const a=S[Math.max(0,i-gw)],b=S[Math.min(S.length-1,i+gw)];S[i].g=b.d>a.d?(b.e-a.e)/(b.d-a.d)*100:0;}
+  const gw=Math.max(1,Math.round(100/step));for(let i=0;i<S.length;i++){const a=S[Math.max(0,i-gw)],b=S[Math.min(S.length-1,i+gw)];S[i].g=b.d>a.d?(b.e-a.e)/(b.d-a.d)*100:0;}
   // the E&N's own profile, when the measured line follows the track
   let track=null;if($('mb-snap').checked&&window.__PD){const sn=S.filter((s,i)=>i%5===0).map(s=>snapToRail(s.xy[0],s.xy[1]));
     if(sn.every(q=>q&&q.d/PX_PER_KM*1000<60&&q.line===sn[0].line)){const pd=window.__PD[sn[0].line==='MAIN'?'main_rail':'alb_rail'];
