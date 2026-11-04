@@ -589,6 +589,7 @@ input[type=checkbox],input[type=radio]{accent-color:var(--accent);width:15px;hei
 .costkey i{width:10px;height:10px;border-radius:2px;flex:none}
 .cg0{background:#8c6d3f}.cg1{background:#5b6f8a}.cg2{background:#c0392b}.cg3{background:#7b52c7}.cg4{background:#0f8f7f}.cg5{background:#4f8a3c}.cg6{background:#2f5f9e}.cgw{background:#d9822b}.cgs{background:#8a8f8c}.cgc{background:repeating-linear-gradient(45deg,#8a8f8c 0 3px,#c9ccca 3px 6px)}
 .costopts{display:flex;flex-wrap:wrap;gap:4px 14px}.costopts label{display:flex;gap:5px;align-items:center;cursor:pointer}
+.cplink{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:8px 0 2px}.cplink .m{font-size:11.5px}
 .costh{margin:6px 0 0;font-size:13px;display:flex;justify-content:space-between;gap:8px}.costh span{font-variant-numeric:tabular-nums}
 .coststeps{margin:0;padding-left:20px;display:grid;gap:4px}.coststeps li b{display:block}.coststeps .m{display:block;font-size:11.5px}
 .costg{border:1px solid var(--ctl-line);border-radius:8px;overflow:hidden}
@@ -679,6 +680,23 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
 .srcit h3{margin:0;font-size:14px;line-height:1.3}.srcit h3 a{color:var(--info);text-decoration:underline;text-underline-offset:2px}
 .srcit p{margin:0;font-size:12.5px;line-height:1.45}.srcg>p{margin:0;font-size:13px}
 .app.basic .src-exp{display:none}
+.cpbar{display:flex;align-items:center;gap:10px;max-width:1100px;margin:0 0 10px}.cpbar .grow{flex:1}
+.cpgrid{display:grid;border:1px solid var(--line);border-radius:8px;background:var(--panel-2);overflow:hidden}
+.cprow{display:grid;grid-template-columns:minmax(0,1fr) 112px 84px 92px 64px;gap:8px;align-items:center;padding:6px 10px}
+.cprow+.cprow{border-top:1px solid var(--line)}.cprow.hd{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding:6px 10px;background:var(--panel)}
+.cprow .cpn{font-size:13px;line-height:1.35;cursor:help;text-decoration:underline dotted color-mix(in srgb,var(--muted) 60%,transparent);text-underline-offset:3px}
+.cprow .cpn small{display:block;color:var(--muted);text-decoration:none;font-size:11.5px}
+.cprow input{font:inherit;font-size:13px;width:100%;padding:5px 6px;border:1.5px solid var(--ctl-line);border-radius:6px;background:var(--ctl-bg);color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.cprow.cust input{border-color:var(--accent)}
+.cprow .cpu{font-size:11.5px;color:var(--muted)}
+.cpst{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:4px;padding:2px 6px;justify-self:start;white-space:nowrap;border:0;background:var(--ctl-hov);color:var(--muted)}
+.cpst.cpc{background:var(--accent);color:#fff}.cpst.cpf{background:color-mix(in srgb,var(--info) 18%,transparent);color:var(--info)}
+.cprow.off .cpn{opacity:.6}
+.xglist{display:grid;gap:4px;margin:6px 0;max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:var(--panel)}
+.xglist>.m{font-size:11.5px}.xgrow{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px}.xgrow .m{font-size:11px}.xgrow>span{flex:1;min-width:0}.xgrow select{flex:none;width:120px;font:inherit;font-size:12px;padding:2px 4px;border:1.5px solid var(--ctl-line);border-radius:5px;background:var(--ctl-bg);color:var(--ink)}
+.cptip{position:fixed;z-index:60;max-width:360px;background:var(--ink);color:var(--bg);border-radius:8px;padding:9px 11px;font-size:12.5px;line-height:1.45;box-shadow:0 6px 20px rgba(0,0,0,.25);pointer-events:none}
+.cptip b{display:block;margin-bottom:3px}
+@media (max-width:600px){#btn-costs span{display:none}.cprow{grid-template-columns:minmax(0,1fr) 92px 58px;row-gap:4px}.cprow .cpu,.cprow .cpst{display:none}.cprow.hd span:nth-child(3),.cprow.hd span:nth-child(4){display:none}}
 @media (max-width:600px){#btn-sources span{display:none}.srclist{grid-template-columns:1fr}}
 @media (max-width:600px){#btn-trains span{display:none}}
 .tsf{fill:var(--panel);stroke:currentColor;stroke-width:1.3}.tsg{fill:color-mix(in srgb,var(--info) 18%,transparent);stroke:currentColor;stroke-width:1}
@@ -906,6 +924,7 @@ circle.th.limit{fill:#d0393b!important;stroke:#fff}
       <button class="btn restart" id="btn-restart" type="button" title="Restart today's service from the first departure">↺ Restart day</button>
       <button class="btn setbtn" id="btn-trains" type="button" title="Train types and specifications"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 10h14M9 17l-2 4M15 17l2 4"/><circle cx="9" cy="13.5" r=".6" fill="currentColor"/><circle cx="15" cy="13.5" r=".6" fill="currentColor"/></svg><span>Trains</span></button>
       <button class="btn setbtn" id="btn-sources" type="button" title="Where the data comes from"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/><path d="M9 8h7M9 12h5"/></svg><span>Sources</span></button>
+      <button class="btn setbtn" id="btn-costs" type="button" title="Unit costs and work costs: adjust them to local prices"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20"/><path d="M17 6.5c-1-1.3-2.8-2-5-2-2.8 0-4.5 1.4-4.5 3.4 0 4.6 10 2.4 10 7.4 0 2-1.9 3.6-5 3.6-2.4 0-4.3-.9-5.3-2.4"/></svg><span>Costs</span></button>
       <button class="btn setbtn" id="btn-profiles" type="button" title="Track and highway height profiles"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 19h18"/><path d="M3 16l5-6 4 3 4-7 5 6"/></svg><span>Profiles</span></button>
       <div class="setwrap"><button class="btn setbtn" id="btn-settings" type="button" aria-haspopup="true" aria-expanded="false" title="Settings"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></button>
         <div class="setmenu" id="setmenu" role="dialog" aria-label="Settings" hidden>
@@ -940,6 +959,12 @@ circle.th.limit{fill:#d0393b!important;stroke:#fff}
   <section class="trainpage srcpage" id="srcpage" hidden aria-label="Information sources">
     <div class="tptop"><button class="btn" id="src-back" type="button">← Back to the map</button><h1>Sources</h1><span class="m">Where the planner's maps, travel figures and railway data come from, what each is used for, and its limits</span></div>
     <div class="srcbody" id="src-body"></div>
+  </section>
+  <section class="trainpage srcpage cppage" id="cppage" hidden aria-label="Costs">
+    <div class="tptop"><button class="btn" id="cp-back" type="button">← Back to the map</button><h1>Costs</h1><span class="m">The rates behind the capital cost in the Plan tab: per km, per crossing and per item. Every track work is priced from these, so change a rate to match local prices and all works of that kind follow. Hover over an item to see where its rate comes from. Changes are saved with the plan and in shared links.</span></div>
+    <div class="cpbar"><span id="cp-sum" class="m"></span><span class="grow"></span><button class="btn sm" id="cp-resetall" type="button">Reset all to defaults</button></div>
+    <div class="srcbody" id="cp-body"></div>
+    <div class="cptip" id="cp-tip" role="tooltip" hidden></div>
   </section>
   <section class="trainpage pfpage" id="pfpage" hidden aria-label="Track profiles">
     <style>
@@ -1182,7 +1207,7 @@ const BASE_BUILT={MAIN:buildLine(GEO.MAIN),ALB:buildLine(GEO.ALB)};
 function normTrack(sp){const o={geom:{},lines:[],works:[],seed:41,notices:defaultNotices()};if(!sp||typeof sp!=='object'){o.works=DEFAULT_WORKS.map(w=>({...w}));return o;}
   if([150,175,300,500,800].includes(+sp.minR))o.minR=+sp.minR;
   if(Array.isArray(sp.notices))o.notices=sp.notices.filter(n=>n&&(n.l==='MAIN'||n.l==='ALB')&&isFinite(+n.m)).map(n=>({id:String(n.id||'n'+Math.random().toString(36).slice(2,8)),ref:Number.isInteger(n.ref)&&INFRA[n.ref]?n.ref:null,n:String(n.n||'Notice').slice(0,80),l:n.l,m:+n.m,m2:n.m2!=null&&isFinite(+n.m2)&&+n.m2>+n.m?+n.m2:null,s:NOTICE_ST[n.s]?n.s:'other',d:String(n.d||'').slice(0,500),cond:String(n.cond||'').slice(0,60)}));
-  if(Array.isArray(sp.works))for(const w of sp.works)if(w&&WORK_TYPES[w.type]&&(w.line==='MAIN'||w.line==='ALB')&&isFinite(+w.a)&&isFinite(+w.b)&&+w.b>+w.a)o.works.push({id:String(w.id||'w'+Math.random().toString(36).slice(2,8)),type:w.type,line:w.line,a:+w.a,b:+w.b,name:String(w.name||'').slice(0,80),deg:w.deg!=null?+w.deg:undefined,status:['idea','proposed','planned','funded','built'].includes(w.status)?w.status:'idea',cost:w.cost!=null&&w.cost!==''&&isFinite(+w.cost)?+w.cost:null,notes:String(w.notes||'').slice(0,1500),project:w.project||null,on:w.on!==false,withR:w.withR!==false,tlabel:w.tlabel?String(w.tlabel).slice(0,40):undefined});
+  if(Array.isArray(sp.works))for(const w of sp.works)if(w&&WORK_TYPES[w.type]&&(w.line==='MAIN'||w.line==='ALB')&&isFinite(+w.a)&&isFinite(+w.b)&&+w.b>+w.a)o.works.push({id:String(w.id||'w'+Math.random().toString(36).slice(2,8)),type:w.type,line:w.line,a:+w.a,b:+w.b,name:String(w.name||'').slice(0,80),deg:w.deg!=null?+w.deg:undefined,status:['idea','proposed','planned','funded','built'].includes(w.status)?w.status:'idea',cost:w.cost!=null&&w.cost!==''&&isFinite(+w.cost)?+w.cost:null,notes:String(w.notes||'').slice(0,1500),project:w.project||null,on:w.on!==false,withR:w.withR!==false,auto:typeof w.auto==='boolean'?w.auto:undefined,cost0:w.cost0!=null&&isFinite(+w.cost0)?+w.cost0:undefined,xt:w.xt&&typeof w.xt==='object'?Object.fromEntries(Object.entries(w.xt).filter(([k,v])=>['gate','full','cwt','close','none'].includes(v)).slice(0,400)):undefined,tlabel:w.tlabel?String(w.tlabel).slice(0,40):undefined});
   if(sp.geom&&typeof sp.geom==='object')for(const l of ['MAIN','ALB'])if(Array.isArray(sp.geom[l])&&sp.geom[l].length>=2&&sp.geom[l].every(e=>Array.isArray(e)||(e&&Number.isInteger(e.a)&&Array.isArray(e.ll))))o.geom[l]=sp.geom[l];
   if(Array.isArray(sp.lines))for(const t of sp.lines)if(t&&typeof t.id==='string'&&Array.isArray(t.ll)&&t.ll.length>=2&&(t.parent==='MAIN'||t.parent==='ALB'||o.lines.some(x=>x.id===t.parent)))
     o.lines.push({id:t.id,name:String(t.name||'New track').slice(0,40),v:Math.max(20,Math.min(160,+t.v||80)),parent:t.parent,ll:t.ll.map(p=>[+p[0],+p[1]])});
@@ -1321,18 +1346,18 @@ const WORK_G0={curve:'track',tunnel:'track',superel:'track',renew:'track',drain:
 for(const [k,t] of Object.entries(WORK_TYPES))t.g=t.g||WORK_G0[k]||'other';
 /* works done together with the restoration: the share of a work's cost the restoration budget already pays for */
 const WITH_R={
- superel:{f:w=>.5,why:'Done in the restoration’s own surfacing pass (ballast program), so about half the cost of a separate pass.'},
- renew:{f:w=>Math.min(1,.6*(w.b-w.a)/(+w.cost||1)),why:'The restoration’s Class 3 upgrade already lays 115 lb rail and new ties on these miles (≈$0.75M a mile); only welding and tighter surfacing (about 20% of that) plus the signalling and gates are extra.'},
- xing:{f:w=>.3,why:'The restoration’s crossing budget (≈$0.29M a crossing for surfaces, warning systems and sight lines) already pays for about 30% of this; the gates, constant warning time and closures are extra.'},
- drain:{f:w=>.5,why:'The restoration’s Class 2 drainage and ballast program already cover about half of this.'},
- veg:{f:w=>.75,why:'Class 2 restoration already includes vegetation clearing; only the wider sight lines are extra.'},
- bridge:{f:w=>.5,why:'The restoration’s bridge and trestle budget (48 bridges on the Victoria Sub) already covers about half of a typical bridge repair.'},
- fence:{f:w=>.5,why:'Class 2 restoration already includes fencing; only trail separation and trespass control beyond that are extra.'},
- rebuild:{f:w=>{let c=0;if(w.line==='MAIN'&&w.a<83.7&&w.b>82.8)c+=3;if(w.line==='MAIN'&&w.a<=26.9&&w.b>=26.7)c+=3;return Math.min(1,c/(+w.cost||1));},why:'The restoration already carries $3M allowances for the Snaw-Naw-As track and the Shawnigan Lake Road bridge; that much is not counted again here.'}};
+ superel:{f:w=>cp('wr.superel')/100,why:w=>`Done in the restoration’s own surfacing pass (ballast program), so about ${cp('wr.superel')}% of the cost of a separate pass is already paid for.`},
+ renew:{f:w=>Math.min(1,(w.b-w.a)*1.609344*cp('w.c4rail')*cp('wr.renew')/100/(+w.cost||1)),why:w=>`The restoration’s Class 3 upgrade already lays 115 lb rail and new ties on these miles, so ${cp('wr.renew')}% of the rail and tie cost is already paid for; welding, tighter surfacing, signalling and gates are extra.`},
+ xing:{f:w=>cp('wr.xing')/100,why:w=>`The restoration’s crossing budget (surfaces, warning systems and sight lines at every crossing) already pays for about ${cp('wr.xing')}% of this; the gates, constant warning time and closures are extra.`},
+ drain:{f:w=>cp('wr.drain')/100,why:w=>`The restoration’s Class 2 drainage and ballast program already cover about ${cp('wr.drain')}% of this.`},
+ veg:{f:w=>cp('wr.veg')/100,why:w=>`Class 2 restoration already includes vegetation clearing (about ${cp('wr.veg')}% of this); only the wider sight lines are extra.`},
+ bridge:{f:w=>cp('wr.bridge')/100,why:w=>`The restoration’s bridge and trestle budget already covers about ${cp('wr.bridge')}% of a typical bridge repair.`},
+ fence:{f:w=>cp('wr.fence')/100,why:w=>`Class 2 restoration already includes fencing (about ${cp('wr.fence')}% of this); trail separation and trespass control beyond that are extra.`},
+ rebuild:{f:w=>{let c=0;if(w.line==='MAIN'&&w.a<83.7&&w.b>82.8)c+=snawCost();if(w.line==='MAIN'&&w.a<=26.9&&w.b>=26.7)c+=cp('r.shaw');return Math.min(1,c/(+w.cost||1));},why:w=>'The restoration already carries allowances for the Snaw-Naw-As track and the Shawnigan Lake Road bridge; that much is not counted again here.'}};
 function workCost(w){const full=w.cost==null?null:+w.cost||0,r=WITH_R[w.type];
   if(full==null)return{full:null,net:null,credit:0,can:!!r,withR:w.withR!==false};
   const withR=!!r&&w.withR!==false,credit=withR?Math.max(0,Math.min(full,full*r.f(w))):0;
-  return{full,net:+(full-credit).toFixed(2),credit,can:!!r,withR,why:r?r.why:''};}
+  return{full,net:+(full-credit).toFixed(2),credit,can:!!r,withR,why:r?r.why(w):''};}
 const wNet=w=>{const c=workCost(w);return c.net==null?0:c.net;};
 const workTypeName=w=>w.type==='custom'&&w.tlabel?w.tlabel:(WORK_TYPES[w.type]||WORK_TYPES.custom).s;
 
@@ -1354,7 +1379,7 @@ const DEFAULT_WORKS=[
   notes:`14 crossings, MP 71.8–73.9, all with lights and bells. Add gates and constant warning time at 11 (Fifth, Kennedy, Milton, Albert, Prideaux, Franklyn, Fitzwilliam, Wentworth, Comox, Rosehill, Townsite: 11 × $${XG}k); constant warning time at St George (already gated, $150k); close Campbell St and the second Prideaux St crossing (2 × $${XC}k).`},
  {id:'p41-x3',type:'xing',line:'MAIN',a:137.9,b:139.9,name:'Crossings: Courtenay approach',status:'proposed',cost:2.0,on:true,
   notes:`4 crossings, MP 138.3–139.7. Gates at 26th St and 17th Ave (2 × $${XG}k); full gates at the passive Cumberland Rd crossing (7,000 vehicles a day, $${XP}k); close 29th St (50 vehicles a day, $${XC}k).`},
- {id:'p41-x4',type:'xing',line:'ALB',a:36.95,b:38,name:'Crossings: Port Alberni',status:'proposed',cost:1.7,on:true,
+ {id:'p41-x4',type:'xing',line:'ALB',a:36.9,b:38,name:'Crossings: Port Alberni',status:'proposed',cost:1.7,on:true,
   notes:`Johnston Rd, Roger St and Stamp Ave (11,000–18,000 vehicles a day, lights and bells today): add gates and constant warning time (3 × $${XG}k).`},
  {id:'p41-c4a',type:'renew',line:'MAIN',a:73.93,b:80,name:'Class 4 track: Nanaimo–Wellington',status:'idea',cost:35,on:false,
   notes:'Saves under a minute. Cost basis: 115 lb welded rail, ties, plates and surfacing at the 2020 assessment intermediate-phase rates (≈$0.75M per mile in 2026), plus signalling for running above 60 mph at the assessment’s commuter signalling rate (≈$4.3M per mile), plus gates at 8 crossings. Poor value at today’s alignment.'},
@@ -1736,7 +1761,7 @@ function finishTrip(t){
    Costs: MnDOT Midwest Regional Rail cost methodology (2010 US$: passenger siding about $1.45M a mile of track, No. 20 turnouts
    $0.18–0.28M, CTC $0.21M a mile; double track on new embankment $3.0M a mile), escalated to 2026 CAD (×2.2). Order of magnitude. */
 function track2Cost(type,line,a,b){try{const km=Math.max(.1,Math.abs(mpToK(line,b)-mpToK(line,a)));
-  return type==='siding'?+(5.5+Math.max(0,km-1)*3.5).toFixed(1):type==='double'?+(2+km*5).toFixed(1):null;}catch(_){return null;}}
+  return type==='siding'?+(cp('w.sid1')+Math.max(0,km-1)*cp('w.sidkm')).toFixed(1):type==='double'?+(cp('w.dbl0')+km*cp('w.dblkm')).toFixed(1):null;}catch(_){return null;}}
 let DISPATCH=true;
 let PLACES=null,PLACES_SIG='';
 function placesSig(){return JSON.stringify((TRACKSPEC.works||[]).filter(w=>w.on!==false&&WORK_TYPES[w.type]&&WORK_TYPES[w.type].track2).map(w=>[w.type,w.line,w.a,w.b]))+'|'+Object.keys(LINES).join();}
@@ -3814,7 +3839,7 @@ const lineMaxMP=l=>l==='MAIN'?139.87:38;
 function showWorkTip(w,e,pin){const t=WORK_TYPES[w.type],ef=workEffect(w),on=w.on!==false;
   placeTip(e,`<h4>${esc(w.name||t.n)}</h4><div class="m">${esc(w.type==='custom'&&w.tlabel?w.tlabel:t.n)} · ${TRKSPD[w.line].sub} MP ${w.a.toFixed(1)}–${w.b.toFixed(1)} · ${WORK_STATUS[w.status]}</div>
     <div>${t.nospeed?'Does not change train speeds.':ef.saved>.05?(on?`Saves <b>${ef.saved.toFixed(1)} min</b> end to end on the subdivision`:`Would save <b>${ef.saved.toFixed(1)} min</b> end to end if applied`):'No running-time change in the current speed setting'}</div>
-    ${w.cost!=null?(()=>{const c=workCost(w);return c.credit>0?`<div>Estimated cost <b>$${(+c.net).toFixed(1)} M</b> done with the restoration ($${w.cost} M on its own, 2026 CAD)</div>`:`<div>Estimated cost <b>$${w.cost} M</b> (2026 CAD)</div>`;})():''}${pin&&w.notes?`<div class="m" style="max-width:300px;margin-top:4px">${esc(w.notes)}</div>`:''}
+    ${w.cost!=null?(()=>{const c=workCost(w);return c.credit>0?`<div>Estimated cost <b>$${(+c.net).toFixed(1)} M</b> done with the restoration ($${w.cost} M on its own, 2026 CAD)</div>`:`<div>Estimated cost <b>$${w.cost} M</b> (2026 CAD)</div>`;})():''}${pin&&w.cost!=null?`<div class="m" style="max-width:300px;margin-top:4px">${esc(cpWorkState(w).basis)}</div>`:''}${pin&&w.notes?`<div class="m" style="max-width:300px;margin-top:4px">${esc(w.notes)}</div>`:''}
     ${pin?`<label class="tipchk"><input type="checkbox" id="tip-apply"${on?' checked':''}> ${t.nospeed?'Included in the plan':'Applied to track speeds'}</label><div class="pbtns"><button class="btn sm primary" id="tip-edit" type="button">Edit</button><button class="btn sm" id="tip-close" type="button">Close</button></div>`:`<div class="m">${t.nospeed?(on?'Included in the plan':'Not included'):on?'Applied to track speeds':'Not applied to track speeds'} · click for options</div>`}`);
   if(!pin)return;$('tip').classList.add('act');
   $('tip-apply').onchange=ev=>{setWorkOn(w.id,ev.target.checked);const w2=(TRACKSPEC.works||[]).find(x=>x.id===w.id);if(w2){tipPinned={work:w.id};showWorkTip(w2,null,true);}};
@@ -3836,7 +3861,7 @@ function openWork(id,noZoom){if(!needExp())return;const w=findWork(id);if(!w)ret
 function closeWork(){WORK_SEL=null;WORK_SNAP=null;WORK_PICK=null;svg.classList.remove('picking');renderWorks();drawWorksOnMap();}
 // every change: speeds, layer and panel update at once; the heavier timetable checks follow a moment later
 let worksT=null;
-function worksChanged(msg,loud){MINCACHE.clear();PLACES=null;if(window.__sidQ)window.__sidQ();savePlan();if(L.speed.style.display!=='none'){drawSpeedLayer();speedStats();}else drawWorksOnMap();renderWorks();
+function worksChanged(msg,loud){syncWorkCosts();MINCACHE.clear();PLACES=null;if(window.__sidQ)window.__sidQ();savePlan();if(L.speed.style.display!=='none'){drawSpeedLayer();speedStats();}else drawWorksOnMap();renderWorks();
   clearTimeout(worksT);worksT=setTimeout(()=>applyPlan(loud?msg:''),loud?0:500);}
 const commitWorks=msg=>worksChanged(msg,true);
 function createWork(o){if(!needExp())return null;const t=WORK_TYPES[o.type];const w={id:newWorkId(),type:o.type,line:o.line,a:+o.a.toFixed(2),b:+o.b.toFixed(2),name:o.name||`${t.s}, MP ${o.a.toFixed(1)}–${o.b.toFixed(1)}`,
@@ -3863,7 +3888,7 @@ function renderWorks(){const box=$('worksbox');if(!box)return;const W=TRACKSPEC.
       <label class="wksw" title="Apply to track speeds and run times"><input type="checkbox" data-on="${w.id}"${on?' checked':''} aria-label="Applied"><span></span></label>
       <span class="wkico" style="background:${t.c}">${t.i}</span>
       <div class="wkmain"><span class="wknm"><b class="wkname">${esc(w.name||t.n)}</b><button type="button" class="wkren" data-ren="${w.id}" title="Rename" aria-label="Rename ${esc(w.name||t.n)}">✎</button></span><div class="m">${esc(workTypeName(w))} · ${w.line==='MAIN'?'Victoria':'Port Alberni'} Sub MP ${w.a.toFixed(1)}–${w.b.toFixed(1)}</div><span class="wkst st-${w.status}">${WORK_STATUS[w.status]}</span></div>
-      <div class="wkr"><b${workCost(w).credit>0?` title="$${money(+w.cost)}M on its own; less what the restoration already pays for"`:''}>${w.cost!=null?'$'+money(wNet(w))+'M':'—'}</b><span class="${ef.saved>.05?'wksave':'m'}">${ef.saved>.05?(on?`−${ef.saved.toFixed(1)} min`:`${ef.saved.toFixed(1)} min possible`):'no change'}</span>${v?`<span class="m">${v>=1?v.toFixed(1):v.toFixed(2)} min/$M</span>`:''}</div></div>
+      <div class="wkr"><b title="${esc(cpWorkState(w).basis+(workCost(w).credit>0?` Counted in the plan less what the restoration already pays for.`:''))}">${w.cost!=null?'$'+money(wNet(w))+'M':'—'}</b><span class="${ef.saved>.05?'wksave':'m'}">${ef.saved>.05?(on?`−${ef.saved.toFixed(1)} min`:`${ef.saved.toFixed(1)} min possible`):'no change'}</span>${v?`<span class="m">${v>=1?v.toFixed(1):v.toFixed(2)} min/$M</span>`:''}</div></div>
       ${sel?editorHtml(w,ef):''}</div>`;};
   box.innerHTML=`
     ${WORK_NEW||WORK_PICK&&WORK_PICK.create?newWorkHtml():''}
@@ -3899,10 +3924,11 @@ function editorHtml(w,ef){const t=WORK_TYPES[w.type],changed=WORK_SNAP&&WORK_SNA
     <div class="wef g3"><label>Subdivision<select id="we-line"><option value="MAIN"${w.line==='MAIN'?' selected':''}>Victoria</option><option value="ALB"${w.line==='ALB'?' selected':''}>Port Alberni</option></select></label>
       <label>From MP<input id="we-a" type="number" step="0.1" min="0" value="${w.a.toFixed(2)}"></label><label>To MP<input id="we-b" type="number" step="0.1" min="0" value="${w.b.toFixed(2)}"></label></div>
     <div class="wehint"><button class="btn sm" id="we-pick" type="button" aria-pressed="${!!(WORK_PICK&&WORK_PICK.id===w.id)}">${WORK_PICK&&WORK_PICK.id===w.id?(WORK_PICK.stage?'Click the end on the map…':'Click the start on the map…'):'Pick range on map'}</button><span class="m">or drag the end handles on the map</span></div>
-    <div class="wef g2"><label>Est. cost ($M, 2026)<input id="we-cost" type="number" step="0.1" min="0" value="${w.cost??''}" placeholder="unknown"></label>
+    <div class="wef g2"><label>Est. cost ($M, 2026)${(()=>{const st=cpWorkState(w);return st.custom?` <button type="button" class="linkbtn" id="we-creset" title="${esc(st.resetTip)}">reset</button>`:'';})()}<input id="we-cost" type="number" step="0.1" min="0" value="${w.cost??''}" placeholder="unknown" title="${esc(cpWorkState(w).basis)}"></label>
       ${t.deg!==undefined?`<label>Sharpest curve after<select id="we-deg">${[1,1.5,2,3,4,5,6,8].map(d=>`<option value="${d}"${(w.deg??t.deg)==d?' selected':''}>${d}° (≈${5*Math.floor(Math.sqrt(7/(0.0007*d))/5)} mph)</option>`).join('')}</select></label>`:'<span></span>'}</div>
+    ${xingEditorHtml(w)}
     <label class="tipchk"><input type="checkbox" id="we-on"${w.on!==false?' checked':''}> ${t.nospeed?'Included in the plan and its costs':'Applied to track speeds and run times'}</label>
-    ${(()=>{const c=workCost(w);return c.can?`<label class="tipchk"><input type="checkbox" id="we-withr"${c.withR?' checked':''}> Done with the restoration</label><div class="weeff">${c.withR?`${esc(WITH_R[w.type].why)}${c.full!=null?` Counted in the plan: <b>$${(+c.net).toFixed(1)}M</b> of $${c.full}M.`:''}`:`Costed as a separate project after the restoration${c.full!=null?`: the full <b>$${c.full}M</b> is counted`:''}.`}</div>`:'';})()}
+    ${(()=>{const c=workCost(w);return c.can?`<label class="tipchk"><input type="checkbox" id="we-withr"${c.withR?' checked':''}> Done with the restoration</label><div class="weeff">${c.withR?`${esc(c.why)}${c.full!=null?` Counted in the plan: <b>$${(+c.net).toFixed(1)}M</b> of $${c.full}M.`:''}`:`Costed as a separate project after the restoration${c.full!=null?`: the full <b>$${c.full}M</b> is counted`:''}.`}</div>`:'';})()}
     ${t.nospeed?`<div class="weeff">This kind of work does not change train speeds. ${w.on!==false?'Its cost is included in the Plan tab.':'Switch it on to include its cost in the Plan tab.'}</div>`:''}<div class="weeff"${t.nospeed?' hidden':''}>Speeds in range: <b>${r(lo)} → ${r(hi)} mph</b>. ${ef.saved>.05?`${w.on!==false?'Saves':'Would save'} <b>${ef.saved.toFixed(1)} min</b> end to end.`:'No running-time change in the current speed setting.'}</div>
     <div class="wef"><label class="wide">Notes and cost basis<textarea id="we-notes" rows="3" maxlength="1500">${esc(w.notes||'')}</textarea></label></div>
     <div class="weacts"><button class="btn sm primary" id="we-done" type="button">Done</button><button class="btn sm" id="we-zoom" type="button">Zoom to</button><button class="btn sm" id="we-dup" type="button">Duplicate</button>${changed?'<button class="btn sm" id="we-revert" type="button">Undo changes</button>':''}<span class="grow"></span><button class="btn sm danger" id="we-del" type="button">Delete</button></div>
@@ -3939,7 +3965,9 @@ function bindWorks(box){
   const rng=()=>{let a=+$('we-a').value,b=+$('we-b').value;if(!isFinite(a)||!isFinite(b))return;if(b<a)[a,b]=[b,a];const mx=lineMaxMP(w.line);w.a=+Math.max(0,Math.min(mx-.05,a)).toFixed(2);w.b=+Math.max(w.a+.05,Math.min(mx,b)).toFixed(2);};
   ch('we-a',rng);ch('we-b',rng);
   ch('we-deg',e=>w.deg=+e.value);
-  ch('we-cost',e=>w.cost=e.value===''?null:Math.max(0,+e.value));
+  ch('we-cost',e=>{w.cost=e.value===''?null:Math.max(0,+e.value);if(workFormula(w))w.auto=false;});
+  {const b=$('we-creset');if(b)b.onclick=()=>{cpResetWork(w);delete w.fresh;worksChanged('');};}
+  for(const sel of document.querySelectorAll('#worksbox [data-xt]'))sel.onchange=()=>{(w.xt||(w.xt={}))[sel.dataset.xt]=sel.value;delete w.fresh;worksChanged('');};
   ch('we-on',e=>w.on=e.checked);
   ch('we-withr',e=>w.withR=e.checked);
   $('we-pick').onclick=()=>{WORK_PICK=WORK_PICK&&WORK_PICK.id===w.id?null:{stage:0,id:w.id};svg.classList.toggle('picking',!!WORK_PICK);renderWorks();};
@@ -4061,53 +4089,244 @@ $('btn-restart').onclick=restartDay;
 const ESC20=637/548*1.03**3;// 2020→2023 from the CVRD report (Table H-6), then 3% a year to 2026 ≈ ×1.27
 const ESC23=1.03**3;// 2023→2026
 const COST_BASE=[// [group, step, Victoria Sub $M (2020), Port Alberni Sub $M (2020), note]
- ['Track','Restore track to Class 2: ties, relay rail, plates and anchors, surfacing, drainage, vegetation, fencing, yards',31.29,6.89,'IRCCA initial phase, less bridges, crossings and rockfall. 45% of ties (180,000) were found defective.'],
- ['Track','Upgrade to Class 3 and 286,000 lb cars: 115 lb rail, double-shoulder plates, ties, turnouts',90.52,23.98,'IRCCA intermediate phase. Needed for the 60 mph passenger speeds the planner assumes and for more than 4 trains a day.'],
- ['Track','Ballast program: undercutting, new ballast, 6 in. surfacing, geometry testing',48.48,13.16,'IRCCA ultimate phase, ballast items only. Ballast was rated poor from Langford to Nanaimo.'],
- ['Structures','Bridge and trestle remediation',38.42,34.70,'IRCCA bridge remediation by segment (48 bridges on the Victoria Sub), including the Port Alberni Sub trestles that are out today.'],
- ['Structures','Rockfall protection (Langford–Shawnigan, Port Alberni Sub)',1.40,0.25,'IRCCA rockfall remediation.'],
- ['Crossings','Bring all road crossings to standard: surfaces, warning systems, sight lines',44.29,8.48,'IRCCA crossing upgrades: 203 crossings on the Victoria Sub, 33 on the Port Alberni Sub.']];
+ ['Track','Restore track to Class 2: ties, relay rail, plates and anchors, surfacing, drainage, vegetation, fencing, yards',31.29,6.89,'IRCCA initial phase, less bridges, crossings and rockfall. 45% of ties (180,000) were found defective.','cl2'],
+ ['Track','Upgrade to Class 3 and 286,000 lb cars: 115 lb rail, double-shoulder plates, ties, turnouts',90.52,23.98,'IRCCA intermediate phase. Needed for the 60 mph passenger speeds the planner assumes and for more than 4 trains a day.','cl3'],
+ ['Track','Ballast program: undercutting, new ballast, 6 in. surfacing, geometry testing',48.48,13.16,'IRCCA ultimate phase, ballast items only. Ballast was rated poor from Langford to Nanaimo.','bal'],
+ ['Structures','Bridge and trestle remediation',38.42,34.70,'IRCCA bridge remediation by segment (48 bridges on the Victoria Sub), including the Port Alberni Sub trestles that are out today.','brg'],
+ ['Structures','Rockfall protection (Langford–Shawnigan, Port Alberni Sub)',1.40,0.25,'IRCCA rockfall remediation.','rock'],
+ ['Crossings','Bring all road crossings to standard: surfaces, warning systems, sight lines',44.29,8.48,'IRCCA crossing upgrades: 203 crossings on the Victoria Sub, 33 on the Port Alberni Sub.','xing']];
 const COST_ALLOW=[// 2026 $M allowances, construction
- ['Structures','Rebuild track through the Snaw-Naw-As reserve, MP 82.8–83.7 (removed 2024): If Reconciled with the Nation',3,0,'Planner allowance: 0.9 mile of new track and crossings.'],
- ['Structures','Shawnigan Lake Road bridge, MP 26.8 (out today)',3,0,'Planner allowance, if not covered by the IRCCA bridge budget. The CVRD report also plans to raise its clearance for the trail.']];
+ ['Structures','Rebuild track through the Snaw-Naw-As reserve, MP 82.8–83.7 (removed 2024): If Reconciled with the Nation',3,0,'Planner allowance: 0.9 mile of new track and crossings.','snaw'],
+ ['Structures','Shawnigan Lake Road bridge, MP 26.8 (out today)',3,0,'Planner allowance, if not covered by the IRCCA bridge budget. The CVRD report also plans to raise its clearance for the trail.','shaw']];
 const STN_MAJOR=new Set(['VIC','WHL','DUN','NAN','CTN','PAL']);
 const TRAIN_COST={dmu:2*6*ESC23,dmu2:4*6*ESC23,bemu:2*7.5*ESC23,h2:2*9*ESC23,pp:(18+4*5)*ESC23,lrt:7*ESC23,rdc:6,steam:3,frt:0};// $M per trainset, 2026
 const TRAIL_KM={vic:209,alb:61};// corridor km without trail today: Victoria Sub north of Humpback Rd, and the Port Alberni Sub
 const TRAIL_RATE=595800/1e6*ESC23;// $M per km, FORT-VI corridor average incl. bridge decking, crossings, engineering and contingency (2023), escalated
 const OVH=[['Construction supervision',.10],['Engineering',.12],['Project management',.10],['First Nations consultation',.15]];// IRCCA percentages, CVRD Table H-6
 function costOpts(){const o=PLAN.costOpts||(PLAN.costOpts={});if(o.v!==44){o.v=44;o.alb=o.alb!==false;o.trailN=true;o.cont=50;}if(typeof o.cont!=='number')o.cont=o.cont?50:0;return o;}
+/* ---------- Costs page (V118): a rate card. Every work is priced from its type's rate per km, per crossing or per item;
+   restoration items are rates per km of corridor. Planner changes live in PLAN.costAdj (key -> value), so they are saved
+   with the plan and travel in shared links. A work can still be given a custom amount in the work editor (auto false). ---------- */
+// Transport Canada Grade Crossings Inventory, 2023 update (open.canada.ca), main-line crossings of the Victoria and Port Alberni subdivisions:
+// [TC number, line, milepost, road, lat, lon, protection P passive | L lights and bells | G gates, public 1 | private 0, vehicles a day]
+const GCI=[["600706","ALB",1.05,"Fairdowne Rd",49.30942,-124.34595,"P",1,25],["26808","ALB",1.7,"Church Rd",49.3097,-124.358,"L",1,902],["26809","ALB",3.9,"Virginia Rd",49.3061,-124.408,"P",1,102],["600707","ALB",4.8,"",49.30563,-124.42144,"P",0,10],["600316","ALB",5.82,"Hwy#4A",49.3066,-124.45,"L",1,3500],["26811","ALB",7.7,"Hilliers R",49.3112,-124.488,"L",1,2304],["26812","ALB",8.88,"Melrose Rd",49.3124,-124.514,"P",1,100],["26813","ALB",10.3,"Qualicum Falls Rd",49.3104,-124.544,"P",1,500],["600708","ALB",20.68,"",49.24941,-124.67119,"P",0,10],["600709","ALB",24.2,"",null,null,"P",0,10],["600710","ALB",24.8,"",49.2736,-124.74,"P",0,10],["600711","ALB",26.8,"",49.2974,-124.762,"P",0,10],["26814","ALB",33.3,"Smith Road",49.3076,-124.837,"P",1,100],["600712","ALB",34.02,"",49.29621,-124.83315,"P",0,10],["26815","ALB",35.8,"Kitsuksis Rd",49.2742,-124.816,"L",1,1004],["26817","ALB",36.28,"Compton Rd",49.2694,-124.809,"P",1,400],["26816","ALB",36.7,"Lathom Rd.",49.2638,-124.805,"L",1,2502],["26818","ALB",36.92,"Johnston Rd",49.2608,-124.805,"L",1,11010],["26819","ALB",37.4,"Roger St",49.2544,-124.805,"L",1,11004],["26821","ALB",37.9,"Stamp Road",49.2471,-124.809,"L",1,18004],["600713","ALB",38.05,"",49.24592,-124.80957,"P",0,10],["600714","ALB",38.1,"",49.24497,-124.80979,"P",0,10],["600715","ALB",38.3,"",49.2425,-124.81023,"P",0,10],["600716","ALB",38.65,"",49.23804,-124.81013,"P",0,10],["600717","ALB",38.79,"",49.23647,-124.8108,"P",0,10],["26822","ALB",38.9,"Argyle St",49.2347,-124.813,"P",1,3000],["26823","ALB",39.21,"Beach Rd",49.231,-124.811,"P",1,300],["600718","ALB",39.3,"",null,null,"P",0,10],["600719","ALB",39.33,"",49.22797,-124.81124,"P",0,10],["26824","ALB",39.4,"Bruce Ave",null,null,"P",1,300],["36886","MAIN",0.37,"Tyee Road",48.4275,-123.378,"L",1,2000],["600734","MAIN",0.57,"",null,null,"P",0,10],["29886","MAIN",0.77,"Catherine St",48.4301,-123.385,"G",1,2400],["29887","MAIN",0.83,"Mary St",48.4302,-123.386,"P",1,500],["29888","MAIN",0.88,"Russell St",48.4303,-123.387,"P",1,750],["29889","MAIN",0.95,"Esquimalt Rd.",48.4305,-123.388,"L",1,21020],["29890","MAIN",1.1,"Wilson Street",48.4326,-123.39,"L",1,3210],["29893","MAIN",1.57,"Devonshire/Fairview",48.4358,-123.399,"P",1,2500],["29894","MAIN",1.76,"Lampson Street",48.4369,-123.403,"L",1,14180],["29895","MAIN",2.14,"Hutchinson Ave.",48.4379,-123.41,"P",1,760],["29897","MAIN",2.29,"Intervale Ave.",48.4376,-123.414,"P",1,510],["29898","MAIN",2.53,"Admirals Rd @ Naden",48.4372,-123.419,"L",1,20150],["29899","MAIN",3.12,"Maple Bank Rd.",48.44039,-123.42943,"P",1,200],["600256","MAIN",3.37,"Thomas Rd",null,null,"P",0,100],["46110","MAIN",3.5,"On Reserve (Esquimalt)",48.44398,-123.4288,"P",0,10],["600257","MAIN",3.65,"Hallowell Rd",48.4465,-123.4304,"P",0,300],["35075","MAIN",4.81,"Burnett Rd",48.46,-123.442,"L",1,352],["600735","MAIN",4.85,"",null,null,"P",0,10],["600303","MAIN",5.03,"Prop.Kitlingbury Lan",48.4606,-123.447,"P",0,25],["600736","MAIN",5.6,"",null,null,"P",0,10],["29906","MAIN",6.9,"Atkins Ave.",48.4474,-123.476,"L",1,704],["29908","MAIN",7.9,"Goldstream Ave.",48.4473,-123.495,"L",1,30420],["29909","MAIN",8.52,"Jacklin Rd",48.4447,-123.509,"L",1,22100],["29910","MAIN",10.7,"Humpback Rd",48.4543,-123.553,"L",1,602],["600737","MAIN",11.4,"",null,null,"P",0,10],["29911","MAIN",11.85,"Sooke Lake Rd.",48.4612,-123.573,"P",1,50],["29912","MAIN",20.2,"Shawnigan Lake Rd.",48.5626,-123.586,"L",1,1002],["29914","MAIN",27.75,"Thrush Rd.(Beach Acc",null,null,"P",1,1],["29915","MAIN",28.12,"Renfrew Rd",48.6572,-123.627,"L",1,3604],["29916","MAIN",29.4,"Thain Rd",48.67025,-123.625,"P",1,200],["29918","MAIN",31.1,"Empress Ave.",48.6863,-123.604,"P",1,52],["29919","MAIN",31.5,"Thain Rd.",48.6919,-123.608,"P",1,200],["29920","MAIN",34.1,"Hillbank Rd.",48.7159,-123.643,"P",1,104],["600738","MAIN",35.5,"Uphill Rd Bypass",48.7294,-123.66844,"P",1,25],["601156","MAIN",36.8,"",null,null,"P",0,2],["29922","MAIN",38,"Miller Rd",48.7588,-123.6847,"L",1,1004],["29923","MAIN",38.33,"Roberts Rd",48.7617,-123.69,"L",1,1500],["29924","MAIN",38.7,"Allenby Rd",48.7651,-123.696,"L",1,5025],["35505","MAIN",39.11,"Boy'S Road",48.769,-123.703,"L",1,3002],["29925","MAIN",39.7,"Government St",48.7768,-123.706,"L",1,27050],["35779","MAIN",39.79,"Coronation Avenue",null,null,"P",1,1],["29926","MAIN",39.83,"Queen (Ingram) St.",48.7793,-123.707,"L",1,3010],["29927","MAIN",40,"James St.",48.78201,-123.70803,"L",1,9510],["600425","MAIN",40.23,"Beverly St.",48.7848,-123.70987,"G",1,1502],["29928","MAIN",40.75,"Sherman Rd",48.7918,-123.713,"L",1,4002],["34876","MAIN",41.38,"Green Road",48.7993,-123.72,"P",1,25],["29929","MAIN",41.7,"Drinkwater Road",48.8031,-123.724,"L",1,1204],["29930","MAIN",42.6,"Herd Rd",48.8142,-123.73,"L",1,4004],["601157","MAIN",42.82,"",null,null,"P",0,2],["29931","MAIN",44.3,"Somenos Rd",48.8385,-123.729,"L",1,804],["29933","MAIN",46.9,"Chemainus Rd.",48.8697,-123.701,"L",1,402],["29935","MAIN",47.8,"Chemainus Rd.",48.8785,-123.688,"L",1,1804],["29936","MAIN",48.6,"Ashcroft Rd.",48.889,-123.692,"P",1,52],["29937","MAIN",48.8,"Chemainus Rd.",48.892,-123.692,"L",1,1204],["29938","MAIN",50,"Chemainus Rd.",48.9077,-123.705,"L",1,2004],["29939","MAIN",50.6,"Henry Rd.",48.9145,-123.714,"L",1,4010],["33994","MAIN",50.7,"Pv.Rd.Mac-Brodell",null,null,"P",0,200],["29941","MAIN",50.9,"River Road",48.9181,-123.716,"L",1,1802],["29942","MAIN",51.35,"Elm St",48.9233,-123.721,"L",1,300],["29943","MAIN",51.7,"Old Victoria Road",48.9258,-123.728,"L",1,1404],["29944","MAIN",52.3,"Cook Street",48.932,-123.732,"L",1,602],["29945","MAIN",53.8,"Old Victoria Rd.",48.9444,-123.758,"L",1,602],["29946","MAIN",55.97,"N.Watts Rd.",48.9672,-123.785,"P",1,25],["29947","MAIN",57.03,"Chemainus Rd.",48.9778,-123.802,"G",1,3102],["29948","MAIN",58,"Oyster Cove Rd",48.9945,-123.815,"P",1,500],["601340","MAIN",58.2,"Roberts St.(Proposed",null,null,"L",1,25],["29949","MAIN",58.8,"Ludlow Road",48.999,-123.822,"L",1,1202],["48865","MAIN",58.9,"Tc Hwy",null,null,"G",1,25],["48866","MAIN",60.88,"Oyster-Stolo Rd",49.0144,-123.8548,"P",1,25],["29951","MAIN",60.92,"Regan Rd.",49.0154,-123.856,"P",1,10],["29952","MAIN",61.7,"Takala Rd",49.0258,-123.868,"P",1,152],["29953","MAIN",63.14,"Timberland Road",49.044,-123.878,"L",1,2204],["29955","MAIN",64,"Vowels Rd",49.0575,-123.878,"L",1,1602],["600739","MAIN",64.9,"",null,null,"P",0,10],["35077","MAIN",65.52,"Nanaimo River Road",49.0762,-123.885,"L",1,1502],["600740","MAIN",65.71,"",null,null,"P",0,10],["29958","MAIN",66.94,"Minetown Rd",49.0954,-123.896,"P",1,502],["29960","MAIN",69.3,"Sparks Ave",49.12168,-123.9222,"L",1,5206],["34112","MAIN",70.24,"Junction Ave.",49.1349,-123.929,"L",1,6306],["29964","MAIN",71.3,"7Th St.",49.14749,-123.93827,"L",1,3502],["29965","MAIN",71.8,"Fifth St.",49.1551,-123.939,"L",1,5002],["29966","MAIN",72.09,"Kennedy Rd",49.15815,-123.939,"L",1,1002],["29968","MAIN",72.2,"Milton Street",49.1596,-123.94,"L",1,5000],["29969","MAIN",72.26,"Albert St.",49.1604,-123.941,"L",1,7500],["29970","MAIN",72.3,"Prideaux Street",49.162,-123.941,"L",1,1000],["29971","MAIN",72.4,"Franklyn Street",49.163,-123.942,"L",1,900],["29972","MAIN",72.6,"Fitzwilliam Street",49.165,-123.943,"L",1,4050],["29973","MAIN",72.7,"Wentworth Street",49.1667,-123.945,"L",1,1000],["29974","MAIN",72.73,"Prideaux Street",49.1669,-123.945,"L",1,600],["29975","MAIN",72.8,"Campbell Street",49.1681,-123.946,"L",1,600],["29976","MAIN",73,"Comox Rd",49.1703,-123.947,"L",1,8304],["29977","MAIN",73.4,"Rosehill Street",49.1759,-123.948,"L",1,900],["29978","MAIN",73.5,"Townsite Road",49.177,-123.949,"L",1,5050],["29979","MAIN",73.87,"St George Street",49.1819,-123.954,"G",1,6525],["29980","MAIN",74.48,"Waddington Rd.",49.1882,-123.963,"L",1,5200],["36253","MAIN",74.93,"Montrose @ Isl. Hwy",null,null,"P",1,1],["29981","MAIN",75,"Northfield Rd.",49.1919,-123.972,"G",1,12000],["29982","MAIN",75.68,"Dorman Rd.",49.198,-123.985,"L",1,4000],["29983","MAIN",75.7,"Industrl R",null,null,"P",1,1199],["29985","MAIN",76.53,"Bowen Road",49.204,-124.0015,"G",1,26008],["29987","MAIN",77.3,"Jinglepot Road",49.2069,-124.017,"G",1,6025],["29990","MAIN",77.9,"Wellington Rd.",49.212,-124.029,"L",1,3500],["36113","MAIN",78.18,"Mostar Road.",49.2136,-124.033,"L",1,11300],["29991","MAIN",78.5,"Godfrey Rd",49.2171,-124.039,"L",1,2000],["48906","MAIN",79.4,"Bicycle Trail",null,null,"P",1,25],["29993","MAIN",80.2,"Aulds Rd",49.2348,-124.063,"L",1,1504],["29994","MAIN",81.1,"Ware Rd",49.2422,-124.081,"L",1,504],["29995","MAIN",82.24,"Superior Road",49.2502,-124.102,"L",1,1502],["29997","MAIN",86.65,"Nanoose Bay Rd",49.2626,-124.193,"P",1,100],["601158","MAIN",86.8,"",null,null,"P",0,2],["29998","MAIN",86.9,"Northwest Bay Rd.",49.2645,-124.199,"L",1,1504],["29999","MAIN",87.8,"Northwest Bay Rd.",49.2705,-124.193,"L",1,1504],["30000","MAIN",88.1,"Giant Powder Wks Rd",49.2726,-124.187,"L",1,1002],["30001","MAIN",88.6,"Northwest Bay Rd.",49.279,-124.19,"L",1,1204],["30002","MAIN",89.9,"Saunders Rd.",49.2891,-124.214,"P",1,250],["600415","MAIN",90.1,"Mac-Blo Access",49.2904,-124.219,"L",0,20],["30003","MAIN",91.9,"Island Hwy",49.2998,-124.255,"G",1,12006],["34994","MAIN",94.25,"Butler Road",49.3052,-124.301,"P",1,50],["30004","MAIN",95.28,"Alberni Hy",49.3078,-124.324,"L",1,10002],["30005","MAIN",97,"Church Rd",49.3212,-124.355,"L",1,1202],["30006","MAIN",97.8,"Lowry Rd",49.3318,-124.363,"P",1,52],["30007","MAIN",98.82,"Drew Road",49.3395,-124.381,"P",1,12],["30008","MAIN",99.64,"Bennett Rd",49.3423,-124.399,"L",1,1002],["30009","MAIN",100.6,"Qualicum Rd.",49.3449,-124.421,"P",1,1506],["30010","MAIN",101.6,"Memorial Ave.",49.3481,-124.442,"L",1,8510],["30011","MAIN",101.88,"Beach Rd",49.3497,-124.448,"P",1,3000],["30012","MAIN",102.64,"Arbutus Rd",49.3513,-124.464,"P",1,2502],["35947","MAIN",102.94,"Grandin Court",49.3522,-124.47,"P",1,200],["30013","MAIN",103.22,"Laburnum Rd.",49.353,-124.476,"P",1,25],["600747","MAIN",103.54,"",null,null,"P",0,10],["30014","MAIN",104.56,"Texada Rd.",49.3589,-124.501,"P",1,27],["600748","MAIN",104.84,"",null,null,"P",0,10],["600749","MAIN",105.04,"",null,null,"P",0,10],["30015","MAIN",105.61,"Hobbs Rd",49.3647,-124.519,"P",1,302],["30016","MAIN",106.05,"Island Hwy",49.3685,-124.53,"L",1,8502],["30017","MAIN",107.85,"Polegate Rd.",49.3764,-124.567,"P",1,150],["30018","MAIN",108.2,"Island Hwy. No. 19",49.3777,-124.575,"L",1,8502],["600750","MAIN",108.83,"",null,null,"P",0,10],["36245","MAIN",109.2,"Grovehill Road",49.3796,-124.595,"P",1,29],["30019","MAIN",110.1,"Horne Lake Rd",49.3858,-124.612,"L",1,2410],["600751","MAIN",111,"",null,null,"P",0,10],["36291","MAIN",114.05,"Mccoll Rd",49.428,-124.665,"P",1,10],["30020","MAIN",114.6,"Island Hwy",49.4342,-124.673,"L",1,8520],["30021","MAIN",115.6,"Jamieson Rd",49.4436,-124.689,"L",1,602],["30022","MAIN",116.8,"Gainsberg Rd.",49.4531,-124.711,"L",1,1002],["601159","MAIN",118.4,"",49.4515,-124.741,"P",0,2],["30023","MAIN",120.1,"Berray Rd",49.4568,-124.774,"P",1,50],["30024","MAIN",120.98,"Curran Rd",49.46,-124.792,"P",1,27],["600283","MAIN",121.26,"Can.Forest Prod.",null,null,"P",0,250],["30025","MAIN",121.4,"Island Hwy",49.4659,-124.798,"L",1,8510],["48867","MAIN",122.7,"Hastings Rd",null,null,"P",1,25],["600752","MAIN",122.75,"",49.4858,-124.811,"P",0,10],["601295","MAIN",123.66,"",49.4937,-124.821,"P",0,10],["35412","MAIN",124.37,"Cougar Smith Road",49.5013,-124.829,"P",1,27],["34231","MAIN",124.98,"Macey Road No 156",49.5102,-124.835,"P",1,52],["601296","MAIN",126.2,"",null,null,"P",0,10],["600408","MAIN",126.8,"Mckay Rd",49.5243,-124.851,"P",1,50],["601297","MAIN",126.9,"",null,null,"P",0,10],["600315","MAIN",129.25,"Prop. Subd Rd A",49.5324,-124.86,"P",1,200],["601298","MAIN",129.9,"",null,null,"P",0,10],["30026","MAIN",130.5,"Mcleod Rd.",49.5809,-124.887,"L",1,602],["601299","MAIN",132,"",null,null,"P",0,10],["30028","MAIN",135.75,"Royston Rd",49.6444,-124.948,"L",1,1416],["600753","MAIN",137.57,"",49.6504,-124.957,"P",0,10],["30029","MAIN",137.6,"Fraser Rd",49.6625,-124.977,"L",1,1002],["30030","MAIN",138.27,"29Th.Street.",49.6696,-124.986,"P",1,50],["34950","MAIN",138.59,"26Th Street",49.6732,-124.99,"L",1,5002],["30031","MAIN",139.2,"17Th Ave",49.6799,-124.998,"L",1,1706],["30032","MAIN",139.7,"Cumberland Rd.",49.6836,-125.002,"P",1,7010],["30033","MAIN",139.9,"5Th St",null,null,"P",1,7010]];
+const SUB_KM={MAIN:+(139.87*1.609344).toFixed(1),ALB:+(38*1.609344).toFixed(1)},IRCCA_XINGS={MAIN:203,ALB:33};
+var CP_DEF=null,CP_IDX={};
+function cpInit(){if(CP_DEF)return;const E=ESC20,e=v=>+(v*E).toFixed(3),IR=`IRCCA 2020 (WSP for BC MoTI), escalated ×${E.toFixed(2)} to 2026.`,PL='Planner estimate; change it to a local figure if you have one.';
+  const pk=v=>+(v*E/SUB_KM.MAIN).toFixed(4);const D=[];const g=(grp,list)=>{for(const x of list)D.push({g:grp,...x});};
+  g('Restoration of the corridor',[
+   {k:'r.cl2',n:'Restore track to Class 2',sub:'Ties, relaid rail, plates and anchors, surfacing, drainage, vegetation, fencing, yards',d:pk(31.29),u:'$M a km',b:`IRCCA initial phase, less bridges, crossings and rockfall: $31.29M (2020) for the ${SUB_KM.MAIN} km Victoria Sub, as a rate per km. ${IR} 45% of ties were found defective.`},
+   {k:'r.cl3',n:'Upgrade to Class 3 and 286,000 lb cars',sub:'115 lb rail, double-shoulder plates, ties, turnouts',d:pk(90.52),u:'$M a km',b:`IRCCA intermediate phase: $90.52M (2020) for the Victoria Sub, as a rate per km. ${IR} Needed for 60 mph passenger running and more than 4 trains a day.`},
+   {k:'r.bal',n:'Ballast program',sub:'Undercutting, new ballast, 6 in. surfacing, geometry testing',d:pk(48.48),u:'$M a km',b:`IRCCA ultimate phase, ballast items only: $48.48M (2020) for the Victoria Sub, as a rate per km. ${IR}`},
+   {k:'r.xing',n:'Bring a road crossing to standard',sub:'Surfaces, warning systems, sight lines',d:+(44.29*E/203).toFixed(3),u:'$M a crossing',b:`IRCCA crossing upgrades: $44.29M (2020) for 203 crossings on the Victoria Sub (33 on the Port Alberni Sub). ${IR}`},
+   {k:'r.brg.v',n:'Bridge and trestle remediation',sub:'Victoria Sub (48 bridges)',d:e(38.42),u:'$M',b:`IRCCA bridge remediation by segment: $38.42M (2020). ${IR}`},
+   {k:'r.brg.a',n:'Bridge and trestle remediation',sub:'Port Alberni Sub, including the trestles that are out today',d:e(34.70),u:'$M',b:`IRCCA bridge remediation: $34.70M (2020). ${IR} Kept as an amount because the Port Alberni trestles do not fit a rate per km.`},
+   {k:'r.rock',n:'Rockfall protection',sub:'Langford–Shawnigan and the Port Alberni Sub',d:e(1.65),u:'$M',b:`IRCCA rockfall remediation: $1.40M Victoria Sub and $0.25M Port Alberni Sub (2020). ${IR}`},
+   {k:'r.shaw',n:'Shawnigan Lake Road bridge, MP 26.8 (out today)',d:3,u:'$M',b:'Planner allowance, if not covered by the IRCCA bridge budget. The Snaw-Naw-As track is priced with the rebuild rate below.'}]);
+  g('Signals, sidings and stations',[
+   {k:'sig.vl',n:'Signals and train control, Victoria–Langford',sub:'For frequent commuter service',d:e(26),u:'$M',b:`IRCCA signalling upgrades: $26M (2020). ${IR}`},
+   {k:'disp.km',n:'Dispatching and train control, rest of the line',d:+(.4/1.609344).toFixed(3),u:'$M a km',b:'Planner allowance of about $0.4M a mile for a centralized dispatch and train control system, charged north of Langford and on the Port Alberni Sub.'},
+   {k:'sid.pass',n:'Passing siding allowance',sub:'6 sidings, used only until the plan has siding works of its own',d:4,u:'$M each',b:'Planner allowance. The ICF business case allowed only $5M for all of them.'},
+   {k:'sid.store',n:'Commuter storage sidings',d:e(1.64),u:'$M',b:`IRCCA storage sidings: $1.64M (2020). ${IR}`},
+   {k:'dis.to',n:'Turnout, for rebuilding a disused siding',d:+(.23*2.2).toFixed(3),u:'$M each',b:'MnDOT Midwest Regional Rail cost methodology: No. 20 turnout $0.18–0.28M (2010 US$), ×2.2 to 2026 CAD. Two per siding.'},
+   {k:'dis.km',n:'Relaid siding track, for a disused siding',d:+(1.45*2.2/1.609344).toFixed(3),u:'$M a km',b:'MnDOT Midwest Regional Rail cost methodology: passenger siding track about $1.45M a mile (2010 US$), ×2.2 to 2026 CAD.'},
+   {k:'stn.main',n:'Main station',sub:'Victoria, Westhills, Duncan, Nanaimo, Courtenay, Port Alberni',d:e(6.85),u:'$M each',b:`IRCCA station cost: $6.85M (2020) for platforms, shelters, access and parking. ${IR}`},
+   {k:'stn.local',n:'Local station, or a Station work',d:e(3.43),u:'$M each',b:`IRCCA station cost: $3.43M (2020). ${IR}`},
+   {k:'fac',n:'Maintenance and storage facility',d:e(75.48),u:'$M',b:`IRCCA maintenance facility: $75.48M (2020). ${IR}`},
+   {k:'prop',n:'Property for stations, sidings and the facility',d:e(44.24),u:'$M',b:`IRCCA property acquisition: $44.24M (2020). ${IR} Not subject to construction overheads.`}]);
+  g('Trail',[
+   {k:'trail.crd',n:'Complete the CRD E&N Rail Trail',sub:'Jacklin Rd to Humpback Rd, 3.6 km',d:+(3.6*36/17.4*1.5).toFixed(2),u:'$M',b:'CRD E&N Rail Trail: $36M for 17.4 km (2016), ×1.5 to 2026.'},
+   {k:'trail.km',n:'Rail-with-trail, or a Trail work',d:+TRAIL_RATE.toFixed(3),u:'$M a km',b:'FORT-VI trail feasibility study as costed in the CVRD report (Table H-7): $595,800 a km with engineering and contingency (2023), escalated. 25% asphalt and 75% gravel, bridge railing and decking, crossings and rock fall.'}]);
+  g('Track works: per km',[
+   {k:'w.se',n:'Superelevation',sub:'Re-surfacing curves with up to 6 in. of superelevation',d:+(.077/1.609344).toFixed(4),u:'$M a km',b:'IRCCA Appendix G: 6 in. lift at $7 a track foot and ballast at $50 a cubic yard ≈ $59k a mile (2020), ×1.3 to 2026.'},
+   {k:'w.curve',n:'Curve easing',sub:'Rock cuts and side-hill realignment',d:+(8/1.609344).toFixed(2),u:'$M a km',b:'2017 Malahat Village highway project ($34M for 5 km of widening with blasting, about $15M a mile in 2026) scaled down to about $8M a mile for a single-track corridor. Needs a geotechnical study.'},
+   {k:'w.tunnel',n:'Tunnel or new alignment',d:100,u:'$M a km',b:'Planner estimate. The CVRD report (Table H-2) puts a tunnel to bypass a reserve section at $150–410M.'},
+   {k:'w.c4rail',n:'Class 4 renewal: welded rail, ties and surfacing',d:+(.75/1.609344).toFixed(3),u:'$M a km',b:'IRCCA intermediate-phase rates for 115 lb welded rail, ties, plates and surfacing, escalated to 2026. Gates are added at the crossings in the range that have none, at the crossing rates.'},
+   {k:'w.c4sig',n:'Class 4 renewal: signalling above 60 mph',d:+(4.3/1.609344).toFixed(2),u:'$M a km',b:'IRCCA commuter signalling rate, escalated to 2026.'},
+   {k:'w.drain',n:'Drainage, ballast and surfacing',d:+(48.48*E/SUB_KM.MAIN).toFixed(3),u:'$M a km',b:'The IRCCA ballast program’s average rate per km of the Victoria Sub.'},
+   {k:'w.veg',n:'Vegetation clearing and sight lines',d:.03,u:'$M a km',b:PL},
+   {k:'w.raise',n:'Raise track (flood and washout protection)',d:5,u:'$M a km',b:PL+' New embankment and track, culverts and slope protection.'},
+   {k:'w.rebuild',n:'Rebuild missing track',d:+(3/1.45).toFixed(2),u:'$M a km',b:'Planner allowance for the Snaw-Naw-As section: $3M for 0.9 mile (1.45 km) of new track and crossings. Also prices that section in the restoration.'},
+   {k:'w.fence',n:'Fencing and separation',d:.1,u:'$M a km',b:PL+' Chain-link both sides or a barrier between trail and track.'},
+   {k:'w.slope',n:'Slope stabilization or retaining wall',d:3,u:'$M a km',b:PL},
+   {k:'w.env',n:'Environmental remediation',d:.2,u:'$M a km',b:PL+' Site investigation and clean-up of creosote ties, fuel and old yards.'},
+   {k:'w.util',n:'Utility corridor',d:.5,u:'$M a km',b:PL+' Fibre conduit or a main laid in the corridor.'},
+   {k:'w.sig',n:'Signals and train control',d:+(.21*2.2/1.609344).toFixed(3),u:'$M a km',b:'MnDOT Midwest Regional Rail cost methodology: CTC $0.21M a mile (2010 US$), ×2.2 to 2026 CAD.'},
+   {k:'w.elec',n:'Electrification',d:2.5,u:'$M a km',b:PL+' Overhead contact wire and power supply for single track.'},
+   {k:'w.sid1',n:'Passing siding: first km',sub:'Including its two turnouts',d:5.5,u:'$M',b:'MnDOT Midwest Regional Rail cost methodology (2010 US$: siding track $1.45M a mile, No. 20 turnouts $0.18–0.28M, CTC $0.21M a mile), ×2.2 to 2026 CAD.'},
+   {k:'w.sidkm',n:'Passing siding: each further km',d:3.5,u:'$M a km',b:'MnDOT Midwest Regional Rail cost methodology, ×2.2 to 2026 CAD.'},
+   {k:'w.dbl0',n:'Double track: turnouts and crossovers',d:2,u:'$M',b:'MnDOT Midwest Regional Rail cost methodology, ×2.2 to 2026 CAD.'},
+   {k:'w.dblkm',n:'Double track: each km',d:5,u:'$M a km',b:'MnDOT: double track on new embankment about $3.0M a mile (2010 US$), ×2.2 to 2026 CAD, plus signals.'}]);
+  g('Track works: per crossing',[
+   {k:'w.xg',n:'Add gates and constant warning time',sub:'Crossing with lights and bells',d:XG/1000,u:'$M a crossing',b:'CN Otway Rd, Prince George (2021): $472–529k for gates, bells, lights and constant warning time, ×1.15 to 2026.'},
+   {k:'w.xp',n:'Full gates, lights and bells',sub:'Crossing with signs only',d:XP/1000,u:'$M a crossing',b:'CN Otway Rd example plus lights, bells and a new circuit where there are signs only.'},
+   {k:'w.xw',n:'Constant warning time',sub:'Crossing that already has gates',d:.15,u:'$M a crossing',b:PL},
+   {k:'w.xc',n:'Close a crossing',d:XC/1000,u:'$M a crossing',b:PL+' Barriers, signs and road work.'},
+   {k:'w.gsep',n:'Grade separation (overpass or underpass)',d:30,u:'$M a crossing',b:PL+' A two-lane road over or under a single track, with approaches.'}]);
+  g('Track works: per item',[
+   {k:'w.bridge',n:'Bridge or trestle repair',sub:'Each bridge in the range',d:+(38.42*E/48).toFixed(2),u:'$M each',b:'The IRCCA’s average remediation cost per bridge on the Victoria Sub ($38.42M for 48 bridges, 2020), escalated. Major bridges will cost far more: give those works a custom amount.'},
+   {k:'w.culvert',n:'Culvert or fish passage',d:.4,u:'$M each',b:PL},
+   {k:'w.stntrk',n:'Station track',sub:'About 300 m with two turnouts and signals',d:3,u:'$M each',b:'Planner estimate; platforms not included.'},
+   {k:'w.park',n:'Park-and-ride, bus connection or access',d:2,u:'$M each',b:PL}]);
+  g('Trains (per trainset)',Object.keys(TRAIN_COST).filter(k=>k!=='frt'&&TYPES[k]).map(k=>({k:'t.'+k,n:TYPES[k].name||TYPES[k].short,sub:TYPES[k].sub,d:+TRAIN_COST[k].toFixed(2),u:'$M each',b:k==='rdc'?'Planner estimate for a refurbished Budd RDC.':k==='steam'?'Planner estimate for a heritage train.':'CVRD report Table H-3: a DMU car costs $5–7M (2023), as on Ottawa’s Trillium Line (Stadler FLIRT), escalated; other technologies scaled from car prices. Not subject to construction overheads.'})));
+  g('Overheads (share of construction)',OVH.map(([n,p],i)=>({k:'o.'+i,n,d:p*100,u:'%',b:'IRCCA percentage as used in the CVRD report (Table H-6). Applied to construction costs, including the track works.'})));
+  g('Works done with the restoration: share already paid for',[
+   {k:'wr.superel',n:'Superelevation',d:50,u:'%',b:'Planner estimate: done in the restoration’s own surfacing pass.'},
+   {k:'wr.xing',n:'Crossing works',d:30,u:'%',b:'Planner estimate: the restoration’s crossing budget already pays for warning-system upgrades at every crossing.'},
+   {k:'wr.renew',n:'Class 4 renewal: rail and ties',d:80,u:'%',b:'Planner estimate: the Class 3 upgrade already lays 115 lb rail and ties; welding and tighter surfacing are the rest.'},
+   {k:'wr.drain',n:'Drainage, ballast and surfacing',d:50,u:'%',b:'Planner estimate: Class 2 drainage and the ballast program.'},
+   {k:'wr.veg',n:'Vegetation clearing',d:75,u:'%',b:'Planner estimate: Class 2 restoration includes vegetation clearing.'},
+   {k:'wr.bridge',n:'Bridge or trestle repair',d:50,u:'%',b:'Planner estimate: the restoration’s bridge and trestle budget.'},
+   {k:'wr.fence',n:'Fencing',d:50,u:'%',b:'Planner estimate: Class 2 restoration includes fencing.'}]);
+  CP_DEF=D;CP_IDX={};for(const x of D)CP_IDX[x.k]=x;}
+function cp(k){if(!CP_DEF)try{cpInit();}catch(_){}const x=CP_IDX[k];let a=null;try{a=PLAN&&PLAN.costAdj;}catch(_){}
+  const v=a&&a[k];return v!=null&&v!==''&&isFinite(+v)&&+v>=0?+v:(x?x.d:0);}
+function cpCustom(k){let a=null;try{a=PLAN.costAdj;}catch(_){}return !!(a&&a[k]!=null&&isFinite(+a[k])&&CP_IDX[k]&&Math.abs(+a[k]-CP_IDX[k].d)>1e-9);}
+function cpSet(k,v){const a=PLAN.costAdj||(PLAN.costAdj={});if(v==null||!isFinite(v)||Math.abs(v-CP_IDX[k].d)<1e-9)delete a[k];else a[k]=+v;}
+const cpM=v=>{v=+v;return '$'+(v>=100?Math.round(v).toLocaleString():v>=10?v.toFixed(1).replace(/\.0$/,''):v>=1?v.toFixed(2).replace(/0$/,'').replace(/\.$/,''):v.toFixed(3).replace(/0+$/,'').replace(/\.$/,''))+'M';};
+const snawCost=()=>cp('w.rebuild')*1.45;
+/* crossings in a work's range, and what the work does at each: gate (add gates to lights and bells), full (full gates where there are signs only),
+   cwt (constant warning time where gates exist), close, none. The planner's default follows the protection and traffic; w.xt holds changes. */
+const XT_NAME={gate:'Add gates',full:'Full gates',cwt:'Warning time',close:'Close',sep:'Grade separate',none:'Leave'};
+function xingsIn(line,a,b){return GCI.filter(x=>x[1]===line&&x[2]>=a-1e-6&&x[2]<b-1e-6);}
+function xtDefault(x){return x[6]==='G'?'cwt':x[6]==='L'?'gate':!x[7]?'none':x[8]<600?'close':'full';}
+const XT_PRESET={'p41-x2':{29975:'close',29974:'close'}};
+function xtOf(w,x){const o=(w.xt&&w.xt[x[0]])||(XT_PRESET[w.id]&&XT_PRESET[w.id][x[0]]);return XT_NAME[o]?o:xtDefault(x);}
+const XT_RATE={gate:'w.xg',full:'w.xp',cwt:'w.xw',close:'w.xc',sep:'w.gsep'};
+const XPROT={P:'signs only',L:'lights and bells',G:'gates'};
+// unit-rate formula for a work: {v, b} or null when it is priced by hand (Custom type)
+function workFormula(w){if(!CP_DEF)cpInit();const mi=Math.max(0,w.b-w.a),r1=v=>Math.max(.1,+v.toFixed(1));
+  const km=(()=>{try{return Math.max(.05,Math.abs(mpToK(w.line,w.b)-mpToK(w.line,w.a)));}catch(_){return mi*1.609344;}})(),K=km.toFixed(1)+' km';
+  const per=(key,what)=>({v:r1(cp(key)*km),b:`${K} × ${cpM(cp(key))} a km${what?' '+what:''}.`});
+  const each=(key,n,what)=>({v:r1(cp(key)*n),b:`${n} × ${cpM(cp(key))} ${what}.`});
+  switch(w.type){
+  case 'superel':return per('w.se','to re-surface the curves with up to 6 in. of superelevation');
+  case 'curve':return per('w.curve','for rock cuts and side-hill realignment');
+  case 'tunnel':return per('w.tunnel','for a tunnel or new alignment');
+  case 'drain':return per('w.drain','for drainage, ballast and surfacing');
+  case 'veg':return per('w.veg','for clearing and sight lines');
+  case 'raise':return per('w.raise','to raise the track');
+  case 'rebuild':return per('w.rebuild','to rebuild the track');
+  case 'trail':return per('trail.km','for rail-with-trail');
+  case 'fence':return per('w.fence','for fencing and separation');
+  case 'slope':return per('w.slope','for slope work');
+  case 'env':return per('w.env','for remediation');
+  case 'utility':return per('w.util','for the utility corridor');
+  case 'signal':return per('w.sig','for signals and train control');
+  case 'electrify':return per('w.elec','for overhead wire and power supply');
+  case 'renew':{const X=xingsIn(w.line,w.a,w.b).filter(x=>x[6]==='L'||(x[6]==='P'&&x[7]&&x[8]>=600)),g=X.filter(x=>x[6]==='L').length,p=X.length-g;
+    const v=km*(cp('w.c4rail')+cp('w.c4sig'))+g*cp('w.xg')+p*cp('w.xp');
+    return{v:r1(v),b:`${K} × (${cpM(cp('w.c4rail'))} rail, ties and surfacing + ${cpM(cp('w.c4sig'))} signalling) a km${g?`, plus gates at ${g} crossing${g>1?'s':''} with lights and bells × ${cpM(cp('w.xg'))}`:''}${p?`, plus full gates at ${p} busier crossing${p>1?'s':''} with signs only × ${cpM(cp('w.xp'))}`:''}.`};}
+  case 'xing':case 'gradesep':{const X=xingsIn(w.line,w.a,w.b).filter(x=>x[7]||w.type==='xing');
+    if(w.type==='gradesep'){const n=Math.max(1,X.filter(x=>x[7]).length);return each('w.gsep',n,`a grade separation (${X.length?`${n} public crossing${n>1?'s':''} in the range`:'no crossing in the inventory in this range; counted as one'})`);}
+    const c={};for(const x of X){const t=xtOf(w,x);(c[t]||(c[t]=[])).push(x);}
+    const parts=Object.keys(XT_RATE).filter(t=>c[t]);if(!X.length)return{v:0,b:'No crossings in the Transport Canada inventory in this range. Widen the range, or type a custom amount.'};
+    return{v:r1(parts.reduce((s,t)=>s+c[t].length*cp(XT_RATE[t]),0)),b:`${X.length} crossing${X.length>1?'s':''} in the Transport Canada inventory: `+parts.map(t=>`${XT_NAME[t].toLowerCase()} at ${c[t].length} × ${cpM(cp(XT_RATE[t]))}`).join('; ')+(c.none?`; ${c.none.length} left as they are`:'')+'.'};}
+  case 'bridge':{let n=0;try{n=INFRA.filter(s=>s.l===w.line&&(s.k==='b'||s.k==='h')&&s.m>=w.a-1e-6&&s.m<=w.b+1e-6).length;}catch(_){}n=Math.max(1,n);return each('w.bridge',n,`a bridge${n>1?` (${n} bridges in the range)`:''}`);}
+  case 'culvert':return each('w.culvert',1,'a culvert');
+  case 'station':return each('stn.local',1,'a station or platform');
+  case 'parkride':return each('w.park',1,'a park-and-ride or access project');
+  case 'siding':{if(/station track/i.test(w.name||''))return each('w.stntrk',1,'a station track (about 300 m, two turnouts and signals; platforms not included)');
+    return{v:+(cp('w.sid1')+Math.max(0,km-1)*cp('w.sidkm')).toFixed(1),b:`${K}: ${cpM(cp('w.sid1'))} for the first km with its two turnouts${km>1?`, plus ${(km-1).toFixed(1)} km × ${cpM(cp('w.sidkm'))} a km`:''}.`};}
+  case 'double':return{v:+(cp('w.dbl0')+km*cp('w.dblkm')).toFixed(1),b:`${cpM(cp('w.dbl0'))} for the turnouts and crossovers, plus ${K} × ${cpM(cp('w.dblkm'))} a km.`};}
+  return null;}
+function syncWorkCosts(){const W=(typeof TRACKSPEC!=='undefined'&&TRACKSPEC&&TRACKSPEC.works)||[];for(const w of W){const f=workFormula(w);
+  if(!f){if(w.cost0===undefined)w.cost0=w.cost;continue;}
+  if(w.auto===undefined)w.auto=w.cost==null||w.fresh===true||Math.abs(+w.cost-f.v)<=.15*f.v+.11;
+  if(w.auto)w.cost=f.v;}}
+function cpWorkState(w){const f=workFormula(w);
+  if(f){const custom=w.auto===false;return{custom,formula:f,resetTip:`Back to the rate-card cost, ${cpM(f.v)}`,
+    basis:custom?`Custom amount entered by a planner. From the rate card it would be ${cpM(f.v)}: ${f.b}`:`From the rate card on the Costs page: ${f.b}`};}
+  const c0=w.cost0,custom=c0!==undefined&&c0!==w.cost;
+  return{custom,formula:null,resetTip:c0==null?'Back to no cost estimate':`Back to the original estimate, ${cpM(c0)}`,
+    basis:custom?`Custom amount entered by a planner.${c0!=null?` The original estimate was ${cpM(c0)}.`:''}`:'Custom work: priced by hand, as there is no rate for it on the Costs page.'};}
+function cpResetWork(w){const f=workFormula(w);if(f){w.auto=true;w.cost=f.v;}else if(w.cost0!==undefined)w.cost=w.cost0;}
+function cpCustomCount(){if(!CP_DEF)cpInit();return CP_DEF.filter(x=>cpCustom(x.k)).length;}
+function cpWorkCustomCount(){return (TRACKSPEC.works||[]).filter(w=>workFormula(w)&&w.auto===false).length;}
+function cpChanged(){syncWorkCosts();savePlan();if(typeof renderCost==='function')renderCost();if(typeof renderWorks==='function')renderWorks();}
+// the crossing list in the work editor
+function xingEditorHtml(w){if(w.type!=='xing')return '';const X=xingsIn(w.line,w.a,w.b);
+  if(!X.length)return `<div class="weeff">No crossings in the Transport Canada inventory between MP ${w.a.toFixed(2)} and ${w.b.toFixed(2)}.</div>`;
+  return `<div class="xglist"><div class="m">Crossings in the range (Transport Canada inventory, 2023). Choose what this work does at each; costs follow the per-crossing rates.</div>${X.map(x=>{const t=xtOf(w,x);
+    return `<label class="xgrow"><span><b>${esc(x[3]||'Private crossing')}</b> <span class="m">MP ${x[2]} · ${XPROT[x[6]]}${x[7]?'':' · private'} · ${x[8].toLocaleString()} vehicles a day</span></span><select data-xt="${x[0]}">${Object.entries(XT_NAME).filter(([k])=>k!=='sep').map(([k,n])=>`<option value="${k}"${k===t?' selected':''}${(k==='gate'&&x[6]!=='L')||(k==='full'&&x[6]!=='P')||(k==='cwt'&&x[6]!=='G')?' disabled':''}>${n}</option>`).join('')}</select></label>`;}).join('')}</div>`;}
+function renderCostsPage(){cpInit();syncWorkCosts();const box=$('cp-body');const fmt=v=>+(+v).toFixed(4);
+  const groups=[];for(const x of CP_DEF){let G=groups.find(q=>q.g===x.g);if(!G)groups.push(G={g:x.g,items:[]});G.items.push(x);}
+  const hd=`<div class="cprow hd"><span>Item</span><span>Rate</span><span>Unit</span><span>Source</span><span></span></div>`;
+  const row=x=>{const c=cpCustom(x.k);return `<div class="cprow${c?' cust':''}"><span class="cpn" tabindex="0" data-cptip="${x.k}">${esc(x.n)}${x.sub?`<small>${esc(x.sub)}</small>`:''}</span>
+    <input type="number" min="0" step="any" data-cpk="${x.k}" value="${fmt(cp(x.k))}" aria-label="${esc(x.n+(x.sub?', '+x.sub:''))} (${x.u})"><span class="cpu">${x.u}</span><span class="cpst${c?' cpc':''}">${c?'Custom':'Default'}</span>
+    <button type="button" class="btn sm" data-cpr="${x.k}"${c?'':' disabled'} title="${c?`Back to the default, ${fmt(x.d)} ${x.u}`:'At the default'}">Reset</button></div>`;};
+  box.innerHTML=groups.map(G=>`<section class="srcg"><h2>${esc(G.g)}</h2><div class="cpgrid">${hd}${G.items.map(row).join('')}</div></section>`).join('');
+  const n=cpCustomCount(),nw=cpWorkCustomCount(),tot=`overall capital cost $${(costModel().total/1000).toFixed(2)}B`;
+  $('cp-sum').textContent=(n?`${n} rate${n>1?'s':''} changed from the defaults`:'All rates at the planner defaults')+(nw?` · ${nw} work${nw>1?'s have':' has'} a custom amount (Works tab)`:'')+' · '+tot;
+  $('cp-resetall').disabled=!n;}
+function cpTipHtml(k){const x=CP_IDX[k];if(!x)return '';const c=cpCustom(k);
+  return `<b>${c?'Custom rate':'How it was worked out'}</b>${c?`Changed by a planner from the default of ${+(+x.d).toFixed(4)} ${esc(x.u)}. Default basis: `:''}${esc(x.b)}`;}
+(function(){const pg=$('cppage'),tip=$('cp-tip');if(!pg)return;
+  const others=()=>['trainpage','srcpage','rdpage','pfpage'].some(id=>$(id)&&!$(id).hidden);
+  function openCosts(on){if(on){if(!$('trainpage').hidden)openTrains(false);if(!$('srcpage').hidden)openSources(false);if($('rdpage')&&!$('rdpage').hidden)openRidership(false);if($('pfpage')&&!$('pfpage').hidden&&window.openProfiles)window.openProfiles(false);}
+    pg.hidden=!on;document.querySelector('.app').classList.toggle('tpopen',on||others());tip.hidden=true;
+    if(on){renderCostsPage();pg.scrollTop=0;$('cp-back').focus();if(location.hash!=='#costs')history.replaceState(null,'','#costs');if(window.__track)__track('page:costs',false);}
+    else if(location.hash==='#costs')history.replaceState(null,'',location.pathname+location.search);}
+  window.openCosts=openCosts;
+  $('btn-costs').onclick=()=>openCosts(true);$('cp-back').onclick=()=>{openCosts(false);$('btn-costs').focus();};
+  ['btn-trains','btn-sources','btn-profiles','plan-rd-open'].forEach(id=>{const b=$(id);b&&b.addEventListener('click',()=>{if(!pg.hidden){pg.hidden=true;tip.hidden=true;}},true);});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!pg.hidden)openCosts(false);});
+  window.addEventListener('hashchange',()=>{const on=location.hash==='#costs';if(on!==!pg.hidden)openCosts(on);});
+  document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#co-costs'))openCosts(true);});
+  pg.addEventListener('change',e=>{const i=e.target;if(i.dataset.cpk){const v=i.value===''?null:Math.max(0,+i.value);cpSet(i.dataset.cpk,v);cpChanged();renderCostsPage();}});
+  pg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+    if(b.dataset.cpr){cpSet(b.dataset.cpr,null);cpChanged();renderCostsPage();}
+    else if(b.id==='cp-resetall'){if(!b.dataset.armed){b.dataset.armed=1;b.textContent='Click again to reset every rate';setTimeout(()=>{delete b.dataset.armed;b.textContent='Reset all to defaults';},4000);return;}
+      delete b.dataset.armed;b.textContent='Reset all to defaults';PLAN.costAdj={};cpChanged();renderCostsPage();toast('Costs','Every rate is back at the planner default. Custom work amounts in the Works tab are kept.');}});
+  const show=el=>{const h=cpTipHtml(el.dataset.cptip);if(!h){tip.hidden=true;return;}tip.innerHTML=h;tip.hidden=false;const r=el.getBoundingClientRect(),tw=tip.offsetWidth,th=tip.offsetHeight;
+    let x=Math.min(window.innerWidth-tw-8,Math.max(8,r.left)),y=r.bottom+6;if(y+th>window.innerHeight-8)y=Math.max(8,r.top-th-6);tip.style.left=x+'px';tip.style.top=y+'px';};
+  pg.addEventListener('pointerover',e=>{const el=e.target.closest('[data-cptip]');if(el)show(el);});
+  pg.addEventListener('pointerout',e=>{const el=e.target.closest('[data-cptip]');if(el&&!el.contains(e.relatedTarget))tip.hidden=true;});
+  pg.addEventListener('focusin',e=>{const el=e.target.closest('[data-cptip]');if(el)show(el);else tip.hidden=true;});
+  pg.addEventListener('scroll',()=>{tip.hidden=true;},{passive:true});
+  if(location.hash==='#costs')setTimeout(()=>openCosts(true),0);
+  setTimeout(()=>{try{const C=SRC.find(x=>x.g==='Costs');C.items.push({n:'Transport Canada Grade Crossings Inventory (2023 update)',u:'https://open.canada.ca/data/en/dataset/d0f54727-6c0b-4e5a-aa04-ea1463cf9f4c',use:'The 200 main-line crossings of the Victoria and Port Alberni subdivisions, with their protection and traffic. Crossing works are priced crossing by crossing from it.',d:'Read 4 November 2026.',lic:'Open Government Licence – Canada.'},
+    {n:'Costs page',use:'The rate card behind the capital cost: rates per km, per crossing and per item. Planners can change any rate; changes are saved with the plan and in shared links.'});}catch(_){}},0);})();
 function costModel(){const o=costOpts(),albOn=o.alb,rows=[];const add=(g,n,v,note,src,kind='c')=>rows.push({g,n,v,note,src,kind});
-  for(const [g,n,v,a,note] of COST_BASE)add(g,n,(v+(albOn?a:0))*ESC20,note+(albOn?'':' Victoria Sub only.'),'IRCCA 2020, escalated');
-  for(const [g,n,v,a,note] of COST_ALLOW)add(g,n,v+(albOn?a:0),note,'Allowance');
-  add('Signals and sidings','Signals and train control, Victoria–Langford (frequent commuter service)',26*ESC20,'IRCCA signalling upgrades.','IRCCA 2020, escalated');
-  add('Signals and sidings','Dispatching and train control for the rest of the line',(130+(albOn?38:0))*0.4,'Planner allowance: about $0.4M per mile for a centralized dispatch and train control system.','Allowance');
+  syncWorkCosts();
+  {const km=SUB_KM.MAIN+(albOn?SUB_KM.ALB:0),nx=IRCCA_XINGS.MAIN+(albOn?IRCCA_XINGS.ALB:0),sub=albOn?'':' Victoria Sub only.',kmT=`${km.toFixed(0)} km`;
+   for(const [g,n,v,a,note,id] of COST_BASE){let val,how;
+     if(id==='cl2'||id==='cl3'||id==='bal'){val=cp('r.'+id)*km;how=` ${kmT} × ${cpM(cp('r.'+id))} a km (Costs page).`;}
+     else if(id==='xing'){val=cp('r.xing')*nx;how=` ${nx} crossings × ${cpM(cp('r.xing'))} (Costs page).`;}
+     else if(id==='brg'){val=cp('r.brg.v')+(albOn?cp('r.brg.a'):0);how='';}
+     else{val=cp('r.rock')*(albOn?1:1.40/1.65);how='';}
+     add(g,n,val,note+how+sub,'IRCCA 2020, escalated');}
+   add('Structures','Rebuild track through the Snaw-Naw-As reserve, MP 82.8–83.7 (removed 2024): If Reconciled with the Nation',snawCost(),`1.45 km × ${cpM(cp('w.rebuild'))} a km (the rebuild rate on the Costs page).`,'Allowance');
+   add('Structures','Shawnigan Lake Road bridge, MP 26.8 (out today)',cp('r.shaw'),'Planner allowance, if not covered by the IRCCA bridge budget. The CVRD report also plans to raise its clearance for the trail.','Allowance');}
+  add('Signals and sidings','Signals and train control, Victoria–Langford (frequent commuter service)',cp('sig.vl'),'IRCCA signalling upgrades.','IRCCA 2020, escalated');
+  add('Signals and sidings','Dispatching and train control for the rest of the line',(130+(albOn?38:0))*1.609344*cp('disp.km'),`Planner allowance: about ${cpM(cp('disp.km'))} a km for a centralized dispatch and train control system.`,'Allowance');
   // passing sidings: once the plan has siding or double-track works, they are costed there (below), not as a flat allowance
   const t2=(TRACKSPEC.works||[]).some(w=>w.on!==false&&w.status!=='built'&&WORK_TYPES[w.type]&&WORK_TYPES[w.type].track2&&(albOn||w.line!=='ALB'));
-  if(t2)add('Signals and sidings','Commuter storage sidings',1.64*ESC20,'Storage sidings from the IRCCA. New passing sidings, double track and station tracks are costed with the track works below.','IRCCA 2020, escalated');
-  else add('Signals and sidings','Passing sidings for two-way service, and commuter storage sidings',6*4+1.64*ESC20,'Planner allowance: 6 passing sidings at $4M (the ICF business case allowed only $5M in total); storage sidings from the IRCCA.','Allowance');
+  if(t2)add('Signals and sidings','Commuter storage sidings',cp('sid.store'),'Storage sidings from the IRCCA. New passing sidings, double track and station tracks are costed with the track works below.','IRCCA 2020, escalated');
+  else add('Signals and sidings','Passing sidings for two-way service, and commuter storage sidings',6*cp('sid.pass')+cp('sid.store'),`Planner allowance: 6 passing sidings at $${cp('sid.pass')}M (the ICF business case allowed only $5M in total); storage sidings from the IRCCA.`,'Allowance');
   // existing sidings that are disused have to be rebuilt before trains can pass there
   {const dis=EXIST_SIDINGS.filter(([l,k,len,n,src,s])=>s==='d'&&k>1&&(albOn||l!=='ALB'));
-   const each=([l,k,len])=>(2*.23+len/1609*1.45)*2.2;
+   const each=([l,k,len])=>2*cp('dis.to')+len/1000*cp('dis.km');
    const pp=EXIST_SIDINGS.filter(x=>x[4]==='pp'&&(albOn||x[0]!=='ALB')).map(x=>x[3]);
    if(dis.length)add('Signals and sidings',`Rebuild ${dis.length} disused sidings: ${dis.map(x=>x[3]+' '+x[2]+' m').join(', ')}`,dis.reduce((s,x)=>s+each(x),0),
      `Two new No. 20 turnouts and relaid siding track on the existing bed, about $${(dis.reduce((s,x)=>s+each(x),0)/dis.length).toFixed(1)}M each (MnDOT Midwest Regional Rail cost methodology, 2010 US$: turnouts $0.18–0.28M, passenger siding track about $1.45M a mile; ×2.2 to 2026 CAD). Not costed: ${pp.length} passing points (${pp.join(', ')}) whose sidings are not in OpenStreetMap; their 330 m length is assumed and needs a field check.`,'MnDOT, escalated');}
   const st=[...servedStops()].filter(c=>STATIONS[c]);const big=st.filter(c=>STN_MAJOR.has(c)),small=st.filter(c=>!STN_MAJOR.has(c));
-  add('Stations and facility',`Stations served by this timetable: ${big.length} main and ${small.length} local (platforms, shelters, access, parking)`,(big.length*6.85+small.length*3.43)*ESC20,`IRCCA station costs: $6.85M main, $3.43M local (2020). Served: ${st.map(nm).join(', ')}.`,'IRCCA 2020, escalated');
-  add('Stations and facility','Maintenance and storage facility',75.48*ESC20,'IRCCA maintenance facility.','IRCCA 2020, escalated');
+  add('Stations and facility',`Stations served by this timetable: ${big.length} main and ${small.length} local (platforms, shelters, access, parking)`,big.length*cp('stn.main')+small.length*cp('stn.local'),`IRCCA station costs: $6.85M main, $3.43M local (2020). Served: ${st.map(nm).join(', ')}.`,'IRCCA 2020, escalated');
+  add('Stations and facility','Maintenance and storage facility',cp('fac'),'IRCCA maintenance facility.','IRCCA 2020, escalated');
   // trail
-  add('Trail','Complete the CRD E&N Rail Trail: Jacklin Rd to Humpback Rd, 3.6 km',3.6*36/17.4*1.5,'CRD E&N Rail Trail: $36M for 17.4 km (2016), escalated. 13.8 km Victoria–Jacklin Rd is built.','Canadian example');
+  add('Trail','Complete the CRD E&N Rail Trail: Jacklin Rd to Humpback Rd, 3.6 km',cp('trail.crd'),'CRD E&N Rail Trail: $36M for 17.4 km (2016), escalated. 13.8 km Victoria–Jacklin Rd is built.','Canadian example');
   if(o.trailN){const km=TRAIL_KM.vic+(albOn?TRAIL_KM.alb:0);
-    add('Trail',`Rail-with-trail beside the line north of the CRD${albOn?' and on the Port Alberni Sub':''}, about ${km} km`,km*TRAIL_RATE,'FORT-VI trail feasibility study as costed in the CVRD report (Table H-7): $349,100 per km civil works, 25% asphalt and 75% gravel, bridge railing and decking, crossings and rock fall; $595,800 per km with engineering and contingency (2023), escalated. The CVRD section alone (72 km) is $55.2M.','CVRD report');}
+    add('Trail',`Rail-with-trail beside the line north of the CRD${albOn?' and on the Port Alberni Sub':''}, about ${km} km`,km*cp('trail.km'),'FORT-VI trail feasibility study as costed in the CVRD report (Table H-7): $349,100 per km civil works, 25% asphalt and 75% gravel, bridge railing and decking, crossings and rock fall; $595,800 per km with engineering and contingency (2023), escalated. The CVRD section alone (72 km) is $55.2M.','CVRD report');}
   // not subject to construction overheads
   const fl={};for(const f of PLAN.fleet)fl[f.type]=(fl[f.type]||0)+1;
-  add('Trains and property',`Trains: ${Object.entries(fl).map(([k,n])=>`${n} × ${TYPES[k]?TYPES[k].short:k}`).join(', ')}`,Object.entries(fl).reduce((s,[k,n])=>s+n*(TRAIN_COST[k]??12),0),'CVRD report Table H-3: a DMU car costs $5–7M (2023), as on Ottawa’s Trillium Line (Stadler FLIRT); about $12.4M per 2-car unit in 2026.','CVRD report','x');
-  add('Trains and property','Property for stations, sidings and the facility',44.24*ESC20,'IRCCA property acquisition.','IRCCA 2020, escalated','x');
+  add('Trains and property',`Trains: ${Object.entries(fl).map(([k,n])=>`${n} × ${TYPES[k]?TYPES[k].short:k}`).join(', ')}`,Object.entries(fl).reduce((s,[k,n])=>s+n*(CP_IDX['t.'+k]?cp('t.'+k):(TRAIN_COST[k]??12)),0),'CVRD report Table H-3: a DMU car costs $5–7M (2023), as on Ottawa’s Trillium Line (Stadler FLIRT); about $12.4M per 2-car unit in 2026.','CVRD report','x');
+  add('Trains and property','Property for stations, sidings and the facility',cp('prop'),'IRCCA property acquisition.','IRCCA 2020, escalated','x');
   // works: every applied work that is not already built
   const W=(TRACKSPEC.works||[]).filter(w=>albOn||w.line!=='ALB');
   const wk=W.filter(w=>w.on!==false&&w.status!=='built'),off=W.filter(w=>w.on===false&&w.status!=='built'),built=W.filter(w=>w.status==='built');
   const wsum=wk.reduce((s,w)=>s+wNet(w),0),offsum=off.reduce((s,w)=>s+wNet(w),0),wcred=wk.reduce((s,w)=>s+workCost(w).credit,0),nocost=wk.filter(w=>w.cost==null).length;
   const constr=rows.filter(r=>r.kind==='c').reduce((s,r)=>s+r.v,0)+wsum,other=rows.filter(r=>r.kind==='x').reduce((s,r)=>s+r.v,0);
-  const ovh=OVH.map(([n,p])=>[n,p,constr*p]),cont=constr*o.cont/100;
+  const ovh=OVH.map(([n,p],i)=>{const q=cp('o.'+i)/100;return[n,q,constr*q];}),cont=constr*o.cont/100;
   const base=rows.reduce((s,r)=>s+r.v,0);
   return{rows,base,constr,other,wk,off,built,wsum,offsum,wcred,nocost,ovh,cont,total:constr+other+ovh.reduce((s,x)=>s+x[2],0)+cont,st,o};}
 const COST_STEPS=[
@@ -4128,6 +4347,7 @@ function renderCost(){const box=$('plan-cost');if(!box)return;const m=costModel(
       <div class="costkey">${bar.map(([n,v,c])=>`<span><i class="${c}"></i>${esc(n)} <b>$${f(v)}M</b></span>`).join('')}</div></div>
     <div class="costopts"><label><input type="checkbox" id="co-alb"${o.alb?' checked':''}> Include the Port Alberni Sub</label><label><input type="checkbox" id="co-trail"${o.trailN?' checked':''}> Trail along the whole corridor</label>
       <label>Contingency <select id="co-cont">${[[50,'50% (IRCCA)'],[30,'30%'],[0,'None']].map(([v,n])=>`<option value="${v}"${o.cont===v?' selected':''}>${n}</option>`).join('')}</select></label></div>
+    <div class="cplink"><button type="button" class="btn sm" id="co-costs">Adjust the cost rates</button><span class="m">${(()=>{const n=cpCustomCount(),nw=cpWorkCustomCount();return (n?`${n} rate${n>1?'s':''} changed on the Costs page`:'All rates at the planner defaults')+(nw?` · ${nw} work${nw>1?'s':''} with a custom amount`:'');})()}</span></div>
     <h4 class="costh">Speed projects applied in the Works tab <span>$${f(m.wsum)}M</span></h4>
     ${m.wk.length?`<div class="costg">${m.wk.slice().sort((a,b)=>a.line.localeCompare(b.line)||a.a-b.a).map(w=>`<div class="costw"><label class="wksw" title="Applied"><input type="checkbox" data-con="${w.id}" checked aria-label="Applied"><span></span></label><span class="grow"><button type="button" class="linkbtn" data-wopen="${w.id}">${esc(w.name)}</button><span class="m"> · ${WORK_STATUS[w.status]}${w.status==='idea'?' (not yet proposed)':''}</span></span><b>${w.cost!=null?'$'+f(wNet(w))+'M':'no cost yet'}</b></div>`).join('')}</div>${m.wcred>0.05?`<p class="m">Works done with the restoration are counted only for what they add: $${f(m.wcred)}M of their stand-alone cost is already in the restoration budget below.</p>`:''}`:'<p class="m">No works applied. Switch works on in the Works tab, or here below.</p>'}
     ${m.nocost?`<p class="m">${m.nocost} applied work${m.nocost>1?'s have':' has'} no cost estimate yet.</p>`:''}
@@ -4605,7 +4825,7 @@ function needExp(){return EXP;}
 $('wk-sid').onclick=()=>{const r=autoSidings(PLAN);worksChanged(r.added.length?`Added ${r.added.length} siding${r.added.length>1?'s':''} or double-track section${r.added.length>1?'s':''} for ${r.uncovered} meet${r.uncovered>1?'s':''} away from existing sidings (${r.meets} scheduled meets in all)`:`All ${r.meets} scheduled meets fall at existing sidings, stations or double track: nothing to add`,true);};
 function setSubtitle(){$('subtitle').textContent=!PLAN.trips.length&&!PLAN.fleet.length?'E&N corridor · Blank slate: no trains or trainsets yet · add trainsets and trips to build a service':(PRESETS[PLAN.preset]||PRESETS.data8).sub;$('tt-preset').value=PRESETS[PLAN.preset]?PLAN.preset:'data8';}
 setSubtitle();
-$('btn-preset').onclick=()=>{const k=$('tt-preset').value;PLAN=defaultPlan(k);const AS=autoSidings(PLAN);DONE.clear();KNOWN.clear();for(const t of [...trains])removeTrainGfx(t);trains.length=0;FORM=null;
+$('btn-preset').onclick=()=>{const k=$('tt-preset').value;const ca=PLAN.costAdj;PLAN=defaultPlan(k);if(ca)PLAN.costAdj=ca;const AS=autoSidings(PLAN);DONE.clear();KNOWN.clear();for(const t of [...trains])removeTrainGfx(t);trains.length=0;FORM=null;
   syncRuntime();bootPositions();setSubtitle();applyPlan(`Loaded the ${PRESETS[k].name} timetable. Stations and track are unchanged${AS.added.length?`, apart from ${AS.added.length} siding${AS.added.length>1?'s':''} or double-track section${AS.added.length>1?'s':''} this timetable needs (see Works)`:''}.`);};
 // side-by-side numbers for the two starting timetables
 function presetStats(P){let km=0,seats=0,wsDay=0,peakIn=0;const sets=new Set();
@@ -5264,7 +5484,7 @@ function cfgCollect(){const lp=$('layerpanel');return{app:'island-rail-planner',
   plan:(PLAN.stations=STNSPEC,PLAN.track=TRACKSPEC,JSON.parse(JSON.stringify(PLAN)))};}// timetable, fleet, stations, track changes and works
 function cfgApply(c){
   try{if(c.plan&&validPlan(c.plan)){try{localStorage.setItem(LS+'-before-share',JSON.stringify(PLAN));}catch(_){}
-    PLAN=c.plan;TRACKSPEC=normTrack(c.plan.track);applyStations(c.plan.stations);syncRuntime();bootPositions();(typeof ensureSidings==='function'&&ensureSidings(),applyPlan('Opened the timetable from a shared link'));}}catch(e){console.warn('shared timetable',e);}
+    PLAN=c.plan;TRACKSPEC=normTrack(c.plan.track);applyStations(c.plan.stations);syncWorkCosts();syncRuntime();bootPositions();(typeof ensureSidings==='function'&&ensureSidings(),applyPlan('Opened the timetable from a shared link'));}}catch(e){console.warn('shared timetable',e);}
   // colour theme for this visit only (the viewer's own choices are not overwritten)
   if(c.palette&&(c.palette==='standard'||PAL_BASE[c.palette])){SETTINGS.palette=c.palette;applyTheme();}
   const lp=$('layerpanel');if(Array.isArray(c.layers))for(const b of lp.querySelectorAll('.lsw')){const want=c.layers.includes(b.id);if((b.getAttribute('aria-pressed')==='true')!==want)b.click();}
