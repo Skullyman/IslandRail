@@ -1,4 +1,4 @@
-# Island Rail Planner — deployment
+# Island Rail Corridor Planner — deployment
 
 A static website: no build step, no database, no server-side code.
 

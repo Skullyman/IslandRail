@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Island Rail Planner: interactive Vancouver Island rail corridor map with a timetable simulation, train editor, population and highway traffic overlays.">
+<meta name="description" content="Island Rail Corridor Planner: interactive Vancouver Island rail corridor map with a timetable simulation, train editor, population and highway traffic overlays.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Island Rail Planner">
-<meta property="og:title" content="Island Rail Planner">
+<meta property="og:site_name" content="Island Rail Corridor Planner">
+<meta property="og:title" content="Island Rail Corridor Planner">
 <meta property="og:description" content="Plan passenger rail from Victoria to Courtenay and Port Alberni: a live timetable simulation with trains, buses, ferries and flights, plus population, jobs and traffic.">
 <meta property="og:url" content="https://skullyman.github.io/IslandRail/">
 <meta property="og:image" content="https://skullyman.github.io/IslandRail/og-image.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Map of Vancouver Island showing the E&amp;N rail corridor from Victoria to Courtenay, with the title Island Rail Planner">
+<meta property="og:image:alt" content="Map of Vancouver Island showing the E&amp;N rail corridor from Victoria to Courtenay, with the title Island Rail Corridor Planner">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Island Rail Planner">
+<meta name="twitter:title" content="Island Rail Corridor Planner">
 <meta name="twitter:description" content="Plan passenger rail from Victoria to Courtenay and Port Alberni on Vancouver Island's E&amp;N corridor.">
 <meta name="twitter:image" content="https://skullyman.github.io/IslandRail/og-image.jpg">
-<meta name="twitter:image:alt" content="Map of Vancouver Island showing the E&amp;N rail corridor from Victoria to Courtenay, with the title Island Rail Planner">
-<title>Island Rail Planner</title>
+<meta name="twitter:image:alt" content="Map of Vancouver Island showing the E&amp;N rail corridor from Victoria to Courtenay, with the title Island Rail Corridor Planner">
+<title>Island Rail Corridor Planner</title>
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
 /* Layout: dispatcher's console — live corridor map fills the left, train status board docked right; stacks on phones. */
@@ -56,6 +56,7 @@ button{font:inherit;color:inherit}
 .top{display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px}
 .brand{display:flex;flex-direction:column;min-width:0}
 .brand h1{font-family:var(--display);font-weight:800;font-size:30px;line-height:.95;margin:0;letter-spacing:.01em;text-transform:uppercase}
+@media (max-width:440px){.brand h1{font-size:27px!important;letter-spacing:0}}
 .brand h1 b{color:var(--accent)}
 .brand span{font-size:12px;color:var(--muted);letter-spacing:.04em}
 .clock{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;font-variant-numeric:tabular-nums;padding:4px 12px;border-radius:6px;background:var(--ink);color:var(--bg);min-width:96px;text-align:center}
@@ -763,6 +764,9 @@ svg.zt .ctrlbl{display:block}.nolbl-trail .ctrlbl{display:none!important}
 .profdot{fill:#fff;stroke:#b45309;stroke-width:3}
 @media (max-width:900px){.measprof{width:calc(100% - 20px);min-width:0;bottom:10px}.profopen .measbar{top:44px;bottom:auto;left:10px;transform:none;width:calc(100% - 70px)}}
 @media (max-width:600px){.measprof{bottom:0;border-radius:10px 10px 0 0;max-height:55%;overflow:auto;padding:6px 10px}.mp-stats{gap:2px 12px}.mp-note{display:none}}
+.trkminr{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;margin:6px 0;font-size:12.5px}.trkminr select{margin-left:6px}
+.trkdraft.rubber.bad{stroke:#d0393b!important}.trklimt{font-family:var(--body);font-size:11.5px;font-weight:700;fill:#b42318;paint-order:stroke;stroke:var(--halo);stroke-width:3.5px;pointer-events:none}
+circle.th.limit{fill:#d0393b!important;stroke:#fff}
 .mlane path:not(.marr),.mres path{cursor:help}
 .mres .r-mil{fill:url(#milhatch);stroke:#b91c1c;stroke-width:1.2}
 .mres .r-nogo{fill:rgba(220,38,38,.30);stroke:#dc2626;stroke-width:1.2}
@@ -885,12 +889,12 @@ svg.zt .ctrlbl{display:block}.nolbl-trail .ctrlbl{display:none!important}
 @media (prefers-reduced-motion:reduce){.tour .spot{transition:none}}
 </style></head>
 <body>
-<noscript><p style="padding:2em;font-family:sans-serif">Island Rail Planner needs JavaScript enabled.</p></noscript>
+<noscript><p style="padding:2em;font-family:sans-serif">Island Rail Corridor Planner needs JavaScript enabled.</p></noscript>
 
 
 <div class="app">
   <header class="top">
-    <div class="brand"><h1>Island Rail <b>Planner</b></h1><span>E&amp;N corridor · <span id="subtitle">Data-driven service on 8 trainsets · West Shore every 10–20 min · Nanaimo–Victoria commuter · Courtenay intercity</span></span></div>
+    <div class="brand"><h1>Island Rail Corridor <b>Planner</b></h1><span>E&amp;N corridor · <span id="subtitle">Data-driven service on 8 trainsets · West Shore every 10–20 min · Nanaimo–Victoria commuter · Courtenay intercity</span></span></div>
     <div class="ctrls">
       <div class="seg" role="group" aria-label="Simulation speed" id="speeds">
         <button id="sp-pause" data-s="0" aria-pressed="false" title="Pause">❚❚</button>
@@ -1089,7 +1093,7 @@ svg.zt .ctrlbl{display:block}.nolbl-trail .ctrlbl{display:none!important}
       </div>
       <div class="pane" id="pane-trk" hidden>
         <div class="toolbar"><button class="btn primary" id="btn-drawtrk" type="button">+ Draw new track</button><button class="btn" id="btn-edittrk" type="button" aria-pressed="false">Move track</button><span class="grow"></span><span class="m" id="trk-count"></span></div>
-        <div class="form" id="trkhelp" hidden></div>
+        <div class="trkminr"><label>Minimum curve radius <select id="trk-minr" aria-label="Minimum curve radius for track drawn or moved here"></select></label><span class="m">Applies to track you draw or move; the surveyed E&amp;N alignment is left as it is.</span></div><div class="form" id="trkhelp" hidden></div>
         <div class="spdbox" id="spdbox"></div>
         <p class="m trknote">Track works and speed projects are in the <button class="linkbtn" type="button" id="go-works">Works</button> tab.</p>
         <div id="trklist"></div>
@@ -1176,6 +1180,7 @@ const BASE_LINES={MAIN:GEO.MAIN,ALB:GEO.ALB};
 var TRACKSPEC={geom:{},lines:[]}, TRK={};// TRK: line id -> {id,name,parent,jk,v,user}
 const BASE_BUILT={MAIN:buildLine(GEO.MAIN),ALB:buildLine(GEO.ALB)};
 function normTrack(sp){const o={geom:{},lines:[],works:[],seed:41,notices:defaultNotices()};if(!sp||typeof sp!=='object'){o.works=DEFAULT_WORKS.map(w=>({...w}));return o;}
+  if([150,175,300,500,800].includes(+sp.minR))o.minR=+sp.minR;
   if(Array.isArray(sp.notices))o.notices=sp.notices.filter(n=>n&&(n.l==='MAIN'||n.l==='ALB')&&isFinite(+n.m)).map(n=>({id:String(n.id||'n'+Math.random().toString(36).slice(2,8)),ref:Number.isInteger(n.ref)&&INFRA[n.ref]?n.ref:null,n:String(n.n||'Notice').slice(0,80),l:n.l,m:+n.m,m2:n.m2!=null&&isFinite(+n.m2)&&+n.m2>+n.m?+n.m2:null,s:NOTICE_ST[n.s]?n.s:'other',d:String(n.d||'').slice(0,500),cond:String(n.cond||'').slice(0,60)}));
   if(Array.isArray(sp.works))for(const w of sp.works)if(w&&WORK_TYPES[w.type]&&(w.line==='MAIN'||w.line==='ALB')&&isFinite(+w.a)&&isFinite(+w.b)&&+w.b>+w.a)o.works.push({id:String(w.id||'w'+Math.random().toString(36).slice(2,8)),type:w.type,line:w.line,a:+w.a,b:+w.b,name:String(w.name||'').slice(0,80),deg:w.deg!=null?+w.deg:undefined,status:['idea','proposed','planned','funded','built'].includes(w.status)?w.status:'idea',cost:w.cost!=null&&w.cost!==''&&isFinite(+w.cost)?+w.cost:null,notes:String(w.notes||'').slice(0,1500),project:w.project||null,on:w.on!==false,tlabel:w.tlabel?String(w.tlabel).slice(0,40):undefined});
   if(sp.geom&&typeof sp.geom==='object')for(const l of ['MAIN','ALB'])if(Array.isArray(sp.geom[l])&&sp.geom[l].length>=2&&sp.geom[l].every(e=>Array.isArray(e)||(e&&Number.isInteger(e.a)&&Array.isArray(e.ll))))o.geom[l]=sp.geom[l];
@@ -1215,6 +1220,7 @@ function applyStations(spec){
     if(u){if(!LINES[u.parent])continue;const j=kOnLine(LINES[u.parent],u.ll[0]);arr=u.ll.map(p=>[...p]);arr[0]={n:null,c:'_'+u.id,k:0,ll:j.ll};
       TRK[line]={id:line,name:u.name,parent:u.parent,jk:j.k,v:u.v,user:true};}
     else{arr=geomArr(line);TRK[line]=line==='MAIN'?{id:'MAIN',name:'Main line'}:{id:'ALB',name:'Port Alberni line',parent:'MAIN',jk:kMapper(LINES.MAIN)(GEO.JUNC_K),v:40};}
+    if(typeof filletArr==='function')arr=filletArr(line,arr);
     for(const o of arr)if(!Array.isArray(o)&&STNSPEC.del.includes(o.c))o.x=1;
     for(const a of STNSPEC.add.filter(a=>a.line===line)){const p=projSeg(arr,a.ll);const A=arr[p.i],Bq=arr[Math.min(p.i+1,arr.length-1)],la=Array.isArray(A)?A:A.ll,lb=Array.isArray(Bq)?Bq:Bq.ll;
       arr.splice(p.i+1,0,{ll:[la[0]+(lb[0]-la[0])*p.t,la[1]+(lb[1]-la[1])*p.t],n:a.n,c:a.c,soft:1});}
@@ -3536,9 +3542,48 @@ const trkG=el('g',{},L.edit),trkDraftG=el('g',{},L.edit);
 const invP=([x,y])=>[x/(C*K)+B.w,B.n-y/K];
 const toSvg=e=>{const r=wrap.getBoundingClientRect();return[vb.x+(e.clientX-r.left)/ppu,vb.y+(e.clientY-r.top)/ppu];};
 const rll=ll=>ll.map(v=>Math.round(v*1e5)/1e5);
+/* ---------- railway curvature: track drawn or moved here keeps a minimum curve radius, and bends are drawn as circular curves ---------- */
+var MINR_OPTS=[[150,'150 m (11.7° curve, about 55 km/h)'],[175,'175 m (10° curve, about 60 km/h)'],[300,'300 m (5.8° curve, about 75 km/h)'],[500,'500 m (3.5° curve, about 100 km/h)'],[800,'800 m (2.2° curve, about 125 km/h)']];
+function minR(){return TRACKSPEC.minR||175;}
+var M_PER_U=1000/PX_PER_KM;// metres per map unit (hoisted functions below can run at start-up, before this file position)
+function turnAt(a,b,c){const ux=b[0]-a[0],uy=b[1]-a[1],vx=c[0]-b[0],vy=c[1]-b[1],l1=Math.hypot(ux,uy),l2=Math.hypot(vx,vy);
+  if(!l1||!l2)return{th:0,l1,l2};return{th:Math.acos(Math.max(-1,Math.min(1,(ux*vx+uy*vy)/(l1*l2)))),l1,l2};}
+// the largest curve that fits at a bend: each curve may use up to half of each neighbouring straight
+function radiusAt(a,b,c){const t=turnAt(a,b,c);return t.th<1e-4?Infinity:Math.min(t.l1,t.l2)/2/Math.tan(t.th/2)*1000/PX_PER_KM;}
+var BASE_KEYS={};function baseKey(line){if(!BASE_KEYS)BASE_KEYS={};return BASE_KEYS[line]||(BASE_KEYS[line]=new Set((BASE_LINES[line]||[]).map(p=>(Array.isArray(p)?p:p.ll).join(','))));}
+function llOf(e){return Array.isArray(e)?e:e.ll;}
+// bends that the planner's edits created or changed (original survey geometry is left exactly as it is)
+function bendIdx(line,arr){const user=!!TRACKSPEC.lines.find(t=>t.id===line),bk=user?null:baseKey(line);
+  const mine=i=>user||!bk.has(llOf(arr[i]).join(','));const out=new Set();
+  for(let i=1;i<arr.length-1;i++)if(Array.isArray(arr[i])&&(mine(i-1)||mine(i)||mine(i+1)))out.add(i);return out;}
+// replace each such bend by a circular curve of the minimum radius (or the largest that fits)
+function filletArr(line,arr){if(!TRACKSPEC.geom[line]&&!TRACKSPEC.lines.find(t=>t.id===line))return arr;const bends=bendIdx(line,arr);if(!bends.size)return arr;
+  const mpu=1000/PX_PER_KM,rnd=ll=>ll.map(v=>Math.round(v*1e5)/1e5),xy=arr.map(e=>P(llOf(e))),Ru=minR()/mpu,out=[arr[0]];
+  for(let i=1;i<arr.length;i++){if(!bends.has(i)){out.push(arr[i]);continue;}
+    const a=xy[i-1],b=xy[i],c=xy[i+1],t=turnAt(a,b,c);if(t.th<0.02){out.push(arr[i]);continue;}
+    const T=Math.min(Ru*Math.tan(t.th/2),t.l1/2,t.l2/2),r=T/Math.tan(t.th/2);
+    const u=[(a[0]-b[0])/t.l1,(a[1]-b[1])/t.l1],v=[(c[0]-b[0])/t.l2,(c[1]-b[1])/t.l2],bl=Math.hypot(u[0]+v[0],u[1]+v[1])||1;
+    const cen=[b[0]+(u[0]+v[0])/bl*r/Math.cos(t.th/2),b[1]+(u[1]+v[1])/bl*r/Math.cos(t.th/2)];
+    const p1=[b[0]+u[0]*T,b[1]+u[1]*T],p2=[b[0]+v[0]*T,b[1]+v[1]*T];let a1=Math.atan2(p1[1]-cen[1],p1[0]-cen[0]),a2=Math.atan2(p2[1]-cen[1],p2[0]-cen[0]);
+    let da=a2-a1;while(da>Math.PI)da-=2*Math.PI;while(da<-Math.PI)da+=2*Math.PI;const n=Math.max(2,Math.ceil(Math.abs(da)/(3*Math.PI/180)));
+    for(let j=0;j<=n;j++){const ang=a1+da*j/n;const X=cen[0]+r*Math.cos(ang),Y=cen[1]+r*Math.sin(ang);out.push(rnd([X/(C*K)+B.w,B.n-Y/K]));}}
+  return out;}
+// tightest curve on an edited or added line (metres), for the track list
+function tightest(line){const arr=editArr(line),bends=bendIdx(line,arr),user=!!TRACKSPEC.lines.find(t=>t.id===line);let m=Infinity;const xy=arr.map(e=>P(llOf(e))),mpu=1000/PX_PER_KM;
+  // added track: room for each bend's curve; the surveyed line: the circle through each changed point and its neighbours
+  const r3=(a,b,c)=>{const ab=Math.hypot(b[0]-a[0],b[1]-a[1]),bc=Math.hypot(c[0]-b[0],c[1]-b[1]),ca=Math.hypot(a[0]-c[0],a[1]-c[1]),cr=Math.abs((b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]));return cr<1e-12?Infinity:ab*bc*ca/(2*cr)*mpu;};
+  for(const i of bends)m=Math.min(m,user?radiusAt(xy[i-1],xy[i],xy[i+1]):r3(xy[i-1],xy[i],xy[i+1]));return m;}
+// is this vertex list acceptable at these bends? a bend may be tighter than the minimum only if it was already that tight
+function curvesOk(line,arr,idxs,before){const xy=arr.map(e=>P(llOf(e))),R=minR();
+  for(const i of idxs){if(i<1||i>=arr.length-1)continue;const r=radiusAt(xy[i-1],xy[i],xy[i+1]);if(r>=R)continue;if(before&&before[i]!=null&&r>=before[i]*0.999)continue;return false;}return true;}
+// the junction where new track leaves a line: treat the parent line as a long straight
+function junctionR(parent,k,ll1,ll2){const v=LINES[parent];if(!v)return Infinity;const a=lineAt(parent,Math.max(v[0].k,k-.05)),b=lineAt(parent,Math.min(v[v.length-1].k,k+.05)),p=P(ll1),q=P(ll2);
+  const tx=b[0]-a[0],ty=b[1]-a[1],tl=Math.hypot(tx,ty)||1,qx=q[0]-p[0],qy=q[1]-p[1],ql=Math.hypot(qx,qy)||1;
+  const th=Math.acos(Math.min(1,Math.abs((tx*qx+ty*qy)/(tl*ql))));return th<1e-4?Infinity:ql/2/Math.tan(th/2)*M_PER_U;}
+
 function ensureEditable(line){const u=TRACKSPEC.lines.find(t=>t.id===line);if(u)return u.ll;
   if(!TRACKSPEC.geom[line])TRACKSPEC.geom[line]=editArr(line).map(e=>Array.isArray(e)?[...e]:{a:e.a,ll:[...e.ll]});return TRACKSPEC.geom[line];}
-function previewLine(line){const pts=editArr(line).map(e=>P(Array.isArray(e)?e:e.ll).map(v=>v.toFixed(1)).join(',')).join(' ');(RAIL_EL[line]||[]).forEach(p=>p.setAttribute('points',pts));}
+function previewLine(line){const pts=filletArr(line,editArr(line)).map(e=>P(Array.isArray(e)?e:e.ll).map(v=>v.toFixed(1)).join(',')).join(' ');(RAIL_EL[line]||[]).forEach(p=>p.setAttribute('points',pts));}
 function commitTrack(msg){const w0=WARN.size;reapplyStations();const dw=WARN.size-w0;renderTrack();queueHandles();
   if(msg)toast('Track updated',msg+(dw>0?` · ${dw} more trip${dw>1?'s':''} now flagged as too tight`:''));}
 function setTrkEdit(on){trkEdit=on;$('btn-edittrk').setAttribute('aria-pressed',String(on));$('btn-edittrk').classList.toggle('primary',on);if(on)cancelDrawing();queueHandles();renderTrkHelp();}
@@ -3572,21 +3617,51 @@ function startDrag(c,line,i,kind,e){try{c.setPointerCapture(e.pointerId);}catch(
   const arr=ensureEditable(line);const pos=[+c.getAttribute('cx'),+c.getAttribute('cy')];
   if(kind==='mid'||kind==='ext')arr.splice(i,0,rll(invP(pos)));
   trkDrag={line,idx:i,moved:kind==='ext',kind};c.classList.add('drag');
-  const move=ev=>{if(!trkDrag)return;const q=toSvg(ev),ll=rll(invP(q));const o=arr[trkDrag.idx];if(Array.isArray(o))arr[trkDrag.idx]=ll;else o.ll=ll;
+  const xy0=arr.map(e=>P(llOf(e))),user=!!(TRK[line]&&TRK[line].user),mpu=1000/PX_PER_KM;
+  const setLL=(j,q)=>{const ll=rll(invP(q)),o=arr[j];if(Array.isArray(o))arr[j]=ll;else o.ll=ll;};
+  // circle through three points: the curvature a smooth line through them would have
+  const r3=(a,b,c)=>{const ab=Math.hypot(b[0]-a[0],b[1]-a[1]),bc=Math.hypot(c[0]-b[0],c[1]-b[1]),ca=Math.hypot(a[0]-c[0],a[1]-c[1]),cr=Math.abs((b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]));return cr<1e-12?Infinity:ab*bc*ca/(2*cr)*mpu;};
+  let place,checkOk;
+  if(user||kind==='ext'){// sparse waypoints on added track, or extending an end: move the one point; each bend needs room for its curve
+    const chk=[i-1,i,i+1],before={};for(const j of chk)if(j>0&&j<arr.length-1)before[j]=radiusAt(xy0[j-1],xy0[j],xy0[j+1]);
+    place=q=>{setLL(i,q);return true;};checkOk=()=>curvesOk(line,arr,chk,before);}
+  else{// the surveyed line has closely spaced points: moving one bends the track smoothly over a stretch either side, ending at the nearest stations
+    const cum=[0];for(let j=1;j<xy0.length;j++)cum.push(cum[j-1]+Math.hypot(xy0[j][0]-xy0[j-1][0],xy0[j][1]-xy0[j-1][1]));
+    let lo=0,hi=xy0.length-1;for(let j=i-1;j>=0;j--)if(!Array.isArray(arr[j])){lo=j;break;}for(let j=i+1;j<xy0.length;j++)if(!Array.isArray(arr[j])){hi=j;break;}
+    const before={};for(let j=Math.max(1,lo);j<=Math.min(xy0.length-2,hi);j++)before[j]=r3(xy0[j-1],xy0[j],xy0[j+1]);
+    let win=[i,i];
+    place=q=>{const dx=q[0]-xy0[i][0],dy=q[1]-xy0[i][1],A=Math.hypot(dx,dy)*mpu;
+      // transition length grows with the move so the curves stay gentle
+      let D=Math.max(150,Math.sqrt(10*minR()*A))/mpu;const Dl=Math.min(D,cum[i]-cum[lo]),Dr=Math.min(D,cum[hi]-cum[i]);
+      for(let j=lo;j<=hi;j++){if(j===i){setLL(j,q);continue;}if(!Array.isArray(arr[j])){continue;}const s=cum[j]-cum[i],L=s<0?Dl:Dr,f=L>0?Math.abs(s)/L:1;
+        const w=f>=1?0:(1-f*f)**2;setLL(j,[xy0[j][0]+dx*w,xy0[j][1]+dy*w]);}win=[lo,hi];return true;};
+    checkOk=()=>{const xy=arr.map(e=>P(llOf(e))),R=minR();for(let j=Math.max(1,win[0]);j<=Math.min(xy.length-2,win[1]);j++){const r=r3(xy[j-1],xy[j],xy[j+1]);if(r<R&&!(before[j]!=null&&r>=before[j]*.999))return false;}return true;};}
+  let good=pos.slice();
+  const move=ev=>{if(!trkDrag)return;let q=toSvg(ev);place(q);let lim=false;
+    if(!checkOk()){lim=true;let a=0,b=1;for(let n=0;n<14;n++){const m=(a+b)/2;place([good[0]+(q[0]-good[0])*m,good[1]+(q[1]-good[1])*m]);if(checkOk())a=m;else b=m;}
+      q=[good[0]+(q[0]-good[0])*a,good[1]+(q[1]-good[1])*a];place(q);}
+    good=q;c.classList.toggle('limit',lim);if(lim)trkLimit(q);else trkLimit(null);
     c.setAttribute('cx',q[0].toFixed(2));c.setAttribute('cy',q[1].toFixed(2));trkDrag.moved=true;previewLine(line);};
-  const end=()=>{c.removeEventListener('pointermove',move);c.removeEventListener('pointerup',end);c.removeEventListener('pointercancel',end);if(!trkDrag)return;const d=trkDrag;trkDrag=null;
+  const end=()=>{c.removeEventListener('pointermove',move);c.removeEventListener('pointerup',end);c.removeEventListener('pointercancel',end);trkLimit(null);if(!trkDrag)return;const d=trkDrag;trkDrag=null;
     if(d.moved)commitTrack(d.kind==='ext'?`Extended the ${lineName(d.line)}`:d.kind==='mid'?`Added a waypoint to the ${lineName(d.line)}`:`Moved the ${lineName(d.line)}`);
     else{if(d.kind==='mid')arr.splice(d.idx,1);queueHandles();}};
   c.addEventListener('pointermove',move);c.addEventListener('pointerup',end);c.addEventListener('pointercancel',end);}
+let trkLimG=null;function trkLimit(q){if(!trkLimG)trkLimG=el('g',{class:'trklim'},svg);trkLimG.innerHTML='';if(!q)return;
+  const g=el('g',{transform:`translate(${q[0]} ${q[1]}) scale(${(1/ppu).toFixed(4)})`},trkLimG);el('text',{x:12,y:-12,class:'trklimt'},g).textContent=`Curve limit: ${minR()} m radius`;}
 function renderTrkHelp(){const box=$('trkhelp');
-  if(drawing){box.hidden=false;box.innerHTML=`<p class="m" style="margin:0">${drawing.pts.length?'Click to add points along the new alignment. Finish (or press Enter) when you reach the end; a station is added there.':'Click on an existing rail line where the new track should branch off (zoom in for precision). Press Esc to cancel.'}</p>`;return;}
-  if(trkEdit){box.hidden=false;box.innerHTML=`<p class="m" style="margin:0">${vb.w>320?'<b>Zoom in</b> on the part of the line you want to move; the drag points appear when you are close enough.':'Drag a point to move the track. Drag anywhere on the line (or a hollow point) to add a waypoint. To extend a line, drag the dot on the short dashed stub past its end. Double-click a waypoint to remove it. Filled red points are stations and move with the track.'}</p>`;return;}
+  if(drawing){box.hidden=false;box.innerHTML=`<p class="m" style="margin:0">${drawing.pts.length?`Click to add points along the new alignment. Bends become curves of at least ${minR()} m radius, so leave room between points for them to fit; a point that makes a curve too tight is refused. Finish (or press Enter) when you reach the end; a station is added there.`:'Click on an existing rail line where the new track should branch off (zoom in for precision). Press Esc to cancel.'}</p>`;return;}
+  if(trkEdit){box.hidden=false;box.innerHTML=`<p class="m" style="margin:0">${vb.w>320?'<b>Zoom in</b> on the part of the line you want to move; the drag points appear when you are close enough.':'Drag a point to move the track. Drag anywhere on the line (or a hollow point) to add a waypoint. To extend a line, drag the dot on the short dashed stub past its end. Double-click a waypoint to remove it. Filled red points are stations and move with the track. Bends become curves of at least the minimum radius; a point stops where a curve would get tighter.'}</p>`;return;}
   box.hidden=true;box.innerHTML='';}
 // drawing a new track
 function cancelDrawing(){drawing=null;trkDraftG.innerHTML='';$('trkbar').hidden=true;svg.classList.remove('drawing');if(tab==='trk')renderTrkHelp();}
+// the curve a new point would need at the previous point (or at the junction for the first leg)
+function draftR(q){const n=drawing.pts.length,b=P(drawing.pts[n-1]);if(n===1){const sn=snapToRail(b[0],b[1]);return sn?junctionR(drawing.parent,sn.k,drawing.pts[0],invP(q)):Infinity;}
+  return radiusAt(P(drawing.pts[n-2]),b,q);}
 function drawDraft(cur){trkDraftG.innerHTML='';if(!drawing||!drawing.pts.length)return;const xy=drawing.pts.map(P);
-  el('polyline',{points:xy.map(q=>q.map(v=>v.toFixed(2)).join(',')).join(' '),class:'trkdraft','vector-effect':'non-scaling-stroke'},trkDraftG);
-  if(cur)el('polyline',{points:[xy[xy.length-1],cur].map(q=>q.map(v=>v.toFixed(2)).join(',')).join(' '),class:'trkdraft rubber','vector-effect':'non-scaling-stroke'},trkDraftG);
+  const sm=xy.length>2?(()=>{const tmp=drawing.pts.map(p=>[...p]),o=[tmp[0]];const Ru=minR()/M_PER_U;const X=tmp.map(P);for(let i=1;i<X.length-1;i++){const t=turnAt(X[i-1],X[i],X[i+1]);if(t.th<.02){o.push(X[i]);continue;}const T=Math.min(Ru*Math.tan(t.th/2),t.l1/2,t.l2/2);o.push([X[i][0]+(X[i-1][0]-X[i][0])/t.l1*T,X[i][1]+(X[i-1][1]-X[i][1])/t.l1*T],[X[i][0]+(X[i+1][0]-X[i][0])/t.l2*T,X[i][1]+(X[i+1][1]-X[i][1])/t.l2*T]);}o.push(X[X.length-1]);o[0]=X[0];return o;})():xy;
+  el('polyline',{points:sm.map(q=>q.map(v=>v.toFixed(2)).join(',')).join(' '),class:'trkdraft','vector-effect':'non-scaling-stroke'},trkDraftG);
+  if(cur){const ok=draftR(cur)>=minR();el('polyline',{points:[xy[xy.length-1],cur].map(q=>q.map(v=>v.toFixed(2)).join(',')).join(' '),class:'trkdraft rubber'+(ok?'':' bad'),'vector-effect':'non-scaling-stroke'},trkDraftG);
+    if(!ok){const g=el('g',{transform:`translate(${cur[0]} ${cur[1]}) scale(${(1/ppu).toFixed(4)})`},trkDraftG);el('text',{x:12,y:-12,class:'trklimt'},g).textContent=`Too tight: ${Math.round(draftR(cur))} m curve (minimum ${minR()} m)`;}}
   for(const q of xy)el('circle',{cx:q[0].toFixed(2),cy:q[1].toFixed(2),r:(4/ppu).toFixed(3),class:'trkpt','vector-effect':'non-scaling-stroke'},trkDraftG);}
 function draftKm(){let d=0;const xy=drawing.pts.map(P);for(let i=1;i<xy.length;i++)d+=Math.hypot(xy[i][0]-xy[i-1][0],xy[i][1]-xy[i-1][1]);return d/PX_PER_KM;}
 function updTrkBar(){$('trkbar-t').textContent=!drawing.pts.length?'Click the rail line where the new track branches off':`New track · ${draftKm().toFixed(1)} km · click to add points`;$('trkfinish').disabled=drawing.pts.length<2;$('trkundo').disabled=drawing.pts.length<1;renderTrkHelp();}
@@ -3598,7 +3673,9 @@ $('trkfinish').onclick=()=>finishDrawing();
 svg.addEventListener('click',e=>{if(!drawing||dragMoved>=5)return;e.stopPropagation();const q=toSvg(e);
   if(!drawing.pts.length){const sn=snapToRail(q[0],q[1]);if(!sn||sn.d*ppu>36){toast('Start on the line','Click on an existing rail line to branch the new track from it');return;}
     drawing.parent=sn.line;drawing.pts.push(rll(sn.ll));}
-  else{const ll=rll(invP(q));const last=P(drawing.pts[drawing.pts.length-1]);if(Math.hypot(q[0]-last[0],q[1]-last[1])*ppu<4)return;drawing.pts.push(ll);}
+  else{const ll=rll(invP(q));const last=P(drawing.pts[drawing.pts.length-1]);if(Math.hypot(q[0]-last[0],q[1]-last[1])*ppu<4)return;
+    const r=draftR(q);if(r<minR()){toast('Curve too tight',`That bend needs a ${Math.round(r)} m curve; railway track here needs at least ${minR()} m. Place the point further away or at a gentler angle.`);return;}
+    drawing.pts.push(ll);}
   drawDraft();updTrkBar();},true);
 svg.addEventListener('pointermove',e=>{if(!drawing||!drawing.pts.length||ptrs.size)return;drawDraft(toSvg(e));});
 svg.addEventListener('dblclick',e=>{if(drawing&&drawing.pts.length>=2){e.preventDefault();finishDrawing();}});
@@ -3616,13 +3693,14 @@ function removeTrack(id){const ids=new Set([id]);let more=true;while(more){more=
   const name=lineName(id);TRACKSPEC.lines=TRACKSPEC.lines.filter(t=>!ids.has(t.id));
   reapplyStations(`Removed ${name}${ids.size>1?` and ${ids.size-1} track${ids.size>2?'s':''} branching from it`:''}${edited?` · ${edited} trips changed${dropped?`, ${dropped} removed`:''}`:''}`);renderTrack();queueHandles();}
 function renderTrack(){const lines=Object.keys(LINES);$('trk-count').textContent=`${lines.length} line${lines.length>1?'s':''}`;
+  {const sel=$('trk-minr');if(sel&&!sel.options.length){sel.innerHTML=MINR_OPTS.map(([v,t])=>`<option value="${v}">${t}</option>`).join('');sel.onchange=()=>{TRACKSPEC.minR=+sel.value;commitTrack(`Minimum curve radius set to ${sel.value} m`);};}if(sel)sel.value=String(minR());}
   const edited=Object.keys(TRACKSPEC.geom).length+TRACKSPEC.lines.length;$('trkresetbox').hidden=!edited;
   $('trklist').innerHTML=lines.map(line=>{const T=TRK[line],v=LINES[line],len=v[v.length-1].k-v[0].k,nst=Object.values(STATIONS).filter(s=>s.line===line).length,ed=!!TRACKSPEC.geom[line];
     return `<div class="srow trow2" data-l="${line}"><span class="km">${len.toFixed(1)} km</span>
       ${T.user?`<input class="sname" value="${esc(T.name)}" maxlength="40" aria-label="Track name" data-tname="${line}">`:`<b>${esc(T.name)}</b>`}
       <span>${T.user?`<button class="btn sm danger" data-tdel="${line}">Remove</button>`:ed?`<button class="btn sm" data-tundo="${line}">Undo moves</button>`:''}</span>
       <div class="sctl">${T.user?`<label>Speed <select data-tv="${line}" aria-label="Design speed">${[40,60,80,100,120,140].map(s=>`<option value="${s}"${s===T.v?' selected':''}>${s} km/h</option>`).join('')}</select></label><span>Branches off the ${esc(lineName(T.parent))} at km ${T.jk.toFixed(1)}</span>`:`<span>${line==='ALB'?'Port Alberni':'Victoria'} Sub speeds below</span>`}
-      <span>${nst} station${nst===1?'':'s'}</span>${ed?'<span class="badge">Moved</span>':''}${T.user?'<span class="badge">Added</span>':''}</div></div>`;}).join('');
+      <span>${nst} station${nst===1?'':'s'}</span>${(ed||T.user)?(()=>{const r=tightest(line);return isFinite(r)?`<span class="${r<minR()?'badt':''}">Tightest new curve ${Math.round(r)} m${r<minR()?' (below the minimum)':''}</span>`:'';})():''}${ed?'<span class="badge">Moved</span>':''}${T.user?'<span class="badge">Added</span>':''}</div></div>`;}).join('');
   const box=$('trklist');
   box.querySelectorAll('[data-tname]').forEach(i=>i.onchange=()=>{const u=TRACKSPEC.lines.find(t=>t.id===i.dataset.tname);const v=i.value.trim();if(!u||!v)return;u.name=v;reapplyStations(`Track renamed to ${v}`);renderTrack();});
   box.querySelectorAll('[data-tv]').forEach(sel=>sel.onchange=()=>{const u=TRACKSPEC.lines.find(t=>t.id===sel.dataset.tv);u.v=+sel.value;reapplyStations(`${u.name} design speed is now ${u.v} km/h`);renderTrack();});
@@ -5235,7 +5313,7 @@ function zsSync(){const s=$('zoomsl');if(s&&ZS_MIN&&document.activeElement!==s)s
 /* ---------- intro tour: shown once to new visitors, and from Settings → Take the tour ----------
    The main tour ends with a link to an extended tour of the planning tools (Experimental mode). */
 const TOURS={main:[
- {t:'Welcome to the Island Rail Planner',p:'This map shows what restored passenger rail on Vancouver Island’s E&N corridor could look like: trains running a full weekday between Victoria, Nanaimo, Courtenay and Port Alberni, with the people, jobs and travel around them.'},
+ {t:'Welcome to the Island Rail Corridor Planner',p:'This map shows what restored passenger rail on Vancouver Island’s E&N corridor could look like: trains running a full weekday between Victoria, Nanaimo, Courtenay and Port Alberni, with the people, jobs and travel around them.'},
  {sel:'#mapwrap',t:'Trains on the map',p:'Each badge is a trainset running the timetable. Click one to follow it and see its trips. Drag to move the map, and scroll, pinch or use + and − to zoom; second tracks and sidings appear as you zoom in.'},
  {sel:'#speeds',t:'The map clock',p:'The simulation runs a weekday on its own clock. Pause it, or speed it up to 12 times. The stats beside the clock count trains running, riders, car trips avoided and single-track meets as the day goes on.',alt:'.stats'},
  {sel:'#layersbtn',t:'Layers',p:'Turn on population, jobs, travel flows, highway traffic, BC Transit buses, ferries, flights and more, to see where rail fits in how people move around the Island.'},
