@@ -1182,7 +1182,7 @@ const BASE_BUILT={MAIN:buildLine(GEO.MAIN),ALB:buildLine(GEO.ALB)};
 function normTrack(sp){const o={geom:{},lines:[],works:[],seed:41,notices:defaultNotices()};if(!sp||typeof sp!=='object'){o.works=DEFAULT_WORKS.map(w=>({...w}));return o;}
   if([150,175,300,500,800].includes(+sp.minR))o.minR=+sp.minR;
   if(Array.isArray(sp.notices))o.notices=sp.notices.filter(n=>n&&(n.l==='MAIN'||n.l==='ALB')&&isFinite(+n.m)).map(n=>({id:String(n.id||'n'+Math.random().toString(36).slice(2,8)),ref:Number.isInteger(n.ref)&&INFRA[n.ref]?n.ref:null,n:String(n.n||'Notice').slice(0,80),l:n.l,m:+n.m,m2:n.m2!=null&&isFinite(+n.m2)&&+n.m2>+n.m?+n.m2:null,s:NOTICE_ST[n.s]?n.s:'other',d:String(n.d||'').slice(0,500),cond:String(n.cond||'').slice(0,60)}));
-  if(Array.isArray(sp.works))for(const w of sp.works)if(w&&WORK_TYPES[w.type]&&(w.line==='MAIN'||w.line==='ALB')&&isFinite(+w.a)&&isFinite(+w.b)&&+w.b>+w.a)o.works.push({id:String(w.id||'w'+Math.random().toString(36).slice(2,8)),type:w.type,line:w.line,a:+w.a,b:+w.b,name:String(w.name||'').slice(0,80),deg:w.deg!=null?+w.deg:undefined,status:['idea','proposed','planned','funded','built'].includes(w.status)?w.status:'idea',cost:w.cost!=null&&w.cost!==''&&isFinite(+w.cost)?+w.cost:null,notes:String(w.notes||'').slice(0,1500),project:w.project||null,on:w.on!==false,tlabel:w.tlabel?String(w.tlabel).slice(0,40):undefined});
+  if(Array.isArray(sp.works))for(const w of sp.works)if(w&&WORK_TYPES[w.type]&&(w.line==='MAIN'||w.line==='ALB')&&isFinite(+w.a)&&isFinite(+w.b)&&+w.b>+w.a)o.works.push({id:String(w.id||'w'+Math.random().toString(36).slice(2,8)),type:w.type,line:w.line,a:+w.a,b:+w.b,name:String(w.name||'').slice(0,80),deg:w.deg!=null?+w.deg:undefined,status:['idea','proposed','planned','funded','built'].includes(w.status)?w.status:'idea',cost:w.cost!=null&&w.cost!==''&&isFinite(+w.cost)?+w.cost:null,notes:String(w.notes||'').slice(0,1500),project:w.project||null,on:w.on!==false,withR:w.withR!==false,tlabel:w.tlabel?String(w.tlabel).slice(0,40):undefined});
   if(sp.geom&&typeof sp.geom==='object')for(const l of ['MAIN','ALB'])if(Array.isArray(sp.geom[l])&&sp.geom[l].length>=2&&sp.geom[l].every(e=>Array.isArray(e)||(e&&Number.isInteger(e.a)&&Array.isArray(e.ll))))o.geom[l]=sp.geom[l];
   if(Array.isArray(sp.lines))for(const t of sp.lines)if(t&&typeof t.id==='string'&&Array.isArray(t.ll)&&t.ll.length>=2&&(t.parent==='MAIN'||t.parent==='ALB'||o.lines.some(x=>x.id===t.parent)))
     o.lines.push({id:t.id,name:String(t.name||'New track').slice(0,40),v:Math.max(20,Math.min(160,+t.v||80)),parent:t.parent,ll:t.ll.map(p=>[+p[0],+p[1]])});
@@ -1319,6 +1319,21 @@ const WORK_TYPES={
 const WORK_GROUPS=[['track','Track and speed'],['struct','Structures'],['cross','Crossings'],['corr','Corridor, trail and utilities'],['sys','Stations and systems'],['other','Other']];
 const WORK_G0={curve:'track',tunnel:'track',superel:'track',renew:'track',drain:'track',veg:'track',raise:'struct',bridge:'struct',rebuild:'struct',xing:'cross'};
 for(const [k,t] of Object.entries(WORK_TYPES))t.g=t.g||WORK_G0[k]||'other';
+/* works done together with the restoration: the share of a work's cost the restoration budget already pays for */
+const WITH_R={
+ superel:{f:w=>.5,why:'Done in the restoration’s own surfacing pass (ballast program), so about half the cost of a separate pass.'},
+ renew:{f:w=>Math.min(1,.6*(w.b-w.a)/(+w.cost||1)),why:'The restoration’s Class 3 upgrade already lays 115 lb rail and new ties on these miles (≈$0.75M a mile); only welding and tighter surfacing (about 20% of that) plus the signalling and gates are extra.'},
+ xing:{f:w=>.3,why:'The restoration’s crossing budget (≈$0.29M a crossing for surfaces, warning systems and sight lines) already pays for about 30% of this; the gates, constant warning time and closures are extra.'},
+ drain:{f:w=>.5,why:'The restoration’s Class 2 drainage and ballast program already cover about half of this.'},
+ veg:{f:w=>.75,why:'Class 2 restoration already includes vegetation clearing; only the wider sight lines are extra.'},
+ bridge:{f:w=>.5,why:'The restoration’s bridge and trestle budget (48 bridges on the Victoria Sub) already covers about half of a typical bridge repair.'},
+ fence:{f:w=>.5,why:'Class 2 restoration already includes fencing; only trail separation and trespass control beyond that are extra.'},
+ rebuild:{f:w=>{let c=0;if(w.line==='MAIN'&&w.a<83.7&&w.b>82.8)c+=3;if(w.line==='MAIN'&&w.a<=26.9&&w.b>=26.7)c+=3;return Math.min(1,c/(+w.cost||1));},why:'The restoration already carries $3M allowances for the Snaw-Naw-As track and the Shawnigan Lake Road bridge; that much is not counted again here.'}};
+function workCost(w){const full=w.cost==null?null:+w.cost||0,r=WITH_R[w.type];
+  if(full==null)return{full:null,net:null,credit:0,can:!!r,withR:w.withR!==false};
+  const withR=!!r&&w.withR!==false,credit=withR?Math.max(0,Math.min(full,full*r.f(w))):0;
+  return{full,net:+(full-credit).toFixed(2),credit,can:!!r,withR,why:r?r.why:''};}
+const wNet=w=>{const c=workCost(w);return c.net==null?0:c.net;};
 const workTypeName=w=>w.type==='custom'&&w.tlabel?w.tlabel:(WORK_TYPES[w.type]||WORK_TYPES.custom).s;
 
 /* ---------- corridor speed projects (V41): the cheap ones are applied by default. Costs are 2026 CAD order-of-magnitude estimates.
@@ -3799,7 +3814,7 @@ const lineMaxMP=l=>l==='MAIN'?139.87:38;
 function showWorkTip(w,e,pin){const t=WORK_TYPES[w.type],ef=workEffect(w),on=w.on!==false;
   placeTip(e,`<h4>${esc(w.name||t.n)}</h4><div class="m">${esc(w.type==='custom'&&w.tlabel?w.tlabel:t.n)} · ${TRKSPD[w.line].sub} MP ${w.a.toFixed(1)}–${w.b.toFixed(1)} · ${WORK_STATUS[w.status]}</div>
     <div>${t.nospeed?'Does not change train speeds.':ef.saved>.05?(on?`Saves <b>${ef.saved.toFixed(1)} min</b> end to end on the subdivision`:`Would save <b>${ef.saved.toFixed(1)} min</b> end to end if applied`):'No running-time change in the current speed setting'}</div>
-    ${w.cost!=null?`<div>Estimated cost <b>$${w.cost} M</b> (2026 CAD)</div>`:''}${pin&&w.notes?`<div class="m" style="max-width:300px;margin-top:4px">${esc(w.notes)}</div>`:''}
+    ${w.cost!=null?(()=>{const c=workCost(w);return c.credit>0?`<div>Estimated cost <b>$${(+c.net).toFixed(1)} M</b> done with the restoration ($${w.cost} M on its own, 2026 CAD)</div>`:`<div>Estimated cost <b>$${w.cost} M</b> (2026 CAD)</div>`;})():''}${pin&&w.notes?`<div class="m" style="max-width:300px;margin-top:4px">${esc(w.notes)}</div>`:''}
     ${pin?`<label class="tipchk"><input type="checkbox" id="tip-apply"${on?' checked':''}> ${t.nospeed?'Included in the plan':'Applied to track speeds'}</label><div class="pbtns"><button class="btn sm primary" id="tip-edit" type="button">Edit</button><button class="btn sm" id="tip-close" type="button">Close</button></div>`:`<div class="m">${t.nospeed?(on?'Included in the plan':'Not included'):on?'Applied to track speeds':'Not applied to track speeds'} · click for options</div>`}`);
   if(!pin)return;$('tip').classList.add('act');
   $('tip-apply').onchange=ev=>{setWorkOn(w.id,ev.target.checked);const w2=(TRACKSPEC.works||[]).find(x=>x.id===w.id);if(w2){tipPinned={work:w.id};showWorkTip(w2,null,true);}};
@@ -3833,14 +3848,14 @@ function createWork(o){if(!needExp())return null;const t=WORK_TYPES[o.type];cons
 function mapCentreRange(){const cx=vb.x+vb.w/2,cy=vb.y+vb.h/2;const sn=snapToRail(cx,cy);if(!sn||!TRKSPD[sn.line])return{line:'MAIN',a:15,b:16};
   const mp=kToMP(sn.line,sn.k),mx=lineMaxMP(sn.line);const a=Math.max(0,Math.min(mx-1,mp-.5));return{line:sn.line,a,b:Math.min(mx,a+1)};}
 function syncEditorRange(w){if(w.id!==WORK_SEL)return;const a=$('we-a'),b=$('we-b');if(a)a.value=w.a.toFixed(2);if(b)b.value=w.b.toFixed(2);}
-function workValue(w,ef){return w.cost>0&&ef.saved>.05?ef.saved/w.cost:null;}
+function workValue(w,ef){const n=wNet(w);return n>0&&ef.saved>.05?ef.saved/n:null;}
 function renderWorks(){const box=$('worksbox');if(!box)return;const W=TRACKSPEC.works||[];
   const act=document.activeElement,fid=act&&box.contains(act)?act.id:null,sel0=fid&&act.selectionStart!=null?[act.selectionStart,act.selectionEnd]:null;
   const tot={};for(const l of ['MAIN','ALB'])tot[l]=subTime(l,[])-subTime(l,W);
-  const ON=W.filter(w=>w.on!==false),OFF=W.filter(w=>w.on===false),sum=a=>a.reduce((s,w)=>s+(+w.cost||0),0),money=v=>v>=10?Math.round(v):v.toFixed(1);
+  const ON=W.filter(w=>w.on!==false),OFF=W.filter(w=>w.on===false),sum=a=>a.reduce((s,w)=>s+wNet(w),0),money=v=>v>=10?Math.round(v):v.toFixed(1);
   const EF=new Map(W.map(w=>[w.id,workEffect(w)]));
   let list=W.filter(w=>WORK_FILTER==='all'||(WORK_FILTER==='on')===(w.on!==false));
-  const by={mp:(a,b)=>a.line.localeCompare(b.line)||a.a-b.a,saved:(a,b)=>EF.get(b.id).saved-EF.get(a.id).saved,cost:(a,b)=>(+a.cost||0)-(+b.cost||0),
+  const by={mp:(a,b)=>a.line.localeCompare(b.line)||a.a-b.a,saved:(a,b)=>EF.get(b.id).saved-EF.get(a.id).saved,cost:(a,b)=>wNet(a)-wNet(b),
     value:(a,b)=>(workValue(b,EF.get(b.id))??-1)-(workValue(a,EF.get(a.id))??-1)};list=list.slice().sort(by[WORK_SORT]||by.mp);
   const stale=PLAN.timedSig&&PLAN.timedSig!==worksSig();
   const row=w=>{const t=WORK_TYPES[w.type],ef=EF.get(w.id),on=w.on!==false,v=workValue(w,ef),sel=w.id===WORK_SEL;
@@ -3848,7 +3863,7 @@ function renderWorks(){const box=$('worksbox');if(!box)return;const W=TRACKSPEC.
       <label class="wksw" title="Apply to track speeds and run times"><input type="checkbox" data-on="${w.id}"${on?' checked':''} aria-label="Applied"><span></span></label>
       <span class="wkico" style="background:${t.c}">${t.i}</span>
       <div class="wkmain"><span class="wknm"><b class="wkname">${esc(w.name||t.n)}</b><button type="button" class="wkren" data-ren="${w.id}" title="Rename" aria-label="Rename ${esc(w.name||t.n)}">✎</button></span><div class="m">${esc(workTypeName(w))} · ${w.line==='MAIN'?'Victoria':'Port Alberni'} Sub MP ${w.a.toFixed(1)}–${w.b.toFixed(1)}</div><span class="wkst st-${w.status}">${WORK_STATUS[w.status]}</span></div>
-      <div class="wkr"><b>${w.cost!=null?'$'+money(+w.cost)+'M':'—'}</b><span class="${ef.saved>.05?'wksave':'m'}">${ef.saved>.05?(on?`−${ef.saved.toFixed(1)} min`:`${ef.saved.toFixed(1)} min possible`):'no change'}</span>${v?`<span class="m">${v>=1?v.toFixed(1):v.toFixed(2)} min/$M</span>`:''}</div></div>
+      <div class="wkr"><b${workCost(w).credit>0?` title="$${money(+w.cost)}M on its own; less what the restoration already pays for"`:''}>${w.cost!=null?'$'+money(wNet(w))+'M':'—'}</b><span class="${ef.saved>.05?'wksave':'m'}">${ef.saved>.05?(on?`−${ef.saved.toFixed(1)} min`:`${ef.saved.toFixed(1)} min possible`):'no change'}</span>${v?`<span class="m">${v>=1?v.toFixed(1):v.toFixed(2)} min/$M</span>`:''}</div></div>
       ${sel?editorHtml(w,ef):''}</div>`;};
   box.innerHTML=`
     ${WORK_NEW||WORK_PICK&&WORK_PICK.create?newWorkHtml():''}
@@ -3887,6 +3902,7 @@ function editorHtml(w,ef){const t=WORK_TYPES[w.type],changed=WORK_SNAP&&WORK_SNA
     <div class="wef g2"><label>Est. cost ($M, 2026)<input id="we-cost" type="number" step="0.1" min="0" value="${w.cost??''}" placeholder="unknown"></label>
       ${t.deg!==undefined?`<label>Sharpest curve after<select id="we-deg">${[1,1.5,2,3,4,5,6,8].map(d=>`<option value="${d}"${(w.deg??t.deg)==d?' selected':''}>${d}° (≈${5*Math.floor(Math.sqrt(7/(0.0007*d))/5)} mph)</option>`).join('')}</select></label>`:'<span></span>'}</div>
     <label class="tipchk"><input type="checkbox" id="we-on"${w.on!==false?' checked':''}> ${t.nospeed?'Included in the plan and its costs':'Applied to track speeds and run times'}</label>
+    ${(()=>{const c=workCost(w);return c.can?`<label class="tipchk"><input type="checkbox" id="we-withr"${c.withR?' checked':''}> Done with the restoration</label><div class="weeff">${c.withR?`${esc(WITH_R[w.type].why)}${c.full!=null?` Counted in the plan: <b>$${(+c.net).toFixed(1)}M</b> of $${c.full}M.`:''}`:`Costed as a separate project after the restoration${c.full!=null?`: the full <b>$${c.full}M</b> is counted`:''}.`}</div>`:'';})()}
     ${t.nospeed?`<div class="weeff">This kind of work does not change train speeds. ${w.on!==false?'Its cost is included in the Plan tab.':'Switch it on to include its cost in the Plan tab.'}</div>`:''}<div class="weeff"${t.nospeed?' hidden':''}>Speeds in range: <b>${r(lo)} → ${r(hi)} mph</b>. ${ef.saved>.05?`${w.on!==false?'Saves':'Would save'} <b>${ef.saved.toFixed(1)} min</b> end to end.`:'No running-time change in the current speed setting.'}</div>
     <div class="wef"><label class="wide">Notes and cost basis<textarea id="we-notes" rows="3" maxlength="1500">${esc(w.notes||'')}</textarea></label></div>
     <div class="weacts"><button class="btn sm primary" id="we-done" type="button">Done</button><button class="btn sm" id="we-zoom" type="button">Zoom to</button><button class="btn sm" id="we-dup" type="button">Duplicate</button>${changed?'<button class="btn sm" id="we-revert" type="button">Undo changes</button>':''}<span class="grow"></span><button class="btn sm danger" id="we-del" type="button">Delete</button></div>
@@ -3925,6 +3941,7 @@ function bindWorks(box){
   ch('we-deg',e=>w.deg=+e.value);
   ch('we-cost',e=>w.cost=e.value===''?null:Math.max(0,+e.value));
   ch('we-on',e=>w.on=e.checked);
+  ch('we-withr',e=>w.withR=e.checked);
   $('we-pick').onclick=()=>{WORK_PICK=WORK_PICK&&WORK_PICK.id===w.id?null:{stage:0,id:w.id};svg.classList.toggle('picking',!!WORK_PICK);renderWorks();};
   $('we-done').onclick=closeWork;$('we-zoom').onclick=()=>zoomToWork(w.id);
   $('we-dup').onclick=()=>{const c={...w,id:newWorkId(),name:(w.name||'')+' (copy)'};delete c.fresh;TRACKSPEC.works.push(c);WORK_SEL=c.id;WORK_SNAP={id:c.id,json:JSON.stringify(c)};worksChanged(`Duplicated ${w.name}`,true);};
@@ -4088,11 +4105,11 @@ function costModel(){const o=costOpts(),albOn=o.alb,rows=[];const add=(g,n,v,not
   // works: every applied work that is not already built
   const W=(TRACKSPEC.works||[]).filter(w=>albOn||w.line!=='ALB');
   const wk=W.filter(w=>w.on!==false&&w.status!=='built'),off=W.filter(w=>w.on===false&&w.status!=='built'),built=W.filter(w=>w.status==='built');
-  const wsum=wk.reduce((s,w)=>s+(+w.cost||0),0),offsum=off.reduce((s,w)=>s+(+w.cost||0),0),nocost=wk.filter(w=>w.cost==null).length;
+  const wsum=wk.reduce((s,w)=>s+wNet(w),0),offsum=off.reduce((s,w)=>s+wNet(w),0),wcred=wk.reduce((s,w)=>s+workCost(w).credit,0),nocost=wk.filter(w=>w.cost==null).length;
   const constr=rows.filter(r=>r.kind==='c').reduce((s,r)=>s+r.v,0)+wsum,other=rows.filter(r=>r.kind==='x').reduce((s,r)=>s+r.v,0);
   const ovh=OVH.map(([n,p])=>[n,p,constr*p]),cont=constr*o.cont/100;
   const base=rows.reduce((s,r)=>s+r.v,0);
-  return{rows,base,constr,other,wk,off,built,wsum,offsum,nocost,ovh,cont,total:constr+other+ovh.reduce((s,x)=>s+x[2],0)+cont,st,o};}
+  return{rows,base,constr,other,wk,off,built,wsum,offsum,wcred,nocost,ovh,cont,total:constr+other+ovh.reduce((s,x)=>s+x[2],0)+cont,st,o};}
 const COST_STEPS=[
  ['Corridor and partners','Agreements with the Island Corridor Foundation, regional districts, the province and the First Nations whose reserves the corridor crosses. In the Cowichan Valley alone it bisects five reserve sections (Oyster Bay 12, Squaw-Hay-One 11, Halalt 2 and two in Cowichan 1); going around any one of them would mean a 1–3 km diversion or a $150–410M tunnel (CVRD report, Table H-2). Rebuilding through the Snaw-Naw-As reserve needs that Nation’s agreement.'],
  ['Funding','Federal and provincial capital funding agreements; regional and municipal shares for stations and the trail.'],
@@ -4112,9 +4129,9 @@ function renderCost(){const box=$('plan-cost');if(!box)return;const m=costModel(
     <div class="costopts"><label><input type="checkbox" id="co-alb"${o.alb?' checked':''}> Include the Port Alberni Sub</label><label><input type="checkbox" id="co-trail"${o.trailN?' checked':''}> Trail along the whole corridor</label>
       <label>Contingency <select id="co-cont">${[[50,'50% (IRCCA)'],[30,'30%'],[0,'None']].map(([v,n])=>`<option value="${v}"${o.cont===v?' selected':''}>${n}</option>`).join('')}</select></label></div>
     <h4 class="costh">Speed projects applied in the Works tab <span>$${f(m.wsum)}M</span></h4>
-    ${m.wk.length?`<div class="costg">${m.wk.slice().sort((a,b)=>a.line.localeCompare(b.line)||a.a-b.a).map(w=>`<div class="costw"><label class="wksw" title="Applied"><input type="checkbox" data-con="${w.id}" checked aria-label="Applied"><span></span></label><span class="grow"><button type="button" class="linkbtn" data-wopen="${w.id}">${esc(w.name)}</button><span class="m"> · ${WORK_STATUS[w.status]}${w.status==='idea'?' (not yet proposed)':''}</span></span><b>${w.cost!=null?'$'+f(+w.cost)+'M':'no cost yet'}</b></div>`).join('')}</div>`:'<p class="m">No works applied. Switch works on in the Works tab, or here below.</p>'}
+    ${m.wk.length?`<div class="costg">${m.wk.slice().sort((a,b)=>a.line.localeCompare(b.line)||a.a-b.a).map(w=>`<div class="costw"><label class="wksw" title="Applied"><input type="checkbox" data-con="${w.id}" checked aria-label="Applied"><span></span></label><span class="grow"><button type="button" class="linkbtn" data-wopen="${w.id}">${esc(w.name)}</button><span class="m"> · ${WORK_STATUS[w.status]}${w.status==='idea'?' (not yet proposed)':''}</span></span><b>${w.cost!=null?'$'+f(wNet(w))+'M':'no cost yet'}</b></div>`).join('')}</div>${m.wcred>0.05?`<p class="m">Works done with the restoration are counted only for what they add: $${f(m.wcred)}M of their stand-alone cost is already in the restoration budget below.</p>`:''}`:'<p class="m">No works applied. Switch works on in the Works tab, or here below.</p>'}
     ${m.nocost?`<p class="m">${m.nocost} applied work${m.nocost>1?'s have':' has'} no cost estimate yet.</p>`:''}
-    ${m.off.length?`<details class="costoff"><summary>Not applied: ${m.off.length} work${m.off.length>1?'s':''}, $${f(m.offsum)}M</summary><div class="costg">${m.off.map(w=>`<div class="costw"><label class="wksw" title="Applied"><input type="checkbox" data-con="${w.id}" aria-label="Applied"><span></span></label><span class="grow"><button type="button" class="linkbtn" data-wopen="${w.id}">${esc(w.name)}</button><span class="m"> · ${WORK_STATUS[w.status]}</span></span><b>${w.cost!=null?'$'+f(+w.cost)+'M':'—'}</b></div>`).join('')}</div></details>`:''}
+    ${m.off.length?`<details class="costoff"><summary>Not applied: ${m.off.length} work${m.off.length>1?'s':''}, $${f(m.offsum)}M</summary><div class="costg">${m.off.map(w=>`<div class="costw"><label class="wksw" title="Applied"><input type="checkbox" data-con="${w.id}" aria-label="Applied"><span></span></label><span class="grow"><button type="button" class="linkbtn" data-wopen="${w.id}">${esc(w.name)}</button><span class="m"> · ${WORK_STATUS[w.status]}</span></span><b>${w.cost!=null?'$'+f(wNet(w))+'M':'—'}</b></div>`).join('')}</div></details>`:''}
     <h4 class="costh">Basic rail with trail <span>$${f(m.base)}M</span></h4>
     ${Object.keys(groups).map(g=>`<div class="costg"><div class="costgh"><b>${g}</b><b>$${f(gsum(g))}M</b></div>${groups[g].map(r=>`<details class="costr"><summary><span>${esc(r.n)}</span><b>$${f(r.v)}M</b></summary><div class="m">${esc(r.note)} <i>${r.src}.</i></div></details>`).join('')}</div>`).join('')}
     <h4 class="costh">Overheads and contingency <span>$${f(osum+m.cont)}M</span></h4>
