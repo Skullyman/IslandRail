@@ -76,7 +76,7 @@ button{font:inherit;color:inherit}
 /* main */
 .main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:12px;min-height:0}
 .mapwrap{position:relative;min-height:0;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--sea);touch-action:none}
-#map{width:100%;height:100%;display:block;cursor:grab;user-select:none}
+#map{width:100%;height:100%;display:block;cursor:grab;user-select:none}#map [data-cull]{display:none}
 #mapfx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;will-change:transform;contain:strict}
 #map.drag{cursor:grabbing}
 .mapctl{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:4px;z-index:5}
@@ -696,7 +696,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
 .xglist>.m{font-size:11.5px}.xgrow{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px}.xgrow .m{font-size:11px}.xgrow>span{flex:1;min-width:0}.xgrow select{flex:none;width:120px;font:inherit;font-size:12px;padding:2px 4px;border:1.5px solid var(--ctl-line);border-radius:5px;background:var(--ctl-bg);color:var(--ink)}
 .cptip{position:fixed;z-index:60;max-width:360px;background:var(--ink);color:var(--bg);border-radius:8px;padding:9px 11px;font-size:12.5px;line-height:1.45;box-shadow:0 6px 20px rgba(0,0,0,.25);pointer-events:none}
 .cptip b{display:block;margin-bottom:3px}
-@media (max-width:600px){#btn-costs span{display:none}.cprow{grid-template-columns:minmax(0,1fr) 92px 58px;row-gap:4px}.cprow .cpu,.cprow .cpst{display:none}.cprow.hd span:nth-child(3),.cprow.hd span:nth-child(4){display:none}}
+@media (max-width:600px){.cprow{grid-template-columns:minmax(0,1fr) 92px 58px;row-gap:4px}.cprow .cpu,.cprow .cpst{display:none}.cprow.hd span:nth-child(3),.cprow.hd span:nth-child(4){display:none}}
 @media (max-width:600px){#btn-sources span{display:none}.srclist{grid-template-columns:1fr}}
 @media (max-width:600px){#btn-trains span{display:none}}
 .tsf{fill:var(--panel);stroke:currentColor;stroke-width:1.3}.tsg{fill:color-mix(in srgb,var(--info) 18%,transparent);stroke:currentColor;stroke-width:1}
@@ -924,7 +924,6 @@ circle.th.limit{fill:#d0393b!important;stroke:#fff}
       <button class="btn restart" id="btn-restart" type="button" title="Restart today's service from the first departure">↺ Restart day</button>
       <button class="btn setbtn" id="btn-trains" type="button" title="Train types and specifications"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 10h14M9 17l-2 4M15 17l2 4"/><circle cx="9" cy="13.5" r=".6" fill="currentColor"/><circle cx="15" cy="13.5" r=".6" fill="currentColor"/></svg><span>Trains</span></button>
       <button class="btn setbtn" id="btn-sources" type="button" title="Where the data comes from"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/><path d="M9 8h7M9 12h5"/></svg><span>Sources</span></button>
-      <button class="btn setbtn" id="btn-costs" type="button" title="Unit costs and work costs: adjust them to local prices"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20"/><path d="M17 6.5c-1-1.3-2.8-2-5-2-2.8 0-4.5 1.4-4.5 3.4 0 4.6 10 2.4 10 7.4 0 2-1.9 3.6-5 3.6-2.4 0-4.3-.9-5.3-2.4"/></svg><span>Costs</span></button>
       <button class="btn setbtn" id="btn-profiles" type="button" title="Track and highway height profiles"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 19h18"/><path d="M3 16l5-6 4 3 4-7 5 6"/></svg><span>Profiles</span></button>
       <div class="setwrap"><button class="btn setbtn" id="btn-settings" type="button" aria-haspopup="true" aria-expanded="false" title="Settings"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></button>
         <div class="setmenu" id="setmenu" role="dialog" aria-label="Settings" hidden>
@@ -1857,7 +1856,7 @@ for(const lk of GEO.LAKES)el('polygon',{points:lk.pts.map(P).join(' '),class:'la
 
 // screen-constant label groups
 const SC=[];
-function scg(x,y,parent,minZoom=0,rot=0,maxZoom=1e9){const g=el('g',{},parent);SC.push({g,x,y,minZoom,rot,maxZoom});return g;}
+function scg(x,y,parent,minZoom=0,rot=0,maxZoom=1e9){const g=el('g',{},parent);SC.push({g,x,y,minZoom,rot,maxZoom,vis:undefined,sc:''});return g;}
 const GLBL=[];
 // graticule labels
 for(const lat of GLAT){const g=el('g',{},L.grat);GLBL.push({g,lat:1,v:P([0,lat])[1]});el('text',{x:3,y:-3,'font-size':10,class:'glbl'},g).textContent=`${Math.floor(lat)}°${lat%1?'30′':'00′'}N`;}
@@ -1945,7 +1944,7 @@ const TRAIL_INFO={
  pk:['Parkway Trail','Multi-use path beside the Nanaimo Parkway (Hwy 19).'],
  tcts:['Trans Canada Trail','On-road and trail sections linking the Galloping Goose to the Cowichan Valley and north to Nanaimo.'],
  tctn:['Trans Canada Trail','Nanaimo region sections, linking to the Departure Bay ferry.']};
-function showTrailTip(t,e){const tip=$('tip');const r=wrap.getBoundingClientRect();const [n,info]=TRAIL_INFO[t.k]||[t.n,''];
+function showTrailTip(t,e){const tip=$('tip');const r=wrapRect();const [n,info]=TRAIL_INFO[t.k]||[t.n,''];
   tip.innerHTML=`<h4></h4><div class="m"></div>${t.tct.length&&!t.k.startsWith('tct')?'<div class="m">Solid sections are part of the Trans Canada Trail</div>':''}`;
   tip.querySelector('h4').textContent=n;tip.querySelector('.m').textContent=info;tip.hidden=false;
   let x=e.clientX-r.left+14,y=e.clientY-r.top+14;if(x>r.width-250)x-=270;if(y>r.height-120)y-=130;tip.style.left=x+'px';tip.style.top=y+'px';}
@@ -2188,7 +2187,7 @@ function spark(s){const w=200,h=46,mx=Math.max(...s.P,...s.N);const pt=a=>a.map(
   const x=((sim/60)%24)/23*w;
   return `<svg width="${w}" height="${h+12}" viewBox="0 -2 ${w} ${h+14}" class="tspark"><polyline points="${pt(s.P)}" class="sp-p"/><polyline points="${pt(s.N)}" class="sp-n"/><line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="0" y2="${h}" class="sp-now"/><text x="0" y="${h+11}">00</text><text x="${w/2}" y="${h+11}" text-anchor="middle">12</text><text x="${w}" y="${h+11}" text-anchor="end">24</text></svg>`;}
 let tipXY=[0,0];
-function showTrafficTip(s,e){const tip=$('tip');const r=wrap.getBoundingClientRect();if(e)tipXY=[e.clientX-r.left,e.clientY-r.top];
+function showTrafficTip(s,e){const tip=$('tip');const r=wrapRect();if(e)tipXY=[e.clientX-r.left,e.clientY-r.top];
   const p=Math.round(hourVal(s.P,sim)),n=Math.round(hourVal(s.N,sim)),idx=tIndex(s,sim),b=tBand(idx);
   const pk=a=>{const v=Math.max(...a);return`${fmt(v)} at ${String(a.indexOf(v)).padStart(2,'0')}:00`;};
   tip.innerHTML=`<h4>${s.name}</h4><div class="m">${s.code} · ${s.loc} · ${s.note||s.yr+' weekday average'}</div>
@@ -2212,21 +2211,44 @@ $('popbtn').onclick=()=>{const on=popG.style.display==='none';popG.style.display
 
 /* ---------- view / zoom / pan ---------- */
 const wrap=$('mapwrap');let vb={x:0,y:0,w:1000,h:H},ppu=1;
+// the map's screen rectangle, cached: reading it forces a layout of the whole map, which made zooming stutter when wheel events came faster than frames
+let WRAP_R=null;const wrapRect=()=>WRAP_R||(WRAP_R=wrap.getBoundingClientRect());
+window.addEventListener('resize',()=>{WRAP_R=null;},true);window.addEventListener('scroll',()=>{WRAP_R=null;},true);try{new ResizeObserver(()=>{WRAP_R=null;}).observe(wrap);}catch(_){}
 const FIT={x:150,y:30,w:800,h:950},FIT_ISL={x:-1450,y:-1220,w:2700,h:2280};
-function fit(F=FIT){const r=wrap.getBoundingClientRect();const ar=r.width/r.height;let w=F.w,h=F.h;if(w/h<ar)w=h*ar;else h=w/ar;vb={x:F.x+F.w/2-w/2,y:F.y+F.h/2-h/2,w,h};applyVB();}
-function applyVB(){if(typeof MEAS!=='undefined'&&MEAS.pts.length)requestAnimationFrame(()=>measDraw());if(!dotsQueued&&typeof rebuildDots==='function'){dotsQueued=true;requestAnimationFrame(rebuildDots);}if(typeof trkEdit!=='undefined'&&trkEdit)queueHandles();if(typeof drawing!=='undefined'&&drawing&&drawing.pts.length)requestAnimationFrame(()=>drawDraft());const r=wrap.getBoundingClientRect();const ar=r.width/r.height||1;vb.h=vb.w/ar;ppu=r.width/vb.w;svg.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);svgfx.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);svgTop.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);updateSC();updateScale();if(typeof cullBikes==='function')cullBikes();if(typeof cullCrash==='function')cullCrash();if(window.__marReady)marineZoom();if(window.__lnotesQ)window.__lnotesQ();if(window.__sidQ)window.__sidQ();if(typeof trainScale==='function')trainScale();}
-function zoomAt(f,cx,cy){const r=wrap.getBoundingClientRect();const sx=vb.x+(cx-r.left)/ppu,sy=vb.y+(cy-r.top)/ppu;const nw=Math.max(8,Math.min(3300,vb.w/f));const nf=vb.w/nw;vb.w=nw;vb.h=vb.h/nf;vb.x=sx-(cx-r.left)/(r.width/vb.w);vb.y=sy-(cy-r.top)/(r.width/vb.w);applyVB();}
+function fit(F=FIT){const r=wrapRect();const ar=r.width/r.height;let w=F.w,h=F.h;if(w/h<ar)w=h*ar;else h=w/ar;vb={x:F.x+F.w/2-w/2,y:F.y+F.h/2-h/2,w,h};applyVB();}
+function gestureVB(){applyVB();}
+/* level of detail by view: map shapes and labels far outside the visible area are taken out of the drawing (display:none), so a pan or zoom
+   lays out and paints only what is near the screen. Zoomed in on one town, that is a few hundred of the ~6,000 shapes instead of all of them.
+   Each shape's extent is measured once (in idle time) and cached; shapes not yet measured stay drawn. */
+const CULL_BB=new WeakMap(),CULL_SKIP=new Set(['measg','profhov','srl']);let CULL_LIST=null,CULL_Q=[],CULL_IDLE=false;
+try{new MutationObserver(()=>{CULL_LIST=null;}).observe(svg,{childList:true,subtree:true});}catch(_){}
+function cullList(){if(CULL_LIST)return CULL_LIST;const L=[];for(const g of svg.children){if(g.tagName!=='g'||CULL_SKIP.has(g.getAttribute('class')))continue;
+    for(const e of g.querySelectorAll('path,text,circle,polyline,polygon,line,rect,ellipse,image')){if(e.closest('g[transform],defs,clipPath,mask,pattern'))continue;L.push(e);if(!CULL_BB.has(e))CULL_Q.push(e);}}
+  if(CULL_Q.length&&!CULL_IDLE){CULL_IDLE=true;(window.requestIdleCallback||(f=>setTimeout(()=>f({timeRemaining:()=>8}),60)))(cullMeasure);}return CULL_LIST=L;}
+function cullMeasure(dl){const t0=performance.now();while(CULL_Q.length&&(performance.now()-t0<8)){const e=CULL_Q.pop();if(!e.isConnected||CULL_BB.has(e))continue;
+    const was=e.hasAttribute('data-cull');if(was)e.removeAttribute('data-cull');try{const b=e.getBBox();CULL_BB.set(e,[b.x,b.y,b.x+b.width,b.y+b.height]);}catch(_){CULL_BB.set(e,null);}}
+  CULL_IDLE=false;if(CULL_Q.length){CULL_IDLE=true;(window.requestIdleCallback||(f=>setTimeout(()=>f({timeRemaining:()=>8}),60)))(cullMeasure);}else cullView();}
+function cullView(){const L=cullList(),mx=vb.w*.35,my=vb.h*.35,x0=vb.x-mx,x1=vb.x+vb.w+mx,y0=vb.y-my,y1=vb.y+vb.h+my;
+  for(const e of L){const b=CULL_BB.get(e);const out=!!b&&(b[0]>x1||b[2]<x0||b[1]>y1||b[3]<y0);if(out!==(e.__cull===true)){e.__cull=out;if(out)e.setAttribute('data-cull','');else e.removeAttribute('data-cull');}}}
+function applyVB(){if(typeof MEAS!=='undefined'&&MEAS.pts.length)requestAnimationFrame(()=>measDraw());if(!dotsQueued&&typeof rebuildDots==='function'){dotsQueued=true;requestAnimationFrame(rebuildDots);}if(typeof trkEdit!=='undefined'&&trkEdit)queueHandles();if(typeof drawing!=='undefined'&&drawing&&drawing.pts.length)requestAnimationFrame(()=>drawDraft());const r=wrapRect();const ar=r.width/r.height||1;vb.h=vb.w/ar;ppu=r.width/vb.w;svg.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);svgfx.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);svgTop.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);cullView();updateSC();updateScale();if(typeof cullBikes==='function')cullBikes();if(typeof cullCrash==='function')cullCrash();if(window.__marReady)marineZoom();if(window.__lnotesQ)window.__lnotesQ();if(window.__sidQ)window.__sidQ();if(typeof trainScale==='function')trainScale();}
+function zoomAt(f,cx,cy,g){const r=wrapRect();const sx=vb.x+(cx-r.left)/ppu,sy=vb.y+(cy-r.top)/ppu;const nw=Math.max(8,Math.min(3300,vb.w/f));const nf=vb.w/nw;vb.w=nw;vb.h=vb.h/nf;vb.x=sx-(cx-r.left)/(r.width/vb.w);vb.y=sy-(cy-r.top)/(r.width/vb.w);g?gestureVB():applyVB();}
 function zoomFactor(){return 1000/vb.w*(FIT.w/1000)/(FIT.w/1000);} // relative to full width
-function updateSC(){const inv=1/ppu;const z=800/vb.w;svg.classList.toggle('z2',z>=1.8);svg.classList.toggle('zr',z>=1.4);svg.classList.toggle('zt',z>=2.4);svg.classList.toggle('zo',z<.9);for(const s of SC){const show=z>=s.minZoom&&z<s.maxZoom;s.g.style.display=show?'':'none';if(show)s.g.setAttribute('transform',`translate(${s.x.toFixed(2)} ${s.y.toFixed(2)}) scale(${inv.toFixed(4)})${s.rot?` rotate(${s.rot})`:''}`);}
+function updateSC(){const inv=1/ppu;const z=800/vb.w;svg.classList.toggle('z2',z>=1.8);svg.classList.toggle('zr',z>=1.4);svg.classList.toggle('zt',z>=2.4);svg.classList.toggle('zo',z<.9);
+  // markers off screen are hidden and left alone, and a marker is only rewritten when it appears or the zoom changes (panning rewrites nothing)
+  const mx=vb.w*.6+60*inv,my=vb.h*.6+60*inv,x0=vb.x-mx,x1=vb.x+vb.w+mx,y0=vb.y-my,y1=vb.y+vb.h+my,sc=inv.toFixed(4);
+  for(const s of SC){const show=z>=s.minZoom&&z<s.maxZoom&&s.x>=x0&&s.x<=x1&&s.y>=y0&&s.y<=y1;
+    if(show!==s.vis){s.vis=show;s.g.style.display=show?'':'none';}
+    if(show&&s.sc!==sc){s.sc=sc;s.g.setAttribute('transform',`translate(${s.x.toFixed(2)} ${s.y.toFixed(2)}) scale(${sc})${s.rot?` rotate(${s.rot})`:''}`);}}
   for(const q of GLBL){const x=q.lat?vb.x+2*inv:q.v,y=q.lat?q.v:vb.y+vb.h-14*inv;q.g.setAttribute('transform',`translate(${x.toFixed(2)} ${y.toFixed(2)}) scale(${inv.toFixed(4)})`);}
   const cr=Math.max(1.1,2.2*inv*1.2);for(const c of cars)c.el.setAttribute('r',(2.1*inv).toFixed(3));}
 function updateScale(){const kmPx=PX_PER_KM*ppu;const nice=[.1,.2,.25,.5,1,2,5,10,20,25,50,100,200];let km=nice.find(k=>k*kmPx>=70)||200;$('scale-t').textContent=km<1?`${km*1000} m`:`${km} km`;$('scale-b').style.width=(km*kmPx).toFixed(0)+'px';}
-wrap.addEventListener('wheel',e=>{e.preventDefault();zoomAt(Math.exp(-e.deltaY*.0015),e.clientX,e.clientY);},{passive:false});
+{let wz=null;wrap.addEventListener('wheel',e=>{e.preventDefault();const f=Math.exp(-e.deltaY*.0015);if(!wz)WRAP_R=null;
+  if(wz){wz.f*=f;wz.x=e.clientX;wz.y=e.clientY;return;}wz={f,x:e.clientX,y:e.clientY};requestAnimationFrame(()=>{const q=wz;wz=null;zoomAt(q.f,q.x,q.y,true);});},{passive:false});}
 const ptrs=new Map();let dragMoved=0,pinch0=null;
-svg.addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});dragMoved=0;if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch0={d:Math.hypot(a.x-b.x,a.y-b.y),w:vb.w};}svg.classList.add('drag');});
+svg.addEventListener('pointerdown',e=>{WRAP_R=null;ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});dragMoved=0;if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch0={d:Math.hypot(a.x-b.x,a.y-b.y),w:vb.w};}svg.classList.add('drag');});
 svg.addEventListener('pointermove',e=>{const p=ptrs.get(e.pointerId);if(!p)return;const dx=e.clientX-p.x,dy=e.clientY-p.y;p.x=e.clientX;p.y=e.clientY;
-  if(ptrs.size===2&&pinch0){const [a,b]=[...ptrs.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);zoomAt(vb.w/(pinch0.w/(d/pinch0.d)),(a.x+b.x)/2,(a.y+b.y)/2);dragMoved+=10;return;}
-  dragMoved+=Math.abs(dx)+Math.abs(dy);if(dragMoved>4){try{if(!svg.hasPointerCapture(e.pointerId))svg.setPointerCapture(e.pointerId);}catch(_){}follow=false;$('follow').setAttribute('aria-pressed','false');}vb.x-=dx/ppu;vb.y-=dy/ppu;applyVB();});
+  if(ptrs.size===2&&pinch0){const [a,b]=[...ptrs.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);zoomAt(vb.w/(pinch0.w/(d/pinch0.d)),(a.x+b.x)/2,(a.y+b.y)/2,true);dragMoved+=10;return;}
+  dragMoved+=Math.abs(dx)+Math.abs(dy);if(dragMoved>4){try{if(!svg.hasPointerCapture(e.pointerId))svg.setPointerCapture(e.pointerId);}catch(_){}follow=false;$('follow').setAttribute('aria-pressed','false');}vb.x-=dx/ppu;vb.y-=dy/ppu;gestureVB();});
 const endPtr=e=>{ptrs.delete(e.pointerId);if(ptrs.size<2)pinch0=null;if(!ptrs.size)svg.classList.remove('drag');};
 svg.addEventListener('pointerup',endPtr);svg.addEventListener('pointerleave',e=>{if(!svg.hasPointerCapture(e.pointerId))endPtr(e);});svg.addEventListener('pointercancel',endPtr);
 svg.addEventListener('click',()=>{if(dragMoved<5)hideTip(true);});
@@ -2372,12 +2394,12 @@ svg.addEventListener('pointermove',e=>{if(!MEAS.on||!PROF.S||MEAS.drag||ptrs.siz
   for(let i=0;i<PROF.S.length;i++){const s=PROF.S[i],d=Math.hypot(s.xy[0]-q[0],s.xy[1]-q[1]);if(d<bd){bd=d;bi=i;}}
   if(bd*ppu<10)profHover(bi);else if(PROF.hov>=0)profHover(-1);});
 window.addEventListener('resize',()=>{if(PROF.S&&!$('measprof').hidden)profPaint();});
-const centerOf=()=>{const r=wrap.getBoundingClientRect();return[r.left+r.width/2,r.top+r.height/2];};
+const centerOf=()=>{const r=wrapRect();return[r.left+r.width/2,r.top+r.height/2];};
 $('zin').onclick=()=>zoomAt(1.6,...centerOf());$('zout').onclick=()=>zoomAt(1/1.6,...centerOf());
 $('zfit').onclick=()=>{follow=false;$('follow').setAttribute('aria-pressed','false');fit();};
 $('zisl').onclick=()=>{follow=false;$('follow').setAttribute('aria-pressed','false');fit(FIT_ISL);};
 $('follow').onclick=()=>{if(!selected)select(trains[0].id,false);follow=!follow;$('follow').setAttribute('aria-pressed',String(follow));if(follow&&vb.w>300){const t=trains.find(x=>x.id===selected);zoomTo(t,220);}};
-function zoomTo(t,w){vb.w=w;const r=wrap.getBoundingClientRect();vb.h=w*r.height/r.width;vb.x=t.xy[0]-vb.w/2;vb.y=t.xy[1]-vb.h/2;applyVB();}
+function zoomTo(t,w){vb.w=w;const r=wrapRect();vb.h=w*r.height/r.width;vb.x=t.xy[0]-vb.w/2;vb.y=t.xy[1]-vb.h/2;applyVB();}
 /* ---------- bus priority lanes: OpenStreetMap bus lanes (read 19 Oct 2026) plus BC Transit's built, under-construction and planned transit priority projects ---------- */
 const BP_GEO={"douglas":"-12336693,4843834,-257,465,-245,408,-149,230,-175,292,-74,139,-2,16,-61,71,-56,40,-41,20;-12337793,4845513,64,-29,49,-32,43,-40,24,-33,20,-11;-12336693,4843834,227,-417,16,-391","hwy1":"-12339247,4845810,145,2,135,-22,939,-214,155,-38,80,-25;-12341160,4846190,-383,185,-79,25,-49,10,-143,12;-12337753,4845515,-97,32,-1155,265,-143,22,-119,2;-12341227,4846212,79,-38,67,-39,95,-43,269,-93,35,-19,42,-34;-12339561,4845831,-97,-1,-127,7,-137,21,-144,28,-213,63,-181,64","ravine":"-12337749,4845644,15,5,86,85;-12337589,4845791,-59,-57","mctavish":"-12341349,4862992,71,-2,12,8,-1,9,-7,3,-57,-1,-13,4,-5,14,9,8,16,4,37,-1,9,-6,-3,-27,-9,-7","uptown":"-12337871,4846743,-12,12,-13,37,4,17;-12337724,4845502,-1,-8,38,-27,7,-15","mtnewton":"-12339828,4859438,-31,-64;-12339825,4859366,36,79","bos":"-12345526,4846134,1329,112,376,37,469,84,154,17,122,6,451,-5,322,14,210,3,268,11,89,-3,45,-6,90,-19,51,-17,323,-156;-12341214,4846217,-301,147,-107,36,-90,16,-102,6,-240,-10,-323,1,-271,-10,-365,6,-131,-4,-198,-18,-395,-72,-138,-19,-1643,-143","ihcol":"-12346704,4844511,-80,-106,-73,-81;-12345882,4845692,-21,-49,-20,-26,-30,-26,-143,-96,-59,-52,-46,-48,-92,-121,-81,-120,-128,-218,-204,-411,2,-14,16,11,150,313,107,197,178,272,48,66,68,74,85,69,120,80,28,28,20,33","ihvr":"-12345454,4846071,-52,-31,-195,-99,-52,-34,-34,-29,-36,-50,-74,-172;-12345884,4845654,72,164,35,50,55,44,234,120","dtown":"-12336454,4843119,10,-261,-3,-51,-127,-498,-34,-103,-28,-183","mckenzie":"-12337726,4846846,1690,207,375,51,150,37,376,50,270,26,71,-5,209,-35,70,-14,68,-24,50,-28,273,-212,51,-22,58,-11,408,-4,1492,-1,164,-3,20,-6,141,-1,250,11,176,13,159,17,51,1,65,-10,44,-17,248,-140,16,-26;-12340549,4845941,128,80,79,60,7,16,109,97,140,144,55,43,201,134,86,48,76,31,74,19,72,11,424,24,692,83,68,9,273,56,234,31,105,19,-175,-13,-141,-17,-401,-76,-678,-83,-358,-19,-74,-10,-62,-12,-101,-32,-63,-32,-51,-37;-12340335,4846097,-213,-140;-12330759,4846712,-68,44,-194,110,-53,23,-53,11,-55,2,-363,-31,-406,-13"};
 const BP_ST={built:'In service',cons:'Under construction',plan:'Planned'};
@@ -2410,13 +2432,13 @@ function buildBP(){if(bpBuilt)return;bpBuilt=true;
     g.addEventListener('click',e=>{e.stopPropagation();tipPinned={bp:b.k};showBPTip(b,e);});}
   updateSC();}
 function showBPTip(b,e){placeTip(e,`<h4>${esc(b.n)}</h4><div class="m">${BP_ST[b.st]} · about ${b.km<1?b.km.toFixed(2):b.km.toFixed(1)} km of road</div><div style="max-width:300px">${esc(b.d)}</div><div class="m">Source: ${esc(b.src)}.</div>`);}
-function zoomToBP(b){const xs=b.xy.flat().map(p=>p[0]),ys=b.xy.flat().map(p=>p[1]);const r=wrap.getBoundingClientRect();
+function zoomToBP(b){const xs=b.xy.flat().map(p=>p[0]),ys=b.xy.flat().map(p=>p[1]);const r=wrapRect();
   const w=Math.max(10,(Math.max(...xs)-Math.min(...xs))*1.8,(Math.max(...ys)-Math.min(...ys))*1.8*r.width/r.height);vb.w=w;vb.h=w*r.height/r.width;vb.x=(Math.min(...xs)+Math.max(...xs))/2-w/2;vb.y=(Math.min(...ys)+Math.max(...ys))/2-vb.h/2;applyVB();}
 function bpStats(){const t={built:0,cons:0,plan:0};for(const b of BP)t[b.st]+=b.km;
   $('bpstats').innerHTML=`<div class="bpkey"><span><i class="bpk bp-built"></i>In service <b>${t.built.toFixed(1)} km</b></span><span><i class="bpk bp-cons"></i>Under construction <b>${t.cons.toFixed(1)} km</b></span><span><i class="bpk bp-plan"></i>Planned <b>${t.plan.toFixed(1)} km</b></span></div>
     <div class="m">Kilometres of road with bus priority in at least one direction. All of it is in Greater Victoria; none is mapped elsewhere on the Island.</div>
     <div class="bplist">${['built','cons','plan'].map(st=>BP.filter(b=>b.st===st).map(b=>`<button type="button" data-bp="${b.k}"><i class="bpk bp-${b.st}"></i>${esc(b.n)} <span>${b.km.toFixed(1)} km</span></button>`).join('')).join('')}</div>`;
-  $('bpstats').querySelectorAll('[data-bp]').forEach(x=>x.onclick=()=>{const b=BP.find(z=>z.k===x.dataset.bp);zoomToBP(b);tipPinned={bp:b.k};const m=b.xy[0][Math.floor(b.xy[0].length/2)];const r=wrap.getBoundingClientRect();
+  $('bpstats').querySelectorAll('[data-bp]').forEach(x=>x.onclick=()=>{const b=BP.find(z=>z.k===x.dataset.bp);zoomToBP(b);tipPinned={bp:b.k};const m=b.xy[0][Math.floor(b.xy[0].length/2)];const r=wrapRect();
     const sx=r.left+(m[0]-vb.x)/vb.w*r.width,sy=r.top+(m[1]-vb.y)/vb.h*r.height;showBPTip(b,{clientX:sx,clientY:sy});});}
 $('bpbtn').onclick=()=>{const on=bpG.style.display==='none';if(on)buildBP();bpG.style.display=on?'':'none';$('bpbtn').setAttribute('aria-pressed',String(on));$('bplegend').hidden=!on;if(on)bpStats();};
 
@@ -2457,7 +2479,7 @@ function srGo(it){srG.innerHTML='';const [x,y]=it.xy;const g=scg(x,y,srG,0);g.se
   const nr=srNear(it.xy);SR_MARK=it;
   $('sr-info').innerHTML=`<b>${esc(it.n)}</b><span class="m">${esc(it.kind)}</span><span>${nr&&nr.d<.05?'On the railway.':nr?`${nr.d<1?Math.round(nr.d*1000)+' m':nr.d.toFixed(1)+' km'} from ${esc(nr.s.n)} station (straight line)`:'No stations served by this timetable.'}</span><button type="button" class="btn sm" id="sr-clear">Clear pin</button>`;$('sr-info').hidden=false;
   $('sr-clear').onclick=srClear;$('sr-res').hidden=true;
-  const r=wrap.getBoundingClientRect(),w=Math.min(Math.max(vb.w,1),40);vb.w=w;vb.h=w*r.height/r.width;vb.x=x-w/2;vb.y=y-vb.h/2;applyVB();}
+  const r=wrapRect(),w=Math.min(Math.max(vb.w,1),40);vb.w=w;vb.h=w*r.height/r.width;vb.x=x-w/2;vb.y=y-vb.h/2;applyVB();}
 function srClear(){srG.innerHTML='';SR_MARK=null;$('sr-info').hidden=true;$('sr-q').value='';$('sr-res').hidden=true;$('sr-q').focus();}
 function srRun(go){const q=$('sr-q').value.trim();const local=srLocal(q);clearTimeout(SR_T);const seq=++SR_SEQ;
   if(q.length<3){srRender(local,null,'');return;}srRender(local,null,'wait');
@@ -2538,7 +2560,7 @@ let tipPinned=null;
 function stationDeps(c,n){const rows=[];for(const t of trains)for(const tr of t.block){if(DONE.has(tr.id))continue;const i=tr.stops.findIndex(x=>x.c===c);if(i<0||i===tr.stops.length-1)continue;
   const running=t.trip&&t.trip.id===tr.id;if(running&&t.lastStop>=i)continue;const d=running?t.delay:0;rows.push({t:tr.stops[i].t,d,tr});}
   return rows.sort((a,b)=>a.t-b.t).slice(0,n);}
-function showTip(st,e,pin){if(tipPinned&&!pin)return;if(pin)tipPinned=st;const tip=$('tip');const r=wrap.getBoundingClientRect();
+function showTip(st,e,pin){if(tipPinned&&!pin)return;if(pin)tipPinned=st;const tip=$('tip');const r=wrapRect();
   const kmTxt=st.line==='MAIN'?`km ${Math.round(st.k)} from Victoria`:`km ${st.k<10?st.k.toFixed(1):Math.round(st.k)} on the ${lineName(st.line)}`;
   const deps=stationDeps(st.c,4);
   let body=st.type==='pax'?`<div style="margin-top:6px"><b>${fmt(st.waiting)}</b> riders waiting</div><div class="m">${fmt(jobsRound(jobsNear(st.xy)))} jobs within 800 m (2021 Census)</div>${window.__busReady?busNearHtml(st):''}`:st.type==='freight'?`<div class="m" style="margin-top:6px">Freight point</div>`:`<div class="m" style="margin-top:6px">Passing point. Add it as a stop in the editor.</div>`;
@@ -2655,7 +2677,7 @@ function flowStats(){const R=FRES,rail=FMODE==='rail';$('fpct-row').hidden=!rail
   $('fstats').innerHTML=`<div><b>${fmt(div)}</b> commuters switch from driving to the train: <b>${fmt(div*2)}</b> fewer car trips each weekday, ${pct(R.div,R.car)} of all car commutes between Island places.</div>
     <div>Across the Malahat: ${R.mal[1]>=.5?`<b>−${fmt(Math.round(R.mal[1]*2))}</b> car trips a day (of ${fmt(R.mal[0]*2)})`:'no change (no train in this timetable crosses it)'}. West Shore ↔ core: ${R.ws[1]>=.5?`<b>−${fmt(Math.round(R.ws[1]*2))}</b> (of ${fmt(R.ws[0]*2)})`:'no change'}.</div>
     ${topS?`<div>Busiest section: <b>${nm(topS.k.split('|')[0])}–${nm(topS.k.split('|')[1])}</b>, ${fmt(Math.round(topS.v))} commuters a day; about <b>${fmt(Math.round(topD.v))}</b> of them ride it toward ${nm(topD.k.split('>')[1])} in the busiest morning hour.</div>`:'<div class="m">No commuting pair is served by the current timetable.</div>'}`;}
-function showFlowTip(r,e){const tip=$('tip'),w=wrap.getBoundingClientRect();if(e)tipXY=[e.clientX-w.left,e.clientY-w.top];const o=NODES[r.o],d=NODES[r.d];
+function showFlowTip(r,e){const tip=$('tip'),w=wrapRect();if(e)tipXY=[e.clientX-w.left,e.clientY-w.top];const o=NODES[r.o],d=NODES[r.d];
   if(FRES.survey){const back=FRES.rows.find(x=>x.o===r.d&&x.d===r.o),nm=c=>STATIONS[c]?STATIONS[c].n:'';
     const rail=FMODE==='rail'?(r.sw>=.5?`<div><b>With E&amp;N: about ${fmt(Math.round(r.sw))}</b> of these trips by train (${esc(nm(r.so))} → ${esc(nm(r.sd))}).</div>`:`<div class="m">With E&amp;N: no change, ${esc(r.why)}.</div>`):'';
     tip.innerHTML=`<h4>${esc(o.n)} → ${esc(d.n)}</h4><div><b>${fmt(r.t24)}</b> trips a weekday${back?` (${fmt(back.t24)} the other way)`:''}</div>
@@ -2667,14 +2689,14 @@ function showFlowTip(r,e){const tip=$('tip'),w=wrap.getBoundingClientRect();if(e
   tip.innerHTML=`<h4>${esc(o.n)} → ${esc(d.n)}</h4><div><b>${fmt(r.t)}</b> commuters a day${back?` (${fmt(back.t)} the other way)`:''}</div>
     <div class="m">Estimated: drive ${pct(r.car,r.t)} · transit ${pct(r.tr,r.t)} · walk or bike ${pct(r.act,r.t)}</div>${rail}`;
   tip.hidden=false;let x=tipXY[0]+14,y=tipXY[1]+14;if(x>w.width-260)x-=280;if(y>w.height-130)y-=140;tip.style.left=x+'px';tip.style.top=y+'px';}
-function showNodeTip(n,e){const tip=$('tip'),w=wrap.getBoundingClientRect();tipXY=[e.clientX-w.left,e.clientY-w.top];
+function showNodeTip(n,e){const tip=$('tip'),w=wrapRect();tipXY=[e.clientX-w.left,e.clientY-w.top];
   tip.innerHTML=`<h4>${esc(n.n)}</h4><div>Live and work here: <b>${fmt(n.intra)}</b></div><div>Commute out to other Island places: <b>${fmt(n.outT)}</b></div><div>Commute in: <b>${fmt(n.inT)}</b></div>${n.off?`<div class="m">Work off the Island: ${fmt(n.off)}</div>`:''}`;
   tip.hidden=false;let x=tipXY[0]+14,y=tipXY[1]+14;if(x>w.width-260)x-=280;if(y>w.height-130)y-=140;tip.style.left=x+'px';tip.style.top=y+'px';}
 for(const n of FN){const g=scg(n.xy[0],n.xy[1],fNode,0);const r=2.5+Math.sqrt(n.intra+n.outT+n.inT)/40;
   const c=el('circle',{r:Math.min(9,r).toFixed(1),class:'flownode'},g);
   c.addEventListener('pointerenter',e=>{if(!tipPinned)showNodeTip(n,e);});c.addEventListener('pointerleave',()=>{if(!tipPinned)$('tip').hidden=true;});
   c.addEventListener('click',e=>{e.stopPropagation();tipPinned=n;showNodeTip(n,e);});}
-function showSNodeTip(n,e){const tip=$('tip'),w=wrap.getBoundingClientRect();tipXY=[e.clientX-w.left,e.clientY-w.top];
+function showSNodeTip(n,e){const tip=$('tip'),w=wrapRect();tipXY=[e.clientX-w.left,e.clientY-w.top];
   tip.innerHTML=`<h4>${esc(n.n)}</h4><div>Trips within the district: <b>${fmt(n.intra)}</b></div><div>To other districts: <b>${fmt(n.outT)}</b> · from them: <b>${fmt(n.inT)}</b></div><div class="m">Weekday trips by Capital Region residents, CRD 2022 survey${n.sv>=19?' (this area is outside the CRD: only trips by CRD residents are counted)':''}</div>`;
   tip.hidden=false;let x=tipXY[0]+14,y=tipXY[1]+14;if(x>w.width-260)x-=280;if(y>w.height-130)y-=140;tip.style.left=x+'px';tip.style.top=y+'px';}
 for(const n of SN){const g=scg(n.xy[0],n.xy[1],fNodeS,0);const r=2.5+Math.sqrt(n.intra+n.outT+n.inT)/90;
@@ -2706,7 +2728,7 @@ const GICON={campus:'M-4 -1L0 -4L4 -1L0 2z M-2.5 0v2.6c1.6 1 3.4 1 5 0V0',air:'M
 GENS.forEach((g,gi)=>{const s=scg(g.xy[0],g.xy[1],fGen,1.1);const c=el('circle',{r:8,class:'fgenbg'},s);el('path',{d:GICON[g.kind],class:'fgenic'},s);
   c.addEventListener('pointerenter',e=>{if(!tipPinned)showGenTip(gi,e);});c.addEventListener('pointerleave',()=>{if(!tipPinned)$('tip').hidden=true;});
   c.addEventListener('click',e=>{e.stopPropagation();tipPinned={gen:gi};showGenTip(gi,e);});});
-function showGenTip(gi,e){const g=GENS[gi],top=RF.GOD.filter(x=>x[0]===gi).sort((a,b)=>b[2]-a[2]).slice(0,4),tip=$('tip'),w=wrap.getBoundingClientRect();if(e)tipXY=[e.clientX-w.left,e.clientY-w.top];
+function showGenTip(gi,e){const g=GENS[gi],top=RF.GOD.filter(x=>x[0]===gi).sort((a,b)=>b[2]-a[2]).slice(0,4),tip=$('tip'),w=wrapRect();if(e)tipXY=[e.clientX-w.left,e.clientY-w.top];
   tip.innerHTML=`<h4>${esc(g.n)}</h4><div>About <b>${fmt(g.trips)}</b> arrivals a day and as many departures, roughly <b>${fmt(Math.round(g.trips*g.veh*2))}</b> vehicle trips</div>
     <div class="m">${esc(g.note)}</div>${g.sail?`<div class="m">This weekday: ${g.sail.d.length} departures (first ${hhmm(g.sail.d[0][0])}, last ${hhmm(g.sail.d[g.sail.d.length-1][0]%1440)}) and ${g.sail.a.length} arrivals; road traffic follows the sailings.</div>`:''}<div class="m">Mostly to and from ${top.map(x=>esc(FN[x[1]].n)+' '+fmt(x[2])).join(', ')} (spread by population and travel time)</div>`;
   tip.hidden=false;let x=tipXY[0]+14,y=tipXY[1]+14;if(x>w.width-270)x-=290;if(y>w.height-140)y-=150;tip.style.left=x+'px';tip.style.top=y+'px';}
@@ -2772,7 +2794,7 @@ BROUTES.forEach((R,ri)=>{const sh=BUS.sys[BSYS[R.si].id]._shapes;let d='';for(co
   const p=el('path',{d,class:'busline',stroke:R.col,'vector-effect':'non-scaling-stroke'},busLines);
   p.addEventListener('pointerenter',e=>{p.classList.add('hot');if(!tipPinned)showBusTip(ri,e);});p.addEventListener('pointerleave',()=>{p.classList.remove('hot');if(!tipPinned)$('tip').hidden=true;});
   p.addEventListener('click',e=>{e.stopPropagation();tipPinned={bus:ri};showBusTip(ri,e);});});
-function showBusTip(ri,e){const R=BROUTES[ri],S=BSYS[R.si],tip=$('tip'),w=wrap.getBoundingClientRect();if(e)tipXY=[e.clientX-w.left,e.clientY-w.top];
+function showBusTip(ri,e){const R=BROUTES[ri],S=BSYS[R.si],tip=$('tip'),w=wrapRect();if(e)tipXY=[e.clientX-w.left,e.clientY-w.top];
   const tr=BTRIPS.filter(t=>t.r===ri),first=Math.min(...tr.map(t=>t.s)),last=Math.max(...tr.map(t=>t.s));
   tip.innerHTML=`<h4>Route ${esc(R.sh)} · ${esc(S.n)}</h4><div><b>${fmt(R.trips)}</b> trips this weekday, first ${hhmm(first%1440)}, last ${hhmm(last%1440)}</div><div class="m">BC Transit schedule (GTFS). Positions are simulated from the timetable.</div>`;
   tip.hidden=false;let x=tipXY[0]+14,y=tipXY[1]+14;if(x>w.width-260)x-=280;if(y>w.height-110)y-=120;tip.style.left=x+'px';tip.style.top=y+'px';}
@@ -2804,7 +2826,7 @@ $('bo-lines').onchange=()=>{busLines.style.display=$('bo-lines').checked?'':'non
 
 // hovering a moving bus shows its route number
 wrap.addEventListener('pointermove',e=>{if(!busHoverOn||busG.style.display==='none'||tipPinned||e.pointerType==='touch'&&e.buttons)return;
-  const r=wrap.getBoundingClientRect(),mx=vb.x+(e.clientX-r.left)/ppu,my=vb.y+(e.clientY-r.top)/ppu,lim=9/ppu;let best=null,bd=lim*lim;
+  const r=wrapRect(),mx=vb.x+(e.clientX-r.left)/ppu,my=vb.y+(e.clientY-r.top)/ppu,lim=9/ppu;let best=null,bd=lim*lim;
   for(const q of busPos){const d=(q[0]-mx)**2+(q[1]-my)**2;if(d<bd){bd=d;best=q;}}
   const tip=$('tip');if(!best){if(busTipShown){busTipShown=false;tip.hidden=true;}return;}
   const t=best[2],R=BROUTES[t.r],S=BSYS[R.si],left=Math.max(0,Math.round(t.e-best[3]));busTipShown=true;
@@ -2973,7 +2995,7 @@ function destNearest(d){const served=servedStops();let best=null,bd=1e9,bs=null,
   for(const s of Object.values(STATIONS)){if(s.type!=='pax')continue;const km=Math.hypot(s.xy[0]-d.xy[0],s.xy[1]-d.xy[1])/PX_PER_KM;if(km<bd){bd=km;best=s;}if(served.has(s.c)&&km<bsd){bsd=km;bs=s;}}
   return{st:best,km:bd,served:bs,skm:bsd};}
 const destBand=km=>km<=1?0:km<=3?1:2;
-function showDestTip(d,e){const tip=$('tip'),w=wrap.getBoundingClientRect();if(e)tipXY=[e.clientX-w.left,e.clientY-w.top];const q=destNearest(d);
+function showDestTip(d,e){const tip=$('tip'),w=wrapRect();if(e)tipXY=[e.clientX-w.left,e.clientY-w.top];const q=destNearest(d);
   const fmtKm=k=>k<1?Math.round(k*1000/10)*10+' m':k.toFixed(1)+' km';
   const line=q.served?`<div><b>${fmtKm(q.skm)}</b> from ${esc(q.served.n)} station, served by this timetable (${['walkable','a short bus or bike ride','beyond easy reach'][destBand(q.skm)]})</div>`:'<div class="m">No station is served by this timetable.</div>';
   const other=q.st&&(!q.served||q.st.c!==q.served.c)?`<div class="m">Nearest station on the corridor: ${esc(q.st.n)}, ${fmtKm(q.km)}</div>`:'';
@@ -3135,9 +3157,9 @@ function ferryStats(){const bc=FR.filter(r=>r.fy);const pax=bc.reduce((a,r)=>a+r
    <div class="frlist">${FR.slice().sort((a,b)=>(b.fy?b.fy[0]:0)-(a.fy?a.fy[0]:0)).map(r=>`<button type="button" data-fr="${FR.indexOf(r)}"><i class="frk fr-${r.op}"></i>${/^\d/.test(r.id)?r.id+' · ':''}${esc(r.n)}<span>${r.fy?fmtM(r.fy[0]).replace(' million','M'):'–'} · ${r.sail.length}</span></button>`).join('')}</div>
    <div class="m">Passengers a year (fiscal 2025) · sailings this Wednesday.</div>`;
   $('fstats').querySelectorAll('[data-fr]').forEach(b=>b.onclick=()=>{const ri=+b.dataset.fr,r=FR[ri];xpZoom(Object.values(r.P).flatMap(p=>p.xy).filter((q,i,a)=>r.id!=='10'||i<3));tipPinned={fr:ri};const q=xpAt(r.P[Object.keys(r.P)[0]],r.id==='10'?.03:.5);showFerryTip(ri,xpScreen(q));});}
-function xpZoom(pts){const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);const r=wrap.getBoundingClientRect();const w=Math.max(12,(Math.max(...xs)-Math.min(...xs))*1.6,(Math.max(...ys)-Math.min(...ys))*1.6*r.width/r.height);
+function xpZoom(pts){const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);const r=wrapRect();const w=Math.max(12,(Math.max(...xs)-Math.min(...xs))*1.6,(Math.max(...ys)-Math.min(...ys))*1.6*r.width/r.height);
   vb.w=w;vb.h=w*r.height/r.width;vb.x=(Math.min(...xs)+Math.max(...xs))/2-w/2;vb.y=(Math.min(...ys)+Math.max(...ys))/2-vb.h/2;applyVB();}
-function xpScreen(q){const r=wrap.getBoundingClientRect();return{clientX:r.left+(q[0]-vb.x)/vb.w*r.width,clientY:r.top+(q[1]-vb.y)/vb.h*r.height};}
+function xpScreen(q){const r=wrapRect();return{clientX:r.left+(q[0]-vb.x)/vb.w*r.width,clientY:r.top+(q[1]-vb.y)/vb.h*r.height};}
 $('ferrybtn').onclick=()=>{const on=ferryG.style.display==='none';if(on)buildFerries();ferryG.style.display=on?'':'none';$('ferrybtn').setAttribute('aria-pressed',String(on));$('ferrylegend').hidden=!on;if(on){stepFerries();ferryStats();}};
 /* ---------- flights ---------- */
 const XA={YYJ:['Victoria International (YYJ)',-123.426,48.646,'About 1.99 million passengers in 2025'],YCD:['Nanaimo (YCD)',-123.870,49.052,'359,525 passengers in 2024'],YQQ:['Comox Valley (YQQ)',-124.887,49.711,'449,849 passengers in 2025'],
@@ -3244,7 +3266,7 @@ function buildCrash(){if(crashBuilt)return;crashBuilt=true;
   crashG.addEventListener('pointerover',e=>{const t=e.target;if(tipPinned)return;if(t._cell)showCrashCellTip(t._cell,e);else if(t._i!==undefined)showCrashTip(CRASH[t._i],e);});
   crashG.addEventListener('pointerout',e=>{if(!tipPinned&&(e.target._cell||e.target._i!==undefined))$('tip').hidden=true;});
   crashG.addEventListener('click',e=>{const t=e.target;if(t._cell){e.stopPropagation();tipPinned={crash:1};showCrashCellTip(t._cell,e);}else if(t._i!==undefined){e.stopPropagation();tipPinned={crash:1};showCrashTip(CRASH[t._i],e);}});}
-function placeTip(e,h){const tip=$('tip'),w=wrap.getBoundingClientRect();if(e)tipXY=[e.clientX-w.left,e.clientY-w.top];tip.classList.remove('act');tip.innerHTML=h;tip.hidden=false;
+function placeTip(e,h){const tip=$('tip'),w=wrapRect();if(e)tipXY=[e.clientX-w.left,e.clientY-w.top];tip.classList.remove('act');tip.innerHTML=h;tip.hidden=false;
   let x=tipXY[0]+14,y=tipXY[1]+14;if(x>w.width-280)x-=300;if(y>w.height-150)y-=160;tip.style.left=x+'px';tip.style.top=y+'px';}
 const crashLine=(t,c)=>`<div><b>${t.toLocaleString()}</b> reported crash${t===1?'':'es'}, 2021–2025: <b>${c.toLocaleString()}</b> injured or killed someone, ${(t-c).toLocaleString()} property damage only</div>`;
 function showCrashTip(o,e){const nm=crashName(o);
@@ -3543,7 +3565,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&placing){cancelPlac
 function snapToRail(x,y){let best=null;for(const line of Object.keys(LINES)){const v=LINES[line];for(let i=0;i<v.length-1;i++){const a=v[i],b=v[i+1];const dx=b.xy[0]-a.xy[0],dy=b.xy[1]-a.xy[1],L2=dx*dx+dy*dy;
   const t=L2?Math.max(0,Math.min(1,((x-a.xy[0])*dx+(y-a.xy[1])*dy)/L2)):0;const px=a.xy[0]+dx*t,py=a.xy[1]+dy*t,d=Math.hypot(px-x,py-y);
   if(!best||d<best.d)best={d,line,xy:[px,py],k:a.k+(b.k-a.k)*t,ll:[a.ll[0]+(b.ll[0]-a.ll[0])*t,a.ll[1]+(b.ll[1]-a.ll[1])*t]};}}return best;}
-svg.addEventListener('click',e=>{if(!placing||dragMoved>=5)return;const r=wrap.getBoundingClientRect();const x=vb.x+(e.clientX-r.left)/ppu,y=vb.y+(e.clientY-r.top)/ppu;
+svg.addEventListener('click',e=>{if(!placing||dragMoved>=5)return;const r=wrapRect();const x=vb.x+(e.clientX-r.left)/ppu,y=vb.y+(e.clientY-r.top)/ppu;
   const sn=snapToRail(x,y);if(!sn||sn.d/PX_PER_KM>3&&sn.d*ppu>40){toast('Not on the line','Click closer to the E&N rail line');return;}
   const near=Object.values(STATIONS).find(o=>o.line===sn.line&&Math.abs(o.k-sn.k)<.25);
   if(near){toast('Already a stop there',`${near.n} is within 250 m. Change its type in the list instead.`);return;}
@@ -3583,7 +3605,7 @@ function renderStnForm(){const box=$('stnform');
 let trkEdit=false,trkDrag=null,drawing=null;
 const trkG=el('g',{},L.edit),trkDraftG=el('g',{},L.edit);
 const invP=([x,y])=>[x/(C*K)+B.w,B.n-y/K];
-const toSvg=e=>{const r=wrap.getBoundingClientRect();return[vb.x+(e.clientX-r.left)/ppu,vb.y+(e.clientY-r.top)/ppu];};
+const toSvg=e=>{const r=wrapRect();return[vb.x+(e.clientX-r.left)/ppu,vb.y+(e.clientY-r.top)/ppu];};
 const rll=ll=>ll.map(v=>Math.round(v*1e5)/1e5);
 /* ---------- railway curvature: track drawn or moved here keeps a minimum curve radius, and bends are drawn as circular curves ---------- */
 var MINR_OPTS=[[150,'150 m (11.7° curve, about 55 km/h)'],[175,'175 m (10° curve, about 60 km/h)'],[300,'300 m (5.8° curve, about 75 km/h)'],[500,'500 m (3.5° curve, about 100 km/h)'],[800,'800 m (2.2° curve, about 125 km/h)']];
@@ -3751,7 +3773,7 @@ function renderTrack(){const lines=Object.keys(LINES);$('trk-count').textContent
   box.querySelectorAll('[data-tdel]').forEach(b=>b.onclick=()=>{const id=b.dataset.tdel;if(b.dataset.armed){removeTrack(id);return;}const n=Object.values(STATIONS).filter(s=>s.line===id).length;
     b.dataset.armed='1';b.textContent=n?`Remove with ${n} station${n>1?'s':''}?`:'Confirm';setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent='Remove';}},4000);});
   box.querySelectorAll('.trow2').forEach(r=>r.onclick=e=>{if(e.target.closest('input,select,button'))return;const v=LINES[r.dataset.l];const xs=v.map(o=>o.xy[0]),ys=v.map(o=>o.xy[1]);
-    const w=Math.max(30,Math.max(...xs)-Math.min(...xs),(Math.max(...ys)-Math.min(...ys))*vb.w/vb.h)*1.25;vb.w=w;const rr=wrap.getBoundingClientRect();vb.h=w*rr.height/rr.width;vb.x=(Math.min(...xs)+Math.max(...xs))/2-w/2;vb.y=(Math.min(...ys)+Math.max(...ys))/2-vb.h/2;applyVB();});
+    const w=Math.max(30,Math.max(...xs)-Math.min(...xs),(Math.max(...ys)-Math.min(...ys))*vb.w/vb.h)*1.25;vb.w=w;const rr=wrapRect();vb.h=w*rr.height/rr.width;vb.x=(Math.min(...xs)+Math.max(...xs))/2-w/2;vb.y=(Math.min(...ys)+Math.max(...ys))/2-vb.h/2;applyVB();});
   renderTrkHelp();renderSpeeds();}
 /* ---------- track speeds panel (Track tab) ---------- */
 let SPD_LINE='MAIN';
@@ -3981,7 +4003,7 @@ function bindWorks(box){
     TRACKSPEC.works=TRACKSPEC.works.filter(x=>x.id!==w.id);WORK_SEL=null;WORK_SNAP=null;worksChanged(`Deleted ${w.name}`,true);};}
 function zoomToWork(id){const w=findWork(id);if(!w||!LINES[w.line])return;const k0=mpToK(w.line,w.a),k1=mpToK(w.line,w.b);const xs=[],ys=[];
   for(let k=k0;k<=k1;k+=.2){const p=lineAt(w.line,k);xs.push(p[0]);ys.push(p[1]);}const p1=lineAt(w.line,k1);xs.push(p1[0]);ys.push(p1[1]);
-  const r=wrap.getBoundingClientRect();const wd=Math.max(12,(Math.max(...xs)-Math.min(...xs))*1.6,(Math.max(...ys)-Math.min(...ys))*1.6*r.width/r.height);
+  const r=wrapRect();const wd=Math.max(12,(Math.max(...xs)-Math.min(...xs))*1.6,(Math.max(...ys)-Math.min(...ys))*1.6*r.width/r.height);
   vb.w=wd;vb.h=wd*r.height/r.width;vb.x=(Math.min(...xs)+Math.max(...xs))/2-wd/2;vb.y=(Math.min(...ys)+Math.max(...ys))/2-vb.h/2;applyVB();}
 $('wk-new').onclick=()=>{WORK_NEW=!WORK_NEW;WORK_PICK=null;svg.classList.remove('picking');if(WORK_NEW){WORK_SEL=null;WORK_SNAP=null;}renderWorks();drawWorksOnMap();$('worksbox').scrollTop=0;$('pane-works').scrollTop=0;};
 // map picking: a new work's range, or a new range for the open work
@@ -4012,7 +4034,7 @@ const NOTICES=()=>TRACKSPEC.notices||(TRACKSPEC.notices=defaultNotices());
 const noticeOf=x=>x&&x.__nt?x.__nt:NOTICES().find(n=>n.ref!=null&&INFRA[n.ref]===x)||null;
 const ntPlace=nt=>`${nt.l==='MAIN'?'Victoria':'Port Alberni'} Sub MP ${(+nt.m).toFixed(1)}${nt.m2?`–${(+nt.m2).toFixed(1)}`:''}`;
 const ntShort=nt=>({out:'out',removed:'removed',slow:'slow order',closed:'closed',other:'notice'})[nt.s]||'notice';
-function drawInfra(){infraGroup.innerHTML='';if(L.speed.style.display==='none')return;
+function drawInfra(){infraGroup.innerHTML='';pruneSC();if(L.speed.style.display==='none')return;
   const gap=(x,fix)=>{const k0=mpToK(x.l,x.m),k1=mpToK(x.l,x.m2);const pts=[];for(let k=k0;k<=k1;k+=.05)pts.push(lineAt(x.l,k));pts.push(lineAt(x.l,k1));
       el('polyline',{points:pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '),class:'gapseg'+(fix?' fixed':''),'vector-effect':'non-scaling-stroke'},infraGroup);};
   const mark=(x,K,nt)=>{const bad=!!nt,fix=bad&&infraFixedBy(x);if(bad&&x.m2)gap(x,fix);
@@ -4293,7 +4315,7 @@ function cpTipHtml(k){const x=CP_IDX[k];if(!x)return '';const c=cpCustom(k);
     if(on){renderCostsPage();pg.scrollTop=0;$('cp-back').focus();if(location.hash!=='#costs')history.replaceState(null,'','#costs');if(window.__track)__track('page:costs',false);}
     else if(location.hash==='#costs')history.replaceState(null,'',location.pathname+location.search);}
   window.openCosts=openCosts;
-  $('btn-costs').onclick=()=>openCosts(true);$('cp-back').onclick=()=>{openCosts(false);$('btn-costs').focus();};
+  $('cp-back').onclick=()=>{openCosts(false);const b=$('co-costs');if(b)b.focus();};
   ['btn-trains','btn-sources','btn-profiles','plan-rd-open'].forEach(id=>{const b=$(id);b&&b.addEventListener('click',()=>{if(!pg.hidden){pg.hidden=true;tip.hidden=true;}},true);});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!pg.hidden)openCosts(false);});
   window.addEventListener('hashchange',()=>{const on=location.hash==='#costs';if(on!==!pg.hidden)openCosts(on);});
@@ -4885,7 +4907,7 @@ function renderHeader(){
 function select(id,center){selected=id;const t=trains.find(x=>x.id===id);if(!t)return;const tr=t.trip||nextFor(t);
   if(tr){routeHi.setAttribute('points',tr.route.pts.map(p=>p.xy.map(v=>v.toFixed(1)).join(',')).join(' '));routeHi.setAttribute('stroke',t.color);}else routeHi.setAttribute('points','');
   trains.forEach(x=>x.g.classList.toggle('sel',x.id===id));t.hiTrip=tr;
-  if(center){const r=wrap.getBoundingClientRect();const [x,y]=[(t.xy[0]-vb.x)*ppu,(t.xy[1]-vb.y)*ppu];if(x<40||y<40||x>r.width-40||y>r.height-40){vb.x=t.xy[0]-vb.w/2;vb.y=t.xy[1]-vb.h/2;applyVB();}}
+  if(center){const r=wrapRect();const [x,y]=[(t.xy[0]-vb.x)*ppu,(t.xy[1]-vb.y)*ppu];if(x<40||y<40||x>r.width-40||y>r.height-40){vb.x=t.xy[0]-vb.w/2;vb.y=t.xy[1]-vb.h/2;applyVB();}}
   if(tab==='fleet')renderFleet();}
 
 /* ---------- log / toasts ---------- */
@@ -5264,7 +5286,7 @@ web.innerHTML='<svg viewBox="0 0 80 80" width="80" height="80"><g fill="none" st
   '</g><path d="M60 26v10" stroke="currentColor" stroke-width=".7"/><circle cx="60" cy="38" r="2.6" fill="currentColor"/><circle cx="60" cy="35.2" r="1.6" fill="currentColor"/></svg>';
 svg.parentNode.appendChild(web);
 let flakes=[],bursts=[],fwPreview=0,fwNext=0;
-function mapToScreen(xy){const m=svg.getScreenCTM(),r=svg.getBoundingClientRect();if(!m)return null;const p=svg.createSVGPoint();p.x=xy[0];p.y=xy[1];const q=p.matrixTransform(m);return[q.x-r.left,q.y-r.top];}
+function mapToScreen(xy){return[(xy[0]-vb.x)*ppu,(xy[1]-vb.y)*ppu];}
 const FW_AT=['VIC','NAN','CTN'];
 function fwActive(){if(fwPreview>performance.now())return true;const m=((Math.floor(sim)%1440)+1440)%1440;
   if(HOL==='newyear')return m>=1430||m<20;if(HOL==='canada')return m>=1320&&m<1410;return false;}
@@ -5459,7 +5481,7 @@ const FKN=1.94384;const FLCOL=[[0,[150,200,235,0]],[.4,[150,200,235,.28]],[1,[74
 function flColor(kn){let a=FLCOL[0],b=FLCOL[FLCOL.length-1];for(let i=0;i<FLCOL.length-1;i++)if(kn<=FLCOL[i+1][0]){a=FLCOL[i];b=FLCOL[i+1];break;}const f=b[0]>a[0]?Math.max(0,Math.min(1,(kn-a[0])/(b[0]-a[0]))):1;return a[1].map((c,i)=>c+(b[1][i]-c)*f);}
 function flCanvases(){if(FLW.cv)return;const mk=()=>{const c=document.createElement('canvas');c.className='flowcv';c.setAttribute('aria-hidden','true');wrap.insertBefore(c,wrap.firstChild);return c;};
   FLW.cv=mk();FLW.fcv=mk();FLW.ctx=FLW.cv.getContext('2d');FLW.fctx=FLW.fcv.getContext('2d');FLW.off=document.createElement('canvas');FLW.off.width=FLR.W;FLW.off.height=FLR.H;FLW.offx=FLW.off.getContext('2d');FLW.img=FLW.offx.createImageData(FLR.W,FLR.H);}
-function flResize(){const r=wrap.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1),W=Math.round(r.width*d),H=Math.round(r.height*d);
+function flResize(){const r=wrapRect(),d=Math.min(2,window.devicePixelRatio||1),W=Math.round(r.width*d),H=Math.round(r.height*d);
   for(const c of [FLW.cv,FLW.fcv])if(c.width!==W||c.height!==H){c.width=W;c.height=H;}FLW.dpr=d;FLW.sw=W;FLW.sh=H;}
 function flDrawField(ra,rb,f){const im=FLW.img.data,W=FLR.W,H=FLR.H;for(let j=0;j<W*H;j++){const a=ra.u[j];if(!(a===a)){im[4*j+3]=0;continue;}const b=rb.u[j],u=b===b?a+(b-a)*f:a,va=ra.v[j],vb2=rb.v[j],v=vb2===vb2?va+(vb2-va)*f:va;
     const c=flColor(Math.hypot(u,v)*FKN);im[4*j]=c[0];im[4*j+1]=c[1];im[4*j+2]=c[2];im[4*j+3]=c[3]*255;}
@@ -5563,8 +5585,8 @@ var TRAIN_SC=1;function trainScale(){const z=800/vb.w;TRAIN_SC=Math.max(.45,Math
 var ZS_MIN=8,ZS_MAX=3300;
 function zsFromW(w){return 100*Math.log(ZS_MAX/w)/Math.log(ZS_MAX/ZS_MIN);}
 function zsSync(){const s=$('zoomsl');if(s&&ZS_MIN&&document.activeElement!==s)s.value=Math.max(0,Math.min(100,zsFromW(vb.w))).toFixed(1);}
-{const s=$('zoomsl');const go=w=>{const r=wrap.getBoundingClientRect();zoomAt(vb.w/w,r.left+r.width/2,r.top+r.height/2);};
- s.addEventListener('input',()=>go(ZS_MAX*Math.pow(ZS_MIN/ZS_MAX,+s.value/100)));
+{const s=$('zoomsl');const go=(w,g)=>{const r=wrapRect();zoomAt(vb.w/w,r.left+r.width/2,r.top+r.height/2,g);};
+ s.addEventListener('input',()=>go(ZS_MAX*Math.pow(ZS_MIN/ZS_MAX,+s.value/100),true));
  $('zs-in').onclick=()=>go(vb.w/1.6);$('zs-out').onclick=()=>go(vb.w*1.6);zsSync();}
 
 // mobile: fold the stats row and the map credits
@@ -5719,7 +5741,7 @@ function ctrTip(c,e,pin){const s=c.S[SEASON],hr=Math.floor(sim/60)%24,f=n=>Math.
     <div class="ctrst"><div><b>${f(s.wd)}</b><span>a weekday</span></div><div><b>${f(s.we)}</b><span>a weekend day</span></div>${last?`<div><b>${f(Math.round(last[1]*365/1000)*1000)}</b><span>trips in ${last[0]}</span></div>`:''}${s.ped>0&&s.ped<100?`<div><b>${s.ped}%</b><span>on foot</span></div>`:''}</div>`:'<div class="m">No data for this season.</div>'}
     ${yrs?`<div class="ctrh" style="margin-top:6px"><b>Trips a year</b> · average day × 365</div>${yrs}`:''}
     <div class="m ctrsrc">Both directions. Capital Regional District and partners (Eco-Counter).</div>${pin?'<div class="pbtns"><button class="btn sm" id="tip-close" type="button">Close</button></div>':''}</div>`);
-  const tp=$('tip'),wr=wrap.getBoundingClientRect(),tw=tp.offsetWidth,th=tp.offsetHeight;let x=parseFloat(tp.style.left),yy=parseFloat(tp.style.top);
+  const tp=$('tip'),wr=wrapRect(),tw=tp.offsetWidth,th=tp.offsetHeight;let x=parseFloat(tp.style.left),yy=parseFloat(tp.style.top);
   if(x+tw>wr.width-6)x=Math.max(6,wr.width-tw-6);if(yy+th>wr.height-6)yy=Math.max(6,wr.height-th-6);tp.style.left=x+'px';tp.style.top=yy+'px';
   if(pin){$('tip').classList.add('act');$('tip-close').onclick=()=>hideTip(true);}}
 let ctrMk=[];
