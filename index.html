@@ -773,7 +773,7 @@ svg.zt .ctrlbl{display:block}.nolbl-trail .ctrlbl{display:none!important}
 .measprof.closed #mp-body{display:none}
 .mp-stats{display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0 2px}.mp-stats div{display:grid}.mp-stats span{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.mp-stats b{font-variant-numeric:tabular-nums;font-size:13.5px}
 .mp-chart svg{display:block;width:100%;height:auto;touch-action:none}.mp-chart .pg{stroke:var(--line)}.mp-chart .pa{font:10px var(--mono);fill:var(--muted)}
-.mp-chart .pf{fill:var(--ink);opacity:.07}.mp-chart .pl{fill:none;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}.pl.g0,.mp-key .g0{stroke:#2e9d4a;background:#2e9d4a}.pl.g1,.mp-key .g1{stroke:#d99a12;background:#d99a12}.pl.g2,.mp-key .g2{stroke:#d0393b;background:#d0393b}
+.mp-chart .pf{fill:var(--ink);opacity:.07}.mp-chart .pwf{fill:#3b8fd6;opacity:.28}.mp-chart .psea{stroke:#3b8fd6;stroke-width:1.2}.pl.gw,.mp-key .gw{stroke:#1f5f99;background:#1f5f99}.mp-chart .pl{fill:none;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}.pl.g0,.mp-key .g0{stroke:#2e9d4a;background:#2e9d4a}.pl.g1,.mp-key .g1{stroke:#d99a12;background:#d99a12}.pl.g2,.mp-key .g2{stroke:#d0393b;background:#d0393b}
 .mp-chart .pt,.mp-key i.pt{fill:none;stroke:var(--rail);stroke-width:1.6;stroke-dasharray:5 3}.mp-key i.pt{background:none;border-top:2px dashed var(--rail);height:0}
 .mp-chart .phx{stroke:var(--ink);stroke-width:1;stroke-dasharray:3 3}.mp-chart .phd{fill:var(--panel);stroke:var(--ink);stroke-width:2}
 .mp-foot{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;justify-content:space-between;margin-top:2px}.mp-read{color:var(--muted)}.mp-read b{color:var(--ink);font-variant-numeric:tabular-nums}
@@ -1089,7 +1089,7 @@ circle.th.limit{fill:#d0393b!important;stroke:#fff}
         <div>Showing <b id="t-hour">—</b>. Sparser, faster dots mean freer-flowing traffic.</div>
         <div class="m">Hover a ◆ station for both directions and its daily profile.</div>
         <div class="m" id="t-enn" hidden>Includes the drivers the Travel flows layer moves to the train (With E&amp;N).</div></div>
-      <div class="measbar" id="measbar" hidden role="status" aria-live="polite"><div class="mb-t"><b id="mb-len">Click the map to start measuring</b><span id="mb-sub"></span></div><div class="mb-c"><label><input type="checkbox" id="mb-smooth" checked> Smooth curve</label><label><input type="checkbox" id="mb-snap" checked> Snap to track</label><button type="button" class="btn" id="mb-undo">Undo</button><button type="button" class="btn" id="mb-clear">Clear</button><button type="button" class="btn" id="mb-done">Done</button></div></div><div class="measprof" id="measprof" hidden role="region" aria-label="Height profile"><div class="mp-h"><b>Height profile</b><span class="mp-st" id="mp-status" role="status"></span><span class="mp-sp"></span><button type="button" class="btn" id="mp-units" title="Showing metres and kilometres; switch to feet">m · km</button><button type="button" class="btn" id="mp-toggle" aria-expanded="true" aria-controls="mp-body">Hide</button></div><div id="mp-body"><div class="mp-stats" id="mp-stats"></div><div class="mp-chart" id="mp-chart"></div><div class="mp-foot"><span id="mp-read" class="mp-read"></span><span class="mp-key" id="mp-key"></span></div><div class="mp-note">Ground heights from AWS Terrain Tiles, about ±5–10 m; bridges and tunnels show the ground below or above them.</div></div></div><div class="lchips" id="lchips" hidden aria-label="Layers on the map"></div><div class="zoomsl"><button type="button" id="zs-out" aria-label="Zoom out">−</button><input type="range" id="zoomsl" min="0" max="100" step="0.5" value="0" aria-label="Zoom"><button type="button" id="zs-in" aria-label="Zoom in">+</button></div><div class="scale" id="scale"><span id="scale-t">20 km</span><i id="scale-b" style="width:100px"></i></div>
+      <div class="measbar" id="measbar" hidden role="status" aria-live="polite"><div class="mb-t"><b id="mb-len">Click the map to start measuring</b><span id="mb-sub"></span></div><div class="mb-c"><label><input type="checkbox" id="mb-smooth" checked> Smooth curve</label><label><input type="checkbox" id="mb-snap" checked> Snap to track</label><button type="button" class="btn" id="mb-undo">Undo</button><button type="button" class="btn" id="mb-clear">Clear</button><button type="button" class="btn" id="mb-done">Done</button></div></div><div class="measprof" id="measprof" hidden role="region" aria-label="Height profile"><div class="mp-h"><b>Height profile</b><span class="mp-st" id="mp-status" role="status"></span><span class="mp-sp"></span><button type="button" class="btn" id="mp-units" title="Showing metres and kilometres; switch to feet">m · km</button><button type="button" class="btn" id="mp-toggle" aria-expanded="true" aria-controls="mp-body">Hide</button></div><div id="mp-body"><div class="mp-stats" id="mp-stats"></div><div class="mp-chart" id="mp-chart"></div><div class="mp-foot"><span id="mp-read" class="mp-read"></span><span class="mp-key" id="mp-key"></span></div><div class="mp-note">Ground heights from AWS Terrain Tiles, about ±5–10 m; bridges and tunnels show the ground below or above them. Sea depths from GMRT, on a grid of about 60 m.</div></div></div><div class="lchips" id="lchips" hidden aria-label="Layers on the map"></div><div class="zoomsl"><button type="button" id="zs-out" aria-label="Zoom out">−</button><input type="range" id="zoomsl" min="0" max="100" step="0.5" value="0" aria-label="Zoom"><button type="button" id="zs-in" aria-label="Zoom in">+</button></div><div class="scale" id="scale"><span id="scale-t">20 km</span><i id="scale-b" style="width:100px"></i></div>
       <button type="button" class="creditbtn" id="creditbtn" aria-label="Map data sources" aria-expanded="false">i</button><div class="credit" id="credit">Map data © OpenStreetMap contributors (ODbL). Elevation and hillshade: AWS Terrain Tiles (Mapzen terrarium). Population: Statistics Canada 2021 Census, grown to 2024 with BC Stats estimates. Jobs: Statistics Canada 2021 Census. Traffic counts: BC MoTI, City of Victoria. Commuting: Statistics Canada 2021 Census. Travel survey: CRD 2022 Origin-Destination Household Travel Survey. Bus schedules: BC Transit GTFS. Sailings and ferry traffic: BC Ferries. UVic and airport traffic figures. First Nation reserves: Natural Resources Canada (Open Government Licence – Canada) and Province of BC (Open Government Licence – British Columbia). Trail and bike counts: Capital Regional District and partners (Eco-Counter). Riders and buses are simulated. Anonymous usage counts, no cookies: <a href="https://map.restoreislandrail.com/stats/">usage statistics</a>.</div>
       <div class="toasts" id="toasts" aria-live="polite"></div>
       <div class="tip" id="tip" hidden></div>
@@ -2324,6 +2324,21 @@ const demPx=(d,px,py)=>{px=Math.max(0,Math.min(255,px));py=Math.max(0,Math.min(2
 function demAt(tiles,z,lon,lat){const [X,Y]=tileXY(lon,lat,z),tx=Math.floor(X),ty=Math.floor(Y),d=tiles.get(tx+'/'+ty);if(!d)return null;
   const fx=(X-tx)*256-.5,fy=(Y-ty)*256-.5,x0=Math.floor(fx),y0=Math.floor(fy),ax=fx-x0,ay=fy-y0;
   return demPx(d,x0,y0)*(1-ax)*(1-ay)+demPx(d,x0+1,y0)*ax*(1-ay)+demPx(d,x0,y0+1)*(1-ax)*ay+demPx(d,x0+1,y0+1)*ax*ay;}
+/* sea-floor depths: the terrain tiles are flat (0 m) over the sea here, so where the line is over water the depth comes from GMRT
+   (Global Multi-Resolution Topography, Lamont-Doherty), read as one small grid around the wet part of the line */
+const GMRT_C=new Map();
+function gmrtGrid(w,s,e,n){const cells=(e-w)*(n-s)/(0.00055**2),res=cells<300000?'high':cells<1200000?'med':'low';
+  const u=`https://www.gmrt.org/services/GridServer?north=${n.toFixed(4)}&south=${s.toFixed(4)}&east=${e.toFixed(4)}&west=${w.toFixed(4)}&layer=topo&format=esriascii&resolution=${res}`;
+  if(!GMRT_C.has(u)){if(GMRT_C.size>12)GMRT_C.delete(GMRT_C.keys().next().value);
+    GMRT_C.set(u,fetch(u).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).then(t=>{const L=t.split('\n'),h={};let i=0;
+      for(;i<L.length;i++){const m=/^\s*([a-z_]+)\s+(\S+)/i.exec(L[i]);if(!m||!isNaN(+L[i].trim().split(/\s+/)[0]))break;h[m[1].toLowerCase()]=+m[2];}
+      const rows=[];for(;i<L.length;i++){const q=L[i].trim();if(q)rows.push(q.split(/\s+/).map(Number));}
+      if(!h.cellsize||!rows.length)throw new Error('no depth grid');return{h,rows};}).catch(e=>{GMRT_C.delete(u);throw e;}));}
+  return GMRT_C.get(u);}
+function gmrtAt(G,lon,lat){const {h,rows}=G,fx=(lon-h.xllcorner)/h.cellsize-.5,fy=(lat-h.yllcorner)/h.cellsize-.5,x0=Math.floor(fx),y0=Math.floor(fy),ax=fx-x0,ay=fy-y0;
+  const v=(c,r)=>{const row=rows[h.nrows-1-Math.max(0,Math.min(h.nrows-1,r))];const z=row&&row[Math.max(0,Math.min(h.ncols-1,c))];return z==null||z===h.nodata_value||z<-12000?null:z;};
+  const a=v(x0,y0),b=v(x0+1,y0),c=v(x0,y0+1),d=v(x0+1,y0+1);if([a,b,c,d].some(z=>z==null))return a??b??c??d;
+  return a*(1-ax)*(1-ay)+b*ax*(1-ay)+c*(1-ax)*ay+d*ax*ay;}
 function profQueue(){clearTimeout(PROF.t);if(!MEAS.on||MEAS.pts.length<2){$('measprof').hidden=true;wrap.classList.remove('profopen');PROF.S=null;PROF.busy=false;PROF.sig=null;PROF.seq++;profHover(-1);return;}
   $('measprof').hidden=false;wrap.classList.add('profopen');if(!PROF.open){profPaint();return;}
   // rebuild only when the line itself changes (the map redraws the line on every zoom and pan)
@@ -2343,9 +2358,14 @@ async function profBuild(){const seq=++PROF.seq;const cv=measCurve(MEAS.pts);
   catch(e){if(seq===PROF.seq){PROF.S=null;PROF.busy=false;PROF.sig=null;$('mp-status').textContent='Heights could not be loaded right now ('+e.message+').';profPaint(true);}return;}
   if(seq!==PROF.seq)return;
   for(const s of S){s.e=demAt(tiles,z,s.ll[0],s.ll[1]);s.xy=P(s.ll);}
+  // over the sea the tiles read 0 m: take the depth there from GMRT
+  PROF.depthErr=null;const wetS=S.filter(s=>s.e!=null&&Math.abs(s.e)<.5);
+  if(wetS.length){$('mp-status').textContent='Reading depths…';const pad=.004;let w=1e9,so=1e9,e=-1e9,no=-1e9;for(const q of wetS){w=Math.min(w,q.ll[0]);e=Math.max(e,q.ll[0]);so=Math.min(so,q.ll[1]);no=Math.max(no,q.ll[1]);}
+    try{const G=await gmrtGrid(w-pad,so-pad,e+pad,no+pad);if(seq!==PROF.seq)return;for(const q of wetS){const d=gmrtAt(G,q.ll[0],q.ll[1]);if(d!=null&&d<0){q.e=d;q.w=true;}}}
+    catch(err){if(seq!==PROF.seq)return;PROF.depthErr=err.message||String(err);for(const q of wetS)q.w=true;}}
   // light smoothing of tile noise, then grade over about 100 m
-  const raw=S.map(s=>s.e),w=Math.max(1,Math.round(30/step));for(let i=0;i<S.length;i++){let a=0,c=0;for(let k=-w;k<=w;k++){const v=raw[i+k];if(v!=null){a+=v;c++;}}S[i].e=c?a/c:raw[i];}
-  const gw=Math.max(1,Math.round(100/step));for(let i=0;i<S.length;i++){const a=S[Math.max(0,i-gw)],b=S[Math.min(S.length-1,i+gw)];S[i].g=b.d>a.d?(b.e-a.e)/(b.d-a.d)*100:0;}
+  const raw=S.map(s=>s.e),w=Math.max(1,Math.round(30/step));for(let i=0;i<S.length;i++){let a=0,c=0;for(let k=-w;k<=w;k++){const v=raw[i+k],q=S[i+k];if(v!=null&&q&&!!q.w===!!S[i].w){a+=v;c++;}}S[i].e=c?a/c:raw[i];}
+  const gw=Math.max(1,Math.round(100/step));for(let i=0;i<S.length;i++){let ia=i,ib=i;while(ia>Math.max(0,i-gw)&&!S[ia-1].w===!S[i].w)ia--;while(ib<Math.min(S.length-1,i+gw)&&!S[ib+1].w===!S[i].w)ib++;const a=S[ia],b=S[ib];S[i].g=S[i].w?0:b.d>a.d?(b.e-a.e)/(b.d-a.d)*100:0;}
   // the E&N's own profile, when the measured line follows the track
   let track=null;if($('mb-snap').checked&&window.__PD){const sn=S.filter((s,i)=>i%5===0).map(s=>snapToRail(s.xy[0],s.xy[1]));
     if(sn.every(q=>q&&q.d/PX_PER_KM*1000<60&&q.line===sn[0].line)){const pd=window.__PD[sn[0].line==='MAIN'?'main_rail':'alb_rail'];
@@ -2359,13 +2379,15 @@ function profPaint(err){const box=$('mp-chart'),st=$('mp-stats');$('mp-toggle').
   $('mp-units').textContent=PROF.ft?'ft · mi':'m · km';$('mp-units').title=PROF.ft?'Showing feet and miles; switch to metres':'Showing metres and kilometres; switch to feet';$('measprof').classList.toggle('closed',!PROF.open);
   if(!PROF.open)return;const S=PROF.S;if(!S){box.innerHTML='';st.innerHTML='';if(!err)$('mp-status').textContent=MEAS.pts.length<2?'':'Reading heights…';return;}
   $('mp-status').textContent='';const u=profU(),tot=S[S.length-1].d;
-  let hi=S[0],lo=S[0],up=0,dn=0,ref=S[0].e,steep=S[0];for(const s of S){if(s.e>hi.e)hi=s;if(s.e<lo.e)lo=s;if(Math.abs(s.g)>Math.abs(steep.g))steep=s;
+  const land=S.filter(s=>!s.w),wet=S.filter(s=>s.w),hE=s=>s.w?(s.e<0?fH(-s.e)+' deep':'water'):fH(s.e);
+  let hi=land[0]||S[0],lo=land[0]||S[0],up=0,dn=0,ref=(land[0]||S[0]).e,steep=land[0]||S[0];for(const s of land){if(s.e>hi.e)hi=s;if(s.e<lo.e)lo=s;if(Math.abs(s.g)>Math.abs(steep.g))steep=s;
     const dd=s.e-ref;if(dd>=3){up+=dd;ref=s.e;}else if(dd<=-3){dn-=dd;ref=s.e;}}
-  const avg=(S[S.length-1].e-S[0].e)/tot*100;
-  st.innerHTML=[['Start',fH(S[0].e)],['End',fH(S[S.length-1].e)],['Highest',fH(hi.e)],['Lowest',fH(lo.e)],['Climb',fH(up)],['Descent',fH(dn)],['Steepest',(steep.g>0?'+':'')+steep.g.toFixed(1)+'%'],['Average',(avg>0?'+':'')+avg.toFixed(1)+'%']]
+  const avg=(S[S.length-1].e-S[0].e)/tot*100;let wd=0;for(let i=1;i<S.length;i++)if(S[i].w&&S[i-1].w)wd+=S[i].d-S[i-1].d;
+  const deep=wet.reduce((m,s)=>s.e<m.e?s:m,wet[0]||S[0]),fD=d=>PROF.ft?(d/1609.344).toFixed(2)+' mi':(d/1000).toFixed(2)+' km';
+  st.innerHTML=[['Start',hE(S[0])],['End',hE(S[S.length-1])],...(land.length?[['Highest',fH(hi.e)]]:[]),...(wet.length?[['Deepest',deep.e<0?fH(-deep.e):'—'],['Over water',fD(wd)]]:[['Lowest',fH(lo.e)]]),...(land.length>1?[['Climb',fH(up)],['Descent',fH(dn)],['Steepest',(steep.g>0?'+':'')+steep.g.toFixed(1)+'%']]:[]),...(!S[0].w&&!S[S.length-1].w?[['Average',(avg>0?'+':'')+avg.toFixed(1)+'%']]:[])]
     .map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('');
   const W=Math.max(260,box.clientWidth||600),H=PROF.compact?120:150,L=46,R=8,T=8,B=22,iw=W-L-R,ih=H-T-B;
-  const es=S.map(s=>s.e).concat(PROF.track||[]);let mn=Math.min(...es),mx=Math.max(...es);if(mx-mn<20){const c=(mx+mn)/2;mn=c-10;mx=c+10;}
+  const es=S.map(s=>s.e).concat(PROF.track||[]).concat(S.some(s=>s.w)?[0]:[]);let mn=Math.min(...es),mx=Math.max(...es);if(mx-mn<20){const c=(mx+mn)/2;mn=c-10;mx=c+10;}
   const hu=u.h,span=(mx-mn)*hu,stp=[2,5,10,20,25,50,100,200,250,500,1000].find(v=>span/v<=5)||2000,y0=Math.floor(mn*hu/stp)*stp,y1=Math.ceil(mx*hu/stp)*stp;
   const X=d=>L+iw*d/tot,Y=m=>T+ih-ih*(m*hu-y0)/(y1-y0||1);
   let g=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Height profile of the measured line">`;
@@ -2373,11 +2395,14 @@ function profPaint(err){const box=$('mp-chart'),st=$('mp-stats');$('mp-toggle').
   const dt=tot*u.d,dstep=[.1,.2,.25,.5,1,2,2.5,5,10,20,25,50,100].find(v=>dt/v<=8)||200;for(let v=0;v<=dt+1e-9;v+=dstep){const xx=X(v/u.d);g+=`<text x="${xx.toFixed(1)}" y="${H-6}" text-anchor="${v===0?'start':'middle'}" class="pa">${+v.toFixed(2)}${v===0?' '+u.du:''}</text>`;}
   g+=`<text x="4" y="${T+8}" class="pa">${u.hu}</text>`;
   g+=`<path class="pf" d="M${X(0)},${T+ih}${S.map(s=>`L${X(s.d).toFixed(1)},${Y(s.e).toFixed(1)}`).join('')}L${X(tot)},${T+ih}Z"/>`;
-  let run=null;const segs=[];S.forEach((s,i)=>{const c=gCls(s.g);if(!run||run.c!==c){if(run)run.p.push(s);run={c,p:[s]};segs.push(run);}else run.p.push(s);});
+  {let i=0;while(i<S.length){if(!S[i].w){i++;continue;}let j=i;while(j+1<S.length&&S[j+1].w)j++;const a=S[Math.max(0,i-1)],b=S[Math.min(S.length-1,j+1)],run=S.slice(i,j+1);
+      g+=`<path class="pwf" d="M${X(a.d).toFixed(1)},${Y(0).toFixed(1)}${run.map(s=>`L${X(s.d).toFixed(1)},${Y(Math.min(0,s.e)).toFixed(1)}`).join('')}L${X(b.d).toFixed(1)},${Y(0).toFixed(1)}Z"/><line class="psea" x1="${X(a.d).toFixed(1)}" x2="${X(b.d).toFixed(1)}" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}"/>`;i=j+1;}}
+  let run=null;const segs=[];S.forEach((s,i)=>{const c=s.w?'gw':gCls(s.g);if(!run||run.c!==c){if(run)run.p.push(s);run={c,p:[s]};segs.push(run);}else run.p.push(s);});
   for(const r of segs)g+=`<polyline class="pl ${r.c}" points="${r.p.map(s=>`${X(s.d).toFixed(1)},${Y(s.e).toFixed(1)}`).join(' ')}"/>`;
   if(PROF.track)g+=`<polyline class="pt" points="${S.map((s,i)=>`${X(s.d).toFixed(1)},${Y(PROF.track[i]).toFixed(1)}`).join(' ')}"/>`;
   g+=`<line class="phx" id="mp-hx" y1="${T}" y2="${T+ih}" x1="-9" x2="-9"/><circle class="phd" id="mp-hd" r="4" cx="-9" cy="-9"/><rect x="${L}" y="${T}" width="${iw}" height="${ih}" fill="transparent" id="mp-hit"/></svg>`;
-  box.innerHTML=g;$('mp-key').innerHTML=`<span><i class="g0"></i>under 1%</span><span><i class="g1"></i>1–2%</span><span><i class="g2"></i>over 2%</span>${PROF.track?'<span><i class="pt"></i>E&amp;N track profile</span>':''}`;
+  box.innerHTML=g;$('mp-key').innerHTML=`<span><i class="g0"></i>under 1%</span><span><i class="g1"></i>1–2%</span><span><i class="g2"></i>over 2%</span>${S.some(s=>s.w)?(PROF.depthErr?'<span><i class="gw"></i>water</span>':'<span><i class="gw"></i>sea floor (GMRT)</span>'):''}${PROF.track?'<span><i class="pt"></i>E&amp;N track profile</span>':''}`;
+  if(PROF.depthErr)$('mp-status').textContent='Depths could not be loaded right now ('+PROF.depthErr+'); water is shown at sea level.';
   PROF.geo={X,Y,L,iw,tot};const hit=$('mp-hit'),sv=box.querySelector('svg');
   const at=e=>{const r=sv.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,d=Math.max(0,Math.min(tot,(x-L)/iw*tot));let bi=0;for(let i=1;i<S.length;i++)if(Math.abs(S[i].d-d)<Math.abs(S[bi].d-d))bi=i;return bi;};
   hit.addEventListener('pointermove',e=>profHover(at(e)));hit.addEventListener('pointerdown',e=>profHover(at(e)));hit.addEventListener('pointerleave',e=>{if(e.pointerType!=='touch')profHover(-1);});
@@ -2386,7 +2411,7 @@ function profHover(i){PROF.hov=i;profHoverG.innerHTML='';const S=PROF.S,ro=$('mp
   if(!S||i<0||i>=S.length||!PROF.geo){if(ro)ro.textContent=PROF.S?'Point along the chart or the line to read heights.':'';const hx=$('mp-hx');if(hx){hx.setAttribute('x1',-9);hx.setAttribute('x2',-9);$('mp-hd').setAttribute('cx',-9);}return;}
   const s=S[i],u=profU(),{X,Y}=PROF.geo;const hx=$('mp-hx');if(hx){hx.setAttribute('x1',X(s.d));hx.setAttribute('x2',X(s.d));const hd=$('mp-hd');hd.setAttribute('cx',X(s.d));hd.setAttribute('cy',Y(s.e));}
   el('circle',{cx:s.xy[0].toFixed(3),cy:s.xy[1].toFixed(3),r:(6/ppu).toFixed(3),class:'profdot','vector-effect':'non-scaling-stroke'},profHoverG);
-  ro.innerHTML=`<b>${(s.d*u.d).toFixed(2)} ${u.du}</b> along · height <b>${fHb(s.e)}</b> · grade <b>${s.g>0?'+':''}${s.g.toFixed(1)}%</b>${PROF.track?` · track ≈ ${fH(PROF.track[i])}`:''}`;}
+  ro.innerHTML=s.w?`<b>${(s.d*u.d).toFixed(2)} ${u.du}</b> along · over water · ${s.e<0?`depth <b>${fHb(-s.e)}</b> below sea level`:'depth not known'}`:`<b>${(s.d*u.d).toFixed(2)} ${u.du}</b> along · height <b>${fHb(s.e)}</b> · grade <b>${s.g>0?'+':''}${s.g.toFixed(1)}%</b>${PROF.track?` · track ≈ ${fH(PROF.track[i])}`:''}`;}
 $('mp-toggle').onclick=()=>{PROF.open=!PROF.open;if(PROF.open){PROF.sig=null;profQueue();}else profPaint();};
 $('mp-units').onclick=()=>{PROF.ft=!PROF.ft;profPaint();};
 /* pointing at the measured line on the map moves the marker on the chart */
@@ -4546,7 +4571,8 @@ if(location.hash==='#trains')openTrains(true);
 const SRC=[
  {g:'Base map',items:[
   {n:'OpenStreetMap',u:'https://www.openstreetmap.org/copyright',use:'Coastline, lakes, roads, trails and bike lanes, land use, shopping centres and the bus lanes in service.',d:'Read between 14 and 19 October 2026 through the Overpass and OSM APIs. Bike-lane lines were joined, simplified to about 10 m and pieces under 60 m dropped.',lim:'Only as complete as the mapping, which is strongest in Greater Victoria and Nanaimo.',lic:'© OpenStreetMap contributors, ODbL'},
-  {n:'AWS Terrain Tiles (Mapzen terrarium)',u:'https://registry.opendata.aws/terrain-tiles/',use:'Elevation shading and hillshade.'},
+  {n:'AWS Terrain Tiles (Mapzen terrarium)',u:'https://registry.opendata.aws/terrain-tiles/',use:'Elevation shading and hillshade, and land heights in the measuring tool’s profile.'},
+  {n:'GMRT Global Multi-Resolution Topography (Lamont-Doherty Earth Observatory)',u:'https://www.gmrt.org/',use:'Sea-floor depths in the measuring tool’s profile, where the measured line crosses water.',lim:'Grid of about 60 m; nearshore depths are approximate.',lic:'CC BY 4.0. Ryan et al. (2009), doi:10.1029/2008GC002332.'},
   {n:'Photon and Nominatim (OpenStreetMap geocoders)',u:'https://photon.komoot.io/',use:'Map search for addresses and places that are not on the map.',d:'Photon is tried first, with Nominatim as the fallback; results are limited to Vancouver Island.',lim:'Needs an internet connection; some hosts block these lookups.'}]},
  {g:'People and places',items:[
   {n:'Statistics Canada, 2021 Census: population by dissemination area',u:'https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/index.cfm?Lang=E',use:'Population layer: people per km² of land, homes, and how many people live within 800 m and 3 km of a served station.',d:'1,374 dissemination areas in the seven Island census divisions (839,786 people). Boundaries from the 2021 cartographic boundary file; counts from the Census Profile. Pulled 21 October 2026.',lim:'Two areas are suppressed by Statistics Canada. Station distances are straight lines to each area\'s centre.'},
