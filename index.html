@@ -1135,7 +1135,7 @@ circle.th.limit{fill:#d0393b!important;stroke:#fff}
         <div class="planrd" id="plan-rd"></div>
         <h3 class="sec">Service plan summary</h3>
         <div class="kpis" id="plan-sum"></div>
-        <div class="pbtns"><button class="btn" id="btn-auto2" type="button">Auto-assign trainsets</button><button class="btn danger" id="btn-reset" type="button">Reset to starting timetable</button><button class="btn danger" id="btn-blank" type="button" title="Removes every train, trainset, added station and added track, keeping the existing corridor, works and station edits">Start from a blank slate</button></div>
+        <div class="pbtns"><button class="btn" id="btn-auto2" type="button">Auto-assign trainsets</button><button class="btn danger" id="btn-reset" type="button">Reset to starting timetable</button><button class="btn danger" id="btn-blank" type="button" title="Removes every train, trainset, added station, added track and track work, leaving only the basic restoration of the existing corridor; station edits are kept">Start from a blank slate</button></div>
         <h3 class="sec">Capital cost</h3>
         <div class="plancost" id="plan-cost"></div>
         <h3 class="sec">Share or back up this plan</h3>
@@ -4836,12 +4836,12 @@ function renderPlanPane(){const ck=FPCT+'|'+JSON.stringify(STNSPEC).length+'|'+J
 $('btn-auto2').onclick=()=>$('btn-auto').click();
 // blank slate for planners: no timetable, no trainsets, no added stations or added track (the corridor, works and notices stay)
 $('btn-blank').onclick=e=>{const b=e.currentTarget,lbl='Start from a blank slate';
-  if(!b.dataset.armed){b.dataset.armed='1';b.textContent='Confirm: clear timetable, fleet, new stations and new track';setTimeout(()=>{if(b.isConnected&&b.dataset.armed){delete b.dataset.armed;b.textContent=lbl;}},4000);return;}
+  if(!b.dataset.armed){b.dataset.armed='1';b.textContent='Confirm: clear timetable, fleet, new stations, new track and works';setTimeout(()=>{if(b.isConnected&&b.dataset.armed){delete b.dataset.armed;b.textContent=lbl;}},4000);return;}
   delete b.dataset.armed;b.textContent=lbl;
-  const sp=JSON.parse(JSON.stringify(STNSPEC||{}));sp.add=[];TRACKSPEC.lines=[];TRACKSPEC.works=(TRACKSPEC.works||[]).filter(w=>w.project!=='auto');PLACES=null;applyStations(sp);drawSidings();
+  const sp=JSON.parse(JSON.stringify(STNSPEC||{}));sp.add=[];TRACKSPEC.lines=[];TRACKSPEC.works=(TRACKSPEC.works||[]).filter(w=>w.status==='built');WORK_SEL=null;WORK_SNAP=null;PLACES=null;applyStations(sp);drawSidings();if(typeof MINCACHE!=='undefined')MINCACHE.clear();if(L.speed.style.display!=='none')drawSpeedLayer();else drawWorksOnMap();renderWorks();
   PLAN.trips=[];PLAN.fleet=[];PLAN.dropped=[];DONE.clear();KNOWN.clear();for(const t of [...trains])removeTrainGfx(t);trains.length=0;FORM=null;
-  syncRuntime();bootPositions();applyPlan('Cleared the timetable, fleet, added stations and added track: a blank slate');setSubtitle();
-  toast('Blank slate','The timetable, fleet, added stations and added track are cleared. The corridor, track works and station edits are kept.');};
+  syncRuntime();bootPositions();applyPlan('Cleared the timetable, fleet, added stations, added track and track works: a blank slate');setSubtitle();
+  toast('Blank slate','The timetable, fleet, added stations, added track and track works are cleared, leaving the basic restoration of the corridor. Station edits are kept; Reset brings back the starting plan.');};
 $('btn-reset').onclick=e=>{const b=e.currentTarget;if(b.dataset.armed){TRACKSPEC=normTrack(null);applyStations({});PLAN=defaultPlan($('tt-preset').value);autoSidings(PLAN);DONE.clear();KNOWN.clear();for(const t of [...trains]){removeTrainGfx(t);}trains.length=0;FORM=null;
     syncRuntime();bootPositions();applyPlan('Restored the starting timetable, the original stations and the original track');b.textContent='Reset to starting timetable';delete b.dataset.armed;}
   else{b.dataset.armed='1';b.textContent='Confirm reset (discards your edits)';setTimeout(()=>{if(b.isConnected&&b.dataset.armed){delete b.dataset.armed;b.textContent='Reset to starting timetable';}},4000);}};
