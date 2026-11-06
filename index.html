@@ -105,6 +105,8 @@ button{font:inherit;color:inherit}
 body.maxmap-on{overflow:hidden}
 .mapctl button{width:34px;height:34px;border-radius:6px;border:1px solid var(--line);background:var(--chip);cursor:pointer;font-size:17px;line-height:1;display:grid;place-items:center}
 .mapctl button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+#locbtn.follow{background:#1a73e8;color:#fff;border-color:#1a73e8}#locbtn.wait svg{animation:locpulse 1s ease-in-out infinite}@keyframes locpulse{50%{opacity:.35}}
+.locacc{fill:#1a73e8;fill-opacity:.12;stroke:#1a73e8;stroke-opacity:.45;stroke-width:1;vector-effect:non-scaling-stroke}.locme .lo{fill:#fff}.locme .li{fill:#1a73e8}.locme .lh{fill:#1a73e8;opacity:.35}.locme{cursor:pointer}#maptop .locme{pointer-events:auto}
 .legend{position:absolute;left:10px;top:10px;background:color-mix(in srgb,var(--panel) 88%,transparent);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:11.5px;display:grid;gap:4px;backdrop-filter:blur(4px)}
 .legend div{display:flex;align-items:center;gap:8px}
 .legend svg{flex:none}
@@ -1038,6 +1040,7 @@ circle.th.limit{fill:#d0393b!important;stroke:#fff}
         <button id="zisl" title="Show whole island" aria-label="Show whole island" class="zisl">▢</button>
         <button id="layersbtn" title="Layers" aria-label="Layers and info panels" aria-pressed="false" aria-expanded="false" aria-controls="layerpanel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/><path d="M3 17.5l9 5 9-5" opacity=".55"/></svg></button>
         <button id="measbtn" title="Measure distance (M)" aria-label="Measure distance" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17L17 3l4 4L7 21z"/><path d="M7 13l2 2M10 10l2 2M13 7l2 2" stroke-width="1.6"/></svg></button>
+        <button id="locbtn" title="Show my location" aria-label="Show my location on the map" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="6"/><circle class="locdot" cx="12" cy="12" r="2.2" fill="currentColor"/></svg></button>
         <button id="follow" title="Follow selected train" aria-label="Follow selected train" aria-pressed="false">◎</button>
         <button id="fsbtn" title="Full screen" aria-label="Full screen map" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="fs-in" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><path class="fs-out" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button>
       </div>
@@ -2248,7 +2251,7 @@ const ptrs=new Map();let dragMoved=0,pinch0=null;
 svg.addEventListener('pointerdown',e=>{WRAP_R=null;ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});dragMoved=0;if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch0={d:Math.hypot(a.x-b.x,a.y-b.y),w:vb.w};}svg.classList.add('drag');});
 svg.addEventListener('pointermove',e=>{const p=ptrs.get(e.pointerId);if(!p)return;const dx=e.clientX-p.x,dy=e.clientY-p.y;p.x=e.clientX;p.y=e.clientY;
   if(ptrs.size===2&&pinch0){const [a,b]=[...ptrs.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);zoomAt(vb.w/(pinch0.w/(d/pinch0.d)),(a.x+b.x)/2,(a.y+b.y)/2,true);dragMoved+=10;return;}
-  dragMoved+=Math.abs(dx)+Math.abs(dy);if(dragMoved>4){try{if(!svg.hasPointerCapture(e.pointerId))svg.setPointerCapture(e.pointerId);}catch(_){}follow=false;$('follow').setAttribute('aria-pressed','false');}vb.x-=dx/ppu;vb.y-=dy/ppu;gestureVB();});
+  dragMoved+=Math.abs(dx)+Math.abs(dy);if(dragMoved>4){if(LOC.mode===2)locMode(1,'Stopped following your location. Click the location button to follow again.');try{if(!svg.hasPointerCapture(e.pointerId))svg.setPointerCapture(e.pointerId);}catch(_){}follow=false;$('follow').setAttribute('aria-pressed','false');}vb.x-=dx/ppu;vb.y-=dy/ppu;gestureVB();});
 const endPtr=e=>{ptrs.delete(e.pointerId);if(ptrs.size<2)pinch0=null;if(!ptrs.size)svg.classList.remove('drag');};
 svg.addEventListener('pointerup',endPtr);svg.addEventListener('pointerleave',e=>{if(!svg.hasPointerCapture(e.pointerId))endPtr(e);});svg.addEventListener('pointercancel',endPtr);
 svg.addEventListener('click',()=>{if(dragMoved<5)hideTip(true);});
@@ -2419,6 +2422,42 @@ svg.addEventListener('pointermove',e=>{if(!MEAS.on||!PROF.S||MEAS.drag||ptrs.siz
   for(let i=0;i<PROF.S.length;i++){const s=PROF.S[i],d=Math.hypot(s.xy[0]-q[0],s.xy[1]-q[1]);if(d<bd){bd=d;bi=i;}}
   if(bd*ppu<10)profHover(bi);else if(PROF.hov>=0)profHover(-1);});
 window.addEventListener('resize',()=>{if(PROF.S&&!$('measprof').hidden)profPaint();});
+/* the viewer's own location: one click pins it, a second click follows it (for riding in a vehicle), a third turns it off.
+   The position stays in this browser; nothing is sent anywhere. Outside the map's area it only says so. */
+var LOC={mode:0,watch:null,fix:null,g:null,acc:null,sc:null,warned:false};
+function locInMap(lon,lat){return lon>=B.w&&lon<=B.e&&lat>=B.s&&lat<=B.n;}
+function locBtn(){const b=$('locbtn');b.classList.toggle('follow',LOC.mode===2);b.setAttribute('aria-pressed',String(LOC.mode>0));
+  b.title=LOC.mode===0?'Show my location':LOC.mode===1?'Follow my location (keeps the map centred on you while you move)':'Stop showing my location';}
+function locClear(){if(LOC.watch!=null){try{navigator.geolocation.clearWatch(LOC.watch);}catch(_){}LOC.watch=null;}if(LOC.g){LOC.g.remove();LOC.g=null;}if(LOC.acc){LOC.acc.remove();LOC.acc=null;}
+  if(LOC.sc){const i=SC.indexOf(LOC.sc);if(i>=0)SC.splice(i,1);LOC.sc=null;}LOC.fix=null;$('locbtn').classList.remove('wait');}
+function locMode(m,msg){if(m===0)locClear();LOC.mode=m;locBtn();if(msg)toast('Your location',msg);}
+function locHere(){const f=LOC.fix;if(!f)return '';const xy=P([f.lon,f.lat]);let txt='';
+  try{const q=snapToRail(xy[0],xy[1]);if(q){const km=q.d/PX_PER_KM;txt+=`${km<1?Math.round(km*1000)+' m':km.toFixed(1)+' km'} from the E&N (${TRKSPD[q.line].sub} MP ${kToMP(q.line,q.k).toFixed(1)})`;}}catch(_){}
+  try{let best=null,bd=1e9;for(const [c,st] of Object.entries(STATIONS)){const p=lineAt(st.line,st.k),d=Math.hypot(p[0]-xy[0],p[1]-xy[1]);if(d<bd){bd=d;best=st;}}if(best)txt+=`${txt?' · ':''}nearest station ${best.n} (${bd/PX_PER_KM<1?Math.round(bd/PX_PER_KM*1000)+' m':(bd/PX_PER_KM).toFixed(1)+' km'})`;}catch(_){}
+  return txt;}
+function locDraw(){const f=LOC.fix;if(!f)return;const xy=P([f.lon,f.lat]);
+  if(!LOC.acc){LOC.acc=el('circle',{class:'locacc'},svgTop);}
+  LOC.acc.setAttribute('cx',xy[0].toFixed(3));LOC.acc.setAttribute('cy',xy[1].toFixed(3));LOC.acc.setAttribute('r',Math.max(0,(f.acc||0)/1000*PX_PER_KM).toFixed(3));
+  if(!LOC.g){LOC.g=scg(xy[0],xy[1],svgTop,0);LOC.g.setAttribute('class','locme');LOC.sc=SC[SC.length-1];
+    el('path',{class:'lh',d:'M0,-20 L7,-6 L-7,-6 Z'},LOC.g);el('circle',{r:9,class:'lo'},LOC.g);el('circle',{r:6.5,class:'li'},LOC.g);
+    LOC.g.addEventListener('pointerenter',e=>{if(!tipPinned)placeTip(e,`<h4>You are here</h4><div class="m">${esc(locHere())}</div><div class="m">Accurate to about ${Math.round(LOC.fix.acc||0)} m${LOC.fix.spd!=null&&LOC.fix.spd>.5?` · moving at ${Math.round(LOC.fix.spd*3.6)} km/h`:''}. Your location stays in this browser.</div>`);});
+    LOC.g.addEventListener('pointerleave',()=>{if(!tipPinned)$('tip').hidden=true;});}
+  const head=LOC.g.querySelector('.lh');const hd=f.hdg!=null&&f.spd!=null&&f.spd>1?f.hdg:null;head.style.display=hd==null?'none':'';if(hd!=null)head.setAttribute('transform',`rotate(${hd.toFixed(0)})`);
+  LOC.sc.x=xy[0];LOC.sc.y=xy[1];LOC.sc.sc='';LOC.sc.vis=undefined;updateSC();}
+function locCentre(first){const f=LOC.fix;if(!f)return;const xy=P([f.lon,f.lat]);if(first&&vb.w>40){vb.w=40;}const r=wrapRect();vb.h=vb.w/((r.width/r.height)||1);
+  vb.x=xy[0]-vb.w/2;vb.y=xy[1]-vb.h/2;applyVB();}
+function locFix(pos,first){const c=pos.coords;
+  if(!locInMap(c.longitude,c.latitude)){const was=LOC.mode;locMode(0);toast('Your location',was&&!first?'You have left the area this map covers, so your location is no longer shown.':'You are outside the area this map covers (southern and central Vancouver Island, from Victoria to Courtenay and Port Alberni), so there is nothing to show.');return;}
+  LOC.fix={lon:c.longitude,lat:c.latitude,acc:c.accuracy,hdg:c.heading,spd:c.speed};$('locbtn').classList.remove('wait');locDraw();
+  if(first||LOC.mode===2)locCentre(first);}
+function locErr(e){const was=LOC.mode;locMode(0);toast('Your location',e&&e.code===1?'Location access was not allowed. You can allow it for this site in your browser’s settings.':e&&e.code===3?'Finding your location took too long. Try again outdoors or with location services on.':'Your location is not available right now'+(was?'':'.')+(window.isSecureContext===false?' (location needs a secure https page).':'.'));}
+function locWatch(){if(LOC.watch!=null)return;LOC.watch=navigator.geolocation.watchPosition(p=>{if(LOC.mode)locFix(p,false);},e=>{if(e&&e.code===1)locErr(e);/* a lost signal (tunnel, cutting) keeps the last position and waits for the next one */},{enableHighAccuracy:true,maximumAge:2000,timeout:30000});}
+$('locbtn').onclick=()=>{
+  if(!('geolocation' in navigator)){toast('Your location','This browser cannot share its location.');return;}
+  if(LOC.mode===0){$('locbtn').classList.add('wait');LOC.mode=1;locBtn();if(window.__track)__track('locate',false);
+    navigator.geolocation.getCurrentPosition(p=>{if(!LOC.mode)return;locFix(p,true);if(LOC.mode){locWatch();toast('Your location','Pinned on the map. Click the location button again to follow it while you travel.');}},locErr,{enableHighAccuracy:true,maximumAge:10000,timeout:20000});}
+  else if(LOC.mode===1){locMode(2);locWatch();locCentre(false);toast('Your location','Following your location. Drag the map or click the button again to stop.');}
+  else locMode(0,'No longer showing your location.');};
 const centerOf=()=>{const r=wrapRect();return[r.left+r.width/2,r.top+r.height/2];};
 $('zin').onclick=()=>zoomAt(1.6,...centerOf());$('zout').onclick=()=>zoomAt(1/1.6,...centerOf());
 $('zfit').onclick=()=>{follow=false;$('follow').setAttribute('aria-pressed','false');fit();};
