@@ -105,6 +105,7 @@ button{font:inherit;color:inherit}
 body.maxmap-on{overflow:hidden}
 .mapctl button{width:34px;height:34px;border-radius:6px;border:1px solid var(--line);background:var(--chip);cursor:pointer;font-size:17px;line-height:1;display:grid;place-items:center}
 .mapctl button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+#follow.wait{outline:2px solid #1a73e8;outline-offset:1px}
 #locbtn.follow{background:#1a73e8;color:#fff;border-color:#1a73e8}#locbtn.wait svg{animation:locpulse 1s ease-in-out infinite}@keyframes locpulse{50%{opacity:.35}}
 .locacc{fill:#1a73e8;fill-opacity:.12;stroke:#1a73e8;stroke-opacity:.45;stroke-width:1;vector-effect:non-scaling-stroke}.locme .lo{fill:#fff}.locme .li{fill:#1a73e8}.locme .lh{fill:#1a73e8;opacity:.35}.locme{cursor:pointer}#maptop .locme{pointer-events:auto}
 .legend{position:absolute;left:10px;top:10px;background:color-mix(in srgb,var(--panel) 88%,transparent);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:11.5px;display:grid;gap:4px;backdrop-filter:blur(4px)}
@@ -1041,7 +1042,7 @@ circle.th.limit{fill:#d0393b!important;stroke:#fff}
         <button id="layersbtn" title="Layers" aria-label="Layers and info panels" aria-pressed="false" aria-expanded="false" aria-controls="layerpanel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/><path d="M3 17.5l9 5 9-5" opacity=".55"/></svg></button>
         <button id="measbtn" title="Measure distance (M)" aria-label="Measure distance" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17L17 3l4 4L7 21z"/><path d="M7 13l2 2M10 10l2 2M13 7l2 2" stroke-width="1.6"/></svg></button>
         <button id="locbtn" title="Show my location" aria-label="Show my location on the map" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="6"/><circle class="locdot" cx="12" cy="12" r="2.2" fill="currentColor"/></svg></button>
-        <button id="follow" title="Follow selected train" aria-label="Follow selected train" aria-pressed="false">◎</button>
+        <button id="follow" title="Follow a moving train, bus, ferry, plane or ship" aria-label="Follow a moving vehicle" aria-pressed="false">◎</button>
         <button id="fsbtn" title="Full screen" aria-label="Full screen map" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="fs-in" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><path class="fs-out" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button>
       </div>
 <div class="srpanel" id="srpanel" hidden role="search"><div class="srbar"><input id="sr-q" type="search" placeholder="Search places, addresses, stations…" aria-label="Search places and addresses" autocomplete="off" spellcheck="false"><button id="sr-x" type="button" aria-label="Close search">×</button></div><div class="srres" id="sr-res" hidden></div><div class="srinfo" id="sr-info" hidden></div><div class="srfoot">Places beyond the map come from OpenStreetMap (Photon / Nominatim).</div></div>
@@ -2026,7 +2027,7 @@ function makeTrainGfx(t){
   el('path',{d:'M-3.4 4.6L-6.6 9.6M3.4 4.6L6.6 9.6M-5.2 7.3H5.2',class:'tico-rail'},t.icon);
   t.tx=el('text',{x:21,y:4,'font-size':11,'text-anchor':'start',class:'tnum'},inner);
   t.warn=el('g',{transform:'translate(11,-11)'},inner);el('circle',{r:5.5,class:'warn'},t.warn);el('text',{y:3.4,'font-size':9,'text-anchor':'middle'},t.warn).textContent='!';
-  t.g=g;g.addEventListener('click',e=>{e.stopPropagation();select(t.id,true);});
+  t.g=g;g.addEventListener('click',e=>{e.stopPropagation();select(t.id,true);folSet({k:'train',id:t.id});if(FOL_PICK||follow)folStart();});
 }
 function styleTrainGfx(t){t.ring.setAttribute('stroke',t.color);t.arrow.setAttribute('fill',t.color);t.pill.setAttribute('fill',t.color);t.icoD.setAttribute('fill',t.color);t.tx.style.stroke=t.color;t.g.querySelector('title')?.remove();el('title',{},t.g).textContent=`${t.name} · ${t.ty.name}`;}
 function removeTrainGfx(t){t.g.remove();if(selected===t.id){selected=null;routeHi.setAttribute('points','');}}
@@ -2462,7 +2463,38 @@ const centerOf=()=>{const r=wrapRect();return[r.left+r.width/2,r.top+r.height/2]
 $('zin').onclick=()=>zoomAt(1.6,...centerOf());$('zout').onclick=()=>zoomAt(1/1.6,...centerOf());
 $('zfit').onclick=()=>{follow=false;$('follow').setAttribute('aria-pressed','false');fit();};
 $('zisl').onclick=()=>{follow=false;$('follow').setAttribute('aria-pressed','false');fit(FIT_ISL);};
-$('follow').onclick=()=>{if(!selected)select(trains[0].id,false);follow=!follow;$('follow').setAttribute('aria-pressed',String(follow));if(follow&&vb.w>300){const t=trains.find(x=>x.id===selected);zoomTo(t,220);}};
+/* following anything that moves: trains, buses, ferries, planes and tankers. Click a vehicle to choose it, then the follow button
+   (or the Follow button in its card); with nothing chosen, the follow button asks you to click one. */
+var FOL=null,FOL_PICK=false;
+function folSet(o){FOL=o;}
+function ferryXY(r,s){const u=xpActive(s.d,s.t,xpNow());if(u<0)return null;const q=xpAt(r.P[s.leg],s.dir?1-u:u);return[q[0],q[1]];}
+function planeXY(f){const s=f.t==='d'?f.m:f.m-f.dur,u=xpActive(s,f.dur,xpNow());if(u<0)return null;const prog=f.t==='d'?u:1-u,frac=f.ap==='VHB'?prog:Math.min(1,prog*f.dur*KMPM/f.km);
+  return[f.o[0]+(f.d[0]-f.o[0])*frac,f.o[1]+(f.d[1]-f.o[1])*frac];}
+function folPos(o){o=o||FOL;if(!o)return null;try{
+  if(o.k==='train'){const t=trains.find(x=>x.id===o.id);return t&&t.xy;}
+  if(o.k==='bus'){if(busG.style.display==='none')return null;const q=busPos.find(q=>q[2]===o.t);return q&&[q[0],q[1]];}
+  if(o.k==='ferry')return ferryG.style.display==='none'?null:ferryXY(o.r,o.s);
+  if(o.k==='plane')return airG.style.display==='none'?null:planeXY(o.f);
+  if(o.k==='ship'){if(tkG.style.display==='none')return null;const sh=TK.ships.find(x=>x.mmsi===o.mmsi);return sh&&P(tkNow(sh));}}catch(_){}return null;}
+function folName(o){return o.k==='train'?`train ${o.id}`:o.n;}
+function folStart(){const xy=folPos();if(!xy){toast('Follow','That vehicle is no longer on the map.');return;}follow=true;$('follow').setAttribute('aria-pressed','true');FOL_PICK=false;$('follow').classList.remove('wait');
+  if(vb.w>300){const r=wrapRect();vb.w=220;vb.h=vb.w/((r.width/r.height)||1);}vb.x=xy[0]-vb.w/2;vb.y=xy[1]-vb.h/2;applyVB();toast('Follow',`Following ${folName(FOL)}. Drag the map or click the follow button to stop.`);}
+function folStop(msg){follow=false;$('follow').setAttribute('aria-pressed','false');if(msg)toast('Follow',msg);}
+// the moving vehicle (other than a train) nearest a map point, from the layers that are switched on
+function folNearest(x,y,lim){let best=null,bd=lim*lim;const tryP=(xy,o)=>{if(!xy)return;const d=(xy[0]-x)**2+(xy[1]-y)**2;if(d<bd){bd=d;best=o;}};
+  if(window.__busReady&&busG.style.display!=='none')for(const q of busPos){const t=q[2],R=BROUTES[t.r],S=BSYS[R.si];if((q[0]-x)**2+(q[1]-y)**2<bd)tryP(q,{k:'bus',t,n:`bus ${R.sh} (${S.n})`});}
+  if(ferryG.style.display!=='none'&&typeof FR!=='undefined')for(const r of FR)for(const s of r.sail){const xy=ferryXY(r,s);if(xy)tryP(xy,{k:'ferry',r,s,n:`the ${r.n} ferry`});}
+  if(airG.style.display!=='none'&&typeof FL!=='undefined')for(const f of FL){const xy=planeXY(f);if(xy)tryP(xy,{k:'plane',f,n:`flight ${f.t==='d'?'to':'from'} ${f.c}`});}
+  if(tkG.style.display!=='none'&&typeof TK!=='undefined')for(const sh of TK.ships)tryP(P(tkNow(sh)),{k:'ship',mmsi:sh.mmsi,n:sh.name||'the tanker'});
+  return best;}
+svg.addEventListener('click',e=>{if(dragMoved>=5||MEAS.on||placing||drawing||WORK_PICK)return;const [x,y]=toSvg(e);const o=folNearest(x,y,14/ppu);if(!o)return;
+  e.stopPropagation();folSet(o);if(FOL_PICK||follow){folStart();return;}
+  tipPinned={fol:1};placeTip(e,`<h4>${esc(folName(o).replace(/^./,c=>c.toUpperCase()))}</h4><div class="m">Moving now on the map.</div><div class="pbtns"><button class="btn sm primary" id="fol-go" type="button">Follow</button><button class="btn sm" id="tip-close" type="button">Close</button></div>`);
+  $('tip').classList.add('act');$('tip-close').onclick=()=>hideTip(true);$('fol-go').onclick=()=>{hideTip(true);folStart();};},true);
+$('follow').onclick=()=>{if(follow){folStop();return;}
+  if(FOL&&folPos()){folStart();return;}
+  FOL_PICK=!FOL_PICK;$('follow').classList.toggle('wait',FOL_PICK);
+  if(FOL_PICK)toast('Follow','Click a train, bus, ferry, plane or ship on the map to follow it. Buses, ferries, planes and ships need their layer switched on.');};
 function zoomTo(t,w){vb.w=w;const r=wrapRect();vb.h=w*r.height/r.width;vb.x=t.xy[0]-vb.w/2;vb.y=t.xy[1]-vb.h/2;applyVB();}
 /* ---------- bus priority lanes: OpenStreetMap bus lanes (read 19 Oct 2026) plus BC Transit's built, under-construction and planned transit priority projects ---------- */
 const BP_GEO={"douglas":"-12336693,4843834,-257,465,-245,408,-149,230,-175,292,-74,139,-2,16,-61,71,-56,40,-41,20;-12337793,4845513,64,-29,49,-32,43,-40,24,-33,20,-11;-12336693,4843834,227,-417,16,-391","hwy1":"-12339247,4845810,145,2,135,-22,939,-214,155,-38,80,-25;-12341160,4846190,-383,185,-79,25,-49,10,-143,12;-12337753,4845515,-97,32,-1155,265,-143,22,-119,2;-12341227,4846212,79,-38,67,-39,95,-43,269,-93,35,-19,42,-34;-12339561,4845831,-97,-1,-127,7,-137,21,-144,28,-213,63,-181,64","ravine":"-12337749,4845644,15,5,86,85;-12337589,4845791,-59,-57","mctavish":"-12341349,4862992,71,-2,12,8,-1,9,-7,3,-57,-1,-13,4,-5,14,9,8,16,4,37,-1,9,-6,-3,-27,-9,-7","uptown":"-12337871,4846743,-12,12,-13,37,4,17;-12337724,4845502,-1,-8,38,-27,7,-15","mtnewton":"-12339828,4859438,-31,-64;-12339825,4859366,36,79","bos":"-12345526,4846134,1329,112,376,37,469,84,154,17,122,6,451,-5,322,14,210,3,268,11,89,-3,45,-6,90,-19,51,-17,323,-156;-12341214,4846217,-301,147,-107,36,-90,16,-102,6,-240,-10,-323,1,-271,-10,-365,6,-131,-4,-198,-18,-395,-72,-138,-19,-1643,-143","ihcol":"-12346704,4844511,-80,-106,-73,-81;-12345882,4845692,-21,-49,-20,-26,-30,-26,-143,-96,-59,-52,-46,-48,-92,-121,-81,-120,-128,-218,-204,-411,2,-14,16,11,150,313,107,197,178,272,48,66,68,74,85,69,120,80,28,28,20,33","ihvr":"-12345454,4846071,-52,-31,-195,-99,-52,-34,-34,-29,-36,-50,-74,-172;-12345884,4845654,72,164,35,50,55,44,234,120","dtown":"-12336454,4843119,10,-261,-3,-51,-127,-498,-34,-103,-28,-183","mckenzie":"-12337726,4846846,1690,207,375,51,150,37,376,50,270,26,71,-5,209,-35,70,-14,68,-24,50,-28,273,-212,51,-22,58,-11,408,-4,1492,-1,164,-3,20,-6,141,-1,250,11,176,13,159,17,51,1,65,-10,44,-17,248,-140,16,-26;-12340549,4845941,128,80,79,60,7,16,109,97,140,144,55,43,201,134,86,48,76,31,74,19,72,11,424,24,692,83,68,9,273,56,234,31,105,19,-175,-13,-141,-17,-401,-76,-678,-83,-358,-19,-74,-10,-62,-12,-101,-32,-63,-32,-51,-37;-12340335,4846097,-213,-140;-12330759,4846712,-68,44,-194,110,-53,23,-53,11,-55,2,-363,-31,-406,-13"};
@@ -5736,7 +5768,7 @@ function frame(now){
     t.g.setAttribute('transform',`translate(${t.xy[0].toFixed(2)} ${t.xy[1].toFixed(2)}) scale(${(inv*(t.id===selected?Math.max(TRAIN_SC,.8):TRAIN_SC)).toFixed(4)})`);
     t.arrow.style.display=t.trip?'':'none';t.arrow.setAttribute('transform',`rotate(${(ang*180/Math.PI).toFixed(1)})`);
     t.warn.style.display=t.blocked>.5?'':'none';t.g.classList.toggle('idle',!t.trip);t.g.classList.toggle('ecs',!!(t.trip&&t.trip.cls==='Empty'));}
-  if(selected&&follow){const t=trains.find(x=>x.id===selected);if(t){vb.x+=(t.xy[0]-vb.w/2-vb.x)*.12;vb.y+=(t.xy[1]-vb.h/2-vb.y)*.12;applyVB();}}
+  if(follow){const xy=folPos();if(xy){vb.x+=(xy[0]-vb.w/2-vb.x)*.12;vb.y+=(xy[1]-vb.h/2-vb.y)*.12;applyVB();}else folStop(FOL&&FOL.k!=='train'?`${folName(FOL).replace(/^./,c=>c.toUpperCase())} has reached the end of its trip, or its layer was switched off.`:'');}
   // dense moving layers (flow dots, buses, ferries, planes) update every frame on a fast device; when frames take longer than
   // about 30 ms they update every second or third frame instead, so the trains stay smooth on slower phones and laptops
   frEMA=frEMA*.9+dt*100;const every=frEMA>55?3:frEMA>30?2:1;denseDt+=dt;
