@@ -2457,7 +2457,7 @@ $('locbtn').onclick=()=>{
   if(!('geolocation' in navigator)){toast('Your location','This browser cannot share its location.');return;}
   if(LOC.mode===0){$('locbtn').classList.add('wait');LOC.mode=1;locBtn();if(window.__track)__track('locate',false);
     navigator.geolocation.getCurrentPosition(p=>{if(!LOC.mode)return;locFix(p,true);if(LOC.mode){locWatch();toast('Your location','Pinned on the map. Click the location button again to follow it while you travel.');}},locErr,{enableHighAccuracy:true,maximumAge:10000,timeout:20000});}
-  else if(LOC.mode===1){locMode(2);locWatch();locCentre(false);toast('Your location','Following your location. Drag the map or click the button again to stop.');}
+  else if(LOC.mode===1){const wasV=follow&&FOL;if(follow){follow=false;$('follow').setAttribute('aria-pressed','false');}locMode(2);locWatch();locCentre(false);toast('Your location',wasV?`Stopped following ${folName(wasV)} to follow your location.`:'Following your location. Drag the map or click the button again to stop.');}
   else locMode(0,'No longer showing your location.');};
 const centerOf=()=>{const r=wrapRect();return[r.left+r.width/2,r.top+r.height/2];};
 $('zin').onclick=()=>zoomAt(1.6,...centerOf());$('zout').onclick=()=>zoomAt(1/1.6,...centerOf());
@@ -2477,8 +2477,8 @@ function folPos(o){o=o||FOL;if(!o)return null;try{
   if(o.k==='plane')return airG.style.display==='none'?null:planeXY(o.f);
   if(o.k==='ship'){if(tkG.style.display==='none')return null;const sh=TK.ships.find(x=>x.mmsi===o.mmsi);return sh&&P(tkNow(sh));}}catch(_){}return null;}
 function folName(o){return o.k==='train'?`train ${o.id}`:o.n;}
-function folStart(){const xy=folPos();if(!xy){toast('Follow','That vehicle is no longer on the map.');return;}follow=true;$('follow').setAttribute('aria-pressed','true');FOL_PICK=false;$('follow').classList.remove('wait');
-  if(vb.w>300){const r=wrapRect();vb.w=220;vb.h=vb.w/((r.width/r.height)||1);}vb.x=xy[0]-vb.w/2;vb.y=xy[1]-vb.h/2;applyVB();toast('Follow',`Following ${folName(FOL)}. Drag the map or click the follow button to stop.`);}
+function folStart(){const xy=folPos();if(!xy){toast('Follow','That vehicle is no longer on the map.');return;}const wasLoc=LOC.mode===2;if(wasLoc){LOC.mode=1;locBtn();}follow=true;$('follow').setAttribute('aria-pressed','true');FOL_PICK=false;$('follow').classList.remove('wait');
+  if(vb.w>300){const r=wrapRect();vb.w=220;vb.h=vb.w/((r.width/r.height)||1);}vb.x=xy[0]-vb.w/2;vb.y=xy[1]-vb.h/2;applyVB();toast('Follow',wasLoc?`Stopped following your location to follow ${folName(FOL)}; your blue dot stays on the map.`:`Following ${folName(FOL)}. Drag the map or click the follow button to stop.`);}
 function folStop(msg){follow=false;$('follow').setAttribute('aria-pressed','false');if(msg)toast('Follow',msg);}
 // the moving vehicle (other than a train) nearest a map point, from the layers that are switched on
 function folNearest(x,y,lim){let best=null,bd=lim*lim;const tryP=(xy,o)=>{if(!xy)return;const d=(xy[0]-x)**2+(xy[1]-y)**2;if(d<bd){bd=d;best=o;}};
