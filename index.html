@@ -697,6 +697,7 @@ i.bpk{display:inline-block;width:22px;height:0;border-top:4px solid var(--bp);fl
 .cprow.off .cpn{opacity:.6}
 .xglist{display:grid;gap:4px;margin:6px 0;max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:var(--panel)}
 .xglist>.m{font-size:11.5px}.xgrow{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px}.xgrow .m{font-size:11px}.xgrow>span{flex:1;min-width:0}.xgrow select{flex:none;width:120px;font:inherit;font-size:12px;padding:2px 4px;border:1.5px solid var(--ctl-line);border-radius:5px;background:var(--ctl-bg);color:var(--ink)}
+.clpage .clv{max-width:820px;margin:0 0 14px}.clpage .clv h2{font-size:17px;margin:0 0 4px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}.clpage .clv h2 .m{font-size:12.5px;font-weight:400}.clpage .clv ul{margin:0;padding-left:20px}.clpage .clv li{margin:2px 0;line-height:1.45}
 .cptip{position:fixed;z-index:60;max-width:360px;background:var(--ink);color:var(--bg);border-radius:8px;padding:9px 11px;font-size:12.5px;line-height:1.45;box-shadow:0 6px 20px rgba(0,0,0,.25);pointer-events:none}
 .cptip b{display:block;margin-bottom:3px}
 @media (max-width:600px){.cprow{grid-template-columns:minmax(0,1fr) 92px 58px;row-gap:4px}.cprow .cpu,.cprow .cpst{display:none}.cprow.hd span:nth-child(3),.cprow.hd span:nth-child(4){display:none}}
@@ -935,7 +936,7 @@ circle.th.limit{fill:#d0393b!important;stroke:#fff}
           <div class="setrow palrow"><span>Colour theme</span><div class="palsel"><i aria-hidden="true"></i><select id="set-pal" aria-label="Colour theme"><option value="standard">Standard</option><option value="chart">Chart (default)</option><option value="forest">Forest</option><option value="night">Night (dark)</option><option value="contrast">High contrast</option><option value="vibrant">Vibrant</option><option value="sunset">Sunset (dark)</option><option value="arctic">Arctic</option><option value="graphite">Graphite (dark)</option></select></div></div>
           <label class="setexp"><input type="checkbox" id="set-exp"><span><b>Experimental mode</b><span class="m">Shows the planning tools: Timetable, Fleet, Stations, Track, Works and Plan panels. These are early and still changing.</span></span></label>
           <div class="sharebox"><div><b>Share this view</b><span class="m">Saves the layers, colour theme, map position and clock, plus the timetable, fleet, stations, track changes and works, as a short link. Nothing is saved until you create a link, and no personal information is stored.</span></div><button type="button" class="btn" id="share-make">Create share link</button><div class="shareout" id="share-out" hidden><input id="share-url" readonly aria-label="Share link"><button type="button" class="btn" id="share-copy">Copy</button></div><div class="m" id="share-msg" role="status"></div></div>
-          <div class="pbtns"><button type="button" class="btn sm" id="set-tour">Take the tour</button><button type="button" class="btn sm" id="set-tour2">Tour the planning tools</button></div>
+          <div class="pbtns"><button type="button" class="btn sm" id="set-tour">Take the tour</button><button type="button" class="btn sm" id="set-tour2">Tour the planning tools</button><button type="button" class="btn sm" id="set-changes">Change log</button></div>
           <p class="m">Settings are remembered in this browser.</p>
         </div></div>
     </div>
@@ -967,6 +968,10 @@ circle.th.limit{fill:#d0393b!important;stroke:#fff}
     <div class="cpbar"><span id="cp-sum" class="m"></span><span class="grow"></span><button class="btn sm" id="cp-resetall" type="button">Reset all to defaults</button></div>
     <div class="srcbody" id="cp-body"></div>
     <div class="cptip" id="cp-tip" role="tooltip" hidden></div>
+  </section>
+  <section class="trainpage srcpage clpage" id="clpage" hidden aria-label="Change log">
+    <div class="tptop"><button class="btn" id="cl-back" type="button">← Back to the map</button><h1>Change log</h1><span class="m">The major changes to the Island Rail Corridor Planner, newest first</span></div>
+    <div class="srcbody" id="cl-body"></div>
   </section>
   <section class="trainpage pfpage" id="pfpage" hidden aria-label="Track profiles">
     <style>
@@ -4247,6 +4252,52 @@ const TRAIL_KM={vic:209,alb:61};// corridor km without trail today: Victoria Sub
 const TRAIL_RATE=595800/1e6*ESC23;// $M per km, FORT-VI corridor average incl. bridge decking, crossings, engineering and contingency (2023), escalated
 const OVH=[['Construction supervision',.10],['Engineering',.12],['Project management',.10],['First Nations consultation',.15]];// IRCCA percentages, CVRD Table H-6
 function costOpts(){const o=PLAN.costOpts||(PLAN.costOpts={});if(o.v!==44){o.v=44;o.alb=o.alb!==false;o.trailN=true;o.cont=50;}if(typeof o.cont!=='number')o.cont=o.cont?50:0;return o;}
+/* ---------- change log (Settings → Change log): the major versions, newest first ---------- */
+const CHANGELOG=[
+ ['127','5 Nov 2026',['Change log in Settings.']],
+ ['126','5 Nov 2026',['Following your location and following a vehicle now cancel each other, so only one is ever on.']],
+ ['125','5 Nov 2026',['The follow button follows anything that moves: trains, buses, ferries, planes and live tanker ships. Click a vehicle, then Follow.']],
+ ['124','5 Nov 2026',['My location button: pins where you are, follows you while you travel, and says so when you are outside the map’s area. Your location stays in your browser.']],
+ ['123','4 Nov 2026',['The measuring tool’s height profile shows sea level and the sea-floor depth where a line crosses water (GMRT).']],
+ ['122','4 Nov 2026',['Starting from a blank slate also clears the track works, leaving only the basic restoration of the corridor.']],
+ ['121','4 Nov 2026',['Smoother panning and zooming: shapes and markers far off screen are left out of the drawing.','The Costs page opens from the Plan tab.']],
+ ['119–120','4 Nov 2026',['All 200 main-line level crossings from the Transport Canada Grade Crossings Inventory on the map, with protection and traffic.','Out-of-service notice for the right-of-way damage at the Shawnigan Heights development (MP 22.15).']],
+ ['118','4 Nov 2026',['Costs page: a rate card per km, per crossing and per item that every work is priced from. Planners can change any rate; changes travel in shared links.','Crossing works priced crossing by crossing, with a choice for each crossing (gates, warning time, close or leave).']],
+ ['117','4 Nov 2026',['Track works done together with the restoration are costed only for what they add.']],
+ ['115–116','4 Nov 2026',['Renamed Island Rail Corridor Planner.','Track edits are held to railway curve limits (minimum radius setting).']],
+ ['113–114','3 Nov 2026',['Height profile for the measuring tool, in metric and imperial.','Measured lines follow the track when snapped to it.']],
+ ['110–112','2 Nov 2026',['Anonymous usage statistics and a public statistics page, including the number of saved plans.','Trail and bike counters with hourly charts and annual trips, and a season switch.']],
+ ['106–109','31 Oct – 1 Nov 2026',['First Nation reserve lands, labelled with the Nation, and marked where the railway needs the Nation’s permission.','Wellcox branch in Nanaimo.','Measuring tool with metric and imperial lengths.','Pinned popups stay put.']],
+ ['102–105','31 Oct 2026',['Credibility fixes to costs and timetables.','Ridership shown as ranges by method; faster map; phone layout; introductory and planning-tool tours.']],
+ ['97–101','30–31 Oct 2026',['Timetables fitted to the track with the fewest trainsets.','Train and bus badges that scale with zoom, BC Transit route colours and a zoom slider.','Chart becomes the default colour theme.']],
+ ['84–96','30 Oct 2026',['Sidings, double track and single-track dispatching, with trains on the right track and station tracks for layovers.','Yards and industrial spurs from OpenStreetMap.','Layer groups fold; holiday themes retired.']],
+ ['81–83','29–30 Oct 2026',['Share links: a view, timetable, fleet, stations, track changes and works saved to a short code.','Start from a blank slate.','Day and time moved into the stats row.']],
+ ['77–80','29 Oct 2026',['Colour themes (Chart, Forest, Night, Vibrant, Sunset, Arctic, Graphite) and a one-tap High contrast switch.']],
+ ['64–76','22–28 Oct 2026',['Refinements and fixes ahead of the move to map.restoreislandrail.com.']],
+ ['63','Oct 2026',['Holiday themes (since retired in version 94).']],
+ ['60–62','Oct 2026',['Ridership forecast, with a direct-demand cross-check and 2024 population.','Timetable optimisation and the Optimised presets.']],
+ ['57–59','Oct 2026',['Ferry routes drawn through water; buses timed to meet the trains; quieter default layers.']],
+ ['53–55','Oct 2026',['Population by dissemination area (2021 Census).','Sources page.','Ferries, flights and rail freight layers.']],
+ ['47–52','Oct 2026',['Bus priority lanes; Trains page with side-view schematics; map search; more work types and out-of-service notices.']],
+ ['41–45','Oct 2026',['Corridor speed projects, with timetables timed by the speed model; Works tab; capital cost in the Plan tab; Settings menu and Experimental mode.']],
+ ['35–40','Oct 2026',['Key destinations; reported crashes; Layers panel; track speeds from the 2003 track charts; bridges, tunnels, crossings and gaps.']],
+ ['1–34','Sept – Oct 2026',['The first planner: simulated trains on the E&N timetable, stations, BC Transit buses, travel flows from the Census and the CRD survey, bike lanes, and editors for the timetable, fleet, stations and track.']]];
+(function(){const pg=$('clpage');if(!pg)return;
+  const body=$('cl-body');body.innerHTML=CHANGELOG.map(([v,d,items])=>`<section class="clv"><h2>Version ${esc(v)} <span class="m">${esc(d)}</span></h2><ul>${items.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></section>`).join('')+
+    '<p class="m">Major changes only. Fixes and small adjustments between these versions are not listed.</p>';
+  const others=()=>['trainpage','srcpage','rdpage','pfpage','cppage'].some(id=>$(id)&&!$(id).hidden);
+  function openChanges(on){if(on){if(!$('trainpage').hidden)openTrains(false);if(!$('srcpage').hidden)openSources(false);if($('rdpage')&&!$('rdpage').hidden)openRidership(false);if($('pfpage')&&!$('pfpage').hidden&&window.openProfiles)window.openProfiles(false);if($('cppage')&&!$('cppage').hidden&&window.openCosts)window.openCosts(false);}
+    pg.hidden=!on;document.querySelector('.app').classList.toggle('tpopen',on||others());
+    if(on){pg.scrollTop=0;$('cl-back').focus();if(location.hash!=='#changes')history.replaceState(null,'','#changes');if(window.__track)__track('page:changes',false);}
+    else if(location.hash==='#changes')history.replaceState(null,'',location.pathname+location.search);}
+  window.openChanges=openChanges;
+  $('set-changes').onclick=()=>{const m=$('setmenu');if(m){m.hidden=true;$('btn-settings').setAttribute('aria-expanded','false');}openChanges(true);};
+  $('cl-back').onclick=()=>openChanges(false);
+  ['btn-trains','btn-sources','btn-profiles','plan-rd-open','co-costs'].forEach(id=>{const b=$(id);b&&b.addEventListener('click',()=>{if(!pg.hidden)pg.hidden=true;},true);});
+  document.addEventListener('click',e=>{if(!pg.hidden&&e.target.closest&&e.target.closest('#co-costs'))pg.hidden=true;},true);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!pg.hidden)openChanges(false);});
+  window.addEventListener('hashchange',()=>{const on=location.hash==='#changes';if(on!==!pg.hidden)openChanges(on);});
+  if(location.hash==='#changes')setTimeout(()=>openChanges(true),0);})();
 /* ---------- Costs page (V118): a rate card. Every work is priced from its type's rate per km, per crossing or per item;
    restoration items are rates per km of corridor. Planner changes live in PLAN.costAdj (key -> value), so they are saved
    with the plan and travel in shared links. A work can still be given a custom amount in the work editor (auto false). ---------- */
