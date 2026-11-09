@@ -979,7 +979,7 @@ circle.th.limit{fill:#d0393b!important;stroke:#fff}
   </section>
   <section class="trainpage pfpage" id="pfpage" hidden aria-label="Track profiles">
     <style>
-.pfpage{--pf-rail:var(--rail);--pf-road:var(--hwy);--pf-ink:var(--ink);--pf-muted:var(--muted);--pf-grid:var(--line);--pf-grid2:var(--ctl-line);--pf-bg:var(--panel);--pf-rail-fill:color-mix(in srgb,var(--rail) 14%,transparent);--pf-mono:var(--mono);--pf-body:var(--body);--pf-display:var(--display)}
+.pfpage{--pf-g0:#2e9d4a;--pf-g1:#d99a12;--pf-g2:#d0393b;--pf-rail:var(--rail);--pf-road:var(--hwy);--pf-ink:var(--ink);--pf-muted:var(--muted);--pf-grid:var(--line);--pf-grid2:var(--ctl-line);--pf-bg:var(--panel);--pf-rail-fill:color-mix(in srgb,var(--rail) 14%,transparent);--pf-mono:var(--mono);--pf-body:var(--body);--pf-display:var(--display)}
 .pfpage .pf-ph h2{text-transform:uppercase}
 @media (max-width:600px){#btn-profiles span{display:none}}
 .pf-root{display:grid;gap:16px;max-width:1180px}
@@ -987,7 +987,7 @@ circle.th.limit{fill:#d0393b!important;stroke:#fff}
 .pf-note b{color:var(--pf-ink)}
 .pf-legend{display:flex;flex-wrap:wrap;gap:18px;font-size:13px;color:var(--pf-ink)}
 .pf-legend span{display:inline-flex;align-items:center;gap:8px}
-.pf-sw{width:28px;height:0;border-top:3px solid var(--pf-rail)}.pf-sw.road{border-top:3px dashed var(--pf-road)}
+.pf-sw{width:28px;height:0;border-top:3px solid var(--pf-ink)}.pf-sw.road{border-top:3px dashed var(--pf-ink)}.pf-gk{width:16px;height:4px;border-radius:2px;display:inline-block}
 .pf-panel{border:1px solid var(--pf-grid2);border-radius:10px;padding:14px;display:grid;gap:10px;min-width:0;background:var(--pf-bg)}
 .pf-ph{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px}
 .pf-ph h2{margin:0;font-family:var(--pf-display);font-weight:800;font-size:24px;letter-spacing:.02em;color:var(--pf-ink)}
@@ -1012,7 +1012,7 @@ circle.th.limit{fill:#d0393b!important;stroke:#fff}
 @media (max-width:520px){.pf-main{height:260px}.pf-stat dl{grid-template-columns:repeat(2,auto)}.pf-stat dt,.pf-stat dd{grid-row:auto}}
     </style>
     <div class="tptop"><button class="btn" id="pf-back" type="button">← Back to the map</button><h1>Track profiles</h1><span class="m">Height of the E&amp;N rail line against the highway beside it, Victoria to Courtenay and Parksville to Port Alberni</span></div>
-    <div class="pf-root" id="pf-root"><div class="pf-legend"><span><i class="pf-sw"></i>Rail (E&amp;N)</span><span><i class="pf-sw road"></i>Parallel highway</span><span class="pf-hint">Scroll or pinch to zoom · drag to pan · drag the strip below each chart to move along the line · double-click to reset</span></div>
+    <div class="pf-root" id="pf-root"><div class="pf-legend"><span><i class="pf-sw"></i>Rail (E&amp;N)</span><span><i class="pf-sw road"></i>Parallel highway</span><span><i class="pf-gk" style="background:var(--pf-g0)"></i>under 1%</span><span><i class="pf-gk" style="background:var(--pf-g1)"></i>1–2%</span><span><i class="pf-gk" style="background:var(--pf-g2)"></i>over 2%</span><span class="pf-hint">Scroll or pinch to zoom · drag to pan · drag the strip below each chart to move along the line · double-click to reset</span></div>
 </div>
     <div class="pf-method">
 <h3>How these profiles were built</h3>
@@ -4258,6 +4258,7 @@ const OVH=[['Construction supervision',.10],['Engineering',.12],['Project manage
 function costOpts(){const o=PLAN.costOpts||(PLAN.costOpts={});if(o.v!==44){o.v=44;o.alb=o.alb!==false;o.trailN=true;o.cont=50;}if(typeof o.cont!=='number')o.cont=o.cont?50:0;return o;}
 /* ---------- change log (Settings → Change log): the major versions, newest first ---------- */
 const CHANGELOG=[
+ ['132','8 Nov 2026',['Track profiles are coloured by grade (under 1%, 1–2%, over 2%), the same as the measuring tool. Rail is solid, the highway dashed.']],
  ['131','8 Nov 2026',['The list of sources at the bottom of the map is now a short OpenStreetMap credit with a link to the Sources page.']],
  ['130','8 Nov 2026',['Opens in the device’s language (French or English) until you choose one with the switch.']],
  ['129','8 Nov 2026',['French covers the whole planner: ridership, costs, trains, sources, map pop-ups, ferries, flights, crossings and works. Place names and source titles stay as published.','The language switch no longer flickers between English and French.','Built so more languages can be added from one list.']],
@@ -5089,6 +5090,7 @@ const FR_DICT={
 'Out of service':'Hors service','Bridge':'Pont','Tunnel':'Tunnel','Removed track':'Voie retirée','Damaged right of way':'Emprise endommagée'
 };
 const FR_TPL={
+"Track profiles are coloured by grade (under 1%, 1–2%, over 2%), the same as the measuring tool. Rail is solid, the highway dashed.":"Les profils de la voie sont colorés selon la pente (moins de 1 %, 1–2 %, plus de 2 %), comme l’outil de mesure. Le rail est en trait plein, l’autoroute en tirets.",
 "© OpenStreetMap contributors ·":"© contributeurs d’OpenStreetMap ·",
 "Riders and buses on the map are simulated. Anonymous usage counts, no cookies:":"Les passagers et les autobus sur la carte sont simulés. Comptage anonyme de l’utilisation, sans témoins :",
 "The list of sources at the bottom of the map is now a short OpenStreetMap credit with a link to the Sources page.":"La liste des sources au bas de la carte est remplacée par une courte mention d’OpenStreetMap avec un lien vers la page Sources.",
@@ -7285,9 +7287,14 @@ function mount(root){
  function line(x,s,X,Y,a,b,col,fill,dash,w){a=Math.max(0,a);b=Math.min(s.len,b);if(b<=a)return;const n=Math.max(200,Math.ceil(X(b)-X(a)));const pts=[];
   for(let i=0;i<=n;i++){const k=a+(b-a)*i/n;pts.push([X(k),Y(at(s,k))]);}
   if(fill){x.beginPath();x.moveTo(pts[0][0],Y.base);pts.forEach(p=>x.lineTo(p[0],p[1]));x.lineTo(pts[pts.length-1][0],Y.base);x.closePath();x.fillStyle=fill;x.fill();}
-  x.beginPath();pts.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.setLineDash(dash||[]);x.lineWidth=w;x.strokeStyle=col;x.lineJoin='round';x.stroke();x.setLineDash([]);}
+  x.setLineDash(dash||[]);x.lineWidth=w;x.lineJoin='round';x.lineCap='round';
+  if(col&&col.g){// colour each stretch by its grade, as in the measuring tool: under 1%, 1–2%, over 2%
+   const cls=[];for(let i=0;i<=n;i++){const k=a+(b-a)*i/n,g=grade(s,k);cls.push(g==null?0:Math.abs(g)<1?0:Math.abs(g)<2?1:2);}
+   let i=0;while(i<n){let j=i;while(j<n&&cls[j+1]===cls[i])j++;j=Math.min(n,j+1);x.beginPath();x.moveTo(pts[i][0],pts[i][1]);for(let q=i+1;q<=j;q++)x.lineTo(pts[q][0],pts[q][1]);x.strokeStyle=col.g[cls[i]];x.stroke();i=j;}}
+  else{x.beginPath();pts.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.strokeStyle=col;x.stroke();}
+  x.setLineDash([]);x.lineCap='butt';}
  function draw(P){const{x,W,H}=size(P.c),{rail,road}=P.R,v=P.v;
-  const C={ink:cv('--pf-ink'),mu:cv('--pf-muted'),gr:cv('--pf-grid'),g2:cv('--pf-grid2'),ra:cv('--pf-rail'),rf:cv('--pf-rail-fill'),ro:cv('--pf-road'),bg:cv('--pf-bg'),mono:cv('--pf-mono'),body:cv('--pf-body')};
+  const C={ink:cv('--pf-ink'),mu:cv('--pf-muted'),gr:cv('--pf-grid'),g2:cv('--pf-grid2'),ra:cv('--pf-rail'),rf:cv('--pf-rail-fill'),ro:cv('--pf-road'),bg:cv('--pf-bg'),mono:cv('--pf-mono'),body:cv('--pf-body')};const GC={g:[cv('--pf-g0'),cv('--pf-g1'),cv('--pf-g2')]};
   x.clearRect(0,0,W,H);const pw=W-M.l-M.r,ph=H-M.t-M.b,[y0,y1]=yr(P);
   const X=k=>M.l+(k-v.x0)/(v.x1-v.x0)*pw,Y=e=>M.t+ph-(e-y0)/(y1-y0)*ph;Y.base=M.t+ph;P.pw=pw;
   x.font='11px '+C.mono;x.textBaseline='middle';x.textAlign='right';const ys=nice(y1-y0,6);
@@ -7295,7 +7302,7 @@ function mount(root){
   const xs=nice(v.x1-v.x0,Math.max(4,Math.floor(pw/90)));x.textAlign='center';x.textBaseline='top';const fx=Math.ceil(v.x0/xs)*xs;
   for(let k=fx;k<=v.x1+1e-9;k+=xs){const X0=X(k);x.strokeStyle=C.gr;x.beginPath();x.moveTo(X0+.5,M.t);x.lineTo(X0+.5,M.t+ph);x.stroke();x.fillStyle=C.mu;x.fillText(fmt(k,xs<1?1:0)+(k===fx?' km':''),X0,M.t+ph+7);}
   x.save();x.beginPath();x.rect(M.l,M.t-2,pw,ph+4);x.clip();
-  line(x,road,X,Y,v.x0,v.x1,C.ro,null,[7,5],2.2);line(x,rail,X,Y,v.x0,v.x1,C.ra,C.rf,null,2.6);
+  line(x,road,X,Y,v.x0,v.x1,GC,null,[7,6],2.2);line(x,rail,X,Y,v.x0,v.x1,GC,C.rf,null,3.2);
   const placed=[];const mark=(s,col,above)=>{s.marks.forEach(p=>{const X0=X(p[0]);if(X0<M.l-2||X0>W-M.r+2)return;const e=at(s,p[0]);if(e==null)return;const y=Y(e);
     x.font=(p[2]?'600 12px ':'12px ')+C.body;const tw=x.measureText(p[1]).width;let ly=above?y-12:y+14;ly=Math.max(M.t+8,Math.min(M.t+ph-8,ly));
     const lx=Math.max(M.l+tw/2+2,Math.min(W-M.r-tw/2-2,X0));const bx={a:lx-tw/2-4,b:lx+tw/2+4,c:ly-8,d:ly+8};
