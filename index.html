@@ -4257,6 +4257,7 @@ const OVH=[['Construction supervision',.10],['Engineering',.12],['Project manage
 function costOpts(){const o=PLAN.costOpts||(PLAN.costOpts={});if(o.v!==44){o.v=44;o.alb=o.alb!==false;o.trailN=true;o.cont=50;}if(typeof o.cont!=='number')o.cont=o.cont?50:0;return o;}
 /* ---------- change log (Settings → Change log): the major versions, newest first ---------- */
 const CHANGELOG=[
+ ['130','8 Nov 2026',['Opens in the device’s language (French or English) until you choose one with the switch.']],
  ['129','8 Nov 2026',['French covers the whole planner: ridership, costs, trains, sources, map pop-ups, ferries, flights, crossings and works. Place names and source titles stay as published.','The language switch no longer flickers between English and French.','Built so more languages can be added from one list.']],
  ['128','8 Nov 2026',['French/English switch (EN | FR) beside Settings, English by default. Menus, buttons, panels, legends and layer names are translated; data, place names and source notes stay in English.']],
  ['127','5 Nov 2026',['Change log in Settings.']],
@@ -5086,6 +5087,7 @@ const FR_DICT={
 'Out of service':'Hors service','Bridge':'Pont','Tunnel':'Tunnel','Removed track':'Voie retirée','Damaged right of way':'Emprise endommagée'
 };
 const FR_TPL={
+"Opens in the device’s language (French or English) until you choose one with the switch.":"S’ouvre dans la langue de l’appareil (français ou anglais) jusqu’à ce que vous en choisissiez une avec le sélecteur.",
 "French covers the whole planner: ridership, costs, trains, sources, map pop-ups, ferries, flights, crossings and works. Place names and source titles stay as published.":"Le français couvre tout le planificateur : achalandage, coûts, trains, sources, fenêtres de la carte, traversiers, vols, passages à niveau et travaux. Les noms de lieux et les titres des sources restent tels que publiés.",
 "The language switch no longer flickers between English and French.":"Le sélecteur de langue ne clignote plus entre l’anglais et le français.",
 "Built so more languages can be added from one list.":"Conçu pour que d’autres langues puissent être ajoutées à partir d’une seule liste.",
@@ -6279,6 +6281,8 @@ function i18nExport(code){const L=LANGS[code||'fr'];if(!L||!L.dict)return '';con
       b.textContent=L.short||c.toUpperCase();b.setAttribute('aria-pressed',String(c==='en'));b.onclick=()=>setLang(c);seg.appendChild(b);}}
   let l=null;try{const q=new URLSearchParams(location.search).get('lang');if(q&&LANGS[q])l=q;}catch(_){}
   if(!l)try{l=SETTINGS.lang;}catch(_){}
+  // no link or saved choice: use the first language in the device's list that has a pack (fr-CA → fr), else English
+  if(!l)try{for(const t of (navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||''])){const c=String(t).toLowerCase().split('-')[0];if(LANGS[c]){l=c;break;}}}catch(_){}
   if(l&&l!=='en'&&LANGS[l])setTimeout(()=>setLang(l,true),0);})();
 const PAL_BASE={chart:'light',forest:'light',contrast:'light',night:'dark',vibrant:'light',arctic:'light',sunset:'dark',graphite:'dark'};
 function applyTheme(){const r=document.documentElement,t=SETTINGS.theme,pal=PAL_BASE[SETTINGS.palette]?SETTINGS.palette:'standard';
