@@ -61,3 +61,25 @@ Discord. If the site moves to another address, update the `og:url`,
 The GitHub repository itself uses a separate image: upload
 `github-social-preview.png` (1280×640) under the repository's
 **Settings → General → Social preview**.
+
+## Languages
+
+English is the source text; French is built in, and the EN | FR switch sits
+beside Settings (`?lang=fr` in a link opens the planner in French). The page is
+translated as it is drawn, so the rest of the code never deals with languages.
+
+To add another language:
+
+1. Open the planner, open the browser console and run `i18nExport('fr')`.
+   It downloads `fr.tsv`: every English string with its French translation.
+   Numbers in the English are written as `#`; each `#` in the translation is
+   filled with the same number, in order.
+2. Translate the second column, keeping the `#` marks.
+3. In `index.html`, find `const LANGS=` and add a pack next to `fr`, e.g.
+   `es:{name:'Español',short:'ES',tag:'es-CA',note:'…',dict:{},tpl:{…rows…},rx:[],num:n=>n}`.
+   A button for it appears beside Settings automatically.
+4. Switch to the new language, open each page and run `i18nMissing()` in the
+   console to list any English still on screen.
+
+The French translations were machine-assisted and would benefit from review
+by a French speaker.
