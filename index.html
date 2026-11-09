@@ -965,6 +965,7 @@ circle.th.limit{fill:#d0393b!important;stroke:#fff}
   <section class="trainpage srcpage" id="srcpage" hidden aria-label="Information sources">
     <div class="tptop"><button class="btn" id="src-back" type="button">← Back to the map</button><h1>Sources</h1><span class="m">Where the planner's maps, travel figures and railway data come from, what each is used for, and its limits</span></div>
     <div class="srcbody" id="src-body"></div>
+    <p class="m" style="max-width:1100px;margin-top:18px">Riders and buses on the map are simulated. Anonymous usage counts, no cookies: <a href="https://map.restoreislandrail.com/stats/">usage statistics</a>.</p>
   </section>
   <section class="trainpage srcpage cppage" id="cppage" hidden aria-label="Costs">
     <div class="tptop"><button class="btn" id="cp-back" type="button">← Back to the map</button><h1>Costs</h1><span class="m">The rates behind the capital cost in the Plan tab: per km, per crossing and per item. Every track work is priced from these, so change a rate to match local prices and all works of that kind follow. Hover over an item to see where its rate comes from. Changes are saved with the plan and in shared links.</span></div>
@@ -1102,7 +1103,7 @@ circle.th.limit{fill:#d0393b!important;stroke:#fff}
         <div class="m">Hover a ◆ station for both directions and its daily profile.</div>
         <div class="m" id="t-enn" hidden>Includes the drivers the Travel flows layer moves to the train (With E&amp;N).</div></div>
       <div class="measbar" id="measbar" hidden role="status" aria-live="polite"><div class="mb-t"><b id="mb-len">Click the map to start measuring</b><span id="mb-sub"></span></div><div class="mb-c"><label><input type="checkbox" id="mb-smooth" checked> Smooth curve</label><label><input type="checkbox" id="mb-snap" checked> Snap to track</label><button type="button" class="btn" id="mb-undo">Undo</button><button type="button" class="btn" id="mb-clear">Clear</button><button type="button" class="btn" id="mb-done">Done</button></div></div><div class="measprof" id="measprof" hidden role="region" aria-label="Height profile"><div class="mp-h"><b>Height profile</b><span class="mp-st" id="mp-status" role="status"></span><span class="mp-sp"></span><button type="button" class="btn" id="mp-units" title="Showing metres and kilometres; switch to feet">m · km</button><button type="button" class="btn" id="mp-toggle" aria-expanded="true" aria-controls="mp-body">Hide</button></div><div id="mp-body"><div class="mp-stats" id="mp-stats"></div><div class="mp-chart" id="mp-chart"></div><div class="mp-foot"><span id="mp-read" class="mp-read"></span><span class="mp-key" id="mp-key"></span></div><div class="mp-note">Ground heights from AWS Terrain Tiles, about ±5–10 m; bridges and tunnels show the ground below or above them. Sea depths from GMRT, on a grid of about 60 m.</div></div></div><div class="lchips" id="lchips" hidden aria-label="Layers on the map"></div><div class="zoomsl"><button type="button" id="zs-out" aria-label="Zoom out">−</button><input type="range" id="zoomsl" min="0" max="100" step="0.5" value="0" aria-label="Zoom"><button type="button" id="zs-in" aria-label="Zoom in">+</button></div><div class="scale" id="scale"><span id="scale-t">20 km</span><i id="scale-b" style="width:100px"></i></div>
-      <button type="button" class="creditbtn" id="creditbtn" aria-label="Map data sources" aria-expanded="false">i</button><div class="credit" id="credit">Map data © OpenStreetMap contributors (ODbL). Elevation and hillshade: AWS Terrain Tiles (Mapzen terrarium). Population: Statistics Canada 2021 Census, grown to 2024 with BC Stats estimates. Jobs: Statistics Canada 2021 Census. Traffic counts: BC MoTI, City of Victoria. Commuting: Statistics Canada 2021 Census. Travel survey: CRD 2022 Origin-Destination Household Travel Survey. Bus schedules: BC Transit GTFS. Sailings and ferry traffic: BC Ferries. UVic and airport traffic figures. First Nation reserves: Natural Resources Canada (Open Government Licence – Canada) and Province of BC (Open Government Licence – British Columbia). Trail and bike counts: Capital Regional District and partners (Eco-Counter). Riders and buses are simulated. Anonymous usage counts, no cookies: <a href="https://map.restoreislandrail.com/stats/">usage statistics</a>.</div>
+      <button type="button" class="creditbtn" id="creditbtn" aria-label="Map data sources" aria-expanded="false">i</button><div class="credit" id="credit">© OpenStreetMap contributors · <a href="#sources" id="credit-src">Sources</a></div>
       <div class="toasts" id="toasts" aria-live="polite"></div>
       <div class="tip" id="tip" hidden></div>
       <div class="fsclock" id="fsclock" aria-hidden="true"></div>
@@ -4257,6 +4258,7 @@ const OVH=[['Construction supervision',.10],['Engineering',.12],['Project manage
 function costOpts(){const o=PLAN.costOpts||(PLAN.costOpts={});if(o.v!==44){o.v=44;o.alb=o.alb!==false;o.trailN=true;o.cont=50;}if(typeof o.cont!=='number')o.cont=o.cont?50:0;return o;}
 /* ---------- change log (Settings → Change log): the major versions, newest first ---------- */
 const CHANGELOG=[
+ ['131','8 Nov 2026',['The list of sources at the bottom of the map is now a short OpenStreetMap credit with a link to the Sources page.']],
  ['130','8 Nov 2026',['Opens in the device’s language (French or English) until you choose one with the switch.']],
  ['129','8 Nov 2026',['French covers the whole planner: ridership, costs, trains, sources, map pop-ups, ferries, flights, crossings and works. Place names and source titles stay as published.','The language switch no longer flickers between English and French.','Built so more languages can be added from one list.']],
  ['128','8 Nov 2026',['French/English switch (EN | FR) beside Settings, English by default. Menus, buttons, panels, legends and layer names are translated; data, place names and source notes stay in English.']],
@@ -4755,7 +4757,7 @@ function renderSources(){const lnk=s=>s.u?`<a href="${s.u}" target="_blank" rel=
 function openSources(on){const pg=$('srcpage');if(on&&!$('trainpage').hidden)openTrains(false);if(on&&!$('rdpage').hidden)openRidership(false);pg.hidden=!on;document.querySelector('.app').classList.toggle('tpopen',on||!$('trainpage').hidden||!$('rdpage').hidden);
   if(on){renderSources();pg.scrollTop=0;$('src-back').focus();if(location.hash!=='#sources')history.replaceState(null,'','#sources');}
   else if(location.hash==='#sources')history.replaceState(null,'',location.pathname+location.search);}
-$('btn-sources').onclick=()=>openSources(true);$('src-back').onclick=()=>{openSources(false);$('btn-sources').focus();};
+$('btn-sources').onclick=()=>openSources(true);$('credit-src').onclick=e=>{e.preventDefault();openSources(true);};$('src-back').onclick=()=>{openSources(false);$('btn-sources').focus();};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('srcpage').hidden)openSources(false);});
 window.addEventListener('hashchange',()=>openSources(location.hash==='#sources'));
 if(location.hash==='#sources')openSources(true);
@@ -5087,6 +5089,9 @@ const FR_DICT={
 'Out of service':'Hors service','Bridge':'Pont','Tunnel':'Tunnel','Removed track':'Voie retirée','Damaged right of way':'Emprise endommagée'
 };
 const FR_TPL={
+"© OpenStreetMap contributors ·":"© contributeurs d’OpenStreetMap ·",
+"Riders and buses on the map are simulated. Anonymous usage counts, no cookies:":"Les passagers et les autobus sur la carte sont simulés. Comptage anonyme de l’utilisation, sans témoins :",
+"The list of sources at the bottom of the map is now a short OpenStreetMap credit with a link to the Sources page.":"La liste des sources au bas de la carte est remplacée par une courte mention d’OpenStreetMap avec un lien vers la page Sources.",
 "Opens in the device’s language (French or English) until you choose one with the switch.":"S’ouvre dans la langue de l’appareil (français ou anglais) jusqu’à ce que vous en choisissiez une avec le sélecteur.",
 "French covers the whole planner: ridership, costs, trains, sources, map pop-ups, ferries, flights, crossings and works. Place names and source titles stay as published.":"Le français couvre tout le planificateur : achalandage, coûts, trains, sources, fenêtres de la carte, traversiers, vols, passages à niveau et travaux. Les noms de lieux et les titres des sources restent tels que publiés.",
 "The language switch no longer flickers between English and French.":"Le sélecteur de langue ne clignote plus entre l’anglais et le français.",
