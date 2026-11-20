@@ -8,16 +8,26 @@
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../fonts/fonts.css">
 <style>
-:root{--bg:#f4f3ee;--panel:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#6d6c67;--line:#e2e0d8;--grid:#ecebe5;--accent:#9b1c31;--land:#e9e7df;--water:#f4f3ee;
-  --s1:#2a78d6;--s2:#eb6834;--track:#ecebe5;--display:'Big Shoulders Display',Impact,sans-serif;--body:'Atkinson Hyperlegible',system-ui,sans-serif}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121211;--panel:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#9c9b93;--line:#2e2e2b;--grid:#262624;--accent:#ee7586;--s1:#3987e5;--s2:#d95926;--track:#2a2a27;--land:#262624;--water:#121211}}
-:root[data-theme="dark"]{--bg:#121211;--panel:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#9c9b93;--line:#2e2e2b;--grid:#262624;--accent:#ee7586;--s1:#3987e5;--s2:#d95926;--track:#2a2a27;--land:#262624;--water:#121211}
+:root{--display:'Big Shoulders Display',Impact,sans-serif;--body:'Atkinson Hyperlegible',system-ui,sans-serif}
+/* Moderate (default): mid-tone, low glare, muted colours */
+:root,:root[data-theme="moderate"]{--bg:#dcd9cf;--panel:#e9e6dd;--ink:#22231f;--ink2:#41423b;--muted:#5a5b53;--line:#c6c2b5;--grid:#d3cfc3;--accent:#8a2f3b;--land:#cfcabd;--water:#d6dcda;--s1:#3d6d8c;--s2:#b8682f;--track:#d3cfc3;--good:#2f6b3a;--dot:.6}
+:root[data-theme="light"]{--bg:#f4f3ee;--panel:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#6d6c67;--line:#e2e0d8;--grid:#ecebe5;--accent:#9b1c31;--land:#e9e7df;--water:#f4f3ee;--s1:#2a78d6;--s2:#eb6834;--track:#ecebe5;--good:#2e7d32;--dot:.55}
+:root[data-theme="dark"]{--bg:#121211;--panel:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#9c9b93;--line:#2e2e2b;--grid:#262624;--accent:#ee7586;--land:#262624;--water:#121211;--s1:#3987e5;--s2:#d95926;--track:#2a2a27;--good:#7cc58a;--dot:.6}
+/* Heritage: cream paper, railway green and signal red */
+:root[data-theme="heritage"]{--bg:#efe6d2;--panel:#f8f1e1;--ink:#1f2a22;--ink2:#3d4a40;--muted:#5d665c;--line:#dccfb3;--grid:#e6dcc5;--accent:#a3271f;--land:#e4d9bf;--water:#dfe3d6;--s1:#2f5d43;--s2:#b5481f;--track:#e6dcc5;--good:#2f5d43;--dot:.6}
+/* Night: deep blue-grey for screens and evening reading */
+:root[data-theme="night"]{--bg:#18202a;--panel:#202a36;--ink:#e6ebf0;--ink2:#b7c1cc;--muted:#8d98a5;--line:#334050;--grid:#2a3644;--accent:#f08a7e;--land:#2a3644;--water:#18202a;--s1:#6fb0e0;--s2:#e8a35c;--track:#2a3644;--good:#86d19a;--dot:.6}
+/* High contrast: strongest text and colour separation */
+:root[data-theme="contrast"]{--bg:#ffffff;--panel:#ffffff;--ink:#000000;--ink2:#1a1a1a;--muted:#333333;--line:#000000;--grid:#bdbdbd;--accent:#b00020;--land:#e6e6e6;--water:#ffffff;--s1:#0047b3;--s2:#c43c00;--track:#d9d9d9;--good:#00661a;--dot:.75}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--body)}
 html.embed body{background:transparent}
 .wrap{max-width:1080px;margin:0 auto;padding:22px 16px 40px}
 html.embed .wrap{padding:8px 4px 16px}
-header{margin-bottom:16px}
+header{margin-bottom:16px;display:flex;flex-wrap:wrap;gap:10px 20px;align-items:flex-start;justify-content:space-between}
+header .hd{flex:1 1 420px;min-width:0}
+.themes{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink2);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.themes select{font:600 13px var(--body);color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 8px;text-transform:none;letter-spacing:0;cursor:pointer}
 h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margin:0;text-transform:uppercase;letter-spacing:.01em}
 h1 span{color:var(--accent)}
 .sub{color:var(--ink2);margin:6px 0 0;font-size:15px;max-width:70ch}
@@ -28,7 +38,7 @@ h1 span{color:var(--accent)}
 .tile .v{font-family:var(--display);font-weight:800;font-size:40px;line-height:1.05;font-variant-numeric:tabular-nums}
 .tile .n{font-size:12.5px;color:var(--muted)}
 .tile.hero{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
-.up{color:#2e7d32}.down{color:var(--accent)}
+.up{color:var(--good)}.down{color:var(--accent)}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
 .card.wide{grid-column:1/-1}
@@ -42,7 +52,7 @@ h1 span{color:var(--accent)}
 .map svg{display:block;width:100%;height:auto;touch-action:none;cursor:grab;user-select:none}
 .map svg.drag{cursor:grabbing}
 .map .land{fill:var(--land);stroke:var(--muted);stroke-width:.5;vector-effect:non-scaling-stroke;stroke-opacity:.55}
-.map .dot{fill:var(--s1);fill-opacity:.55;stroke:var(--panel);stroke-width:.7;vector-effect:non-scaling-stroke}
+.map .dot{fill:var(--s1);fill-opacity:var(--dot);stroke:var(--panel);stroke-width:.7;vector-effect:non-scaling-stroke}
 .map .dot:hover{fill-opacity:.9}
 .map .lg{fill:var(--ink2);font-size:11px}
 .zoom{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--panel)}
@@ -77,8 +87,13 @@ table.tbl .r{text-align:right}
 <body>
 <div class="wrap">
 <header>
-  <h1>Restore Island Rail <span>petition</span></h1>
-  <p class="sub" id="lede">Loading…</p>
+  <div class="hd"><h1>Restore Island Rail <span>petition</span></h1>
+  <p class="sub" id="lede">Loading…</p></div>
+  <label class="themes">Colours
+    <select id="theme" aria-label="Colour theme">
+      <option value="moderate">Moderate</option><option value="light">Light</option><option value="dark">Dark</option>
+      <option value="heritage">Heritage</option><option value="night">Night</option><option value="contrast">High contrast</option>
+    </select></label>
 </header>
 <section class="tiles" id="tiles" aria-label="Summary"></section>
 <div class="grid">
@@ -115,7 +130,15 @@ function niceMax(v){if(v<=4)return 4;const p=Math.pow(10,Math.floor(Math.log10(v
 const REGIONS=['Vancouver Island & Gulf Islands','Rest of B.C.','Rest of Canada','United States','United Kingdom','Other countries'];
 const params=new URLSearchParams(location.search);
 if(params.has('embed')||window.self!==window.top)document.documentElement.classList.add('embed');
-if(params.get('theme'))document.documentElement.dataset.theme=params.get('theme');
+const THEMES=['moderate','light','dark','heritage','night','contrast'];
+// ?theme= in the link wins (and isn't remembered); otherwise the visitor's last pick; otherwise Moderate
+let saved=null;try{saved=localStorage.getItem('rir-petition-theme');}catch(e){}
+const urlTheme=params.get('theme');
+function setTheme(t,remember){if(!THEMES.includes(t))t='moderate';document.documentElement.dataset.theme=t;$('theme').value=t;
+  if(remember)try{localStorage.setItem('rir-petition-theme',t);}catch(e){}}
+setTheme(THEMES.includes(urlTheme)?urlTheme:saved,false);
+$('theme').addEventListener('change',e=>{setTheme(e.target.value,true);if(D){monthly();drawMap();}});
+if(params.get('picker')==='off')document.querySelector('.themes').hidden=true;
 const tip=$('tip');
 function showTip(e,html){tip.innerHTML=html;tip.hidden=false;const w=tip.offsetWidth,h=tip.offsetHeight;let x=e.pageX+14,y=e.pageY-h-10;if(x+w>document.documentElement.clientWidth-8)x=e.pageX-w-14;if(y<window.scrollY+4)y=e.pageY+16;tip.style.left=x+'px';tip.style.top=y+'px';}
 const hideTip=()=>{tip.hidden=true;};
