@@ -78,10 +78,24 @@ table.tbl th,table.tbl td{padding:5px 8px 5px 0;border-bottom:1px solid var(--li
 table.tbl th{color:var(--ink2);font-size:12.5px;text-transform:uppercase;letter-spacing:.04em}
 table.tbl .r{text-align:right}
 .note{color:var(--muted);font-size:12.5px;margin:6px 0 0}
+.dtools{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-bottom:10px}
+.dtools .views{margin-bottom:0}
+.dtools select,.dtools input{font:600 13px var(--body);color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+.dtools input{min-width:0;flex:1 1 160px;max-width:260px;font-weight:400}
+.dtools label{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink2)}
+.dtools label input{flex:none;min-width:0}
+.dlist{max-height:560px;overflow-y:auto;padding-right:4px}
+html.embed .dlist{max-height:none}
+.dlist table.tbl td.bar-c{width:38%;min-width:90px}
+.dlist .tr{height:8px;background:var(--track);border-radius:4px;overflow:hidden}
+.dlist .fill{height:100%;background:var(--s1);border-radius:4px;min-width:2px}
+.dlist tr.isl .fill{background:var(--accent)}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);border:1px solid currentColor;border-radius:4px;padding:0 4px;margin-left:6px;vertical-align:1px}
+.few{color:var(--muted);font-style:italic}
 .about{margin-top:14px;color:var(--ink2);font-size:13.5px}
 .about h2{font-family:var(--display);font-size:19px;text-transform:uppercase;margin:0 0 4px;color:var(--ink)}
 .status{color:var(--muted);font-size:13px;margin:8px 0}
-@media (max-width:600px){h1{font-size:28px}.tile .v{font-size:34px}}
+@media (max-width:600px){h1{font-size:28px}.tile .v{font-size:34px}.dlist .bar-c,.dlist th:last-child{display:none}}
 </style>
 </head>
 <body>
@@ -106,6 +120,19 @@ table.tbl .r{text-align:right}
     <p class="note" id="unlocated"></p></section>
   <section class="card"><h2>Signers by region</h2><p class="cap">Vancouver Island includes the Gulf Islands.</p><div class="bars" id="b-region"></div></section>
   <section class="card"><h2>Canadian signers by province</h2><p class="cap">From the postal code where one was given.</p><div class="bars" id="b-prov"></div></section>
+  <section class="card wide" id="ridings"><h2>Signers by electoral district</h2>
+    <p class="cap">Provincial ridings use the 2024 B.C. election boundaries; federal ridings use the boundaries in force since the 2025 election. Ridings marked <span class="tag" style="margin:0">Island</span> are on Vancouver Island and the Gulf Islands.</p>
+    <div class="dtools">
+      <div class="views" role="group" aria-label="Level of government"><button type="button" data-lv="bc" aria-pressed="true">B.C. provincial</button><button type="button" data-lv="fed" aria-pressed="false">Federal</button></div>
+      <select id="d-prov" aria-label="Province" hidden></select>
+      <input type="search" id="d-q" placeholder="Find a riding" aria-label="Find a riding">
+      <label><input type="checkbox" id="d-isl"> Island only</label>
+    </div>
+    <div class="dlist"><table class="tbl" id="t-ridings"></table></div>
+    <p class="note" id="d-note"></p></section>
+  <section class="card wide" id="regional-districts"><h2>Signers by regional district</h2>
+    <p class="cap">B.C. signers by regional district, the local governments along and beyond the corridor. Island regional districts are in red.</p>
+    <div class="bars" id="b-rd"></div></section>
   <section class="card wide"><h2>Signatures by month</h2><p class="cap">New signatures each month, with the running total.</p>
     <div class="legend"><span><i style="background:var(--s1)"></i>New this month</span><span><i style="background:var(--s2);height:2px"></i>Running total</span></div>
     <div class="chart" id="c-month"></div></section>
@@ -113,7 +140,8 @@ table.tbl .r{text-align:right}
     <div style="overflow-x:auto"><table class="tbl" id="t-comm"></table></div></section>
 </div>
 <section class="about"><h2>How this is counted</h2>
-<p>Counts come from the petition's signature export. No names, street addresses or full postal codes are published here: only counts by postal area, town, region and day. Signers were placed on the map by the first part of their postal code using GeoNames centroids, or by the town they typed if there was no usable code. Map labels show a town name only when at least five signers typed it, otherwise the postal area's official name. "Vancouver Island &amp; Gulf Islands" means Canadian postal codes starting V8, V9 or V0R. Map outlines: Natural Earth.</p></section>
+<p>Counts come from the petition's signature export. No names, street addresses or full postal codes are published here: only counts by postal area, town, region and day. Signers were placed on the map by the first part of their postal code using GeoNames centroids, or by the town they typed if there was no usable code. Map labels show a town name only when at least five signers typed it, otherwise the postal area's official name. "Vancouver Island &amp; Gulf Islands" means Canadian postal codes starting V8, V9 or V0R. Map outlines: Natural Earth.</p>
+<p>Electoral and regional districts: each Canadian signer is placed at the centre of their postal area. In rural postal areas (those with 0 as the second character), which can cross district lines, the town they typed is used instead where it can be matched. A few signers near a boundary may therefore be counted in the neighbouring district. Districts with 1 to 4 signers show "fewer than 5". Boundaries: Elections BC (2023 redistribution), Elections Canada (2023 Representation Order) and the B.C. Administrative Boundaries Management System.</p></section>
 </div>
 <div class="tip" id="tip" hidden></div>
 <script>
@@ -121,7 +149,7 @@ const $=id=>document.getElementById(id);
 const NS='http://www.w3.org/2000/svg';
 const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;};
 const fmt=n=>Math.round(n).toLocaleString('en-CA');
-const pc=(n,d,dp=0)=>d?(n/d*100).toFixed(dp)+'%':'–';
+const pc=(n,d,dp=0)=>{if(!d)return'–';const v=n/d*100;return v>0&&v<Math.pow(10,-dp)?'<'+Math.pow(10,-dp)+'%':v.toFixed(dp)+'%';};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const dlong=d=>new Date(d+'T12:00:00Z').toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric',timeZone:'UTC'});
 const mlong=m=>new Date(m+'-15T12:00:00Z').toLocaleDateString('en-CA',{month:'long',year:'numeric',timeZone:'UTC'});
@@ -194,6 +222,35 @@ function monthly(){const box=$('c-month');box.innerHTML='';
     showTip(e,`<div><b>${mlong(d.k)}</b></div><div>${fmt(d.n)} new signatures</div><div class="m">${fmt(d.c)} in total so far</div>`);});
   hit.addEventListener('pointerleave',()=>{cross.setAttribute('visibility','hidden');hideTip();});}
 
+/* ---------- electoral and regional districts ---------- */
+let LV='bc';
+const PROVS=['B.C.','Alta.','Sask.','Man.','Ont.','Que.','N.B.','N.S.','P.E.I.','N.L.','Y.T.','N.W.T.','Nvt.'];
+function districts(){const X=D.districts;if(!X)return;
+  const sel=$('d-prov');if(!sel.options.length){sel.innerHTML='<option value="">All provinces</option>'+PROVS.map(p=>`<option${p==='B.C.'?' selected':''}>${p}</option>`).join('');}
+  sel.hidden=LV!=='fed';
+  const q=$('d-q').value.trim().toLowerCase(),isl=$('d-isl').checked;
+  let rows=LV==='bc'?X.bc_ridings.map(r=>({name:r[0],n:r[1],isl:r[2],prov:'B.C.'})):X.fed_ridings.map(r=>({name:r[0],prov:r[1],n:r[2],isl:r[3]}));
+  const all=rows;
+  if(LV==='fed'&&sel.value)rows=rows.filter(r=>r.prov===sel.value);
+  if(isl)rows=rows.filter(r=>r.isl);
+  if(q)rows=rows.filter(r=>r.name.toLowerCase().includes(q));
+  const max=Math.max(1,...all.map(r=>r.n||0));
+  const rank=new Map(all.map((r,i)=>[r.name,i+1]));
+  $('t-ridings').innerHTML=`<tr><th>#</th><th>${LV==='bc'?'Provincial riding':'Federal riding'}</th>${LV==='fed'&&!sel.value?'<th>Prov.</th>':''}<th class="r">Signers</th><th></th></tr>`
+    +(rows.length?rows.map(r=>`<tr class="${r.isl?'isl':''}"><td>${r.n==null?'':rank.get(r.name)}</td><td>${esc(r.name)}${r.isl?'<span class="tag">Island</span>':''}</td>${LV==='fed'&&!sel.value?`<td>${esc(r.prov)}</td>`:''}<td class="r">${r.n==null?'<span class="few">fewer than 5</span>':fmt(r.n)}</td><td class="bar-c"><div class="tr"><div class="fill" style="width:${r.n?Math.max(1,r.n/max*100):0}%"></div></div></td></tr>`).join('')
+      :'<tr><td colspan="5" class="few">No ridings match.</td></tr>');
+  const placed=all.reduce((a,r)=>a+(r.n||0),0),isln=all.filter(r=>r.isl).reduce((a,r)=>a+(r.n||0),0);
+  $('d-note').textContent=LV==='bc'
+    ?`${fmt(placed)} B.C. signers placed in ${all.length} provincial ridings; ${fmt(isln)} (${pc(isln,placed)}) in the ${all.filter(r=>r.isl).length} Island ridings.`
+    :`${fmt(placed)} Canadian signers placed in ${all.length} federal ridings; ${fmt(isln)} (${pc(isln,placed)}) in the ${all.filter(r=>r.isl).length} Island ridings.`;
+  postHeight();}
+function regionalDistricts(){const X=D.districts;if(!X)return;const box=$('b-rd');box.innerHTML='';
+  const rows=X.regional_districts,tot=rows.reduce((a,r)=>a+(r[1]||0),0),max=Math.max(1,...rows.map(r=>r[1]||0));
+  for(const [name,n,isl] of rows){const r=document.createElement('div');r.className='bar'+(isl?' hl':'');
+    r.innerHTML=`<span class="lbl" title="${esc(name)}">${esc(name)}</span><span class="num">${n==null?'<span class="few">fewer than 5</span>':`${pc(n,tot)} · ${fmt(n)}`}</span><div class="tr"><div class="fill" style="width:${n?Math.max(1,n/max*100):0}%"></div></div>`;box.appendChild(r);}}
+document.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{LV=b.dataset.lv;document.querySelectorAll('[data-lv]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));D&&districts();});
+['d-q','d-isl','d-prov'].forEach(id=>$(id).addEventListener('input',()=>D&&districts()));
+
 /* ---------- communities ---------- */
 function communities(total){const rows=D.communities.slice().sort((a,b)=>b[2]-a[2]).slice(0,25);
   $('t-comm').innerHTML='<tr><th>#</th><th>Community</th><th>Region</th><th class="r">Signers</th><th class="r">Share</th></tr>'
@@ -244,13 +301,13 @@ function svgPt(e){const r=MAP.svg.getBoundingClientRect();return [(e.clientX-r.l
   const up=e=>{ptrs.delete(e.pointerId);if(!ptrs.size){drag=null;MAP&&MAP.svg.classList.remove('drag');}};
   box.addEventListener('pointerup',up);box.addEventListener('pointercancel',up);
   $('zin').onclick=()=>MAP&&zoomAt(1.6,MAP.W/2,MAP.H/2);$('zout').onclick=()=>MAP&&zoomAt(1/1.6,MAP.W/2,MAP.H/2);
-  document.querySelectorAll('.views button').forEach(b=>b.onclick=()=>{VIEW=b.dataset.v;document.querySelectorAll('.views button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));drawMap();postHeight();});})();
+  document.querySelectorAll('.views button[data-v]').forEach(b=>b.onclick=()=>{VIEW=b.dataset.v;document.querySelectorAll('.views button[data-v]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));drawMap();postHeight();});})();
 
 /* ---------- embedding: tell the parent page our height ---------- */
 function postHeight(){if(window.parent!==window)window.parent.postMessage({type:'rir-petition-height',height:document.documentElement.scrollHeight},'*');}
 if(window.ResizeObserver)new ResizeObserver(postHeight).observe(document.body);
 
-function render(){const total=summary();regionBars(total);monthly();communities(total);drawMap();postHeight();}
+function render(){const total=summary();regionBars(total);districts();regionalDistricts();monthly();communities(total);drawMap();postHeight();}
 let rz,lastW=0;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{if(D&&window.innerWidth!==lastW){lastW=window.innerWidth;monthly();drawMap();}},200);});
 fetch('data.json').then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(d=>{D=d;lastW=window.innerWidth;render();})
   .catch(e=>{$('lede').textContent='The petition statistics could not be loaded right now ('+e.message+').';});
