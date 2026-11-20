@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Restore Island Rail petition: who signed, and from where</title>
+<meta name="description" content="Where signers of the Restore Island Rail petition live: counts by region, province, community and month, with a map. No names are published.">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style>
+:root{--bg:#f4f3ee;--panel:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#6d6c67;--line:#e2e0d8;--grid:#ecebe5;--accent:#9b1c31;--land:#e9e7df;--water:#f4f3ee;
+  --s1:#2a78d6;--s2:#eb6834;--track:#ecebe5;--display:'Big Shoulders Display',Impact,sans-serif;--body:'Atkinson Hyperlegible',system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121211;--panel:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#9c9b93;--line:#2e2e2b;--grid:#262624;--accent:#ee7586;--s1:#3987e5;--s2:#d95926;--track:#2a2a27;--land:#262624;--water:#121211}}
+:root[data-theme="dark"]{--bg:#121211;--panel:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#9c9b93;--line:#2e2e2b;--grid:#262624;--accent:#ee7586;--s1:#3987e5;--s2:#d95926;--track:#2a2a27;--land:#262624;--water:#121211}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--body)}
+html.embed body{background:transparent}
+.wrap{max-width:1080px;margin:0 auto;padding:22px 16px 40px}
+html.embed .wrap{padding:8px 4px 16px}
+header{margin-bottom:16px}
+h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margin:0;text-transform:uppercase;letter-spacing:.01em}
+h1 span{color:var(--accent)}
+.sub{color:var(--ink2);margin:6px 0 0;font-size:15px;max-width:70ch}
+.sub b{font-variant-numeric:tabular-nums}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:12px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.tile .k{font-size:12.5px;color:var(--ink2);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.tile .v{font-family:var(--display);font-weight:800;font-size:40px;line-height:1.05;font-variant-numeric:tabular-nums}
+.tile .n{font-size:12.5px;color:var(--muted)}
+.tile.hero{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.up{color:#2e7d32}.down{color:var(--accent)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.card.wide{grid-column:1/-1}
+.card h2{font-family:var(--display);font-weight:600;font-size:21px;margin:0;text-transform:uppercase;letter-spacing:.02em}
+.card .cap{color:var(--muted);font-size:12.5px;margin:2px 0 10px}
+.views{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);margin-bottom:8px}
+.views button{font:600 13px var(--body);border:0;background:none;color:var(--ink);padding:7px 12px;cursor:pointer}
+.views button+button{border-left:1px solid var(--line)}
+.views button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.map{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--water)}
+.map svg{display:block;width:100%;height:auto;touch-action:none;cursor:grab;user-select:none}
+.map svg.drag{cursor:grabbing}
+.map .land{fill:var(--land);stroke:var(--muted);stroke-width:.5;vector-effect:non-scaling-stroke;stroke-opacity:.55}
+.map .dot{fill:var(--s1);fill-opacity:.55;stroke:var(--panel);stroke-width:.7;vector-effect:non-scaling-stroke}
+.map .dot:hover{fill-opacity:.9}
+.map .lg{fill:var(--ink2);font-size:11px}
+.zoom{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--panel)}
+.zoom button{font:700 16px var(--body);width:30px;height:30px;border:0;background:none;color:var(--ink);cursor:pointer}
+.zoom button+button{border-top:1px solid var(--line)}
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart .gl{stroke:var(--grid)}
+.chart .ax{fill:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:14px;font-size:12.5px;color:var(--ink2);margin-bottom:4px}
+.legend i{display:inline-block;width:14px;height:8px;vertical-align:middle;margin-right:5px;border-radius:2px}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:6px 9px;font-size:12.5px;box-shadow:0 6px 18px rgba(0,0,0,.14);white-space:nowrap;z-index:2}
+.tip b{font-variant-numeric:tabular-nums}.tip .m{color:var(--muted)}
+.bars{display:grid;gap:7px}
+.bar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;font-size:13.5px;align-items:baseline}
+.bar .lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .num{font-variant-numeric:tabular-nums;color:var(--ink2);font-size:13px}
+.bar .tr{grid-column:1/-1;height:8px;background:var(--track);border-radius:4px;overflow:hidden}
+.bar .fill{height:100%;background:var(--s1);border-radius:4px;min-width:2px}
+.bar.hl .fill{background:var(--accent)}
+table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+table.tbl th,table.tbl td{padding:5px 8px 5px 0;border-bottom:1px solid var(--line);text-align:left}
+table.tbl th{color:var(--ink2);font-size:12.5px;text-transform:uppercase;letter-spacing:.04em}
+table.tbl .r{text-align:right}
+.note{color:var(--muted);font-size:12.5px;margin:6px 0 0}
+.about{margin-top:14px;color:var(--ink2);font-size:13.5px}
+.about h2{font-family:var(--display);font-size:19px;text-transform:uppercase;margin:0 0 4px;color:var(--ink)}
+.status{color:var(--muted);font-size:13px;margin:8px 0}
+@media (max-width:600px){h1{font-size:28px}.tile .v{font-size:34px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Restore Island Rail <span>petition</span></h1>
+  <p class="sub" id="lede">Loading…</p>
+</header>
+<section class="tiles" id="tiles" aria-label="Summary"></section>
+<div class="grid">
+  <section class="card wide" id="map-card"><h2>Where signers live</h2>
+    <p class="cap">Each circle is a postal area (Canadian postal code's first three characters, U.S. ZIP or U.K. postcode district); its size shows the number of signers. Drag to move, scroll or use + and − to zoom.</p>
+    <div class="views" role="group" aria-label="Map view">
+      <button type="button" data-v="island" aria-pressed="true">Vancouver Island</button><button type="button" data-v="bc" aria-pressed="false">British Columbia</button><button type="button" data-v="na" aria-pressed="false">Canada &amp; U.S.</button><button type="button" data-v="world" aria-pressed="false">World</button>
+    </div>
+    <div class="map" id="map"><div class="zoom"><button type="button" id="zin" aria-label="Zoom in">+</button><button type="button" id="zout" aria-label="Zoom out">−</button></div></div>
+    <p class="note" id="unlocated"></p></section>
+  <section class="card"><h2>Signers by region</h2><p class="cap">Vancouver Island includes the Gulf Islands.</p><div class="bars" id="b-region"></div></section>
+  <section class="card"><h2>Canadian signers by province</h2><p class="cap">From the postal code where one was given.</p><div class="bars" id="b-prov"></div></section>
+  <section class="card wide"><h2>Signatures by month</h2><p class="cap">New signatures each month, with the running total.</p>
+    <div class="legend"><span><i style="background:var(--s1)"></i>New this month</span><span><i style="background:var(--s2);height:2px"></i>Running total</span></div>
+    <div class="chart" id="c-month"></div></section>
+  <section class="card wide"><h2>Top 25 communities</h2><p class="cap">By the town or city signers typed, so "Victoria" includes people in Saanich or Langford who wrote Victoria.</p>
+    <div style="overflow-x:auto"><table class="tbl" id="t-comm"></table></div></section>
+</div>
+<section class="about"><h2>How this is counted</h2>
+<p>Counts come from the petition's signature export. No names, street addresses or full postal codes are published here: only counts by postal area, town, region and day. Signers were placed on the map by the first part of their postal code using GeoNames centroids, or by the town they typed if there was no usable code. Map labels show a town name only when at least five signers typed it, otherwise the postal area's official name. "Vancouver Island &amp; Gulf Islands" means Canadian postal codes starting V8, V9 or V0R. Map outlines: Natural Earth.</p></section>
+</div>
+<div class="tip" id="tip" hidden></div>
+<script>
+const $=id=>document.getElementById(id);
+const NS='http://www.w3.org/2000/svg';
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;};
+const fmt=n=>Math.round(n).toLocaleString('en-CA');
+const pc=(n,d,dp=0)=>d?(n/d*100).toFixed(dp)+'%':'–';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dlong=d=>new Date(d+'T12:00:00Z').toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric',timeZone:'UTC'});
+const mlong=m=>new Date(m+'-15T12:00:00Z').toLocaleDateString('en-CA',{month:'long',year:'numeric',timeZone:'UTC'});
+const mshort=m=>new Date(m+'-15T12:00:00Z').toLocaleDateString('en-CA',{month:'short',year:'numeric',timeZone:'UTC'});
+function niceMax(v){if(v<=4)return 4;const p=Math.pow(10,Math.floor(Math.log10(v))),m=v/p;return (m<=2?2:m<=5?5:10)*p;}
+const REGIONS=['Vancouver Island & Gulf Islands','Rest of B.C.','Rest of Canada','United States','United Kingdom','Other countries'];
+const params=new URLSearchParams(location.search);
+if(params.has('embed')||window.self!==window.top)document.documentElement.classList.add('embed');
+if(params.get('theme'))document.documentElement.dataset.theme=params.get('theme');
+const tip=$('tip');
+function showTip(e,html){tip.innerHTML=html;tip.hidden=false;const w=tip.offsetWidth,h=tip.offsetHeight;let x=e.pageX+14,y=e.pageY-h-10;if(x+w>document.documentElement.clientWidth-8)x=e.pageX-w-14;if(y<window.scrollY+4)y=e.pageY+16;tip.style.left=x+'px';tip.style.top=y+'px';}
+const hideTip=()=>{tip.hidden=true;};
+let D=null;
+
+/* ---------- summary ---------- */
+function summary(){
+  const R=D.regions,sum=f=>R.filter(f).reduce((a,r)=>a+r[4],0);
+  const total=sum(()=>true),island=sum(r=>r[0]===REGIONS[0]),bc=sum(r=>r[0]===REGIONS[0]||r[0]===REGIONS[1]);
+  const countries=new Set(R.map(r=>r[2])).size,unloc=sum(r=>r[3]==='Not located');
+  const end=new Date(D.to+'T00:00:00Z'),ago=d=>Math.round((end-new Date(d+'T00:00:00Z'))/864e5);
+  const l30=D.daily.filter(d=>ago(d[0])<30).reduce((a,d)=>a+d[1],0),p30=D.daily.filter(d=>ago(d[0])>=30&&ago(d[0])<60).reduce((a,d)=>a+d[1],0);
+  const ch=p30?l30/p30-1:null;
+  $('lede').innerHTML=`<b>${fmt(island)}</b> of <b>${fmt(total)}</b> signers (${pc(island,total)}) live on Vancouver Island or the Gulf Islands, and <b>${fmt(l30)}</b> signed in the last 30 days. Signatures from ${dlong(D.from)} to ${dlong(D.to)}.`;
+  const tile=(k,v,n,hero)=>`<div class="tile${hero?' hero':''}"><div class="k">${k}</div><div class="v">${v}</div><div class="n">${n}</div></div>`;
+  $('tiles').innerHTML=tile('Signatures',fmt(total),'since July 2023',true)
+    +tile('Vancouver Island',fmt(island),`${pc(island,total)} of all signers`)
+    +tile('All of B.C.',fmt(bc),`${pc(bc,total)} of all signers`)
+    +tile('Last 30 days',fmt(l30),ch==null?'':`<span class="${ch>=0?'up':'down'}">${ch>=0?'+':'−'}${Math.abs(Math.round(ch*100))}%</span> vs the 30 days before`)
+    +tile('Countries',fmt(countries),'with at least one signer');
+  $('unlocated').textContent=`${fmt(unloc)} signatures had no usable postal code or recognised town: they are in every count except the map.`;
+  return total;}
+
+/* ---------- bars ---------- */
+function bars(box,items,total,hl){box.innerHTML='';const max=Math.max(...items.map(x=>x[1]),1);
+  for(const [name,v] of items){const r=document.createElement('div');r.className='bar'+(name===hl?' hl':'');
+    r.innerHTML=`<span class="lbl" title="${esc(name)}">${esc(name)}</span><span class="num">${pc(v,total)} · ${fmt(v)}</span><div class="tr"><div class="fill" style="width:${Math.max(1,v/max*100)}%"></div></div>`;box.appendChild(r);}}
+function regionBars(total){
+  bars($('b-region'),REGIONS.map(g=>[g,D.regions.filter(r=>r[0]===g).reduce((a,r)=>a+r[4],0)]),total,REGIONS[0]);
+  const p={};D.regions.filter(r=>r[2]==='Canada').forEach(r=>{p[r[1]||'Not given']=(p[r[1]||'Not given']||0)+r[4];});
+  const ca=Object.values(p).reduce((a,b)=>a+b,0);
+  bars($('b-prov'),Object.entries(p).sort((a,b)=>b[1]-a[1]),ca,'British Columbia');}
+
+/* ---------- monthly chart ---------- */
+function monthly(){const box=$('c-month');box.innerHTML='';
+  const m={};D.daily.forEach(([d,n])=>{m[d.slice(0,7)]=(m[d.slice(0,7)]||0)+n;});
+  const months=Object.keys(m).sort();let run=0;const rows=months.map(k=>({k,n:m[k],c:(run+=m[k])}));
+  const W=Math.max(320,box.clientWidth||900),H=240,L=44,R=44,T=10,B=26,iw=W-L-R,ih=H-T-B;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'New petition signatures by month since July 2023, with the running total'},box);
+  const mx=niceMax(Math.max(...rows.map(r=>r.n))),cx=niceMax(run);
+  for(let i=0;i<=4;i++){const y=T+ih-ih*i/4;el('line',{x1:L,x2:W-R,y1:y,y2:y,class:'gl'},svg);
+    el('text',{x:L-6,y:y+3.5,'text-anchor':'end',class:'ax'},svg).textContent=fmt(mx*i/4);
+    el('text',{x:W-R+6,y:y+3.5,class:'ax'},svg).textContent=cx*i/4>=1000?(cx*i/4/1000)+'k':fmt(cx*i/4);}
+  const n=rows.length,step=iw/n,xc=i=>L+step*(i+.5),bw=Math.max(2,step*.72);
+  const jan=rows.map((r,i)=>[r,i]).filter(([r])=>/-(01|07)$/.test(r.k));const every=Math.ceil(jan.length/Math.max(2,Math.floor(iw/70)));
+  jan.forEach(([r,i],j)=>{if(j%every)return;el('text',{x:xc(i),y:H-8,'text-anchor':'middle',class:'ax'},svg).textContent=mshort(r.k);});
+  rows.forEach((r,i)=>{const h=Math.max(1,ih*r.n/mx);el('rect',{x:xc(i)-bw/2,y:T+ih-h,width:bw,height:h,rx:2,fill:'var(--s1)'},svg);});
+  el('polyline',{points:rows.map((r,i)=>`${xc(i)},${T+ih-ih*r.c/cx}`).join(' '),fill:'none',stroke:'var(--s2)','stroke-width':2,'stroke-linejoin':'round'},svg);
+  const cross=el('line',{y1:T,y2:T+ih,stroke:'var(--muted)','stroke-dasharray':'3 3',visibility:'hidden'},svg);
+  const hit=el('rect',{x:L,y:T,width:iw,height:ih,fill:'transparent'},svg);
+  hit.addEventListener('pointermove',e=>{const r=svg.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,i=Math.max(0,Math.min(n-1,Math.floor((x-L)/step))),d=rows[i];
+    cross.setAttribute('x1',xc(i));cross.setAttribute('x2',xc(i));cross.setAttribute('visibility','visible');
+    showTip(e,`<div><b>${mlong(d.k)}</b></div><div>${fmt(d.n)} new signatures</div><div class="m">${fmt(d.c)} in total so far</div>`);});
+  hit.addEventListener('pointerleave',()=>{cross.setAttribute('visibility','hidden');hideTip();});}
+
+/* ---------- communities ---------- */
+function communities(total){const rows=D.communities.slice().sort((a,b)=>b[2]-a[2]).slice(0,25);
+  $('t-comm').innerHTML='<tr><th>#</th><th>Community</th><th>Region</th><th class="r">Signers</th><th class="r">Share</th></tr>'
+    +rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td class="r">${fmt(r[2])}</td><td class="r">${pc(r[2],total,1)}</td></tr>`).join('');}
+
+/* ---------- map ---------- */
+const VIEWS={island:{box:[-128.4,48.25,-123.0,50.85],rMax:26,label:'Vancouver Island'},bc:{box:[-136,48.2,-114,59.5],rMax:22,label:'British Columbia'},
+  na:{box:[-135,25,-55,60],rMax:18,label:'Canada and the United States'},world:{box:[-170,-50,180,72],rMax:14,label:'the world'}};
+let VIEW='island',VB=null,MAP=null;
+const merc=([lon,lat])=>{const l=Math.max(-85,Math.min(85,lat))*Math.PI/180;return [lon*Math.PI/180,-Math.log(Math.tan(Math.PI/4+l/2))];};
+function ringPath(ring,P){let s='';for(let i=0;i<ring.length;i++){const p=P(ring[i]);s+=(i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1);}return s+'Z';}
+function geomPath(g,P){if(!g)return'';const polys=g.type==='Polygon'?[g.coordinates]:g.type==='MultiPolygon'?g.coordinates:[];return polys.map(poly=>poly.map(r=>ringPath(r,P)).join('')).join('');}
+function drawMap(){const box=$('map');box.querySelector('svg')?.remove();
+  const v=VIEWS[VIEW],W=Math.max(300,box.clientWidth||900),H=Math.round(Math.min(620,Math.max(320,W*(VIEW==='world'?.55:.72))));
+  const [x0,y1]=merc([v.box[0],v.box[1]]),[x1,y0]=merc([v.box[2],v.box[3]]);
+  const k=Math.min((W-16)/(x1-x0),(H-16)/(y1-y0)),ox=(W-(x1-x0)*k)/2-x0*k,oy=(H-(y1-y0)*k)/2-y0*k;
+  const P=ll=>{const m=merc(ll);return [m[0]*k+ox,m[1]*k+oy];};
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':`Map of petition signers across ${v.label}; circle size shows the number of signers in each postal area`});
+  box.prepend(svg);const g=el('g',{},svg);
+  const B=D.basemap,layers=VIEW==='island'?[B.coast]:VIEW==='world'?[B.world]:[B.world,B.admin1];
+  layers.forEach(fc=>fc.features.forEach(f=>{const d=geomPath(f.geometry,P);if(d)el('path',{d,class:'land'},g);}));
+  // merge rows that share a point; keep only points near the view
+  const pts=new Map();for(const p of D.places){if(p[4]==null)continue;const key=p[4]+','+p[5];const q=pts.get(key);
+    if(q){q.n+=p[7];if(p[7]>q.top){q.top=p[7];q.name=p[0];}}else pts.set(key,{ll:[p[5],p[4]],n:p[7],top:p[7],name:p[0],prov:p[2],country:p[3],level:p[6]});}
+  const vmax=Math.max(...[...pts.values()].map(p=>p.n));const rr=n=>Math.max(1.8,Math.sqrt(n/vmax)*v.rMax);
+  const list=[...pts.values()].map(p=>{const [x,y]=P(p.ll);return {...p,x,y};}).filter(p=>p.x>-50&&p.x<W+50&&p.y>-50&&p.y<H+50).sort((a,b)=>b.n-a.n);
+  const dots=el('g',{},g);
+  for(const p of list){const c=el('circle',{cx:p.x.toFixed(1),cy:p.y.toFixed(1),r:rr(p.n),class:'dot'},dots);c._p=p;}
+  dots.addEventListener('pointermove',e=>{const p=e.target._p;if(!p)return hideTip();
+    showTip(e,`<div><b>${esc(p.name)}</b></div><div>${fmt(p.n)} signer${p.n===1?'':'s'}</div><div class="m">${esc([p.prov,p.country].filter(Boolean).join(', '))} · ${esc(p.level)}</div>`);});
+  dots.addEventListener('pointerleave',hideTip);
+  // legend
+  const lg=el('g',{transform:`translate(12,${H-12})`},svg);let lx=0;
+  for(const n of [10,100,1000]){if(n>vmax)continue;const r=rr(n);el('circle',{cx:lx+r,cy:-r,r,class:'dot'},lg);const t=el('text',{x:lx+2*r+4,y:-r+4,class:'lg'},lg);t.textContent=fmt(n);lx+=2*r+14+(t.getComputedTextLength()||28);}
+  MAP={svg,g,dots,W,H,rr,k:1,tx:0,ty:0,lg};applyZoom();}
+function applyZoom(){const m=MAP;m.g.setAttribute('transform',`translate(${m.tx},${m.ty}) scale(${m.k})`);
+  for(const c of m.dots.children)c.setAttribute('r',m.rr(c._p.n)/Math.sqrt(m.k));}
+function zoomAt(f,cx,cy){const m=MAP,k=Math.max(1,Math.min(24,m.k*f));f=k/m.k;m.tx=cx-(cx-m.tx)*f;m.ty=cy-(cy-m.ty)*f;m.k=k;clampPan();applyZoom();}
+function clampPan(){const m=MAP;m.tx=Math.min(0,Math.max(m.W-m.W*m.k,m.tx));m.ty=Math.min(0,Math.max(m.H-m.H*m.k,m.ty));}
+function svgPt(e){const r=MAP.svg.getBoundingClientRect();return [(e.clientX-r.left)*MAP.W/r.width,(e.clientY-r.top)*MAP.H/r.height];}
+(function(){const box=$('map');let drag=null;const ptrs=new Map();
+  box.addEventListener('wheel',e=>{if(!MAP||!e.target.closest('svg'))return;e.preventDefault();const [x,y]=svgPt(e);zoomAt(Math.exp(-e.deltaY*0.002),x,y);},{passive:false});
+  box.addEventListener('pointerdown',e=>{if(!MAP||!e.target.closest('svg'))return;ptrs.set(e.pointerId,svgPt(e));MAP.svg.setPointerCapture(e.pointerId);
+    if(ptrs.size===1)drag={p:svgPt(e),tx:MAP.tx,ty:MAP.ty};MAP.svg.classList.add('drag');});
+  box.addEventListener('pointermove',e=>{if(!MAP||!ptrs.has(e.pointerId))return;const prev=[...ptrs.values()];ptrs.set(e.pointerId,svgPt(e));
+    if(ptrs.size===2){const [a,b]=[...ptrs.values()],[pa,pb]=prev,d0=Math.hypot(pa[0]-pb[0],pa[1]-pb[1]),d1=Math.hypot(a[0]-b[0],a[1]-b[1]);if(d0>0)zoomAt(d1/d0,(a[0]+b[0])/2,(a[1]+b[1])/2);drag=null;return;}
+    if(drag){const p=svgPt(e);MAP.tx=drag.tx+p[0]-drag.p[0];MAP.ty=drag.ty+p[1]-drag.p[1];clampPan();applyZoom();hideTip();}});
+  const up=e=>{ptrs.delete(e.pointerId);if(!ptrs.size){drag=null;MAP&&MAP.svg.classList.remove('drag');}};
+  box.addEventListener('pointerup',up);box.addEventListener('pointercancel',up);
+  $('zin').onclick=()=>MAP&&zoomAt(1.6,MAP.W/2,MAP.H/2);$('zout').onclick=()=>MAP&&zoomAt(1/1.6,MAP.W/2,MAP.H/2);
+  document.querySelectorAll('.views button').forEach(b=>b.onclick=()=>{VIEW=b.dataset.v;document.querySelectorAll('.views button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));drawMap();postHeight();});})();
+
+/* ---------- embedding: tell the parent page our height ---------- */
+function postHeight(){if(window.parent!==window)window.parent.postMessage({type:'rir-petition-height',height:document.documentElement.scrollHeight},'*');}
+if(window.ResizeObserver)new ResizeObserver(postHeight).observe(document.body);
+
+function render(){const total=summary();regionBars(total);monthly();communities(total);drawMap();postHeight();}
+let rz,lastW=0;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{if(D&&window.innerWidth!==lastW){lastW=window.innerWidth;monthly();drawMap();}},200);});
+fetch('data.json').then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(d=>{D=d;lastW=window.innerWidth;render();})
+  .catch(e=>{$('lede').textContent='The petition statistics could not be loaded right now ('+e.message+').';});
+</script>
+</body>
+</html>
