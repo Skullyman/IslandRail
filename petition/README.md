@@ -18,8 +18,18 @@ window.addEventListener('message', e => {
 </script>
 ```
 
-`?embed` drops the page background and outer padding; add `&theme=light` or
-`&theme=dark` to fix the colours instead of following the visitor's setting.
+`?embed` drops the page background and outer padding.
+
+## Colour themes
+
+The page opens in **Moderate** (mid-tone, low glare). Visitors can switch with
+the Colours menu, and their choice is remembered in their browser. Themes:
+`moderate`, `light`, `dark`, `heritage`, `night`, `contrast` (high contrast).
+
+- `&theme=heritage` (any theme name) in the link opens in that theme without
+  changing the visitor's saved choice.
+- `&picker=off` hides the Colours menu, e.g. to lock an embed to your site's look:
+  `?embed&theme=heritage&picker=off`.
 
 ## Updating
 
